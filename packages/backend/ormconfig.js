@@ -6,7 +6,7 @@ module.exports = {
   password: 'root',
   database: 'bp-pg-db',
   entities: ['dist/**/*.entity{.ts,.js}'],
-  synchronize: true,
+  synchronize: false,
   logging: true,
   migrationsTableName: 'custom_migration_table',
   migrations: ['dist/migration/*{.ts,.js}'],

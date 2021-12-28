@@ -15,9 +15,15 @@ import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) {}
 
-  @Post()
-  create(@Body() createRestaurantDto: CreateRestaurantDto) {
+  /** Route qui permettra de valider une demande de restaurant une fois que tout le workflow sera OK */
+  @Post('/validate-restaurant')
+  validateRestaurant(@Body() createRestaurantDto: CreateRestaurantDto) {
     return this.restaurantService.create(createRestaurantDto);
+  }
+
+  @Post('/register-my-restaurant')
+  sendForm(@Body() restaurant: CreateRestaurantDto) {
+    return this.restaurantService.handleRegisterForm(restaurant);
   }
 
   @Get()

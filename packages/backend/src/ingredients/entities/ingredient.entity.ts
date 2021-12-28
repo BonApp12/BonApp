@@ -1,8 +1,14 @@
 import { Plate } from 'src/plate/entities/plate.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
-export class Ingredient {
+export class Ingredient extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

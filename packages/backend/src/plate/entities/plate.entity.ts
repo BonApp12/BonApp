@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   ManyToMany,
@@ -10,7 +11,7 @@ import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 import { Ingredient } from 'src/ingredients/entities/ingredient.entity';
 import { PlateCategory } from 'src/plate-category/entities/plate-category.entity';
 @Entity()
-export class Plate {
+export class Plate extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
