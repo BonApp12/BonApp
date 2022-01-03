@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { UserRole } from '../UserRole.enum';
+import { Exclude, instanceToPlain } from 'class-transformer';
 
 @Entity()
 export class Users extends BaseEntity {
@@ -21,7 +22,7 @@ export class Users extends BaseEntity {
 
   @Column('varchar', { length: 150 })
   email: string;
-
+  @Exclude({ toPlainOnly: true })
   @Column('varchar', { length: 255 })
   password: string;
 
@@ -34,4 +35,8 @@ export class Users extends BaseEntity {
 
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
   restaurant: Restaurant;
+
+  toJson() {
+    return instanceToPlain(this);
+  }
 }

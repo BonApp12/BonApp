@@ -16,6 +16,7 @@ export class UsersService {
 
   async findOne(email: string): Promise<User | undefined> {
     return this.usersRepository.findOne({
+      relations: ['restaurant'],
       where: {
         email,
       },
