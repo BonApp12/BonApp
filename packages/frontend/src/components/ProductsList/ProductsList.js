@@ -16,8 +16,10 @@ const ProductsList = () => {
         }
 
         return plates.filter((plate) => {
-            const plateName = plate.name.toLowerCase();
-            return plateName.includes(query.toLowerCase());
+            // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
+            const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            return plateName.includes(finalQuery.toLowerCase());
         })
     }
 
