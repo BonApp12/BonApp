@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
+import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 
 const ProductsList = () => {
     let params = useParams();
@@ -32,22 +33,7 @@ const ProductsList = () => {
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
-        fetch("http://localhost:4000/restaurant/" + idRestaurant, {
-            crossDomain: true,
-            method: 'GET',
-            mode: 'cors'
-        })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setRestaurant(result);
-                    setIsLoaded(true);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
+        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant);
     }, [params.idRestaurant])
 
     if (error) {

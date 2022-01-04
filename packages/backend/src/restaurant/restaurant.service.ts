@@ -26,8 +26,15 @@ export class RestaurantService {
     });
   }
 
-  update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
-    return `This action updates a #${id} restaurant`;
+  async update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
+    await this.restaurantRepository.update(id, {
+      ...(updateRestaurantDto.name && { name: updateRestaurantDto.name }),
+      ...(updateRestaurantDto.siren && { siren: updateRestaurantDto.siren }),
+      ...(updateRestaurantDto.contact_firstname && { contact_firstname: updateRestaurantDto.contact_firstname }),
+      ...(updateRestaurantDto.contact_lastname && { contact_lastname: updateRestaurantDto.contact_lastname }),
+    });
+
+    return this.restaurantRepository.findOne(id);
   }
 
   async remove(id: number): Promise<void> {
@@ -43,9 +50,18 @@ export class RestaurantService {
     // await Restaurant.save(restaurantEntity);
   }
 
-  hydrateRestaurantEntity(restaurant: CreateRestaurantDto): Restaurant {
+  async handleUpdateForm(restaurant: UpdateRestaurantDto) {
+    const restaurantEntity = this.hydrateRestaurantEntity(restaurant);
+    console.log(restaurant);
+    console.log(restaurantEntity);
+  }
+
+  hydrateRestaurantEntity(
+    restaurant: CreateRestaurantDto | UpdateRestaurantDto,
+  ): Restaurant {
     const restaurantEntity: Restaurant = Restaurant.create();
 
+    restaurantEntity.id = restaurant.id;
     restaurantEntity.name = restaurant.name;
     restaurantEntity.siren = restaurant.siren;
     restaurantEntity.address = restaurant.address;

@@ -1,4 +1,5 @@
 export class CreateRestaurantDto {
+  id: number;
   name: string;
   siren: string;
   address: number;

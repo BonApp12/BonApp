@@ -5,13 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductsList from './components/ProductsList/ProductsList';
-
+import RestaurantManager from "./components/RestaurantManager/RestaurantManager";
 ReactDOM.render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />}>
                 <Route path="restaurant">
                     <Route path=":idRestaurant" element={<ProductsList />} />
+                    <Route path=":idRestaurant/manage" element={<RestaurantManager />} />
                 </Route>
             </Route>
         </Routes>

@@ -26,6 +26,11 @@ export class RestaurantController {
     return this.restaurantService.handleRegisterForm(restaurant);
   }
 
+  @Post(':id/edit-restaurant')
+  sendEditForm(@Body() restaurant: UpdateRestaurantDto) {
+    return this.restaurantService.handleUpdateForm(restaurant);
+  }
+
   @Get()
   findAll() {
     return this.restaurantService.findAll();
