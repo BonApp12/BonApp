@@ -6,7 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductsList from './components/ProductsList/ProductsList';
 import RestaurantManager from "./components/RestaurantManager/RestaurantManager";
+import LoginForm from "./components/LoginForm/LoginForm";
 ReactDOM.render(
+    <div className="container mt-5">
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />}>
@@ -14,9 +16,11 @@ ReactDOM.render(
                     <Route path=":idRestaurant" element={<ProductsList />} />
                     <Route path=":idRestaurant/manage" element={<RestaurantManager />} />
                 </Route>
+                <Route path="login" element={<LoginForm />} />
             </Route>
         </Routes>
-    </BrowserRouter>,
+    </BrowserRouter>
+    </div>,
   document.getElementById('root')
 );
 

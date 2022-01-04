@@ -17,8 +17,8 @@ const RestaurantManager = () => {
 
 
     return (
-       <div className="container">
-           <h1 className="mt-5">{restaurant.name}</h1>
+       <div>
+           <h1>{restaurant.name}</h1>
            <RestaurantForm restaurant={restaurant} />
        </div>
     )
