@@ -11,7 +11,6 @@ const editRestaurantInformations = (form, idRestaurant) => {
         .then(res => {
             if (res.status >= 200 && res.status < 300) {
                 console.log(res);
-                //window.location.reload();
                 return res;
             } else {
                 console.log('Something went wrong?');

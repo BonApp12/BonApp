@@ -21,7 +21,7 @@ class RestaurantForm extends React.Component {
         this.setState({ [name]: value });
     }
     handleSubmit(event) {
-        editRestaurantInformations(this.state, this.props.restaurant.id);
+        const request = editRestaurantInformations(this.state, this.props.restaurant.id);
         event.preventDefault();
     }
 

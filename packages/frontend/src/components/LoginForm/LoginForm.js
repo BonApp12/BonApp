@@ -1,16 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
-
+import ErrorAlert from "../Alerts/ErrorAlert";
+import Loading from "../Loading/Loading";
 
 class LoginForm extends React.Component{
+    _isMounter = false;
     constructor(props) {
         super(props);
         this.state = {
             email: "",
             password: "",
+            logged: "",
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleLoading = this.handleLoading.bind(this);
     }
 
     handleChange(event){
@@ -20,11 +24,29 @@ class LoginForm extends React.Component{
         this.setState({ [name]: value });
     }
 
+    handleLoading(state) {
+        this.setState({ logged: state })
+    }
+
     handleSubmit(event){
-        console.log(this.state.email);
-        console.log(this.state.password);
-        LoginWithCredentials(this.state);
+        this.handleLoading('logging')
+        LoginWithCredentials(this.state)
+            .then(res => res.json())
+            .then(res => {
+                if (res.statusCode === 401){
+                    this.handleLoading('failed');
+                } else {
+                    this.handleLoading('success');
+                }
+            })
+            .catch(err => {
+                this.handleLoading('failed');
+            })
         event.preventDefault();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {
@@ -38,7 +60,6 @@ class LoginForm extends React.Component{
                         </label>
                         <input type="email" className="input input-bordered" placeholder="exemple@doe.com" name="email" onChange={this.handleChange} />
                     </div>
-
                     <div className="form-control">
                         <label className="label">
                             <span className="label-text">Password</span>
@@ -47,6 +68,7 @@ class LoginForm extends React.Component{
                     </div>
                     <button className="btn btn-primary mt-2" type="submit">Connexion</button>
                 </form>
+                {this.state.logged === "logging" ? <Loading /> : (this.state.logged === 'failed' ? <ErrorAlert errorMessage={"Les informations renseignées ne sont pas correctes"} /> : "")}
             </div>
         )
     }

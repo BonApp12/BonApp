@@ -1,5 +1,5 @@
 const loginWithCredentials = (form) => {
-    fetch("http://localhost:4000/auth/login", {
+    return fetch("http://localhost:4000/auth/login", {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
@@ -8,10 +8,6 @@ const loginWithCredentials = (form) => {
             'Content-Type': 'application/json'
         }
     })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res)
-        })
 }
 
 export default loginWithCredentials;
