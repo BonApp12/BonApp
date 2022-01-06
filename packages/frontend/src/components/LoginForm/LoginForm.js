@@ -37,6 +37,7 @@ class LoginForm extends React.Component{
                     this.handleLoading('failed');
                 } else {
                     this.handleLoading('success');
+                    console.log(res);
                 }
             })
             .catch(err => {
