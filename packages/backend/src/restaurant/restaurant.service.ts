@@ -43,7 +43,6 @@ export class RestaurantService {
 
   async handleRegisterForm(restaurant: CreateRestaurantDto) {
     const restaurantEntity = this.hydrateRestaurantEntity(restaurant);
-    console.log(restaurantEntity);
     // Pour l'instant on rajoute l'adresse 1, mais faire en sorte de récupérer l'adresse depuis le front
     // const address = await this.addressService.findOne(1);
 
@@ -52,8 +51,6 @@ export class RestaurantService {
 
   async handleUpdateForm(restaurant: UpdateRestaurantDto) {
     const restaurantEntity = this.hydrateRestaurantEntity(restaurant);
-    console.log(restaurant);
-    console.log(restaurantEntity);
   }
 
   hydrateRestaurantEntity(

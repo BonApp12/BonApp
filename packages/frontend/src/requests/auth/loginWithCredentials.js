@@ -6,7 +6,8 @@ const loginWithCredentials = (form) => {
         body: JSON.stringify(form),
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        credentials: 'include'
     })
 }
 

@@ -1,16 +1,17 @@
-import React, {useState} from "react";
+import React from "react";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
 import ErrorAlert from "../Alerts/ErrorAlert";
 import Loading from "../Loading/Loading";
 
 class LoginForm extends React.Component{
-    _isMounter = false;
     constructor(props) {
         super(props);
+        const storedJwt = localStorage.getItem('token');
         this.state = {
             email: "",
             password: "",
             logged: "",
+            jwt: storedJwt || null,
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,19 +36,18 @@ class LoginForm extends React.Component{
             .then(res => {
                 if (res.statusCode === 401){
                     this.handleLoading('failed');
+                    console.log('failed');
                 } else {
                     this.handleLoading('success');
-                    console.log(res);
+                    this.setState({jwt: res.user.access_token});
+                    console.log(this.state);
                 }
             })
             .catch(err => {
                 this.handleLoading('failed');
+                console.log(err);
             })
         event.preventDefault();
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
     }
 
     render() {
