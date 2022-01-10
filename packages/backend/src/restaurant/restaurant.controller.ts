@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import {ExtractJwt} from "passport-jwt";
 
 @Controller('restaurant')
 export class RestaurantController {
@@ -41,6 +44,7 @@ export class RestaurantController {
     return this.restaurantService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,

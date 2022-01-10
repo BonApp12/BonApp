@@ -18,7 +18,7 @@ export class AuthController {
   @Post('/login')
   async login(@Request() req, @Response() res) {
     const user = await this.authService.login(req.user);
-    res.cookie('token', user.access_token, { httpOnly: true });
+    res.cookie('access_token', user.access_token, { httpOnly: true });
     res.json({ user });
   }
 

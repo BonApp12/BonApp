@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import RestaurantForm from '../RestaurantForm/RestaurantForm';
 import {useParams} from "react-router-dom";
 import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
+
 const RestaurantManager = () => {
 
     let params = useParams();

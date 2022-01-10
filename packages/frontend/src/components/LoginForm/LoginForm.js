@@ -1,78 +1,61 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import Loading from "../../components/Loading/Loading";
+import ErrorAlert from "../../components/Alerts/ErrorAlert";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
-import ErrorAlert from "../Alerts/ErrorAlert";
-import Loading from "../Loading/Loading";
 
-class LoginForm extends React.Component{
-    constructor(props) {
-        super(props);
-        const storedJwt = localStorage.getItem('token');
-        this.state = {
-            email: "",
-            password: "",
-            logged: "",
-            jwt: storedJwt || null,
-        }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleLoading = this.handleLoading.bind(this);
-    }
 
-    handleChange(event){
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({ [name]: value });
-    }
+function LoginForm() {
 
-    handleLoading(state) {
-        this.setState({ logged: state })
-    }
+    const storedJwt = localStorage.getItem('token'); // Récupérer depuis le cookie directement.
 
-    handleSubmit(event){
-        this.handleLoading('logging')
-        LoginWithCredentials(this.state)
+    const [loading, setLoading] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [jwt, setJwt] = useState(storedJwt || null);
+
+    const handleSubmit = (evt) => {
+        setLoading('logging');
+        const form = {email: email, password: password};
+        LoginWithCredentials(form)
             .then(res => res.json())
             .then(res => {
-                if (res.statusCode === 401){
-                    this.handleLoading('failed');
-                    console.log('failed');
+                if (res.statusCode === 401) {
+                    setLoading('failed');
+                    console.log('Login failed.');
                 } else {
-                    this.handleLoading('success');
-                    this.setState({jwt: res.user.access_token});
-                    console.log(this.state);
+                    setLoading('success');
+                    console.log('Login succeeded!')
                 }
             })
             .catch(err => {
-                this.handleLoading('failed');
+                setLoading('failed');
                 console.log(err);
             })
-        event.preventDefault();
+
+        evt.preventDefault();
     }
 
-    render() {
-        return (
-            <div>
-                <h3>Bienvenue, veuillez vous connecter.</h3>
-                <form onSubmit={this.handleSubmit} className="m-5">
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Email</span>
-                        </label>
-                        <input type="email" className="input input-bordered" placeholder="exemple@doe.com" name="email" onChange={this.handleChange} />
-                    </div>
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Password</span>
-                        </label>
-                        <input type="password" className="input input-bordered" placeholder="********" name="password" onChange={this.handleChange} />
-                    </div>
-                    <button className="btn btn-primary mt-2" type="submit">Connexion</button>
-                </form>
-                {this.state.logged === "logging" ? <Loading /> : (this.state.logged === 'failed' ? <ErrorAlert errorMessage={"Les informations renseignées ne sont pas correctes"} /> : "")}
-            </div>
-        )
-    }
+    return (
+        <div>
+            <h3>Bienvenue, veuillez vous connecter.</h3>
+            <form onSubmit={handleSubmit} className="m-5">
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Email</span>
+                    </label>
+                    <input type="email" className="input input-bordered" placeholder="exemple@doe.com" name="email" onChange={e => setEmail(e.target.value)} />
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Password</span>
+                    </label>
+                    <input type="password" className="input input-bordered" placeholder="********" name="password" onChange={e => setPassword(e.target.value)} />
+                </div>
+                <button className="btn btn-primary mt-2" type="submit">Connexion</button>
+            </form>
+            {loading === "logging" ? <Loading /> : (loading === 'failed' ? <ErrorAlert errorMessage={"Les informations renseignées sont incorrectes"}/> : "")}
+        </div>
+    )
 }
 
 export default LoginForm;
