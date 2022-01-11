@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductsList from './components/ProductsList/ProductsList';
 import RestaurantManager from "./components/RestaurantManager/RestaurantManager";
 import LoginForm from "./components/LoginForm/LoginForm";
+import MessagePage from "./components/MessagePage/MessagePage";
 ReactDOM.render(
     <div className="container mt-5">
     <BrowserRouter>
@@ -17,6 +18,7 @@ ReactDOM.render(
                     <Route path=":idRestaurant/manage" element={<RestaurantManager />} />
                 </Route>
                 <Route path="login" element={<LoginForm />} />
+                <Route path="/already-logged" element={<MessagePage errorMessage={"Vous êtes déjà connecté"} />} />
             </Route>
         </Routes>
     </BrowserRouter>

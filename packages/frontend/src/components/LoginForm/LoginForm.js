@@ -2,17 +2,17 @@ import React, {useEffect, useState} from "react";
 import Loading from "../../components/Loading/Loading";
 import ErrorAlert from "../../components/Alerts/ErrorAlert";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
+import { Navigate } from "react-router-dom";
 
 
 function LoginForm() {
 
-    const storedJwt = localStorage.getItem('token'); // Récupérer depuis le cookie directement.
+    const storedIsConnected = localStorage.getItem('isConnected'); // Récupérer depuis le cookie directement.
 
     const [loading, setLoading] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [jwt, setJwt] = useState(storedJwt || null);
-
+    const [isConnected, setIsConnected] = useState(storedIsConnected || null);
     const handleSubmit = (evt) => {
         setLoading('logging');
         const form = {email: email, password: password};
@@ -24,6 +24,8 @@ function LoginForm() {
                     console.log('Login failed.');
                 } else {
                     setLoading('success');
+                    setIsConnected('true');
+                    localStorage.setItem('isConnected', 'true');
                     console.log('Login succeeded!')
                 }
             })
@@ -37,6 +39,7 @@ function LoginForm() {
 
     return (
         <div>
+            {isConnected ? <Navigate to={{pathname: '/already-logged'}} /> : ""}
             <h3>Bienvenue, veuillez vous connecter.</h3>
             <form onSubmit={handleSubmit} className="m-5">
                 <div className="form-control">
