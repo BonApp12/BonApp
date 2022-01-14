@@ -5,7 +5,7 @@ const MessagePage = ({ errorMessage }) =>
         <div>
             <h3>Une erreur est survenue :</h3>
             <p>{errorMessage}</p>
-            <a href={"/"}>Se déconnecter</a>
+            <a href={"/disconnect"}>Se déconnecter</a>
         </div>
     )
 
