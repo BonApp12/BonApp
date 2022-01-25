@@ -2,7 +2,8 @@ const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant)
     fetch("http://localhost:4000/restaurant/" + idRestaurant, {
         crossDomain: true,
         method: 'GET',
-        mode: 'cors'
+        mode: 'cors',
+        credentials: 'include',
     })
         .then(res => res.json())
         .then(

@@ -7,12 +7,17 @@ const Disconnect = () => {
         localStorage.removeItem('isConnected');
     }
     disconnectCurrentUser()
-        .then(r => r.json())
-        .then(r => {
-            console.log(r);
+        .then(res => {
+            console.log(res);
+            if (res.status === 201) {
+                if (storageIsConnected) {
+                    localStorage.removeItem('isConnected');
+                }
+                window.location.replace('http://localhost:3000/login');
+            }
         });
 
-    return(<h1>Disconnecting</h1>);
+    return(<h1>Disconnecting - Check console to see if successful !</h1>);
 }
 
 export default Disconnect;

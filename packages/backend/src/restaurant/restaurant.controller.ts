@@ -12,7 +12,6 @@ import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import {ExtractJwt} from "passport-jwt";
 
 @Controller('restaurant')
 export class RestaurantController {
@@ -39,6 +38,7 @@ export class RestaurantController {
     return this.restaurantService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.restaurantService.findOne(+id);

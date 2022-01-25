@@ -19,14 +19,12 @@ function LoginForm() {
         LoginWithCredentials(form)
             .then(res => res.json())
             .then(res => {
-                if (res.statusCode === 401) {
+                if (res.statusCode === 400) {
                     setLoading('failed');
-                    console.log('Login failed.');
                 } else {
                     setLoading('success');
                     setIsConnected('true');
-                    localStorage.setItem('isConnected', 'true');
-                    console.log('Login succeeded!')
+                    localStorage.setItem('isConnected', 'true'); // Permets au front de savoir quand un utilisateur est connecté ou pas.
                 }
             })
             .catch(err => {
@@ -56,7 +54,7 @@ function LoginForm() {
                 </div>
                 <button className="btn btn-primary mt-2" type="submit">Connexion</button>
             </form>
-            {loading === "logging" ? <Loading /> : (loading === 'failed' ? <ErrorAlert errorMessage={"Les informations renseignées sont incorrectes"}/> : "")}
+            {loading === "logging" ? <Loading /> : (loading === 'failed' ? <ErrorAlert errorMessage={"Les informations renseignées sont incorrectes. Veuillez réessayer."}/> : "")}
         </div>
     )
 }

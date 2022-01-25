@@ -20,8 +20,9 @@ export class Users extends BaseEntity {
   @Column('varchar', { length: 150 })
   lastname: string;
 
-  @Column('varchar', { length: 150 })
+  @Column('varchar', { length: 150, unique: true })
   email: string;
+
   @Exclude({ toPlainOnly: true })
   @Column('varchar', { length: 255 })
   password: string;
@@ -35,6 +36,10 @@ export class Users extends BaseEntity {
 
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
   restaurant: Restaurant;
+
+  @Column({ nullable: true })
+  @Exclude()
+  public currentHashedRefreshToken?: string;
 
   toJson() {
     return instanceToPlain(this);

@@ -8,6 +8,8 @@ import { IngredientsModule } from './ingredients/ingredients.module';
 import { PlateCategoryModule } from './plate-category/plate-category.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
@@ -19,6 +21,14 @@ import { AuthModule } from './auth/auth.module';
     PlateCategoryModule,
     TypeOrmModule.forRoot(),
     AuthModule,
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
+        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+      }),
+    }),
   ],
   controllers: [AppController],
 })
