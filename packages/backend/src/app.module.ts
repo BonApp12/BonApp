@@ -9,6 +9,7 @@ import { PlateCategoryModule } from './plate-category/plate-category.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { OrdersModule } from './orders/orders.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -29,6 +30,7 @@ import * as Joi from 'joi';
         JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
+    OrdersModule,
   ],
   controllers: [AppController],
 })

@@ -9,6 +9,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import {Order} from "../../orders/entities/order.entity";
 
 @Entity()
 export class Restaurant extends BaseEntity {
@@ -42,4 +43,7 @@ export class Restaurant extends BaseEntity {
 
   @OneToMany(() => Users, (user) => user.restaurant)
   users: Users[];
+
+  @OneToMany(() => Order, (order) => order.restaurant)
+  orders: Order[];
 }
