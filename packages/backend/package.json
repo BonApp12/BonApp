@@ -38,6 +38,7 @@
     "joi": "^17.5.0",
     "nestjs-joi": "^1.6.0",
     "passport": "^0.4.1",
+    "passport-apple": "^2.0.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.1",

@@ -16,7 +16,6 @@ ReactDOM.render(
             <Route path="/" element={<App />}>
                 <Route path="restaurant">
                     <Route path=":idRestaurant" element={<ProductsList />} />
-                    <Route path=":idRestaurant/manage" element={<RestaurantManager />} />
                 </Route>
                 <Route path="login" element={<LoginForm />} />
                 <Route path="/already-logged" element={<MessagePage errorMessage={"Vous êtes déjà connecté"} />} />
