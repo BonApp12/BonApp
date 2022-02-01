@@ -3,6 +3,6 @@ import { OrdersService } from './orders.service';
 import { OrdersGateway } from './orders.gateway';
 
 @Module({
-  providers: [OrdersGateway, OrdersService]
+  providers: [OrdersGateway, OrdersService],
 })
 export class OrdersModule {}

@@ -1,15 +1,19 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+} from '@nestjs/websockets';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class OrdersGateway {
   constructor(private readonly ordersService: OrdersService) {}
 
   @SubscribeMessage('createOrder')
   create(@MessageBody() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(createOrderDto);
+    console.log(this.ordersService.create(createOrderDto));
   }
 
   @SubscribeMessage('findAllOrders')

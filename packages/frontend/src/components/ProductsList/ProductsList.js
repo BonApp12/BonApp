@@ -1,16 +1,22 @@
-import React, { Component, useState, useEffect } from "react";
+import React, {useState, useEffect, useContext, useCallback} from "react";
 import { useParams } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
+import { SocketContext } from "../../context/socket";
 
 const ProductsList = () => {
     let params = useParams();
 
+    // Setting up states
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
 
+    // Handling socket
+    const socket = useContext(SocketContext);
+
+    // Filtering plates depending of query
     const filterPlates = (plates, query) => {
         if (!query) {
             return plates;
@@ -24,12 +30,15 @@ const ProductsList = () => {
         })
     }
 
-
+    // Searching query
     const { search } = window.location;
     const query = new URLSearchParams(search).get('s');
     const [searchQuery, setSearchQuery] = useState(query || '');
     const filteredPlates = filterPlates(restaurant.plates, searchQuery);
 
+    useEffect(() => {
+        socket.emit("createOrder");
+    }, [])
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
