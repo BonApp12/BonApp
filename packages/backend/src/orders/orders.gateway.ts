@@ -13,6 +13,7 @@ export class OrdersGateway {
 
   @SubscribeMessage('createOrder')
   create(@MessageBody() createOrderDto: CreateOrderDto) {
+    this.ordersService.create(createOrderDto);
     console.log(this.ordersService.create(createOrderDto));
   }
 
@@ -22,8 +23,10 @@ export class OrdersGateway {
   }
 
   @SubscribeMessage('findOneOrder')
-  findOne(@MessageBody() id: number) {
-    return this.ordersService.findOne(id);
+  async findOne(@MessageBody() id: number) {
+    const event = 'oneOrder';
+    const data = await this.ordersService.findOne(id);
+    return { event, data };
   }
 
   @SubscribeMessage('updateOrder')
