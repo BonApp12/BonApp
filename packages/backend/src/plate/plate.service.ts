@@ -22,7 +22,9 @@ export class PlateService {
 
   findOne(id: number) {
     /** Récupération d'un seul plat avec la relation Category */
-    return this.plateRepository.findOne(id, { relations: ['category'] });
+    return this.plateRepository.findOne(id, {
+      relations: ['category', 'ingredient'],
+    });
   }
 
   update(id: number, updatePlateDto: UpdatePlateDto) {

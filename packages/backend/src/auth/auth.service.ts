@@ -118,4 +118,8 @@ export class AuthService {
       token,
     };
   }
+
+  public isUserConnected(user) {
+    console.log(user);
+  }
 }

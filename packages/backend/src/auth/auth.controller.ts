@@ -17,6 +17,7 @@ import JwtRefreshGuard from './jwt-refresh-auth.guard';
 import { CreateUsersDto } from '../users/dto/create-users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { UsersService } from '../users/users.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 @Controller('auth')
@@ -24,6 +25,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -47,7 +49,15 @@ export class AuthController {
 
     await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
     req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
+    user.password = '';
+    console.log(user);
     return user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/isConnected')
+  async isConnected(@Req() req) {
+    return this.authService.isUserConnected(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
