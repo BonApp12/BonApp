@@ -40,9 +40,8 @@ const ProductDetail = () => {
         return <div><Loading /></div>
     } else {
         return (
-            <div>
+            <Layout restaurant={props.restaurant}>
                 <p onClick={handleGoBack}>Retour</p>
-                <Layout restaurant={props.restaurant}/>
                 <h3>{props.plateName}</h3>
                 <h4>Liste des ingrédients : </h4>
                 <ul>
@@ -54,7 +53,7 @@ const ProductDetail = () => {
                         })
                     }
                 </ul>
-            </div>
+            </Layout>
         )
     }
 }

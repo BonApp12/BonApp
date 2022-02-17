@@ -50,7 +50,6 @@ export class AuthController {
     await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
     req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     user.password = '';
-    console.log(user);
     return user;
   }
 
