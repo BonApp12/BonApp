@@ -5,7 +5,7 @@ import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 
 const RestaurantManager = () => {
 
-    let params = useParams();
+    const params = useParams();
     const [restaurant, setRestaurant] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [error, setError] = useState(null);

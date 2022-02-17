@@ -3,10 +3,11 @@ import Loading from "../../components/Loading/Loading";
 import ErrorAlert from "../../components/Alerts/ErrorAlert";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
 import { Navigate } from "react-router-dom";
-
+import isUserConnected from "../../requests/auth/isUserConnected";
 
 function LoginForm() {
 
+    isUserConnected().then(r => console.log(r));
     const storedIsConnected = localStorage.getItem('isConnected'); // Récupérer depuis le cookie directement.
 
     const [loading, setLoading] = useState("");

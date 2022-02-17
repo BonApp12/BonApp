@@ -3,11 +3,13 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { UserRole } from '../UserRole.enum';
 import { Exclude, instanceToPlain } from 'class-transformer';
+import { Order } from '../../orders/entities/order.entity';
 
 @Entity()
 export class Users extends BaseEntity {
@@ -36,6 +38,9 @@ export class Users extends BaseEntity {
 
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
   restaurant: Restaurant;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @Column({ nullable: true })
   @Exclude()

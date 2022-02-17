@@ -9,19 +9,26 @@ import RestaurantManager from "./components/RestaurantManager/RestaurantManager"
 import LoginForm from "./components/LoginForm/LoginForm";
 import MessagePage from "./components/MessagePage/MessagePage";
 import Disconnect from "./components/Disconnect/Disconnect";
+import ProductDetail from "./components/ProductDetail/ProductDetail";
+import { SocketContext, socket } from "./context/socket";
 ReactDOM.render(
     <div className="container mt-5">
     <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<App />}>
-                <Route path="restaurant">
-                    <Route path=":idRestaurant" element={<ProductsList />} />
+        <SocketContext.Provider value={socket}>
+            <Routes>
+                <Route path="/" element={<App />}>
+                    <Route path="" element={<LoginForm />} />
+                    <Route path="restaurant">
+                        <Route path=":idRestaurant" element={<ProductsList />} />
+                        <Route path=":idRestaurant/:idPlate" element={<ProductDetail />} />
+                    </Route>
+                    <Route path="login" element={<LoginForm />} />
+                    <Route path="/already-logged" element={<MessagePage errorMessage={"Vous êtes déjà connecté"} />} />
+                    <Route path="/is-connected" element={<LoginForm /> }/>
+                    <Route path="/disconnect" element={<Disconnect  />} />
                 </Route>
-                <Route path="login" element={<LoginForm />} />
-                <Route path="/already-logged" element={<MessagePage errorMessage={"Vous êtes déjà connecté"} />} />
-                <Route path="/disconnect" element={<Disconnect  />} />
-            </Route>
-        </Routes>
+            </Routes>
+        </SocketContext.Provider>
     </BrowserRouter>
     </div>,
   document.getElementById('root')
