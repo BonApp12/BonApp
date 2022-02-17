@@ -20,8 +20,10 @@ export class OrdersService {
   }
 
   findOne(id: number) {
-    console.log(this.orderRepository.findOne(id));
-    return this.orderRepository.findOne(id);
+    // TODO : Remplacer ce findOne spécifiquement pour ne récupérer que les informations pertinentes. Pour l'instant, il renvoie même le mot de passe de l'utilisateur lié.
+    return this.orderRepository.findOne(id, {
+      relations: ['user', 'restaurant'],
+    });
   }
 
   update(id: number, updateOrderDto: UpdateOrderDto) {
