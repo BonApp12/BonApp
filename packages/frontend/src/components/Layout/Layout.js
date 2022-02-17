@@ -8,6 +8,7 @@ const Layout = (props) => {
             <h2 className="mt-5">Bienvenue chez {props.restaurant.name}</h2>
             <Button />
             <Navigation />
+            {props.children}
         </div>
     )
 }

@@ -42,8 +42,10 @@ const ProductsList = () => {
     const [searchQuery, setSearchQuery] = useState(query || '');
     const filteredPlates = filterPlates(restaurant.plates, searchQuery);
 
+    // useEffect to get orders : just for testing purposes. Change it to send orders in time.
     useEffect(() => {
-        socket.emit("createOrder");
+        socket.emit("findOneOrder", { id: 1 });
+        socket.on("oneOrder", (data) => console.log(data));
     }, [socket])
 
     useEffect(() => {
