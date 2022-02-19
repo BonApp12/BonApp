@@ -94,3 +94,5 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+## Schema base de donnée
+![alt text](./bdd_bonApp.jpeg)
