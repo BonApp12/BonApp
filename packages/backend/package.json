@@ -22,7 +22,9 @@
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed --configName ormSeederConfig.js",
-    "seed:generate": "ts-node typeorm migration:generate -c seed -n "
+    "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
+    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync",
+    "schema:kill": "npm run schema:drop && npm run schema:sync"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
