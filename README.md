@@ -7,8 +7,10 @@ Repository de l'application BonApp : Commandez et payez directement depuis votre
 ## Pré-requis à l'installation
 
 ### Fichiers d'environnement
+
 Pour que l'installation se déroule sans accroc, vous aurez besoin de créer vous-même les fichiers suivants :  
-```packages/backend/.env```:  
+```packages/backend/.env```:
+
 ```
 JWT_ACCESS_TOKEN_SECRET=VOTRE_CLE_SECRETE
 JWT_ACCESS_TOKEN_EXPIRATION_TIME=1500000
@@ -17,6 +19,7 @@ JWT_REFRESH_TOKEN_EXPIRATION_TIME=1500000
 ```
 
 ```/.env```:
+
 ```
 NODE_ENV=development
 
@@ -39,18 +42,25 @@ PGADMIN_PORT=5055
 DB_URL=postgres://postgres:root@bp-pg-db:5432/bp-pg-db
 ENTITY_PATH=dist/**/**/*.entity{.js,.ts}
 ```
-Dans le cadre du développement, essayez de garder au maximum les mêmes valeurs, exception faite pour les clés secrètes.  
+
+Dans le cadre du développement, essayez de garder au maximum les mêmes valeurs, exception faite pour les clés
+secrètes.  
 Si vous souhaitez changer les ports ou encore les noms de la base de données, faites concorder avec le docker-compose.
 
-
 ### Base de données
-Avant d'exécuter les commandes ci-dessous, rendez-vous dans le fichier ```packages/backend/ormconfig.js``` 
+
+Avant d'exécuter les commandes ci-dessous, rendez-vous dans le fichier ```packages/backend/ormconfig.js```
 et passez la propriété suivante à ```true``` :
+
 ```javascript
 synchronize: false // True
 ```
-Rappel : Une fois que la base de données est initialisée, repasser ce paramètre à false pour éviter qu'elle soit écrasée à chaque redémarrage du Docker.
+
+Rappel : Une fois que la base de données est initialisée, repasser ce paramètre à false pour éviter qu'elle soit écrasée
+à chaque redémarrage du Docker.
+
 ## Installation
+
 ```bash
 # Make (recommandé)
 $ make local 
@@ -80,6 +90,21 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+```
+
+## Générer les fixtures
+
+(Après avoir installé nos packages backend)
+
+``` npm run seed:run```
+
+Pour drop la base de données:
+
+```bash
+$ npm run schema:drop # Créer le drop sans l'execution
+$ npm run schema:sync #Push de la suppression à la bdd
+
+$ npm run schema:kill #Celle ci execute les deux précedente en meme temps
 ```
 
 ## Test (à implémenter)
