@@ -1,5 +1,5 @@
 const editRestaurantInformations = (form, idRestaurant) => {
-    return fetch("http://localhost:4000/restaurant/" + idRestaurant, {
+    return fetch(process.env.REACT_APP_URL_BACKEND + "/restaurant/" + idRestaurant, {
         crossDomain: true,
         method: 'PATCH',
         body: JSON.stringify(form),

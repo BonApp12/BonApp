@@ -1,5 +1,5 @@
 const isUserConnected = () => {
-    return fetch ('http://localhost:4000/auth/isConnected', {
+    return fetch(process.env.REACT_APP_URL_BACKEND + '/auth/isConnected', {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',

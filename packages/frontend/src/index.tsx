@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductsList from './components/ProductsList/ProductsList';
-import RestaurantManager from "./components/RestaurantManager/RestaurantManager";
 import LoginForm from "./components/LoginForm/LoginForm";
 import MessagePage from "./components/MessagePage/MessagePage";
 import Disconnect from "./components/Disconnect/Disconnect";
