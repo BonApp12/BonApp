@@ -27,5 +27,5 @@ jobs:
           host: ${{ secrets.HOST }} # uses secrets stored in the Secrets tab
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
+          port: 22
           script: sh deploy.sh
