@@ -18,6 +18,17 @@ JWT_REFRESH_TOKEN_SECRET=UNE_AUTRE_CLE_SECRETE
 JWT_REFRESH_TOKEN_EXPIRATION_TIME=1500000
 ```
 
+
+Pour mutualiser les url dans le front:  
+```packages/frontend/.env```:
+
+```
+REACT_APP_URL_BACKEND=http://localhost:4000
+REACT_APP_SOCKET_BACKEND=ws://localhost:4000
+```
+
+
+
 ```/.env```:
 
 ```
