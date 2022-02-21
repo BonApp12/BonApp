@@ -1,13 +1,9 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: Deploy
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the live branch
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -24,8 +20,8 @@ jobs:
       - name: log into VPS and trigger deploy script
         uses: appleboy/ssh-action@master
         with:
-          host: 45.155.171.200 # uses secrets stored in the Secrets tab
-          username: root
-          password: G7bNg3kBuS
-          port: 22
-          script: sh deploy.sh
+          host: ${{ secrets.HOST }} # uses secrets stored in the Secrets tab
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: sudo sh deploy.sh
