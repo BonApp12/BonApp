@@ -1,5 +1,5 @@
 const fetchFullPlateById = (idPlate, setPlate, setIsLoaded, setError) => {
-    fetch('http://localhost:4000/plate/' + idPlate, {
+    fetch(process.env.REACT_APP_URL_BACKEND + '/plate/' + idPlate, {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
@@ -10,7 +10,7 @@ const fetchFullPlateById = (idPlate, setPlate, setIsLoaded, setError) => {
             (result) => {
                 setPlate(result);
                 setIsLoaded(true);
-        },
+            },
             (error) => {
                 setIsLoaded(true);
                 setError(error);

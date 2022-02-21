@@ -1,5 +1,5 @@
 const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant) => {
-    fetch("http://localhost:4000/restaurant/" + idRestaurant, {
+    fetch(process.env.REACT_APP_URL_BACKEND + "/restaurant/" + idRestaurant, {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
