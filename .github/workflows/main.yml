@@ -24,4 +24,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd BonApp && sudo sh BonApp/deploy.sh
+          script: cd BonApp && sudo sh deploy.sh
