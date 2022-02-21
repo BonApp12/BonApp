@@ -33,5 +33,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: sh deploy.sh
-          run: echo debut du script
         
