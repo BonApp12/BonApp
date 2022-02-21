@@ -24,8 +24,8 @@ jobs:
       - name: log into VPS and trigger deploy script
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }} # uses secrets stored in the Secrets tab
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: 45.155.171.200 # uses secrets stored in the Secrets tab
+          username: root
+          password: G7bNg3kBuS
           port: 22
           script: sh deploy.sh
