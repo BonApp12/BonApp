@@ -39,7 +39,7 @@ function LoginForm() {
     return (
         <div>
             {isConnected ? <Navigate to={{pathname: '/already-logged'}} /> : ""}
-            <h3>Eoh, veuillez vous connecter.</h3>
+            <h3>Bienvenue, veuillez vous connecter.</h3>
             <form onSubmit={handleSubmit} className="m-5">
                 <div className="form-control">
                     <label className="label">
