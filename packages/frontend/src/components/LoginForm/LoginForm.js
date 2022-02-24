@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import Loading from "../../components/Loading/Loading";
 import ErrorAlert from "../../components/Alerts/ErrorAlert";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
-import { Navigate } from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import isUserConnected from "../../requests/auth/isUserConnected";
 
 function LoginForm() {
@@ -38,24 +38,27 @@ function LoginForm() {
 
     return (
         <div>
-            {isConnected ? <Navigate to={{pathname: '/already-logged'}} /> : ""}
-            <h3>Bienvenue, veuillez vous connecter ✨.</h3>
+            {isConnected ? <Navigate to={{pathname: '/already-logged'}}/> : ""}
+            <h3>Bienvenue, veuillez vous connecter ok.</h3>
             <form onSubmit={handleSubmit} className="m-5">
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text">Email</span>
                     </label>
-                    <input type="email" className="input input-bordered" placeholder="exemple@doe.com" name="email" onChange={e => setEmail(e.target.value)} />
+                    <input type="email" className="input input-bordered" placeholder="exemple@doe.com" name="email"
+                           onChange={e => setEmail(e.target.value)}/>
                 </div>
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text">Password</span>
                     </label>
-                    <input type="password" className="input input-bordered" placeholder="********" name="password" onChange={e => setPassword(e.target.value)} />
+                    <input type="password" className="input input-bordered" placeholder="********" name="password"
+                           onChange={e => setPassword(e.target.value)}/>
                 </div>
                 <button className="btn btn-primary mt-2" type="submit">Connexion</button>
             </form>
-            {loading === "logging" ? <Loading /> : (loading === 'failed' ? <ErrorAlert errorMessage={"Les informations renseignées sont incorrectes. Veuillez réessayer."}/> : "")}
+            {loading === "logging" ? <Loading/> : (loading === 'failed' ?
+                <ErrorAlert errorMessage={"Les informations renseignées sont incorrectes. Veuillez réessayer."}/> : "")}
         </div>
     )
 }
