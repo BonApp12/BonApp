@@ -17,5 +17,5 @@ jobs:
       run: |
         cd packages/frontend/
         echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
-        docker image build --tag yassansplus/frontendbonapp:v1 .
+        docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:v1 . 
         docker push yassansplus/frontendbonapp:v1
