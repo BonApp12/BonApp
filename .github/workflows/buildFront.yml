@@ -1,0 +1,21 @@
+name: build front
+
+on:
+  push:
+   branches: [ master ]
+  pull_request:
+    branches: [ master ]
+      
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build & Push Image
+      run: |
+        cd packages/frontend/
+        echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+        docker image build -t yassansplus/frontendBonapp:v1 .
+        docker push dab8106/gitaction:v1
