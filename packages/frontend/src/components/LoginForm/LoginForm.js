@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Loading from "../../components/Loading/Loading";
 import ErrorAlert from "../../components/Alerts/ErrorAlert";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
@@ -39,7 +39,7 @@ function LoginForm() {
     return (
         <div>
             {isConnected ? <Navigate to={{pathname: '/already-logged'}} /> : ""}
-            <h3>Bienvenue, veuillez vous connecter.</h3>
+            <h3>Bienvenue, veuillez vous connecter ✨.</h3>
             <form onSubmit={handleSubmit} className="m-5">
                 <div className="form-control">
                     <label className="label">
