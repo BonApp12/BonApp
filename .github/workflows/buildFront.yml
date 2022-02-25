@@ -2,7 +2,7 @@ name: build front
 
 on:
   push:
-   branches: [ master ]
+   branches: [ develop ]
       
 jobs:
   build:
@@ -11,9 +11,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build & Push Image
+    - name: Build & Push Image for front
       run: |
         cd packages/frontend/
         echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
-        docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:v1 . 
-        docker push yassansplus/frontendbonapp:v1
+        docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:develop . 
+        docker push yassansplus/frontendbonapp:develop
+    - name: Build & Push Image for back
+      run: |
+        cd packages/backend/
+        echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+        docker image build -f Dockerfile.local --tag yassansplus/backendbonapp:develop . 
+        docker push yassansplus/backendbonapp:develop
