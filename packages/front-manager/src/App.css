@@ -1,4 +1,15 @@
-ul
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap');
+
+body
 {
-    list-style-type:none;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.nav-link
+{
+    color: black;
+}
+
+.logo {
+    width: 3rem;
 }
