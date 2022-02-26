@@ -1,35 +1,57 @@
 import React from "react";
 
 function Sidebar() {
+
+    const user = 'MBLH';
+    const title = 'Dashboard de ';
+
+    const categorys = [
+        {
+            icon: 'fs-4 bi-house',
+            name: 'Home'
+        },
+        {
+            icon: 'fs-4 bi-speedometer2',
+            name: 'Dashboard'
+        },
+        {
+            icon: 'fs-4 bi-table',
+            name: 'Orders'
+        },
+        {
+            icon: 'fs-4 bi-grid',
+            name: 'Products'
+        },
+        {
+            icon: 'fs-4 bi-people',
+            name: 'Customers'
+        }
+    ];
     return (
-        <div class="d-flex" id="wrapper">
-        <div class="border-end bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading border-bottom bg-light">Start Bootstrap </div>
-    <div class="list-group list-group-flush"><a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a><a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a><a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a><a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a><a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a><a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a></div>
-</div>
-    <div id="page-content-wrapper">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-            <div class="container-fluid"><button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                        <li class="nav-item active"><a class="nav-link" href="#!">Home </a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>
-                        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"><a class="dropdown-item" href="#!">Action</a><a class="dropdown-item" href="#!">Another action</a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="#!">Something else here</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+        <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-light">
+            <div
+                className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+                <a href="/"
+                   className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none">
+                    <span className="fs-5 d-none d-sm-inline">{title}{user}</span>
+                </a>
+                <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                    id="menu">
+                    {categorys.map((value, index) => {
+                        return (
+                            <li key={index}>
+                                <a href="#" className="nav-link align-middle px-0">
+                                    <i className={value.icon}/>
+                                    <span className="ms-1 d-none d-sm-inline p-2">
+                                        {value.name}
+                                    </span>
+                                </a>
+                            </li>
+                        )
+                    })}
+                </ul>
             </div>
-        </nav>
-        <div class="container-fluid">
-            <h1 class="mt-4">Simple Sidebar</h1>
-            <p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.</p>
-            <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>. The top navbar is optional, and just for demonstration. Just create an element with the <code>#sidebarToggle</code> ID which will toggle the menu when clicked.</p>
         </div>
-    </div>
-</div>
     );
 }
 
