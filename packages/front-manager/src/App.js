@@ -4,7 +4,11 @@ import Sidebar from './components/Sidebar';
 function App() {
   return (
     <div className="App">
-      <Sidebar />
+        <div className="container-fluid">
+            <div className="row flex-nowrap">
+                <Sidebar />
+            </div>
+        </div>
     </div>
   );
 }
