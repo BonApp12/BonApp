@@ -1,6 +1,15 @@
-import React from "react";
+import React from 'react';
+import { Bar } from 'react-chartjs-2'
 
 function Stats() {
+
+    const BarChart = () => {
+        return (
+            <div>
+                <p>test</p>
+            </div>
+        )
+    }
 
     const stats = [
         {
@@ -46,6 +55,7 @@ function Stats() {
             </div>
             <h3 className='p-3'>Quelques graphiques</h3>
             <div className='row'>
+                { BarChart() }
             </div>
         </div>
     )
