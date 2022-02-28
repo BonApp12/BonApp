@@ -1,12 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap');
 
-body
-{
+body {
     font-family: 'Oxygen', sans-serif;
 }
 
-.nav-link
-{
+.nav-link {
     color: black;
 }
 
