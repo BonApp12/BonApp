@@ -4,26 +4,26 @@ function Sidebar() {
 
     const user = 'MBLH';
 
-    const categorys = [
+    const categories = [
         {
             icon: 'fs-4 bi-house',
-            name: 'Home'
+            content: 'Home'
         },
         {
             icon: 'fs-4 bi-speedometer2',
-            name: 'Dashboard'
+            content: 'Dashboard'
         },
         {
             icon: 'fs-4 bi-table',
-            name: 'Orders'
+            content: 'Orders'
         },
         {
             icon: 'fs-4 bi-grid',
-            name: 'Products'
+            content: 'Products'
         },
         {
             icon: 'fs-4 bi-people',
-            name: 'Customers'
+            content: 'Customers'
         }
     ];
     return (
@@ -35,13 +35,13 @@ function Sidebar() {
                 </a>
                 <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                     id="menu">
-                    {categorys.map((value, index) => {
+                    {categories.map((category, index) => {
                         return (
                             <li key={index}>
                                 <a href="/" className="nav-link align-middle px-0">
-                                    <i className={value.icon}/>
+                                    <i className={category.icon}/>
                                     <span className="ms-1 d-none d-sm-inline p-2">
-                                        {value.name}
+                                        {category.content}
                                     </span>
                                 </a>
                             </li>
