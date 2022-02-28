@@ -2,8 +2,6 @@ import React from "react";
 
 function Sidebar() {
 
-    const user = 'MBLH';
-
     const categories = [
         {
             icon: 'fs-4 bi-house',
@@ -27,18 +25,13 @@ function Sidebar() {
         }
     ];
     return (
-        <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-light">
-            <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-                <a href="/" className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none">
-                    <img src="https://www.svgrepo.com/show/113600/restaurant.svg" alt="logo" className="logo"/>
-                    <span className="fs-5 d-none d-sm-inline text-dark m-3">Dashboard de {user}</span>
-                </a>
-                <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-                    id="menu">
+        <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div className="position-sticky pt-3">
+                <ul className="nav flex-column">
                     {categories.map((category, index) => {
                         return (
-                            <li key={index}>
-                                <a href="/" className="nav-link align-middle px-0">
+                            <li key={index} className="nav-item">
+                                <a href="/" className="nav-link">
                                     <i className={category.icon}/>
                                     <span className="ms-1 d-none d-sm-inline p-2">
                                         {category.content}
@@ -49,7 +42,7 @@ function Sidebar() {
                     })}
                 </ul>
             </div>
-        </div>
+        </nav>
     );
 }
 
