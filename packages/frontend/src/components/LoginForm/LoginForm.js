@@ -10,6 +10,7 @@ import ValidationSchemaLogin from "../../validations/ValidationSchemaLogin";
 import {useRecoilState} from 'recoil';
 import {userAtom} from '../../states/user';
 import Input from '../Input/Input';
+import {toast} from "react-toastify";
 
 function LoginForm() {
     const [loading, setLoading] = useState(false);
@@ -33,6 +34,7 @@ function LoginForm() {
                         message: "L'email ou le mot de passe est incorrect"
                     })
                 }else if(res.statusCode === 200){
+                    toast.success('Connexion réussie');
                     setUserState(res.user);
                     navigate('/already-logged');
                 }
@@ -52,7 +54,7 @@ function LoginForm() {
                 )
             }
             <form onSubmit={handleSubmit(onSubmit)} className="m-5">
-                <Input type="email" name="email" register={{...register('email')}} error={errors?.email?.message} placeHolder="exemple@doe.com"/>
+                <Input type="email" name="email" register={{...register('email')}} error={errors?.email?.message} placeHolder="exemple@doe.com" />
                 <Input type="password" name="password" register={{...register('password')}} error={errors?.password?.message} placeHolder="********"/>
                 {
                     loading ? (

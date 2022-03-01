@@ -1,8 +1,18 @@
-import React from "react";
+import {useEffect} from "react";
 import {Link} from "react-router-dom";
+import {userAtom} from '../../states/user';
+import {useRecoilState} from "recoil";
+import {useNavigate} from "react-router-dom";
 
 const MessagePage = ({message}) => {
+    const [userState,setUserState] = useRecoilState(userAtom);
+    const navigate = useNavigate();
     const getMessageParse = JSON.parse(message);
+
+    useEffect(() => {
+        userState === '' && navigate('/');
+    },[userState]);
+
     return (
         <div>
             {

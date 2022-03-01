@@ -11,6 +11,8 @@ import Disconnect from "./components/Disconnect/Disconnect";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
 import {SocketContext, socket} from "./context/socket";
 import {RecoilRoot} from "recoil";
+import Toast from "../src/components/Toast/Toast";
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
     <div className="container mt-5">
@@ -34,6 +36,7 @@ ReactDOM.render(
                 </RecoilRoot>
             </SocketContext.Provider>
         </BrowserRouter>
+        <Toast/>
     </div>,
     document.getElementById('root')
 );
