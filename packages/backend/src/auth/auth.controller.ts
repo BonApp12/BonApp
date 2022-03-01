@@ -23,9 +23,9 @@ import { ConfigService } from '@nestjs/config';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
-    private readonly usersService: UsersService,
-    private readonly configService: ConfigService,
+      private readonly authService: AuthService,
+      private readonly usersService: UsersService,
+      private readonly configService: ConfigService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -42,15 +42,16 @@ export class AuthController {
   async login(@Req() req: RequestWithUser) {
     const { user } = req;
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
-      user.id,
+        user.id,
+        'accessToken',
     );
     const { cookie: refreshTokenCookie, token: refreshToken } =
-      this.authService.getCookieWithJwtRefreshToken(user.id);
+        this.authService.getCookieWithJwtRefreshToken(user.id, 'refreshToken');
 
     await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
     req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     user.password = '';
-    return user;
+    return {statusCode: 200, user: user};
   }
 
   @UseGuards(JwtAuthGuard)
@@ -67,9 +68,10 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/logout')
-  async logout(@Req() req: RequestWithUser) {
+  async logout(@Req() req: RequestWithUser, @Res() res: Response) {
     await this.usersService.removeRefreshToken(req.user.id);
     req.res.setHeader('Set-Cookie', this.authService.getCookiesForLogOut());
+    ['Authentication', 'Refresh'].map((cookie) => res.clearCookie(cookie));
     req.res.send();
   }
 
@@ -82,7 +84,8 @@ export class AuthController {
   @Get('/refresh')
   refresh(@Req() request: RequestWithUser) {
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
-      request.user.id,
+        request.user.id,
+        'refreshToken',
     );
     request.res.setHeader('Set-Cookie', accessTokenCookie);
     return request.user;

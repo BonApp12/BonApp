@@ -7,9 +7,9 @@ import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-    private readonly configService: ConfigService,
+      private usersService: UsersService,
+      private jwtService: JwtService,
+      private readonly configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -44,13 +44,13 @@ export class AuthService {
       console.log(error);
       if (error?.code === '23505') {
         throw new HttpException(
-          'User with that email already exists',
-          HttpStatus.BAD_REQUEST,
+            'User with that email already exists',
+            HttpStatus.BAD_REQUEST,
         );
       }
       throw new HttpException(
-        'Something went wrong',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+          'Something went wrong',
+          HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -62,37 +62,59 @@ export class AuthService {
       return user;
     } catch (error) {
       throw new HttpException(
-        'Wrong credentials provided(email in general <- dont forget to remove this too)',
-        HttpStatus.BAD_REQUEST,
+          'Wrong credentials provided(email in general <- dont forget to remove this too)',
+          HttpStatus.BAD_REQUEST,
       );
     }
   }
   private async verifyPassword(
-    plainTextPassword: string,
-    hashedPassword: string,
+      plainTextPassword: string,
+      hashedPassword: string,
   ) {
     const isPasswordMatching = await bcrypt.compare(
-      plainTextPassword,
-      hashedPassword,
+        plainTextPassword,
+        hashedPassword,
     );
     if (!isPasswordMatching) {
       throw new HttpException(
-        'Wrong credentials provided (password <- dont forget to remove this after)',
-        HttpStatus.BAD_REQUEST,
+          'Wrong credentials provided (password <- dont forget to remove this after)',
+          HttpStatus.BAD_REQUEST,
       );
     }
   }
-  public getCookieWithJwtAccessToken(userId: number) {
+
+  public getJwtAccessTokenOrRefreshToken(userId: number, typeJwt: string) {
     const payload: TokenPayload = { userId };
-    const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get(
+          typeJwt === 'accessToken'
+              ? 'JWT_ACCESS_TOKEN_SECRET'
+              : 'JWT_REFRESH_TOKEN_SECRET',
+      ),
       expiresIn: `${this.configService.get(
-        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+          typeJwt === 'accessToken'
+              ? 'JWT_ACCESS_TOKEN_EXPIRATION_TIME'
+              : 'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
       )}s`,
     });
+  }
+
+  public getCookieWithJwtAccessToken(userId: number, typeJwt: string) {
+    const token = this.getJwtAccessTokenOrRefreshToken(userId, typeJwt);
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
     )}`;
+  }
+
+  public getCookieWithJwtRefreshToken(userId: number, typeJwt: string) {
+    const token = this.getJwtAccessTokenOrRefreshToken(userId, typeJwt);
+    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+    )}`;
+    return {
+      cookie,
+      token,
+    };
   }
 
   public getCookiesForLogOut() {
@@ -102,22 +124,6 @@ export class AuthService {
     ];
   }
 
-  public getCookieWithJwtRefreshToken(userId: number) {
-    const payload: TokenPayload = { userId };
-    const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: `${this.configService.get(
-        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-      )}s`,
-    });
-    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-    )}`;
-    return {
-      cookie,
-      token,
-    };
-  }
 
   public isUserConnected(user) {
     console.log(user);
