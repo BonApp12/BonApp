@@ -14,6 +14,8 @@ const Disconnect = () => {
                     localStorage.removeItem('isConnected');
                 }
                 window.location.replace('http://localhost:3000/login');
+            }else if(res.status === 401){
+                window.location.replace('http://localhost:3000/login');
             }
         });
 
