@@ -8,11 +8,11 @@ function App() {
         <div className="App">
             <Header/>
             <div className="container-fluid">
-                <div className="row flex-nowrap">
+                <div className="row">
                     <Sidebar/>
-                    <div className="col p-2">
+                    <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                         <Stats/>
-                    </div>
+                    </main>
                 </div>
             </div>
         </div>
