@@ -1,9 +1,13 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+
+const { persistAtom } = recoilPersist();
 
 const userAtom = atom({
     key: 'user',
-    // get initial state from local storage to enable user to stay logged in
-    default: ''
+    default: '',
+    //persist user in state. It's for reload the page because without that the state is remove
+    effects_UNSTABLE: [persistAtom]
 });
 
 export { userAtom };
