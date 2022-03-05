@@ -67,9 +67,22 @@ services:
         - bp-pg-db
       networks:
         - bp-network
+
+  front-manager:
+      depends_on:
+        - backend
+      build:
+        context: ./packages/front-manager
+        args:
+          - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
+      ports:
+        - "${REACT_LOCAL_PORT}:${REACT_DOCKER_PORT}"
+      networks:
+        - bp-network
 volumes:
   pgdata:
   pgadmin:
+
 networks:
   bp-network:
     driver: bridge
