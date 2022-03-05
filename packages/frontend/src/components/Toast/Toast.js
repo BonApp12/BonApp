@@ -12,7 +12,7 @@ export default function Toast(){
 
     return (
         <ToastContainer
-            position="top-center"
+            position="bottom-center"
             autoClose={3000}
             hideProgressBar={false}
             newestOnTop={false}
