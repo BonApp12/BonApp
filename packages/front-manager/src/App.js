@@ -1,8 +1,8 @@
 import './App.css';
-import Sidebar from './components/Sidebar';
-import Stats from "./components/Stats";
-import Header from "./components/Header";
-import Graph from "./components/Graph";
+import Sidebar from './components/sidebar';
+import Stats from "./components/stats";
+import Header from "./components/header";
+import Graph from "./components/graph";
 
 function App() {
     return (
