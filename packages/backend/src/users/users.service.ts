@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UserRole } from './UserRole.enum';
 import * as bcrypt from 'bcryptjs';
+import { ConfigService } from '@nestjs/config';
 export type User = any; // Remplacer par l'entité utilisateur Users
 
 @Injectable()
@@ -12,6 +13,7 @@ export class UsersService {
   constructor(
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
+    private configService: ConfigService
   ) {}
 
   async findOne(email: string): Promise<User | undefined> {
@@ -30,6 +32,10 @@ export class UsersService {
       'User with this email does not exist',
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  async findByRefreshToken(currentHashedRefreshToken): Promise<Users[]> {
+    return this.usersRepository.find({currentHashedRefreshToken});
   }
 
   async findAll(): Promise<Users[]> {
@@ -77,9 +83,11 @@ export class UsersService {
   }
 
   async setCurrentRefreshToken(refreshToken: string, userId: number) {
-    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    const dateNow = new Date();
+    const newDate = new Date(dateNow.getTime() + this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME') * 1000)
     await this.usersRepository.update(userId, {
-      currentHashedRefreshToken,
+      currentHashedRefreshToken: refreshToken,
+      expired_refresh_token: newDate
     });
   }
 
@@ -99,6 +107,7 @@ export class UsersService {
   async removeRefreshToken(userId: number) {
     return this.usersRepository.update(userId, {
       currentHashedRefreshToken: null,
+      expired_refresh_token: null
     });
   }
 

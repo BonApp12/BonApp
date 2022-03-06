@@ -13,6 +13,7 @@ import { Response } from 'express';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtService } from '@nestjs/jwt';
 import JwtRefreshGuard from './jwt-refresh-auth.guard';
 import { CreateUsersDto } from '../users/dto/create-users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
@@ -26,6 +27,7 @@ export class AuthController {
       private readonly authService: AuthService,
       private readonly usersService: UsersService,
       private readonly configService: ConfigService,
+      private readonly jwtService: JwtService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -41,12 +43,9 @@ export class AuthController {
   @Post('/login')
   async login(@Req() req: RequestWithUser) {
     const { user } = req;
-    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
-        user.id,
-        'accessToken',
-    );
+    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(user.id);
     const { cookie: refreshTokenCookie, token: refreshToken } =
-        this.authService.getCookieWithJwtRefreshToken(user.id, 'refreshToken');
+        this.authService.getCookieWithJwtRefreshToken(user.id);
 
     await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
     req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
@@ -69,6 +68,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('/logout')
   async logout(@Req() req: RequestWithUser, @Res() res: Response) {
+    console.log('logout');
     await this.usersService.removeRefreshToken(req.user.id);
     req.res.setHeader('Set-Cookie', this.authService.getCookiesForLogOut());
     ['Authentication', 'Refresh'].map((cookie) => res.clearCookie(cookie));
@@ -85,7 +85,6 @@ export class AuthController {
   refresh(@Req() request: RequestWithUser) {
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
         request.user.id,
-        'refreshToken',
     );
     request.res.setHeader('Set-Cookie', accessTokenCookie);
     return request.user;

@@ -19,6 +19,10 @@ export class Users extends BaseEntity {
     @Column('varchar', {length: 150, unique: true})
     email: string;
 
+    @Exclude()
+    @Column({ type: 'timestamp', nullable: true})
+    expired_refresh_token?: Date
+
     @Exclude({toPlainOnly: true})
     @Column('varchar', {length: 255})
     password: string;

@@ -4,12 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUsersDto } from '../users/dto/create-users.dto';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
+import {v4 as uuidv4} from 'uuid';
+
 @Injectable()
 export class AuthService {
   constructor(
       private usersService: UsersService,
       private jwtService: JwtService,
-      private readonly configService: ConfigService,
+      private readonly configService: ConfigService
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -83,31 +85,23 @@ export class AuthService {
     }
   }
 
-  public getJwtAccessTokenOrRefreshToken(userId: number, typeJwt: string) {
+  public getJwtAccessToken(userId: number) {
     const payload: TokenPayload = { userId };
     return this.jwtService.sign(payload, {
-      secret: this.configService.get(
-          typeJwt === 'accessToken'
-              ? 'JWT_ACCESS_TOKEN_SECRET'
-              : 'JWT_REFRESH_TOKEN_SECRET',
-      ),
-      expiresIn: `${this.configService.get(
-          typeJwt === 'accessToken'
-              ? 'JWT_ACCESS_TOKEN_EXPIRATION_TIME'
-              : 'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-      )}s`,
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`
     });
   }
 
-  public getCookieWithJwtAccessToken(userId: number, typeJwt: string) {
-    const token = this.getJwtAccessTokenOrRefreshToken(userId, typeJwt);
+  public getCookieWithJwtAccessToken(userId: number) {
+    const token = this.getJwtAccessToken(userId);
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
         'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
     )}`;
   }
 
-  public getCookieWithJwtRefreshToken(userId: number, typeJwt: string) {
-    const token = this.getJwtAccessTokenOrRefreshToken(userId, typeJwt);
+  public getCookieWithJwtRefreshToken(userId: number) {
+    const token = uuidv4();
     const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
         'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
     )}`;
@@ -122,6 +116,33 @@ export class AuthService {
       'Authentication=; HttpOnly; Path=/ Max-Age=0',
       'Refresh=; HttpOnly; Path=/; Max-Age=0',
     ];
+  }
+
+  public refreshToken(req){
+    const authentication = req.cookies?.Authentication;
+    const refresh = req.cookies?.Refresh;
+    console.log(refresh,authentication);
+    if(authentication === undefined){
+      if(refresh !== undefined){
+        return this.verifyRefreshToken(refresh);
+      }
+    }
+    return new Promise((resolve,reject) => {
+      resolve(authentication);
+      reject('bug');
+    })
+  }
+
+  private verifyRefreshToken(currentHashedRefreshToken): any {
+    return this.usersService.findByRefreshToken(currentHashedRefreshToken)
+        .then(res => {
+          const date = new Date();
+          if(date < res[0]?.expired_refresh_token){
+            return this.getCookieWithJwtAccessToken(res[0]?.id);
+          }
+          this.usersService.removeRefreshToken(res[0]?.id);
+          return false;
+        });
   }
 
 
