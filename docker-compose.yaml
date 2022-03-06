@@ -67,7 +67,6 @@ services:
         - bp-pg-db
       networks:
         - bp-network
-
   front-manager:
       depends_on:
         - backend
