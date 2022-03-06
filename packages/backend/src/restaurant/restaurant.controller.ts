@@ -41,7 +41,6 @@ export class RestaurantController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log('restaurant');
     return this.restaurantService.findOne(+id);
   }
 

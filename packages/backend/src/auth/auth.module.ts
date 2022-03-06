@@ -8,7 +8,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthMiddleware } from './auth.middleware';
 import { Repository } from 'typeorm';
 import { Users } from '../users/entities/users.entity'
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -37,10 +36,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   exports: [AuthService],
   controllers: [AuthController],
 })
-export class AuthModule {//implements NestModule{
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer
-  //       .apply(AuthMiddleware)
-  //       .forRoutes('auth','restaurant');
-  // }
-}
+export class AuthModule {}

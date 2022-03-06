@@ -7,7 +7,7 @@ module.exports = {
   database: 'bp-pg-db',
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: false, // Changer en true quand une entité est modifiée pour que les changements s'appliquent. docker logs -f backend pour vérifier les erreurs de démarrage s'il y a lieu
-  logging: false,
+  logging: true,
   migrationsTableName: 'custom_migration_table',
   migrations: ['dist/migration/*{.ts,.js}'],
   cli: {

@@ -100,51 +100,11 @@ export class AuthService {
     )}`;
   }
 
-  public getCookieWithJwtRefreshToken(userId: number) {
-    const token = uuidv4();
-    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-    )}`;
-    return {
-      cookie,
-      token,
-    };
-  }
-
   public getCookiesForLogOut() {
     return [
-      'Authentication=; HttpOnly; Path=/ Max-Age=0',
-      'Refresh=; HttpOnly; Path=/; Max-Age=0',
+      'Authentication=; HttpOnly; Path=/ Max-Age=0'
     ];
   }
-
-  public refreshToken(req){
-    const authentication = req.cookies?.Authentication;
-    const refresh = req.cookies?.Refresh;
-    console.log(refresh,authentication);
-    if(authentication === undefined){
-      if(refresh !== undefined){
-        return this.verifyRefreshToken(refresh);
-      }
-    }
-    return new Promise((resolve,reject) => {
-      resolve(authentication);
-      reject('bug');
-    })
-  }
-
-  private verifyRefreshToken(currentHashedRefreshToken): any {
-    return this.usersService.findByRefreshToken(currentHashedRefreshToken)
-        .then(res => {
-          const date = new Date();
-          if(date < res[0]?.expired_refresh_token){
-            return this.getCookieWithJwtAccessToken(res[0]?.id);
-          }
-          this.usersService.removeRefreshToken(res[0]?.id);
-          return false;
-        });
-  }
-
 
   public isUserConnected(user) {
     console.log(user);

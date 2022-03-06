@@ -34,10 +34,6 @@ export class UsersService {
     );
   }
 
-  async findByRefreshToken(currentHashedRefreshToken): Promise<Users[]> {
-    return this.usersRepository.find({currentHashedRefreshToken});
-  }
-
   async findAll(): Promise<Users[]> {
     return this.usersRepository.find({ relations: ['restaurant'] });
   }
@@ -80,35 +76,6 @@ export class UsersService {
       'User with this id does not exist',
       HttpStatus.NOT_FOUND,
     );
-  }
-
-  async setCurrentRefreshToken(refreshToken: string, userId: number) {
-    const dateNow = new Date();
-    const newDate = new Date(dateNow.getTime() + this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME') * 1000)
-    await this.usersRepository.update(userId, {
-      currentHashedRefreshToken: refreshToken,
-      expired_refresh_token: newDate
-    });
-  }
-
-  async getUserIfRefreshTokenMatches(refreshToken: string, userId: number) {
-    const user = await this.getById(userId);
-
-    const isRefreshTokenMatching = await bcrypt.compare(
-      refreshToken,
-      user.currentHashedRefreshToken,
-    );
-
-    if (isRefreshTokenMatching) {
-      return user;
-    }
-  }
-
-  async removeRefreshToken(userId: number) {
-    return this.usersRepository.update(userId, {
-      currentHashedRefreshToken: null,
-      expired_refresh_token: null
-    });
   }
 
   hydrateUserEntity(userDetails: CreateUsersDto): User {
