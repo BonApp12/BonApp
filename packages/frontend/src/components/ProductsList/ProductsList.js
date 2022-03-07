@@ -1,14 +1,15 @@
 import React, {useState, useEffect, useContext, useCallback} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
-import Loading from "../Loading/Loading";
+import LoadingPage from "../Loading/LoadingPage";
 
 const ProductsList = () => {
     let params = useParams();
+    const navigate = useNavigate();
 
     // Setting up states
     const [error, setError] = useState(null);
@@ -50,16 +51,18 @@ const ProductsList = () => {
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
-        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant);
+        setTimeout(() => {
+            fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant, navigate);
+        },1000)
     }, [params.idRestaurant])
 
     if (error) {
         return <div>Erreur dans le chargement. Veuillez réessayer</div>
     } else if (!isLoaded) {
-        return <div><Loading/></div>
+        return <LoadingPage />
     } else {
         return (
-            <div>
+            <>
                 <Layout restaurant={restaurant}/>
                 <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
                 <ol>
@@ -72,7 +75,8 @@ const ProductsList = () => {
                         })
                     }
                 </ol>
-            </div>)
+            </>
+        )
     }
 }
 

@@ -1,4 +1,4 @@
-const fetchFullPlateById = (idPlate, setPlate, setIsLoaded, setError) => {
+const fetchFullPlateById = (idPlate, setPlate, setIsLoaded, setError, navigate) => {
     fetch(process.env.REACT_APP_URL_BACKEND + '/plate/' + idPlate, {
         crossDomain: true,
         method: 'GET',
@@ -8,8 +8,12 @@ const fetchFullPlateById = (idPlate, setPlate, setIsLoaded, setError) => {
         .then(res => res.json())
         .then(
             (result) => {
-                setPlate(result);
-                setIsLoaded(true);
+                if(result.hasOwnProperty('statusCode') && result.statusCode === 401){
+                    navigate('/');
+                }else{
+                    setPlate(result);
+                    setIsLoaded(true);
+                }
             },
             (error) => {
                 setIsLoaded(true);

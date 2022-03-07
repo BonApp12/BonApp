@@ -28,6 +28,8 @@ const MessagePage = ({message}) => {
             <Link to={"/disconnect"}>Se déconnecter</Link>
             <br/>
             <Link to={"/is-connected"}>Revérifier (oublie pas de retirer ça)</Link>
+            <br />
+            <Link to={"/restaurant/1"}>Restaurant (route protégé pour les tests)</Link>
         </div>
     )
 }
