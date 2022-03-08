@@ -1,5 +1,5 @@
 // user.factory.ts
-import Faker from 'faker'
+import Faker from '@faker-js/faker'
 import {define, factory} from 'typeorm-seeding';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
 import {Address} from '../../address/entities/address.entity';

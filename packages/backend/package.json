@@ -27,6 +27,7 @@
     "schema:kill": "npm run schema:drop && npm run schema:sync"
   },
   "dependencies": {
+    "@faker-js/faker": "^6.0.0-beta.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.1.6",
     "@nestjs/core": "^8.0.0",

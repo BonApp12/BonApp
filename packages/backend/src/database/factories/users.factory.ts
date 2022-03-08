@@ -1,6 +1,6 @@
 // user.factory.ts
 import {Users} from '../../users/entities/users.entity';
-import Faker from 'faker'
+import Faker from '@faker-js/faker'
 import {define, factory} from 'typeorm-seeding';
 import {UserRole} from '../../users/UserRole.enum';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
