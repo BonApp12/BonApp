@@ -3,7 +3,7 @@ FROM node:14-alpine
 RUN mkdir -p /svr/app
 
 WORKDIR /svr/app
-
+RUN yarn config set network-timeout 600000 -g
 RUN yarn add global @nestjs/cli
 
 COPY package.json .
