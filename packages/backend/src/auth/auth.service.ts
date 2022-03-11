@@ -3,8 +3,8 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUsersDto } from '../users/dto/create-users.dto';
 import { ConfigService } from '@nestjs/config';
+import { AuthErrorCode } from './auth-error-code.enum';
 import * as bcrypt from 'bcryptjs';
-import {v4 as uuidv4} from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -14,14 +14,6 @@ export class AuthService {
       private readonly configService: ConfigService
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(email);
-    if (user && user.password === password) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  }
   async login(user: any) {
     const payload = { email: user.email, sub: user.userId };
     const access_token = this.jwtService.sign(payload);
@@ -34,17 +26,14 @@ export class AuthService {
     return await this.usersService.findOne(user.email);
   }
   public async register(registrationData: CreateUsersDto) {
-    const hashedPassword = await bcrypt.hash(registrationData.password, 10);
     try {
       const createdUser = await this.usersService.create({
-        ...registrationData,
-        password: hashedPassword,
+        ...registrationData
       });
       createdUser.password = undefined;
       return createdUser;
     } catch (error) {
-      console.log(error);
-      if (error?.code === '23505') {
+      if (AuthErrorCode.USER_ALREADY_EXIST === error?.code) {
         throw new HttpException(
             'User with that email already exists',
             HttpStatus.BAD_REQUEST,

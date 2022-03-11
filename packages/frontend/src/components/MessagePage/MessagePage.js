@@ -5,7 +5,7 @@ import {useRecoilState} from "recoil";
 import {useNavigate} from "react-router-dom";
 
 const MessagePage = ({message}) => {
-    const [userState,setUserState] = useRecoilState(userAtom);
+    const userState = useRecoilState(userAtom);
     const navigate = useNavigate();
     const getMessageParse = JSON.parse(message);
 
@@ -14,7 +14,7 @@ const MessagePage = ({message}) => {
     },[userState]);
 
     return (
-        <div>
+        <div className="flex flex-col">
             {
                 getMessageParse.code === 200 ? (
                     <h3>{getMessageParse.message}</h3>
@@ -26,9 +26,7 @@ const MessagePage = ({message}) => {
                 )
             }
             <Link to={"/disconnect"}>Se déconnecter</Link>
-            <br/>
             <Link to={"/is-connected"}>Revérifier (oublie pas de retirer ça)</Link>
-            <br />
             <Link to={"/restaurant/1"}>Restaurant (route protégé pour les tests)</Link>
         </div>
     )

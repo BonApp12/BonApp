@@ -30,30 +30,28 @@ const ProductDetail = () => {
         fetchFullPlateById(plateId, setPlate, setIsLoaded, setError, navigate);
     }, [params.idPlate]);
 
-    const handleGoBack = () => { navigate(-1) }
+    const handleGoBack = () => {
+        navigate(-1);
+    };
 
-    if (error) {
-        return <div>Une erreur est survenue lors de la récupération du plat. Veuillez réessayer</div>
-    } else if (!isLoaded) {
-        return <div><LoadingPage /></div>
-    } else {
-        return (
-            <Layout restaurant={props.restaurant}>
-                <p onClick={handleGoBack}>Retour</p>
-                <h3>{props.plateName}</h3>
-                <h4>Liste des ingrédients : </h4>
-                <ul>
-                    {
-                        plate.ingredient.map((i) => {
-                            return (
-                                <li key={i.id}>{i.name}</li>
-                            )
-                        })
-                    }
-                </ul>
-            </Layout>
-        )
-    }
-}
+    if (error) return <div>Une erreur est survenue lors de la récupération du plat. Veuillez réessayer</div>;
+    else if (!isLoaded) return <div><LoadingPage/></div>;
+    return (
+        <Layout restaurant={props.restaurant}>
+            <p onClick={handleGoBack}>Retour</p>
+            <h3>{props.plateName}</h3>
+            <h4>Liste des ingrédients : </h4>
+            <ul>
+                {
+                    plate.ingredient.map((i) => {
+                        return (
+                            <li key={i.id}>{i.name}</li>
+                        );
+                    })
+                }
+            </ul>
+        </Layout>
+    );
+};
 
 export default ProductDetail;

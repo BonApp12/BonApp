@@ -4,16 +4,13 @@ import { Users } from './entities/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UserRole } from './UserRole.enum';
-import * as bcrypt from 'bcryptjs';
-import { ConfigService } from '@nestjs/config';
-export type User = any; // Remplacer par l'entité utilisateur Users
+export type User = Users;
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
-    private configService: ConfigService
   ) {}
 
   async findOne(email: string): Promise<User | undefined> {

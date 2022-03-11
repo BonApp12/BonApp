@@ -21,7 +21,7 @@ const ProductsList = () => {
 
     const addToCart = (e) => {
         //console.log(e); // Utiliser plus tard.
-    }
+    };
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
@@ -34,8 +34,8 @@ const ProductsList = () => {
             const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             return plateName.includes(finalQuery.toLowerCase());
-        })
-    }
+        });
+    };
 
     // Searching query
     const {search} = window.location;
@@ -45,39 +45,33 @@ const ProductsList = () => {
 
     // useEffect to get orders : just for testing purposes. Change it to send orders in time.
     useEffect(() => {
-        socket.emit("findOneOrder", { id: 1 });
+        socket.emit("findOneOrder", {id: 1});
         socket.on("oneOrder", (data) => console.log(data));
-    }, [socket])
+    }, [socket]);
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
-        setTimeout(() => {
-            fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant, navigate);
-        },1000)
-    }, [params.idRestaurant])
+        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant, navigate);
+    }, [params.idRestaurant]);
 
-    if (error) {
-        return <div>Erreur dans le chargement. Veuillez réessayer</div>
-    } else if (!isLoaded) {
-        return <LoadingPage />
-    } else {
-        return (
-            <>
-                <Layout restaurant={restaurant}/>
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
-                <ol>
-                    {
-                        filteredPlates.map((plate, index) => {
-                            return (
-                                <Card name={plate.name} key={plate.id} plateId={plate.id} restaurant={restaurant}
-                                      addToCart={addToCart}/>
-                            )
-                        })
-                    }
-                </ol>
-            </>
-        )
-    }
-}
+    if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
+    else if (!isLoaded) return <LoadingPage/>;
+    return (
+        <>
+            <Layout restaurant={restaurant}/>
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+            <ol>
+                {
+                    filteredPlates.map((plate, index) => {
+                        return (
+                            <Card name={plate.name} key={plate.id} plateId={plate.id} restaurant={restaurant}
+                                  addToCart={addToCart}/>
+                        );
+                    })
+                }
+            </ol>
+        </>
+    );
+};
 
 export default ProductsList;

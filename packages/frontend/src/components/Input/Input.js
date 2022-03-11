@@ -6,7 +6,14 @@ export default function Input({type,name,register,placeHolder,error=null,label=n
             <label className="label">
                 <span className="label-text">{label}</span>
             </label>
-            <input type={type} {...register} className="input input-bordered" placeholder={placeHolder} name={name} autoComplete={"on"}/>
+            <input
+                {...register}
+                type={type}
+                className="input input-bordered"
+                placeholder={placeHolder}
+                name={name}
+                autoComplete={"on"}
+            />
             {
                 error !== null && (
                     <span className="flex text-sm text-red-500">{error}*</span>

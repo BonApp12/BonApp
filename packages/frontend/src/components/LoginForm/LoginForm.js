@@ -1,6 +1,4 @@
 import React, {useState,useEffect} from "react";
-import Loading from "../../components/Loading/Loading";
-import ErrorAlert from "../../components/Alerts/ErrorAlert";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useForm} from "react-hook-form";
@@ -54,15 +52,21 @@ function LoginForm() {
                 )
             }
             <form onSubmit={handleSubmit(onSubmit)} className="m-5">
-                <Input type="email" name="email" register={{...register('email')}} error={errors?.email?.message} placeHolder="exemple@doe.com" />
-                <Input type="password" name="password" register={{...register('password')}} error={errors?.password?.message} placeHolder="********"/>
-                {
-                    loading ? (
-                        <button className="btn loading btn-primary mt-2 text-white" type="submit">En cours...</button>
-                    ) : (
-                        <button className="btn btn-primary mt-2 text-white" type="submit">Connexion</button>
-                    )
-                }
+                <Input
+                    type="email"
+                    name="email"
+                    register={{...register('email')}}
+                    error={errors?.email?.message}
+                    placeHolder="exemple@doe.com"
+                />
+                <Input
+                    type="password"
+                    name="password"
+                    register={{...register('password')}}
+                    error={errors?.password?.message}
+                    placeHolder="********"
+                />
+                <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
             </form>
         </>
     )

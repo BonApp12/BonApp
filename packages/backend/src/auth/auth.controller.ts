@@ -13,20 +13,17 @@ import { Response } from 'express';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { JwtService } from '@nestjs/jwt';
 import { CreateUsersDto } from '../users/dto/create-users.dto';
+import { UsersDto } from '../users/dto/users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
-import { UsersService } from '../users/users.service';
-import { ConfigService } from '@nestjs/config';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 @Controller('auth')
 export class AuthController {
   constructor(
       private readonly authService: AuthService,
-      private readonly usersService: UsersService,
-      private readonly configService: ConfigService,
-      private readonly jwtService: JwtService,
+      private userDto: UsersDto
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -41,13 +38,9 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   async login(@Req() req: RequestWithUser) {
-    const { user } = req;
-    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(user.id);
-
-    req.res.setHeader('Set-Cookie', [accessTokenCookie]);
-    delete user.password;
-
-    return {statusCode: 200, user: user};
+    const userDto = plainToClass(UsersDto,req.user);
+    req.res.setHeader('Set-Cookie', [this.authService.getCookieWithJwtAccessToken(userDto.id)]);
+    return {statusCode: 200, user: userDto};
   }
 
   @UseGuards(JwtAuthGuard)

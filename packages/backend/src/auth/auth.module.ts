@@ -1,4 +1,4 @@
-import {MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { UsersModule } from '../users/users.module';
@@ -8,7 +8,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Repository } from 'typeorm';
 import { Users } from '../users/entities/users.entity'
 import { TypeOrmModule } from '@nestjs/typeorm';
 
