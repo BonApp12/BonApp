@@ -3,7 +3,6 @@ import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
-import isUserConnected from "../../requests/auth/isUserConnected";
 import ValidationSchemaLogin from "../../validations/ValidationSchemaLogin";
 import {useRecoilState} from 'recoil';
 import {userAtom} from '../../states/user';
@@ -38,7 +37,7 @@ function LoginForm() {
                 }
             })
             .catch(err => {
-                console.log(err);
+                toast.danger('Une erreur est survenue');
             })
 
     }

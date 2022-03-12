@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, MinLength, IsEmail, IsOptional } from 'class-validator';
+import { IsEmail } from 'class-validator';
 import { UserRole } from '../UserRole.enum';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { Users } from '../entities/users.entity';

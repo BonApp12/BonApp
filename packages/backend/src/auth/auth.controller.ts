@@ -22,8 +22,7 @@ import { plainToClass } from 'class-transformer';
 @Controller('auth')
 export class AuthController {
   constructor(
-      private readonly authService: AuthService,
-      private userDto: UsersDto
+      private readonly authService: AuthService
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -37,6 +36,10 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   @Post('/login')
+  //TODO: TEST:
+  // 1/ Test si tout fonctionnel -> a) Status 200 + token | b) UserDto
+  // 2/ mot de passe ou email incorrect -> test le retour
+  // 3/ mauvais objet (mauvais format) -> return 400
   async login(@Req() req: RequestWithUser) {
     const userDto = plainToClass(UsersDto,req.user);
     req.res.setHeader('Set-Cookie', [this.authService.getCookieWithJwtAccessToken(userDto.id)]);

@@ -28,7 +28,7 @@ ReactDOM.render(
                             </Route>
                             <Route path="login" element={<LoginForm/>}/>
                             <Route path="/already-logged"
-                                   element={<MessagePage message={JSON.stringify({code:200,message:"Vous êtes déjà connecté"})} />}/>
+                                   element={<MessagePage message={{code:200,message:"Vous êtes déjà connecté"}} />}/>
                             <Route path="/is-connected" element={<LoginForm/>}/>
                             <Route path="/disconnect" element={<Disconnect/>}/>
                         </Route>

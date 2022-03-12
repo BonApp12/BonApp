@@ -3,6 +3,7 @@ import { recoilPersist } from 'recoil-persist';
 
 const { persistAtom } = recoilPersist();
 
+//this is a store which will be used in whole in all application -> https://recoiljs.org/fr/
 const userAtom = atom({
     key: 'user',
     default: '',

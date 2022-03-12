@@ -4,18 +4,17 @@ import { Users } from './entities/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UserRole } from './UserRole.enum';
-export type User = Users;
 
 @Injectable()
 export class UsersService {
+  private User = Users;
   constructor(
     @InjectRepository(Users)
-    private usersRepository: Repository<Users>,
+    private usersRepository: Repository<Users>
   ) {}
 
-  async findOne(email: string): Promise<User | undefined> {
+  async findOne(email: string): Promise<Users | undefined> {
     // TODO : Faire en sorte de ne pas récupérer de restaurant lié?
-
     const user = this.usersRepository.findOne({
       relations: ['restaurant'],
       where: {
@@ -48,7 +47,7 @@ export class UsersService {
     return newUser;
   }
 
-  async getByEmail(email: string): Promise<User | undefined> {
+  async getByEmail(email: string): Promise<Users | undefined> {
     const user = this.usersRepository.findOne({
       relations: ['restaurant'],
       where: {
@@ -64,7 +63,7 @@ export class UsersService {
     );
   }
 
-  async getById(id: number): Promise<User | undefined> {
+  async getById(id: number): Promise<Users | undefined> {
     const user = await this.usersRepository.findOne({ id });
     if (user) {
       return user;
@@ -75,7 +74,7 @@ export class UsersService {
     );
   }
 
-  hydrateUserEntity(userDetails: CreateUsersDto): User {
+  hydrateUserEntity(userDetails: CreateUsersDto): Users {
     // Cette fonction doit permettre d'hydrater un objet User
     // Faire en sorte qu'elle soit la plus mainstream possible, éventuellement préciser les champs obligatoires.
     const userEntity: Users = Users.create();
