@@ -36,10 +36,6 @@ export class Users extends BaseEntity {
     @OneToMany(() => Order, (order) => order.user)
     orders: Order[];
 
-    @Column({nullable: true})
-    @Exclude()
-    public currentHashedRefreshToken?: string;
-
     @BeforeInsert()
     async setPassword(password: string) {
         const salt = await bcrypt.genSalt()

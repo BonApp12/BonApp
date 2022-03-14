@@ -2,7 +2,7 @@ import Layout from "../Layout/Layout";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useLocation, useParams} from "react-router-dom";
 import fetchFullPlateById from "../../requests/plates/fetchFullPlate";
-import Loading from "../Loading/Loading";
+import LoadingPage from "../Loading/LoadingPage";
 
 /**
  * Ce composant doit avoir à sa disposition tous les détails du restaurant qui devront
@@ -27,35 +27,31 @@ const ProductDetail = () => {
 
     useEffect(() => {
         let plateId = params.idPlate;
-        fetchFullPlateById(plateId, setPlate, setIsLoaded, setError);
+        fetchFullPlateById(plateId, setPlate, setIsLoaded, setError, navigate);
     }, [params.idPlate]);
 
-    console.log(plate);
+    const handleGoBack = () => {
+        navigate(-1);
+    };
 
-    const handleGoBack = () => { navigate(-1) }
-
-    if (error) {
-        return <div>Une erreur est survenue lors de la récupération du plat. Veuillez réessayer</div>
-    } else if (!isLoaded) {
-        return <div><Loading /></div>
-    } else {
-        return (
-            <Layout restaurant={props.restaurant}>
-                <p onClick={handleGoBack}>Retour</p>
-                <h3>{props.plateName}</h3>
-                <h4>Liste des ingrédients : </h4>
-                <ul>
-                    {
-                        plate.ingredient.map((i) => {
-                            return (
-                                <li key={i.id}>{i.name}</li>
-                            )
-                        })
-                    }
-                </ul>
-            </Layout>
-        )
-    }
-}
+    if (error) return <div>Une erreur est survenue lors de la récupération du plat. Veuillez réessayer</div>;
+    else if (!isLoaded) return <div><LoadingPage/></div>;
+    return (
+        <Layout restaurant={props.restaurant}>
+            <p onClick={handleGoBack}>Retour</p>
+            <h3>{props.plateName}</h3>
+            <h4>Liste des ingrédients : </h4>
+            <ul>
+                {
+                    plate.ingredient.map((i) => {
+                        return (
+                            <li key={i.id}>{i.name}</li>
+                        );
+                    })
+                }
+            </ul>
+        </Layout>
+    );
+};
 
 export default ProductDetail;

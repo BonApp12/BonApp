@@ -1,14 +1,15 @@
 import React, {useState, useEffect, useContext, useCallback} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
-import Loading from "../Loading/Loading";
+import LoadingPage from "../Loading/LoadingPage";
 
 const ProductsList = () => {
     let params = useParams();
+    const navigate = useNavigate();
 
     // Setting up states
     const [error, setError] = useState(null);
@@ -20,7 +21,7 @@ const ProductsList = () => {
 
     const addToCart = (e) => {
         //console.log(e); // Utiliser plus tard.
-    }
+    };
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
@@ -33,8 +34,8 @@ const ProductsList = () => {
             const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             return plateName.includes(finalQuery.toLowerCase());
-        })
-    }
+        });
+    };
 
     // Searching query
     const {search} = window.location;
@@ -44,36 +45,33 @@ const ProductsList = () => {
 
     // useEffect to get orders : just for testing purposes. Change it to send orders in time.
     useEffect(() => {
-        socket.emit("findOneOrder", { id: 1 });
+        socket.emit("findOneOrder", {id: 1});
         socket.on("oneOrder", (data) => console.log(data));
-    }, [socket])
+    }, [socket]);
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
-        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant);
-    }, [params.idRestaurant])
+        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant, navigate);
+    }, [params.idRestaurant]);
 
-    if (error) {
-        return <div>Erreur dans le chargement. Veuillez réessayer</div>
-    } else if (!isLoaded) {
-        return <div><Loading/></div>
-    } else {
-        return (
-            <div>
-                <Layout restaurant={restaurant}/>
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
-                <ol>
-                    {
-                        filteredPlates.map((plate, index) => {
-                            return (
-                                <Card name={plate.name} key={plate.id} plateId={plate.id} restaurant={restaurant}
-                                      addToCart={addToCart}/>
-                            )
-                        })
-                    }
-                </ol>
-            </div>)
-    }
-}
+    if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
+    else if (!isLoaded) return <LoadingPage/>;
+    return (
+        <>
+            <Layout restaurant={restaurant}/>
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+            <ol>
+                {
+                    filteredPlates.map((plate, index) => {
+                        return (
+                            <Card name={plate.name} key={plate.id} plateId={plate.id} restaurant={restaurant}
+                                  addToCart={addToCart}/>
+                        );
+                    })
+                }
+            </ol>
+        </>
+    );
+};
 
 export default ProductsList;

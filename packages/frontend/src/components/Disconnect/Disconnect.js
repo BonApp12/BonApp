@@ -1,23 +1,26 @@
-import React from "react";
+import {useEffect} from "react";
 import disconnectCurrentUser from "../../requests/auth/disconnectCurrentUser";
+import {useNavigate} from "react-router-dom";
+import {useRecoilState} from 'recoil';
+import {userAtom} from '../../states/user';
+import {toast} from "react-toastify";
 
 const Disconnect = () => {
-    let storageIsConnected = localStorage.getItem('isConnected');
-    if (storageIsConnected) {
-        localStorage.removeItem('isConnected');
-    }
+    const navigate = useNavigate();
+    const [userState,setUserState] = useRecoilState(userAtom);
+
+    useEffect(() => {
+        userState !== '' && navigate('/');
+    },[userState]);
+
     disconnectCurrentUser()
         .then(res => {
-            console.log(res);
-            if (res.status === 201) {
-                if (storageIsConnected) {
-                    localStorage.removeItem('isConnected');
-                }
-                window.location.replace('http://localhost:3000/login');
-            }
+            setUserState('');
+            navigate('/');
+            toast.success('Déconnexion réussie');
+            return false;
         });
-
-    return(<h1>Disconnecting - Check console to see if successful !</h1>);
+    return (<></>)
 }
 
 export default Disconnect;

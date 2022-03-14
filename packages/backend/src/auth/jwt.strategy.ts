@@ -8,14 +8,14 @@ import { Request } from 'express';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private readonly configService: ConfigService,
-    private readonly userService: UsersService,
+      private readonly configService: ConfigService,
+      private readonly userService: UsersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
           return request?.cookies?.Authentication;
-        },
+        }
       ]),
       secretOrKey: configService.get('JWT_ACCESS_TOKEN_SECRET'),
     });
