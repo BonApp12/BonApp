@@ -38,7 +38,6 @@ export class RestaurantController {
     return this.restaurantService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.restaurantService.findOne(+id);
