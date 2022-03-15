@@ -52,6 +52,12 @@ PGADMIN_PORT=5055
 
 DB_URL=postgres://postgres:root@bp-pg-db:5432/bp-pg-db
 ENTITY_PATH=dist/**/**/*.entity{.js,.ts}
+
+CLIENT_ORIGIN=http://127.0.0.1:8888
+CLIENT_API_BASE_URL=http://127.0.0.1:6868/api
+
+REACT_LOCAL_PORT=8888
+REACT_DOCKER_PORT=80
 ```
 
 Dans le cadre du développement, essayez de garder au maximum les mêmes valeurs, exception faite pour les clés
