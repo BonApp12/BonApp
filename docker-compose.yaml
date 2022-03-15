@@ -10,74 +10,74 @@ services:
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     volumes:
-      - "./packages/frontend/src:/usr/src/app/src"
+      - "./packages/frontend/:/app/"
     networks:
       - bp-network
-    command: "npm start"
+    command: "yarn start"
   backend:
-      container_name: backend
-      build:
-        context: ./packages/backend
-        dockerfile: Dockerfile.local
-      restart: always
-      env_file: .env
-      volumes:
-        - ./packages/backend:/svr/app
-        - "./scripts/wait.sh:/wait.sh"
-        - /svr/app/node_modules
-      networks:
-        - bp-network
-      ports:
-        - "${BACKEND_PORT}:${BACKEND_PORT}"
-      depends_on:
-        - bp-pg-db
-      links:
-        - bp-pg-db
+    container_name: backend
+    build:
+      context: ./packages/backend
+      dockerfile: Dockerfile.local
+    restart: always
+    env_file: .env
+    volumes:
+      - ./packages/backend:/svr/app
+      - "./scripts/wait.sh:/wait.sh"
+      - /svr/app/node_modules
+    networks:
+      - bp-network
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    depends_on:
+      - bp-pg-db
+    links:
+      - bp-pg-db
   bp-pg-db:
-      image: postgres:12-alpine
-      restart: always
-      container_name: bp-pg-db
-      env_file:
-        - .env
-      environment:
-        POSTGRES_PASSWORD: ${DB_PASSWORD}
-        PGDATA: /var/lib/postgresql/data
-        POSTGRES_USER: ${DB_USER}
-        POSTGRES_DB: ${DB_NAME}
-      ports:
-        - "${DB_PORT}:${DB_PORT}"
-      volumes:
-        - pgdata:/var/lib/postgresql/data
-      networks:
-        - bp-network
+    image: postgres:12-alpine
+    restart: always
+    container_name: bp-pg-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - bp-network
   pgadmin-portal:
-      image: dpage/pgadmin4
-      restart: always
-      container_name: pgadmin-portal
-      env_file:
-        - .env
-      environment:
-        PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
-        PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
-      volumes:
-        - pgadmin:/root/.pgadmin
-      ports:
-        - "${PGADMIN_PORT}:80"
-      depends_on:
-        - bp-pg-db
-      networks:
-        - bp-network
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin-portal
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "${PGADMIN_PORT}:80"
+    depends_on:
+      - bp-pg-db
+    networks:
+      - bp-network
   front-manager:
-      depends_on:
-        - backend
-      build:
-        context: ./packages/front-manager
-        args:
-          - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
-      ports:
-        - "${REACT_LOCAL_PORT}:${REACT_DOCKER_PORT}"
-      networks:
-        - bp-network
+    depends_on:
+      - backend
+    build:
+      context: ./packages/front-manager
+      args:
+        - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
+    ports:
+      - "${REACT_LOCAL_PORT}:${REACT_DOCKER_PORT}"
+    networks:
+      - bp-network
 volumes:
   pgdata:
   pgadmin:

@@ -1,7 +1,11 @@
 FROM node:14
 
-WORKDIR /usr/src/app
+WORKDIR /app
+COPY package.json .
+
+COPY yarn.lock .
+
+RUN yarn install
 
 COPY . .
-
-RUN npm install npm@latest
+COPY . . /app/

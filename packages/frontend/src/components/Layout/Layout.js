@@ -1,13 +1,12 @@
 import React from "react";
-import {Button, Navigation} from "../Sliding/Sliding";
-import {Link} from "react-router-dom";
+import {ButtonCart, Navigation} from "../Sliding/Sliding";
 
 const Layout = (props) => {
     return (
         <div>
             <h2 className="mt-5">Bienvenue chez {props?.restaurant?.name}</h2>
-            <Button />
-            <Navigation />
+            <ButtonCart/>
+            <Navigation/>
             {props.children}
         </div>
     )
