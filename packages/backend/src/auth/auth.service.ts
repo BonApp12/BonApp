@@ -9,9 +9,9 @@ import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class AuthService {
   constructor(
-      private usersService: UsersService,
-      private jwtService: JwtService,
-      private readonly configService: ConfigService
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private readonly configService: ConfigService
   ) {}
 
   async login(user: any) {
@@ -28,20 +28,20 @@ export class AuthService {
   public async register(registrationData: CreateUsersDto) {
     try {
       const createdUser = await this.usersService.create({
-        ...registrationData
+        ...registrationData,
       });
       createdUser.password = undefined;
       return createdUser;
     } catch (error) {
       if (AuthErrorCode.USER_ALREADY_EXIST === error?.code) {
         throw new HttpException(
-            'User with that email already exists',
-            HttpStatus.BAD_REQUEST,
+          'User with that email already exists',
+          HttpStatus.UNPROCESSABLE_ENTITY,
         );
       }
       throw new HttpException(
-          'Something went wrong',
-          HttpStatus.INTERNAL_SERVER_ERROR,
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

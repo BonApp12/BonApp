@@ -13,6 +13,7 @@ import {SocketContext, socket} from "./context/socket";
 import {RecoilRoot} from "recoil";
 import Toast from "../src/components/Toast/Toast";
 import 'react-toastify/dist/ReactToastify.css';
+import RegisterForm from './components/Register/RegisterForm';
 
 ReactDOM.render(
     <div className="container mt-5">
@@ -27,6 +28,7 @@ ReactDOM.render(
                                 <Route path=":idRestaurant/:idPlate" element={<ProductDetail/>}/>
                             </Route>
                             <Route path="login" element={<LoginForm/>}/>
+                            <Route path="register" element={<RegisterForm/>}/>
                             <Route path="/already-logged"
                                    element={<MessagePage message={{code:200,message:"Vous êtes déjà connecté"}} />}/>
                             <Route path="/is-connected" element={<LoginForm/>}/>
