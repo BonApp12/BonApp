@@ -1,15 +1,26 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import fetchFullPlate from "../requests/fetchFullPlate";
 
 function Stats() {
 
+    const [totalPlate, setPlate] = useState(0)
+
+    useEffect(()=>{
+        fetchFullPlate()
+            .then(res => res.json())
+            .then(data => {
+                setPlate(data.length)
+            })
+    })
+
     const stats = [{
-        class: 'card border-3 border-end-0 border-primary mb-3', title: 'Nombre de plats', value: Math.random()
+        class: 'card border-3 border-end-0 border-primary mb-3', title: 'Nombre de plats', value: totalPlate
     }, {
         class: 'card border-3 border-start-0 border-end-0 border-info mb-3',
         title: 'Plat le plus commandé',
         value: 'Grec'
     }, {
-        class: 'card border-3 border-start-0 border-warning mb-3', title: 'Commandes', value: Math.random()
+        class: 'card border-3 border-start-0 border-warning mb-3', title: 'Commandes', value: 0
     }];
 
     return (
@@ -19,10 +30,10 @@ function Stats() {
                 <h1 className="h2">Dashboard</h1>
             </div>
             <div className="row">
-                {stats.map((stat) => {
+                {stats.map((stat, key) => {
                     return (
                         <div className="col-sm-4 text-center">
-                            <div className={stat.class}>
+                            <div className={stat.class} id={key}>
                                 <div className="card-body">
                                     <h5 className="card-title">
                                         {stat.title}
