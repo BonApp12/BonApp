@@ -12,17 +12,18 @@ export default function RegisterForm() {
     const {register, handleSubmit, setError, formState: {errors}} = useForm({resolver: yupResolver(ValidationSchemaRegisterCustomer())})
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        data.role = 'CLIENT';
+    const onSubmit = (user) => {
+        user.role = 'CLIENT';
         setLoading(true);
-        registerUser(data)
+        registerUser(user)
             .then(res => res.json())
             .then(data => {
                 if(data?.statusCode === 422){
+                    console.log(data);
                     setLoading(false);
                     setError('register',{
                         type: 'emailAlreadyExist',
-                        message: "L'email existe déjà"
+                        message: data.message
                     })
                 }else{
                     toast.success('Inscription réussi !');
@@ -34,7 +35,7 @@ export default function RegisterForm() {
     return (
         <>
             <h3 className="text-lg">Inscrivez-vous !</h3>
-            <p className="my-4 text-sm px-2">Vous possèdez un compte ? <Link to="/login" className="text-orange-500">connectez-vous</Link> dès maintenant</p>
+            <p className="my-4 text-sm px-2">Vous possèdez un compte ? <Link to="/login" className="text-orange-600">connectez-vous</Link> dès maintenant</p>
             {
                 errors?.register?.message && (
                     <span className="text-sm text-red-500">{errors?.register?.message}*</span>
@@ -76,7 +77,7 @@ export default function RegisterForm() {
                     error={errors?.confirmPassword?.message}
                     placeHolder="Confirmez votre mot de passe"
                 />
-                <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-500 hover:bg-orange-400`} type="submit">{loading ? 'En cours...' : 'Inscription'}</button>
+                <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-600 hover:bg-orange-500`} type="submit">{loading ? 'En cours...' : 'Inscription'}</button>
             </form>
         </>
     )

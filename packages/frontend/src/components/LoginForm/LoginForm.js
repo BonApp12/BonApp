@@ -45,7 +45,7 @@ function LoginForm() {
     return (
         <>
             <h3 className="text-lg">Connectez-vous !</h3>
-            <p className="m-4 text-sm">Vous n'avez pas encore de compte, <Link to="/register" className="text-orange-500">inscrivez-vous</Link> dès maintenant</p>
+            <p className="m-4 text-sm">Vous n'avez pas encore de compte, <Link to="/register" className="text-orange-600">inscrivez-vous</Link> dès maintenant</p>
             {
                 errors?.auth?.message && (
                     <span className="text-sm text-red-500">{errors?.auth?.message}*</span>
@@ -66,7 +66,7 @@ function LoginForm() {
                     error={errors?.password?.message}
                     placeHolder="********"
                 />
-                <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-500 hover:bg-orange-400`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
+                <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-600 hover:bg-orange-500`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
             </form>
         </>
     )

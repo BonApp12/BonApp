@@ -1,5 +1,5 @@
 const registerUser = (form) => {
-    return fetch(process.env.REACT_APP_URL_BACKEND + "/auth/register", {
+    return fetch(process.env.REACT_APP_REGISTER_URL_BACKEND, {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
