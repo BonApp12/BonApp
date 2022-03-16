@@ -4,13 +4,13 @@ import {SlidingContext} from '../../context/sliding';
 import {RiShoppingCart2Line} from "react-icons/ri";
 import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
-import '../../css/cart.css'
+import '../../css/cart.css';
 import {Button} from "../Button/Button";
 import {MdOutlineClose, MdOutlinePayment} from "react-icons/md";
 // create a button that calls a context function to set a new open state when clicked
 export const ButtonCart = () => {
     const cart= useRecoilState(cartAtom)[0];
-    const ctx = useContext(SlidingContext)
+    const ctx = useContext(SlidingContext);
     return (
         <button onClick={ctx.toggleMenu} className="float-right">
             <div className="bg-orange-600 text-white custom-padding">
@@ -22,11 +22,11 @@ export const ButtonCart = () => {
         </button>
 
     )
-}
+};
 
 // create a navigation component that wraps the burger menu
 export const Navigation = () => {
-    const ctx = useContext(SlidingContext)
+    const ctx = useContext(SlidingContext);
     const [cart, updateCart] = useRecoilState(cartAtom);
 
     function formattedCart() {
@@ -39,7 +39,7 @@ export const Navigation = () => {
             }
             return cartMap.set(plate.name, [...cartMap.get(plate.name), plate]);
 
-        })
+        });
         return Array.from(cartMap);
     }
 
@@ -52,10 +52,10 @@ export const Navigation = () => {
     }
 
     function removeFromCart(plate) {
-        const indexPLateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
-        const copyOfCart = [...cart]
-        copyOfCart.splice(indexPLateToRemove, 1);
-        updateCart(copyOfCart)
+        const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
+        const copyOfCart = [...cart];
+        copyOfCart.splice(indexPlateToRemove, 1);
+        updateCart(copyOfCart);
     }
 
 

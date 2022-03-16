@@ -31,8 +31,8 @@ const ProductsList = () => {
             const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             return plateName.includes(finalQuery.toLowerCase());
-        })
-    }
+        });
+    };
 
     // Searching query
     const {search} = window.location;
@@ -43,23 +43,23 @@ const ProductsList = () => {
     // useEffect to get orders : just for testing purposes. Change it to send orders in time.
     useEffect(() => {
         socket.emit("findOneOrder", {id: 1});
-    }, [socket])
+    }, [socket]);
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
         fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant);
-    }, [params.idRestaurant])
+    }, [params.idRestaurant]);
 
 
     function addToCart(plate) {
-        updateCart([...cart, plate])
+        updateCart([...cart, plate]);
     }
 
     function removeFromCart(plate) {
         const indexPLateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
-        const copyOfCart = [...cart]
+        const copyOfCart = [...cart];
         copyOfCart.splice(indexPLateToRemove, 1);
-        updateCart(copyOfCart)
+        updateCart(copyOfCart);
     }
 
 
@@ -85,6 +85,6 @@ const ProductsList = () => {
                 </ol>
             </div>)
     }
-}
+};
 
 export default ProductsList;
