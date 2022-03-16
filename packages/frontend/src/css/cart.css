@@ -1,0 +1,21 @@
+.custom-padding {
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+    padding: 12px 15px;
+    font-size: 25px;
+    position: fixed;
+    right: 0;
+    z-index: 1000;
+}
+
+.badge-cart {
+    position: absolute;
+    top: 3px;
+    right: 2px;
+    font-size: 11px;
+}
+
+.sidebar-cart .my-menu {
+    background: white;
+    top: -1px !important;
+}

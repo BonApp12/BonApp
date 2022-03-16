@@ -1,27 +1,24 @@
-import React, {useState, useEffect, useContext, useCallback} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
-import LoadingPage from "../Loading/LoadingPage";
+import Loading from "../Loading/Loading";
+import {useRecoilState} from "recoil";
+import {cartAtom} from "../../states/cart";
 
 const ProductsList = () => {
     let params = useParams();
-    const navigate = useNavigate();
 
     // Setting up states
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
-    const [orders, setOrders] = useState([]);
+    const [cart, updateCart] = useRecoilState(cartAtom);
     // Handling socket
     const socket = useContext(SocketContext);
-
-    const addToCart = (e) => {
-        //console.log(e); // Utiliser plus tard.
-    };
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
@@ -46,32 +43,48 @@ const ProductsList = () => {
     // useEffect to get orders : just for testing purposes. Change it to send orders in time.
     useEffect(() => {
         socket.emit("findOneOrder", {id: 1});
-        socket.on("oneOrder", (data) => console.log(data));
     }, [socket]);
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
-        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant, navigate);
+        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant);
     }, [params.idRestaurant]);
 
-    if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
-    else if (!isLoaded) return <LoadingPage/>;
-    return (
-        <>
-            <Layout restaurant={restaurant}/>
-            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
-            <ol>
-                {
-                    filteredPlates.map((plate, index) => {
-                        return (
-                            <Card name={plate.name} key={plate.id} plateId={plate.id} restaurant={restaurant}
-                                  addToCart={addToCart}/>
-                        );
-                    })
-                }
-            </ol>
-        </>
-    );
+
+    function addToCart(plate) {
+        updateCart([...cart, plate]);
+    }
+
+    function removeFromCart(plate) {
+        const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
+        const copyOfCart = [...cart];
+        copyOfCart.splice(indexPlateToRemove, 1);
+        updateCart(copyOfCart);
+    }
+
+
+    if (error) {
+        return <div>Erreur dans le chargement. Veuillez réessayer</div>
+    } else if (!isLoaded) {
+        return <div><Loading/></div>
+    } else {
+        return (
+            <div className="sidebar-cart">
+                <Layout restaurant={restaurant}/>
+                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+                <ol>
+                    {
+                        filteredPlates.map(plate => {
+                            return (
+                                <Card name={plate.name} key={plate.id} removeFromCart={() => removeFromCart(plate)}
+                                      addToCart={() => addToCart(plate)} plateProps={plate} restaurant={restaurant}
+                                      cart={cart} updateCart={updateCart}/>
+                            )
+                        })
+                    }
+                </ol>
+            </div>)
+    }
 };
 
 export default ProductsList;

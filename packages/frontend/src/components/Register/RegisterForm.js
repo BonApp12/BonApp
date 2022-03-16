@@ -9,7 +9,7 @@ import {toast} from "react-toastify";
 
 export default function RegisterForm() {
     const [loading, setLoading] = useState(false);
-    const {register, handleSubmit, setError, formState: {errors}} = useForm({resolver: yupResolver(ValidationSchemaRegisterCustomer())})
+    const {register, handleSubmit, setError, formState: {errors}} = useForm({resolver: yupResolver(ValidationSchemaRegisterCustomer())});
     const navigate = useNavigate();
 
     const onSubmit = (user) => {
@@ -26,11 +26,11 @@ export default function RegisterForm() {
                         message: data.message
                     })
                 }else{
-                    toast.success('Inscription réussi !');
+                    toast.success('Inscription réussie !');
                     navigate('/');
                 }
             })
-    }
+    };
 
     return (
         <>
