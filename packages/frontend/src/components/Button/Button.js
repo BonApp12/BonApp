@@ -1,7 +1,5 @@
-import React from "react";
-
-export const Button = (props) => {
+export const Button = ({classStyle,onClick,children}) => {
     return (
-        <button className="btn btn-primary" onClick={props.onClick}>{ props.title }</button>
+        <button className={'btn ' + classStyle} onClick={onClick}>{children}</button>
     )
-}
+};

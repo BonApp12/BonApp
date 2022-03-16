@@ -4,14 +4,14 @@ RUN mkdir -p /svr/app
 
 WORKDIR /svr/app
 
-RUN npm i -g @nestjs/cli
+RUN yarn add global @nestjs/cli
 
 COPY package.json .
-COPY package-lock.json .
+COPY yarn.lock .
 
-RUN npm install
+RUN yarn install
 
 COPY . . /svr/app/
 EXPOSE $BACKEND_PORT
 
-CMD ["npm", "run", "start:debug"]
+CMD ["yarn", "run", "start:debug"]

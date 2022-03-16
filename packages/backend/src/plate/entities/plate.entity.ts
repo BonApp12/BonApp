@@ -1,15 +1,7 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
-import { Ingredient } from 'src/ingredients/entities/ingredient.entity';
-import { PlateCategory } from 'src/plate-category/entities/plate-category.entity';
+import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
+import {Restaurant} from 'src/restaurant/entities/restaurant.entity';
+import {Ingredient} from 'src/ingredients/entities/ingredient.entity';
+import {PlateCategory} from 'src/plate-category/entities/plate-category.entity';
 import {Order} from "../../orders/entities/order.entity";
 @Entity()
 export class Plate extends BaseEntity {
@@ -21,6 +13,9 @@ export class Plate extends BaseEntity {
 
   @Column('varchar', { length: 200 })
   name: string;
+
+  @Column('float')
+  price: number;
 
   @OneToMany(() => Ingredient, (ingredient) => ingredient.plates)
   ingredient: Ingredient[];

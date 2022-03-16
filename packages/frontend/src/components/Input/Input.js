@@ -12,7 +12,7 @@ export default function Input({type,name,register,placeHolder,error=null,label=n
                 className="input input-bordered"
                 placeholder={placeHolder}
                 name={name}
-                autoComplete={"on"}
+                autoComplete={"off"}
             />
             {
                 error !== null && (
