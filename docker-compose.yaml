@@ -13,7 +13,6 @@ services:
       - "./packages/frontend/:/app/"
     networks:
       - bp-network
-    command: "yarn start"
   backend:
     container_name: backend
     build:

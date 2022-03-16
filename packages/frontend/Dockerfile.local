@@ -9,3 +9,7 @@ RUN yarn install
 
 COPY . .
 COPY . . /app/
+
+EXPOSE $FRONTEND_PORT
+
+CMD ["yarn", "start"]

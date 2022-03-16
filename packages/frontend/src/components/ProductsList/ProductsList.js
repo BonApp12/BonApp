@@ -56,9 +56,9 @@ const ProductsList = () => {
     }
 
     function removeFromCart(plate) {
-        const indexPLateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
+        const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
         const copyOfCart = [...cart];
-        copyOfCart.splice(indexPLateToRemove, 1);
+        copyOfCart.splice(indexPlateToRemove, 1);
         updateCart(copyOfCart);
     }
 
