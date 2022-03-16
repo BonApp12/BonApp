@@ -9,7 +9,7 @@ import {Button} from "../Button/Button";
 import {MdOutlineClose, MdOutlinePayment} from "react-icons/md";
 // create a button that calls a context function to set a new open state when clicked
 export const ButtonCart = () => {
-    const cart= useRecoilState(cartAtom);
+    const cart= useRecoilState(cartAtom)[0];
     const ctx = useContext(SlidingContext)
     return (
         <button onClick={ctx.toggleMenu} className="float-right">
