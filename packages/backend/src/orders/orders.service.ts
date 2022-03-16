@@ -16,7 +16,8 @@ export class OrdersService {
   }
 
   findAll() {
-    return `This action returns all orders`;
+    /* Récupération de toutes les commandes avec les relations User et Restaurant */
+    return this.orderRepository.find({ relations: ['user', 'restaurant'] });
   }
 
   findOne(id: number) {
