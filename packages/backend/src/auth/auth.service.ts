@@ -9,9 +9,9 @@ import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class AuthService {
   constructor(
-      private usersService: UsersService,
-      private jwtService: JwtService,
-      private readonly configService: ConfigService
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async login(user: any) {
@@ -23,25 +23,25 @@ export class AuthService {
     };
   }
   async getCompleteUser(user: CreateUsersDto) {
-    return await this.usersService.findOne(user.email);
+    return this.usersService.findOne(user.email);
   }
   public async register(registrationData: CreateUsersDto) {
     try {
       const createdUser = await this.usersService.create({
-        ...registrationData
+        ...registrationData,
       });
       createdUser.password = undefined;
       return createdUser;
     } catch (error) {
       if (AuthErrorCode.USER_ALREADY_EXIST === error?.code) {
         throw new HttpException(
-            'User with that email already exists',
-            HttpStatus.BAD_REQUEST,
+          "L'email existe déjà",
+          HttpStatus.UNPROCESSABLE_ENTITY,
         );
       }
       throw new HttpException(
-          'Something went wrong',
-          HttpStatus.INTERNAL_SERVER_ERROR,
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -53,23 +53,23 @@ export class AuthService {
       return user;
     } catch (error) {
       throw new HttpException(
-          'Wrong credentials provided(email in general <- dont forget to remove this too)',
-          HttpStatus.BAD_REQUEST,
+        'Wrong credentials provided(email in general <- dont forget to remove this too)',
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
   private async verifyPassword(
-      plainTextPassword: string,
-      hashedPassword: string,
+    plainTextPassword: string,
+    hashedPassword: string,
   ) {
     const isPasswordMatching = await bcrypt.compare(
-        plainTextPassword,
-        hashedPassword,
+      plainTextPassword,
+      hashedPassword,
     );
     if (!isPasswordMatching) {
       throw new HttpException(
-          'Wrong credentials provided (password <- dont forget to remove this after)',
-          HttpStatus.BAD_REQUEST,
+        'Wrong credentials provided (password <- dont forget to remove this after)',
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -78,21 +78,21 @@ export class AuthService {
     const payload: TokenPayload = { userId };
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: `${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`
+      expiresIn: `${this.configService.get(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      )}s`,
     });
   }
 
   public getCookieWithJwtAccessToken(userId: number) {
     const token = this.getJwtAccessToken(userId);
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
     )}`;
   }
 
   public getCookiesForLogOut() {
-    return [
-      'Authentication=; HttpOnly; Path=/ Max-Age=0'
-    ];
+    return ['Authentication=; HttpOnly; Path=/ Max-Age=0'];
   }
 
   public isUserConnected(user) {

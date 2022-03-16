@@ -16,7 +16,7 @@ export default function Input({type,name,register,placeHolder,error=null,label=n
             />
             {
                 error !== null && (
-                    <span className="flex text-sm text-red-500">{error}*</span>
+                    <span className="mt-1 text-left text-sm text-red-500">{error}*</span>
                 )
             }
         </div>

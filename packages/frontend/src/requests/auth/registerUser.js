@@ -1,7 +1,7 @@
 import route from "../../router/route";
 
-const loginWithCredentials = (form) => {
-    return fetch(route.login, {
+const registerUser = (form) => {
+    return fetch(route.register, {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
@@ -13,4 +13,4 @@ const loginWithCredentials = (form) => {
     })
 }
 
-export default loginWithCredentials;
+export default registerUser;

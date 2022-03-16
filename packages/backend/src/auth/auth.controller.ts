@@ -42,8 +42,10 @@ export class AuthController {
   // 3/ mauvais objet (mauvais format) -> return 400
   async login(@Req() req: RequestWithUser) {
     const userDto = plainToClass(UsersDto,req.user);
-    req.res.setHeader('Set-Cookie', [this.authService.getCookieWithJwtAccessToken(userDto.id)]);
-    return {statusCode: 200, user: userDto};
+    req.res.setHeader('Set-Cookie', [
+      this.authService.getCookieWithJwtAccessToken(userDto.id),
+    ]);
+    return { statusCode: 200, user: userDto };
   }
 
   @UseGuards(JwtAuthGuard)
