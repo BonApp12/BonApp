@@ -9,7 +9,7 @@ import {Button} from "../Button/Button";
 import {MdOutlineClose, MdOutlinePayment} from "react-icons/md";
 // create a button that calls a context function to set a new open state when clicked
 export const ButtonCart = () => {
-    const [cart, updateCart] = useRecoilState(cartAtom);
+    const cart= useRecoilState(cartAtom);
     const ctx = useContext(SlidingContext)
     return (
         <button onClick={ctx.toggleMenu} className="float-right">
@@ -70,10 +70,9 @@ export const Navigation = () => {
             <>
                 <h1 className={"mb-5"}>Mes commandes</h1>
 
-                <div className="grid grid-cols-12 mb-5">
                     {formattedCart().map((plate, index) =>
                         //Trouver un moyen d'ajouter l'index ici
-                        <>
+                        <div className="grid grid-cols-12 mb-5" key={index}>
                             <div className="col-span-3">
                                 <img src="https://picsum.photos/id/1005/400/250" alt="photo aléatoire"
                                      className="w-full"/>
@@ -96,11 +95,10 @@ export const Navigation = () => {
                             </div>
                             <div className="col-span-2">{plate[1][0].price * plate[1].length}€</div>
 
-                        </>
+                        </div>
                     )}
-                </div>
                 {formattedCart().length !== 0 ?
-                    <Button classStyle={'mr-3 btn-success animate__animated animate__bounce'}
+                    <Button classStyle={'mr-3 btn-success'}
                             onClick={checkout}>
                         <span
                             className="mr-5">Payer {cart.reduce((partialSum, a) => partialSum + parseFloat(a.price), 0)}€ </span><MdOutlinePayment/>
