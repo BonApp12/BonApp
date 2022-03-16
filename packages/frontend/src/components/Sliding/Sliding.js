@@ -1,31 +1,15 @@
 import {slide as Menu} from 'react-burger-menu';
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import {SlidingContext} from '../../context/sliding';
-import {RiShoppingCart2Line} from "react-icons/ri";
 import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import '../../css/cart.css';
 import {Button} from "../Button/Button";
 import {MdOutlineClose, MdOutlinePayment} from "react-icons/md";
-// create a button that calls a context function to set a new open state when clicked
-export const ButtonCart = () => {
-    const cart= useRecoilState(cartAtom)[0];
-    const ctx = useContext(SlidingContext);
-    return (
-        <button onClick={ctx.toggleMenu} className="float-right">
-            <div className="bg-orange-600 text-white custom-padding">
-                {cart?.length > 0 &&
-                <div className="badge badge-ghost badge-cart">{cart.length}</div>
-                }
-                <RiShoppingCart2Line/>
-            </div>
-        </button>
 
-    )
-};
 
 // create a navigation component that wraps the burger menu
-export const Navigation = () => {
+export const Sliding = () => {
     const ctx = useContext(SlidingContext);
     const [cart, updateCart] = useRecoilState(cartAtom);
 

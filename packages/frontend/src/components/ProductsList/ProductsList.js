@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
@@ -77,7 +77,7 @@ const ProductsList = () => {
                         filteredPlates.map(plate => {
                             return (
                                 <Card name={plate.name} key={plate.id} removeFromCart={() => removeFromCart(plate)}
-                                      addToCart={() => addToCart(plate)} plate={plate} restaurant={restaurant}
+                                      addToCart={() => addToCart(plate)} plateProps={plate} restaurant={restaurant}
                                       cart={cart} updateCart={updateCart}/>
                             )
                         })

@@ -1,15 +1,16 @@
 import React from "react";
-import {ButtonCart, Navigation} from "../Sliding/Sliding";
+import {Sliding} from "../Sliding/Sliding";
+import {ButtonCart} from "../ButtonCart/ButtonCart";
 
 const Layout = (props) => {
     return (
         <div>
             <h2 className="mt-5">Bienvenue chez {props?.restaurant?.name}</h2>
             <ButtonCart/>
-            <Navigation/>
+            <Sliding/>
             {props.children}
         </div>
     )
-}
+};
 
 export default Layout;
