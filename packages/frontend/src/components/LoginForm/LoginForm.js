@@ -2,7 +2,7 @@ import React, {useState,useEffect} from "react";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useForm} from "react-hook-form";
-import {useNavigate} from "react-router-dom";
+import {useNavigate,Link} from "react-router-dom";
 import ValidationSchemaLogin from "../../validations/ValidationSchemaLogin";
 import {useRecoilState} from 'recoil';
 import {userAtom} from '../../states/user';
@@ -44,7 +44,8 @@ function LoginForm() {
 
     return (
         <>
-            <h3>Bienvenue, veuillez vous connecter ok.</h3>
+            <h3 className="text-lg">Connectez-vous !</h3>
+            <p className="m-4 text-sm">Vous n'avez pas encore de compte, <Link to="/register" className="text-orange-600">inscrivez-vous</Link> dès maintenant</p>
             {
                 errors?.auth?.message && (
                     <span className="text-sm text-red-500">{errors?.auth?.message}*</span>
@@ -65,7 +66,7 @@ function LoginForm() {
                     error={errors?.password?.message}
                     placeHolder="********"
                 />
-                <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
+                <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-600 hover:bg-orange-500`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
             </form>
         </>
     )
