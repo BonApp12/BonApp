@@ -1,5 +1,7 @@
+import route from "../../router/route";
+
 const registerUser = (form) => {
-    return fetch(process.env.REACT_APP_REGISTER_URL_BACKEND, {
+    return fetch(route.register, {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',

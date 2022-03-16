@@ -1,5 +1,7 @@
+import route from "../../router/route";
+
 const loginWithCredentials = (form) => {
-    return fetch(process.env.REACT_APP_URL_BACKEND + "/auth/login", {
+    return fetch(route.login, {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
