@@ -1,4 +1,4 @@
-import {BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import { Users } from '../../users/entities/users.entity';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { CreateDateColumn,UpdateDateColumn } from "typeorm";
@@ -12,13 +12,13 @@ export class Order extends BaseEntity {
   @Column('varchar', {length: 10, default: 'to-do'})
   status: string;
 
-  @ManyToOne(() => Users, (user) => user.orders)
+  @ManyToOne(() => Users, (user:Users) => user.orders)
   user: Users;
 
-  @ManyToOne(() => Restaurant, (restaurant) => restaurant.orders)
+  @ManyToOne(() => Restaurant, (restaurant:Restaurant) => restaurant.orders)
   restaurant: Restaurant;
 
-  @ManyToOne(() => Plate, (plate) => plate.orders)
+  @ManyToOne(() => Plate, (plate:Plate) => plate.orders)
   plate: Plate;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
