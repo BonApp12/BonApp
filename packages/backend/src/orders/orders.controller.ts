@@ -27,7 +27,6 @@ export class OrdersController {
         return this.ordersService.findByRestaurant(+id);
     }
 
-
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
         return this.ordersService.update(+id, updateOrderDto);
