@@ -16,6 +16,7 @@ function Stats() {
     }, [])
 
     const [orders, setOrders] = useState([])
+    const [totalOrder, setTotalOrder] = useState(0)
 
     useEffect(() => {
         /* Ici on part du principe que le restaurant qui est connecté à l'ID = 1 */
@@ -23,16 +24,7 @@ function Stats() {
             .then(res => res.json())
             .then(data => {
                 setOrders(data)
-            })
-    }, [])
-
-    const [totalOrder, setTotalOrder] = useState(0)
-
-    useEffect(() => {
-        fetchFullOrder(1)
-            .then(res => res.json())
-            .then(data => {
-                setTotalOrder(data.length);
+                setTotalOrder(data.length)
             })
     }, [])
 
