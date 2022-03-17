@@ -1,7 +1,11 @@
-import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
-import {Restaurant} from 'src/restaurant/entities/restaurant.entity';
-import {Ingredient} from 'src/ingredients/entities/ingredient.entity';
-import {PlateCategory} from 'src/plate-category/entities/plate-category.entity';
+import {BaseEntity, Column, Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
+import { Ingredient } from 'src/ingredients/entities/ingredient.entity';
+import { PlateCategory } from 'src/plate-category/entities/plate-category.entity';
 import {Order} from "../../orders/entities/order.entity";
 @Entity()
 export class Plate extends BaseEntity {
