@@ -8,7 +8,7 @@ function Stats() {
     const [totalPlate, setPlate] = useState(0)
 
     useEffect(() => {
-        fetchFullPlate(1)
+        fetchFullPlate(31)
             .then(res => res.json())
             .then(data => {
                 setPlate(data.length)
@@ -19,12 +19,12 @@ function Stats() {
     const [totalOrder, setTotalOrder] = useState(0)
 
     useEffect(() => {
-        /* Ici on part du principe que le restaurant qui est connecté à l'ID = 1 */
-        fetchFullOrder(1)
+        /* Ici on part du principe que le restaurant qui est connecté à l'ID = 31 */
+        fetchFullOrder(31)
             .then(res => res.json())
             .then(data => {
+                setTotalOrder(data.length);
                 setOrders(data)
-                setTotalOrder(data.length)
             })
     }, [])
 
@@ -58,13 +58,13 @@ function Stats() {
                 </tr>
                 </thead>
                 <tbody>
-                {orders.map(order => (
-                <tr>
+                {orders.map((order, index)  => (
+                <tr key={index}>
                     <th scope="row">{order.id}</th>
                     <td>{order.user.lastname}</td>
                     <td>{order.user.firstname}</td>
                     <td>{order.created_at}</td>
-                    <td>{order.plate.name}</td>
+                    <td>test</td>
                     <td>{order.status}</td>
                     <td>
                         <button className="btn btn-success" onClick={() => updateOrder(order.id)}>
@@ -81,10 +81,10 @@ function Stats() {
                 <h1 className="h2">Dashboard</h1>
             </div>
             <div className="row">
-                {stats.map((stat, key) => {
+                {stats.map((stat, index) => {
                     return (
-                        <div className="col-sm-4 text-center">
-                            <div className={stat.class} id={key}>
+                        <div className="col-sm-4 text-center" key={index}>
+                            <div className={stat.class}>
                                 <div className="card-body">
                                     <h5 className="card-title">
                                         {stat.title}
