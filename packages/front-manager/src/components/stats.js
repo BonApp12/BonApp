@@ -8,7 +8,7 @@ function Stats() {
     const [totalPlate, setPlate] = useState(0)
 
     useEffect(() => {
-        fetchFullPlate()
+        fetchFullPlate(1)
             .then(res => res.json())
             .then(data => {
                 setPlate(data.length)
@@ -59,7 +59,8 @@ function Stats() {
                     <th scope="col">N°</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Prénom</th>
-                    <th scope="col">Date</th>
+                    <th scope="col">Date de commande</th>
+                    <th scope="col">Plat</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -71,6 +72,7 @@ function Stats() {
                     <td>{order.user.lastname}</td>
                     <td>{order.user.firstname}</td>
                     <td>{order.created_at}</td>
+                    <td>{order.plate.name}</td>
                     <td>{order.status}</td>
                     <td>
                         <button className="btn btn-success" onClick={() => updateOrder(order.id)}>
