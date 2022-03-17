@@ -22,6 +22,11 @@ export class PlateController {
     return this.plateService.findOne(+id);
   }
 
+  @Get('/restaurant/:id')
+  findByRestaurant(@Param('id') id: string) {
+    return this.plateService.findByRestaurant(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePlateDto: UpdatePlateDto) {
     return this.plateService.update(+id, updatePlateDto);

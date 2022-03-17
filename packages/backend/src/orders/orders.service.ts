@@ -17,20 +17,20 @@ export class OrdersService {
 
   findAll() {
     /* Récupération de toutes les commandes avec les relations User et Restaurant */
-    return this.orderRepository.find({ relations: ['user', 'restaurant'] });
+    return this.orderRepository.find({ relations: ['user', 'restaurant', 'plate'] });
   }
 
   findOne(id: number) {
     // TODO : Remplacer ce findOne spécifiquement pour ne récupérer que les informations pertinentes.
     //  Pour l'instant, il renvoie même le mot de passe de l'utilisateur lié.
     return this.orderRepository.findOne(id, {
-      relations: ['user', 'restaurant'],
+      relations: ['user', 'restaurant', 'plate'],
     });
   }
 
   findByRestaurant(id: number) {
     return this.orderRepository.find( {
-      relations: ['user'],
+      relations: ['user', 'plate'],
       where: {
         'restaurant': {id: id}
       }

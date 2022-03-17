@@ -2,6 +2,7 @@ import {BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColum
 import { Users } from '../../users/entities/users.entity';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { CreateDateColumn,UpdateDateColumn } from "typeorm";
+import {Plate} from "../../plate/entities/plate.entity";
 
 @Entity()
 export class Order extends BaseEntity {
@@ -16,6 +17,9 @@ export class Order extends BaseEntity {
 
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.orders)
   restaurant: Restaurant;
+
+  @ManyToOne(() => Plate, (plate) => plate.orders)
+  plate: Plate;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   public created_at: Date;
