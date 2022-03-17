@@ -22,6 +22,12 @@ export class OrdersController {
         return this.ordersService.findOne(+id);
     }
 
+    @Get('/restaurant/:id')
+    findByRestaurant(@Param('id') id: string) {
+        return this.ordersService.findByRestaurant(+id);
+    }
+
+
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
         return this.ordersService.update(+id, updateOrderDto);

@@ -21,14 +21,29 @@ export class OrdersService {
   }
 
   findOne(id: number) {
-    // TODO : Remplacer ce findOne spécifiquement pour ne récupérer que les informations pertinentes. Pour l'instant, il renvoie même le mot de passe de l'utilisateur lié.
+    // TODO : Remplacer ce findOne spécifiquement pour ne récupérer que les informations pertinentes.
+    //  Pour l'instant, il renvoie même le mot de passe de l'utilisateur lié.
     return this.orderRepository.findOne(id, {
       relations: ['user', 'restaurant'],
     });
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  findByRestaurant(id: number) {
+    return this.orderRepository.find( {
+      relations: ['user'],
+      where: {
+        'restaurant': {id: id}
+      }
+    });
+  }
+
+  async update(id: number, updateOrderDto: UpdateOrderDto) {
+    return await this.orderRepository
+        .createQueryBuilder()
+        .update(Order)
+        .set({status: "completed"})
+        .where("id = :id", {id: id})
+        .execute();
   }
 
   remove(id: number) {
