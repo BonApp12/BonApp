@@ -5,47 +5,45 @@ import updateOrder from "../requests/updateOrder";
 
 function Stats() {
 
-    const [totalPlate, setPlate] = useState(0)
+    const [plates, setPlate] = useState(0)
 
     useEffect(() => {
         fetchFullPlate(31)
             .then(res => res.json())
-            .then(data => {
-                setPlate(data.length)
+            .then(plates => {
+                setPlate(plates)
             })
     }, [])
 
     const [orders, setOrders] = useState([])
-    const [totalOrder, setTotalOrder] = useState(0)
 
     useEffect(() => {
-        /* Ici on part du principe que le restaurant qui est connecté à l'ID = 31 */
         fetchFullOrder(31)
             .then(res => res.json())
-            .then(data => {
-                setTotalOrder(data.length);
-                setOrders(data)
+            .then(orders => {
+                setOrders(orders)
             })
     }, [])
 
     const stats = [{
-        class: 'card border-3 border-end-0 border-primary mb-3', title: 'Nombre de plats', value: totalPlate
+        class: 'card border-3 border-end-0 border-primary mb-3', title: 'Nombre de plats', value: plates.length
     }, {
         class: 'card border-3 border-start-0 border-end-0 border-info mb-3',
         title: 'Plat le plus commandé',
         value: 'Grec'
     }, {
-        class: 'card border-3 border-start-0 border-warning mb-3', title: 'Commandes', value: totalOrder
+        class: 'card border-3 border-start-0 border-warning mb-3', title: 'Commandes', value: orders.length
     }];
 
     return (
         <div>
             <div
-                className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 className="h2">Commande en cours ({totalOrder})</h1>
+                className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3
+                border-bottom">
+                <h1 className="h2">Commande en cours ({orders.length})</h1>
             </div>
 
-            <table className="table">
+            <table className="table text-center">
                 <thead className="table-dark">
                 <tr>
                     <th scope="col">N°</th>
@@ -64,7 +62,7 @@ function Stats() {
                     <td>{order.user.lastname}</td>
                     <td>{order.user.firstname}</td>
                     <td>{order.created_at}</td>
-                    <td>test</td>
+                    <td>{order.plate.name}</td>
                     <td>{order.status}</td>
                     <td>
                         <button className="btn btn-success" onClick={() => updateOrder(order.id)}>
@@ -77,7 +75,8 @@ function Stats() {
             </table>
 
             <div
-                className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3
+                border-bottom">
                 <h1 className="h2">Dashboard</h1>
             </div>
             <div className="row">

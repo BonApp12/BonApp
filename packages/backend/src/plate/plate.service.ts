@@ -31,7 +31,7 @@ export class PlateService {
     return this.plateRepository.find( {
       relations: ['restaurant'],
       where: {
-        'restaurant': {id: id}
+        'restaurant': {id}
       }
     });
   }

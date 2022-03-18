@@ -8,13 +8,13 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class PlateCategory extends BaseEntity {
+export class plateCategory extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column('varchar', { length: 100 })
   name: string;
 
-  @ManyToOne(() => Plate, (plates) => plates.category)
+  @ManyToOne(() => Plate, (plates:Plate) => plates.category)
   plates: Plate[];
 }
