@@ -32,9 +32,28 @@ export class OrdersService {
     return this.orderRepository.find( {
       relations: ['user', 'plate'],
       where: {
-        'restaurant': {id: id}
+        'restaurant': {id}
       }
     });
+  }
+
+  findByStatus(status: string) {
+    return this.orderRepository.find({
+      relations: ['user', 'plate'],
+      where : {
+        'status': status,
+      }
+    })
+  }
+
+  findByRestaurantByStatus(status: string, id: string) {
+    return this.orderRepository.find({
+      relations: ['user', 'plate', 'restaurant'],
+      where : {
+        'status': status,
+        'restaurant': {id}
+      }
+    })
   }
 
   async update(id: number, updateOrderDto: UpdateOrderDto) {

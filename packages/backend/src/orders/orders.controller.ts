@@ -22,6 +22,16 @@ export class OrdersController {
         return this.ordersService.findOne(+id);
     }
 
+    @Get('/status/:status')
+    findByStatus(@Param('status') status: string) {
+        return this.ordersService.findByStatus(status);
+    }
+
+    @Get('restaurant/:id/status/:status')
+    findByRestaurantByStatus(@Param() params: string[]) {
+        return this.ordersService.findByRestaurantByStatus(params['status'], params['id']);
+    }
+
     @Get('/restaurant/:id')
     findByRestaurant(@Param('id') id: string) {
         return this.ordersService.findByRestaurant(+id);
