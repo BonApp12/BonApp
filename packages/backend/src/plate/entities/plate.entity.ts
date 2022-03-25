@@ -7,6 +7,7 @@ import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { Ingredient } from '../../ingredients/entities/ingredient.entity';
 import { plateCategory } from '../../plate-category/entities/plate-category.entity';
 import {Order} from "../../orders/entities/order.entity";
+
 @Entity()
 export class Plate extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -15,14 +16,13 @@ export class Plate extends BaseEntity {
   @ManyToOne(() => Restaurant, (Restaurant:Restaurant) => Restaurant.plates)
   restaurant: Restaurant;
 
-  @Column('varchar', { length: 200 })
+  @Column('varchar', {length: 200})
   name: string;
 
   @Column('float')
   price: number;
 
   @OneToMany(() => Ingredient, (ingredient:Ingredient) => ingredient.plates)
-  ingredient: Ingredient[];
 
   @ManyToOne(() => plateCategory, (plateCategory:plateCategory) => plateCategory.name)
   category: plateCategory;

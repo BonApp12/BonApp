@@ -82,12 +82,12 @@ Rappel : Une fois que la base de données est initialisée, repasser ce paramèt
 # Make (recommandé)
 $ make local 
 
-# NPM
-$ npm install
+# YARN
+$ yarn install
 ```
 
 Concernant l'installation de l'application, la stack étant exclusivement en Javascript, rendez-vous dans les dossiers
-```packages/backend``` ainsi que ```packages/frontend``` pour y exécuter ```npm install```.
+```packages/backend``` ainsi que ```packages/frontend``` pour y exécuter ```yarn install```.
 
 ## Lancer l'application
 
@@ -98,43 +98,43 @@ $ make local # Cette commande supprime les anciennes instances du projet et le r
 # docker-compose (building is optional)
 $ docker-compose up --build -d # Sans supression des anciennes instances.
 
-#### NPM ####
+#### YARN ####
 # development
-$ npm run start
+$ yarn run start
 
 # watch mode
-$ npm run start:dev
+$ yarn run start:dev
 
 # production mode
-$ npm run start:prod
+$ yarn run start:prod
 ```
 
 ## Générer les fixtures
 
 (Après avoir installé nos packages backend)
 
-``` npm run seed:run```
+``` yarn run seed:run```
 
 Pour drop la base de données:
 
 ```bash
-$ npm run schema:drop # Créer le drop sans l'execution
-$ npm run schema:sync #Push de la suppression à la bdd
+$ yarn run schema:drop # Créer le drop sans l'execution
+$ yarn run schema:sync #Push de la suppression à la bdd
 
-$ npm run schema:kill #Celle ci execute les deux précedente en meme temps
+$ yarn run schema:kill #Celle ci execute les deux précedente en meme temps
 ```
 
 ## Test (à implémenter)
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn run test
 
 # e2e tests
-$ npm run test:e2e
+$ yarn run test:e2e
 
 # test coverage
-$ npm run test:cov
+$ yarn run test:cov
 ```
 ## Schema base de donnée
 ![alt text](./bdd_bonApp.jpeg)
