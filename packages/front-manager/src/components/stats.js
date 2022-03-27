@@ -11,7 +11,7 @@ function Stats() {
 
     checkStatus = (status) => {
         if (status === 'to-do')
-            return true
+            return status === 'to-do';
     }
 
     formattedDate = (date) => {
@@ -24,7 +24,7 @@ function Stats() {
 
     useEffect(() => {
         fetchFullPlate(31)
-            .then(res => res.json())
+            .then(resPlate => resPlate.json())
             .then(plates => {
                 setPlate(plates)
             })
@@ -34,7 +34,7 @@ function Stats() {
 
     useEffect(() => {
         fetchFullOrder(31)
-            .then(res => res.json())
+            .then(resOrder => resOrder.json())
             .then(orders => {
                 setOrders(orders)
             })
@@ -78,8 +78,8 @@ function Stats() {
                 </thead>
                 <tbody>
 
-                {orders.map((order, index)  => (
-                <tr key={index}>
+                {orders.map((order)  => (
+                <tr key={order.id}>
                     <th scope="row">{order.id}</th>
                     <td>{order.user.lastname}</td>
                     <td>{order.user.firstname}</td>

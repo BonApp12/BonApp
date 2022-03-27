@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class plateCategory extends BaseEntity {
+export class PlateCategory extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

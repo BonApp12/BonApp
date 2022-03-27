@@ -1,8 +1,7 @@
-import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn} from 'typeorm';
 import { Users } from '../../users/entities/users.entity';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
-import { CreateDateColumn,UpdateDateColumn } from "typeorm";
-import {Plate} from "../../plate/entities/plate.entity";
+import { Plate } from "../../plate/entities/plate.entity";
 
 @Entity()
 export class Order extends BaseEntity {
