@@ -15,6 +15,6 @@ export class PlateCategory extends BaseEntity {
   @Column('varchar', { length: 100 })
   name: string;
 
-  @ManyToOne(() => Plate, (plates) => plates.category)
+  @ManyToOne(() => Plate, (plates:Plate) => plates.category)
   plates: Plate[];
 }

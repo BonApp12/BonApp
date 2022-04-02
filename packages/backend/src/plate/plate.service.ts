@@ -27,6 +27,15 @@ export class PlateService {
     });
   }
 
+  findByRestaurant(id: number) {
+    return this.plateRepository.find( {
+      relations: ['restaurant'],
+      where: {
+        'restaurant': {id}
+      }
+    });
+  }
+
   update(id: number, updatePlateDto: UpdatePlateDto) {
     return `This action updates a #${id} plate`;
   }

@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     credentials: true,
-    origin: ['http://localhost:3000'], // TODO : Rajouter le domaine de production.
+    origin: ['http://localhost:3000', "http://localhost:3001", "http://localhost:8888"], // TODO : Rajouter le domaine de production.
   });
   app.use(cookieParser());
   await app.listen(4000);

@@ -16,18 +16,53 @@ export class OrdersService {
   }
 
   findAll() {
-    return `This action returns all orders`;
+    /* Récupération de toutes les commandes avec les relations User et Restaurant */
+    return this.orderRepository.find({ relations: ['user', 'restaurant', 'plate'] });
   }
 
   findOne(id: number) {
-    // TODO : Remplacer ce findOne spécifiquement pour ne récupérer que les informations pertinentes. Pour l'instant, il renvoie même le mot de passe de l'utilisateur lié.
+    // TODO : Remplacer ce findOne spécifiquement pour ne récupérer que les informations pertinentes.
+    //  Pour l'instant, il renvoie même le mot de passe de l'utilisateur lié.
     return this.orderRepository.findOne(id, {
-      relations: ['user', 'restaurant'],
+      relations: ['user', 'restaurant', 'plate'],
     });
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  findByRestaurant(id: number) {
+    return this.orderRepository.find( {
+      relations: ['user', 'plate'],
+      where: {
+        'restaurant': {id}
+      }
+    });
+  }
+
+  findByStatus(status: string) {
+    return this.orderRepository.find({
+      relations: ['user', 'plate'],
+      where : {
+        'status': status,
+      }
+    })
+  }
+
+  findByRestaurantByStatus(status: string, id: string) {
+    return this.orderRepository.find({
+      relations: ['user', 'plate', 'restaurant'],
+      where : {
+        'status': status,
+        'restaurant': {id}
+      }
+    })
+  }
+
+  async update(id: number, updateOrderDto: UpdateOrderDto) {
+    return await this.orderRepository
+        .createQueryBuilder()
+        .update(Order)
+        .set({status: "completed"})
+        .where("id = :id", {id: id})
+        .execute();
   }
 
   remove(id: number) {
