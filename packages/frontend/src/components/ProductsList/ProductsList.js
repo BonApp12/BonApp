@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
@@ -16,6 +16,7 @@ const ProductsList = () => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
+    const [displayModal, setDisplayModal] = useState(false);
     const [cart, updateCart] = useRecoilState(cartAtom);
     // Handling socket
     const socket = useContext(SocketContext);
@@ -64,9 +65,9 @@ const ProductsList = () => {
 
 
     if (error) {
-        return <div>Erreur dans le chargement. Veuillez réessayer</div>
+        return <div>Erreur dans le chargement. Veuillez réessayer</div>;
     } else if (!isLoaded) {
-        return <div><Loading/></div>
+        return <div><Loading/></div>;
     } else {
         return (
             <div className="sidebar-cart">
@@ -76,14 +77,33 @@ const ProductsList = () => {
                     {
                         filteredPlates.map(plate => {
                             return (
-                                <Card name={plate.name} key={plate.id} removeFromCart={() => removeFromCart(plate)}
-                                      addToCart={() => addToCart(plate)} plateProps={plate} restaurant={restaurant}
-                                      cart={cart} updateCart={updateCart}/>
-                            )
+                                <Card name={plate.name} key={plate.id}
+                                      removeFromCart={() => removeFromCart(plate)}
+                                      addToCart={() => addToCart(plate)}
+                                      plateProps={plate}
+                                      setDisplayModal={() => setDisplayModal(!displayModal)}
+                                      restaurant={restaurant}
+                                      cart={cart}
+                                      updateCart={updateCart}/>
+                            );
                         })
                     }
                 </ol>
-            </div>)
+                {displayModal &&
+                <div>
+
+                    <div className={`Overlay ${displayModal ? 'Show' : ''}`}/>
+                    <div className={`Modal ${displayModal ? 'Show' : ''}`}>
+                        <button className="Button CenterAlign" onClick={() => setDisplayModal(!displayModal)}>
+                            Close
+                        </button>
+                        ...modal content
+                    </div>
+                </div>
+                }
+            </div>
+
+        );
     }
 };
 

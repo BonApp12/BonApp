@@ -1,0 +1,36 @@
+.Modal {
+    position: fixed;
+    bottom: -150vh;
+    background-color: #fff;
+    width: 100%;
+    left: 0;
+    padding: 0 12px 12px;
+    transition: bottom 0.3s ease-out;
+    z-index: 10;
+}
+.Modal.Show {
+    bottom: 0;
+}
+.Overlay {
+    background-color: rgba(0, 0, 0, 0.55);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    display: none;
+    z-index: 5;
+}
+
+.Overlay.Show {
+    display: block;
+}
+
+.information-wrapper {
+    display: inline-block;
+    position: absolute;
+    top: 14px;
+    right: 25px;
+    font-size: 24px;
+}
+
