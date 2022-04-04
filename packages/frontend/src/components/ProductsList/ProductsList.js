@@ -67,60 +67,57 @@ const ProductsList = () => {
     }
 
 
-    if (error) {
-        return <div>Erreur dans le chargement. Veuillez réessayer</div>;
-    } else if (!isLoaded) {
-        return <div><Loading/></div>;
-    } else {
-        return (
-            <div className="sidebar-cart">
-                <Layout restaurant={restaurant}/>
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
-                <ol>
-                    {
-                        filteredPlates.map(plate => {
-                            return (
-                                <Card name={plate.name} key={plate.id}
-                                      removeFromCart={() => removeFromCart(plate)}
-                                      addToCart={() => addToCart(plate)}
-                                      plateProps={plate}
-                                      setDisplayModal={() => {
-                                          setModalManagement({
-                                              data: {ingredients: plate?.ingredients, description: plate.description},
-                                              isOpen: !modalManagement.isOpen
-                                          });
-                                      }}
-                                      restaurant={restaurant}
-                                      cart={cart}
-                                />
-                            );
-                        })
-                    }
-                </ol>
+    if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
+    if (!isLoaded) return <div><Loading/></div>;
 
-                <Information displayModal={modalManagement} setDisplayModal={setModalManagement}>
-                    <h3 className="font-bold pt-6 pb-4 text-left pl-3">Ingrédients & informations</h3>
-                    <div className="modal-content">
-                        <div className="grid grid-cols-2 place-content-center ">
-                            {modalManagement.data?.ingredients.map((ingredient) => (
-                                <div className="text-left ml-16 hover:text-orange-600 ease-in duration-300"
-                                     key={ingredient.id}>
-                                    <MdOutlineFastfood className="inline-block"/>
-                                    {ingredient.name}
-                                </div>
-                            ))}
-                        </div>
-                        <h3 className="font-bold pt-6 pb-4 text-left pl-3">Description</h3>
-                        <div className="plate-description"
-                             dangerouslySetInnerHTML={{__html: modalManagement.data?.description}}>
-                        </div>
+    return (
+        <div className="sidebar-cart">
+            <Layout restaurant={restaurant}/>
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+            <ol>
+                {
+                    filteredPlates.map(plate => {
+                        return (
+                            <Card name={plate.name} key={plate.id}
+                                  removeFromCart={() => removeFromCart(plate)}
+                                  addToCart={() => addToCart(plate)}
+                                  plateProps={plate}
+                                  setDisplayModal={() => {
+                                      setModalManagement({
+                                          data: {ingredients: plate?.ingredients, description: plate.description},
+                                          isOpen: !modalManagement.isOpen
+                                      });
+                                  }}
+                                  restaurant={restaurant}
+                                  cart={cart}
+                            />
+                        );
+                    })
+                }
+            </ol>
+
+            <Information displayModal={modalManagement} setDisplayModal={setModalManagement}>
+                <h3 className="font-bold pt-6 pb-4 text-left pl-3">Ingrédients & informations</h3>
+                <div className="modal-content">
+                    <div className="grid grid-cols-2 place-content-center ">
+                        {modalManagement.data?.ingredients.map((ingredient) => (
+                            <div className="text-left ml-16 hover:text-orange-600 ease-in duration-300"
+                                 key={ingredient.id}>
+                                <MdOutlineFastfood className="inline-block"/>
+                                {ingredient.name}
+                            </div>
+                        ))}
                     </div>
-                </Information>
+                    <h3 className="font-bold pt-6 pb-4 text-left pl-3">Description</h3>
+                    <div className="plate-description"
+                         dangerouslySetInnerHTML={{__html: modalManagement.data?.description}}>
+                    </div>
+                </div>
+            </Information>
 
-            </div>
+        </div>
 
-        );
-    }
+    );
 };
 
 export default ProductsList;
