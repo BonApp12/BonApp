@@ -1,18 +1,19 @@
 import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
-import {Restaurant} from 'src/restaurant/entities/restaurant.entity';
-import {Ingredient} from 'src/ingredients/entities/ingredient.entity';
-import {PlateCategory} from 'src/plate-category/entities/plate-category.entity';
+import {Restaurant} from '../../restaurant/entities/restaurant.entity';
+import {Ingredient} from '../../ingredients/entities/ingredient.entity';
+import {PlateCategory} from '../../plate-category/entities/plate-category.entity';
+import {Order} from "../../orders/entities/order.entity";
 
 @Entity()
 export class Plate extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.plates)
-    restaurant: Restaurant;
+  @ManyToOne(() => Restaurant, (restaurant:Restaurant) => restaurant.plates)
+  restaurant: Restaurant;
 
-    @Column('varchar', {length: 200})
-    name: string;
+  @Column('varchar', {length: 200})
+  name: string;
 
     @Column('text')
     description: string;
@@ -23,6 +24,9 @@ export class Plate extends BaseEntity {
     @OneToMany(() => Ingredient, (ingredient) => ingredient.plates)
     ingredients: Ingredient[];
 
-    @ManyToOne(() => PlateCategory, (plateCategory) => plateCategory.name)
-    category: PlateCategory;
+  @ManyToOne(() => PlateCategory, (plateCategory:PlateCategory) => plateCategory.name)
+  category: PlateCategory;
+
+  @OneToMany(() => Order, (order:Order) => order.plate)
+  orders: Order[];
 }
