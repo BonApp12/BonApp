@@ -1,7 +1,6 @@
 import {Button} from "../Button/Button";
 import React from "react";
 import {GrCircleInformation} from "react-icons/gr";
-import '../../css/card.css';
 import '../../css/overlayInformaiton.css';
 
 const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModal}) => {
@@ -33,14 +32,13 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
                                 onClick={addToCart}>
                             Commander
                         </Button>
-                        <div className="information-wrapper">
-                            <button className="Button CenterAlign" onClick={setDisplayModal}>
-                                <GrCircleInformation/>
-                            </button>
-                        </div>
                     </div>
                 }
-
+                <div className="information-wrapper">
+                    <button className="Button CenterAlign" onClick={setDisplayModal}>
+                        <GrCircleInformation/>
+                    </button>
+                </div>
             </div>
         </div>
     );
