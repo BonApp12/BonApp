@@ -8,6 +8,8 @@ import Layout from "../Layout/Layout";
 import Loading from "../Loading/Loading";
 import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
+import {Information} from "../overlay/information";
+import {MdOutlineFastfood} from "react-icons/md";
 
 const ProductsList = () => {
     let params = useParams();
@@ -16,7 +18,8 @@ const ProductsList = () => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
-    const [displayModal, setDisplayModal] = useState(false);
+    //Gère la modal, si true, affiche la modal et le contenu de la modal
+    const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
     const [cart, updateCart] = useRecoilState(cartAtom);
     // Handling socket
     const socket = useContext(SocketContext);
@@ -81,26 +84,39 @@ const ProductsList = () => {
                                       removeFromCart={() => removeFromCart(plate)}
                                       addToCart={() => addToCart(plate)}
                                       plateProps={plate}
-                                      setDisplayModal={() => setDisplayModal(!displayModal)}
+                                      setDisplayModal={() => {
+                                          setModalManagement({
+                                              data: {ingredients: plate?.ingredients, description: plate.description},
+                                              isOpen: !modalManagement.isOpen
+                                          });
+                                      }}
                                       restaurant={restaurant}
                                       cart={cart}
-                                      updateCart={updateCart}/>
+                                />
                             );
                         })
                     }
                 </ol>
-                {displayModal &&
-                <div>
 
-                    <div className={`Overlay ${displayModal ? 'Show' : ''}`}/>
-                    <div className={`Modal ${displayModal ? 'Show' : ''}`}>
-                        <button className="Button CenterAlign" onClick={() => setDisplayModal(!displayModal)}>
-                            Close
-                        </button>
-                        ...modal content
+                <Information displayModal={modalManagement} setDisplayModal={setModalManagement}>
+                    <h3 className="font-bold pt-6 pb-4 text-left pl-3">Ingrédients & informations</h3>
+                    <div className="modal-content">
+                        <div className="grid grid-cols-2 place-content-center ">
+                            {modalManagement.data?.ingredients.map((ingredient) => (
+                                <div className="text-left ml-16 hover:text-orange-600 ease-in duration-300"
+                                     key={ingredient.id}>
+                                    <MdOutlineFastfood className="inline-block"/>
+                                    {ingredient.name}
+                                </div>
+                            ))}
+                        </div>
+                        <h3 className="font-bold pt-6 pb-4 text-left pl-3">Description</h3>
+                        <div className="plate-description"
+                             dangerouslySetInnerHTML={{__html: modalManagement.data?.description}}>
+                        </div>
                     </div>
-                </div>
-                }
+                </Information>
+
             </div>
 
         );
