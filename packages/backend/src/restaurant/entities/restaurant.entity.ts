@@ -1,14 +1,7 @@
-import { Address } from 'src/address/entities/address.entity';
-import { Plate } from 'src/plate/entities/plate.entity';
-import { Users } from '../../users/entities/users.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import {Address} from '../../address/entities/address.entity';
+import {Plate} from '../../plate/entities/plate.entity';
+import {Users} from '../../users/entities/users.entity';
+import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {Order} from "../../orders/entities/order.entity";
 
 @Entity()
