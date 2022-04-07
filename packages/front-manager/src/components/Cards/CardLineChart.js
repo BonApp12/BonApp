@@ -3,7 +3,7 @@ import Chart from "chart.js";
 
 export default function CardLineChart() {
   React.useEffect(() => {
-    var config = {
+    const config = {
       type: "line",
       data: {
         labels: [
@@ -103,7 +103,7 @@ export default function CardLineChart() {
         },
       },
     };
-    var ctx = document.getElementById("line-chart").getContext("2d");
+    const ctx = document.getElementById("line-chart").getContext("2d");
     window.myLine = new Chart(ctx, config);
   }, []);
   return (
@@ -113,9 +113,9 @@ export default function CardLineChart() {
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">
               <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
-                Overview
+                Vue d'ensemble
               </h6>
-              <h2 className="text-white text-xl font-semibold">Sales value</h2>
+              <h2 className="text-white text-xl font-semibold">Nombre de visiteurs</h2>
             </div>
           </div>
         </div>

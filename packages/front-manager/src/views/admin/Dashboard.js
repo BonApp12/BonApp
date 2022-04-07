@@ -1,7 +1,6 @@
 import React from "react";
 
 // Components
-
 import CardLineChart from "components/Cards/CardLineChart.js";
 import CardBarChart from "components/Cards/CardBarChart.js";
 

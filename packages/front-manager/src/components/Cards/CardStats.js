@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export default function CardStats({
-  statSubtitle,
   statTitle,
+  statValue,
   statIconName,
   statIconColor,
 }) {
@@ -14,10 +14,10 @@ export default function CardStats({
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
               <h5 className="text-blueGray-400 uppercase font-bold text-xs">
-                {statSubtitle}
+                {statTitle}
               </h5>
               <span className="font-semibold text-xl text-blueGray-700">
-                {statTitle}
+                {statValue}
               </span>
             </div>
             <div className="relative w-auto pl-4 flex-initial">
@@ -38,15 +38,15 @@ export default function CardStats({
 }
 
 CardStats.defaultProps = {
-  statSubtitle: "",
-  statTitle: "0",
-  statIconName: "far fa-chart-bar",
-  statIconColor: "bg-red-500",
+  statTitle: "",
+  statValue: "",
+  statIconName: "",
+  statIconColor: "",
 };
 
 CardStats.propTypes = {
-  statSubtitle: PropTypes.string,
   statTitle: PropTypes.string,
+  statValue: PropTypes.string,
   statIconName: PropTypes.string,
   statIconColor: PropTypes.string,
 };

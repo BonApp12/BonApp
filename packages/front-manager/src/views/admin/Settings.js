@@ -1,7 +1,6 @@
 import React from "react";
 
 // Components
-
 import CardSettings from "components/Cards/CardSettings.js";
 import CardProfile from "components/Cards/CardProfile.js";
 

@@ -1,7 +1,6 @@
 import React from "react";
 
 // Components
-
 import CardTable from "components/Cards/CardTable.js";
 
 export default function Tables() {

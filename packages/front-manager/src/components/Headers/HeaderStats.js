@@ -1,10 +1,38 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+
+// Requests
+
+import fetchFullPlate from "requests/fetchFullPlate";
+import fetchFullOrder from "requests/fetchFullOrder";
+// import updateOrder from "requests/updateOrder";
 
 // components
 
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
+
+  const [plates, setPlate] = useState(0)
+
+  useEffect(() => {
+    fetchFullPlate(31)
+        .then(resPlate => resPlate.json())
+        .then(plates => {
+          setPlate(plates)
+        })
+  }, [plates])
+
+  const [orders, setOrders] = useState([])
+
+  useEffect(() => {
+    fetchFullOrder(31)
+        .then(resOrder => resOrder.json())
+        .then(orders => {
+          setOrders(orders)
+        })
+  }, [orders])
+
+
   return (
     <>
       {/* Header */}
@@ -15,37 +43,25 @@ export default function HeaderStats() {
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
                 <CardStats
-                  statSubtitle="Nombre de commandes"
-                  statTitle="350,897"
-                  statArrow="up"
-                  statPercent="3.48"
-                  statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
+                  statTitle="Nombre de commandes"
+                  statValue={orders.length}
                   statIconName="far fa-chart-bar"
                   statIconColor="bg-red-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
                 <CardStats
-                  statSubtitle="SALES"
-                  statTitle="924"
-                  statArrow="down"
-                  statPercent="1.10"
-                  statPercentColor="text-orange-500"
-                  statDescripiron="Since yesterday"
-                  statIconName="fas fa-users"
+                  statTitle="Nombre de plats"
+                  statValue={plates.length}
+                  statIconName="fas fa-hamburger"
                   statIconColor="bg-pink-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
                 <CardStats
-                  statSubtitle="PERFORMANCE"
-                  statTitle="49,65%"
-                  statArrow="up"
-                  statPercent="12"
-                  statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
-                  statIconName="fas fa-percent"
+                  statTitle="Plat le plus commandé"
+                  statValue="Grec"
+                  statIconName="fas fa-grin-hearts"
                   statIconColor="bg-lightBlue-500"
                 />
               </div>

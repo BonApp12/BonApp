@@ -1,11 +1,11 @@
 import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 
-// components
+// Components
 import Navbar from "components/Navbars/AuthNavbar.js";
 import FooterAuth from "components/Footers/FooterAuth.js";
 
-// views
+// Views
 import Login from "views/auth/Login.js";
 
 export default function Auth() {
