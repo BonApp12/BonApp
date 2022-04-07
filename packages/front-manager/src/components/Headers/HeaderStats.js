@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from "react";
 
 // Requests
+
 import fetchFullPlate from "requests/fetchFullPlate";
 import fetchFullOrder from "requests/fetchFullOrder";
+// import updateOrder from "requests/updateOrder";
 
-// Components
+// components
+
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
@@ -12,7 +15,7 @@ export default function HeaderStats() {
   const [plates, setPlate] = useState(0)
 
   useEffect(() => {
-    fetchFullPlate(1)
+    fetchFullPlate(31)
         .then(resPlate => resPlate.json())
         .then(plates => {
           setPlate(plates)
@@ -22,7 +25,7 @@ export default function HeaderStats() {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    fetchFullOrder(1, 'only-orders')
+    fetchFullOrder(31)
         .then(resOrder => resOrder.json())
         .then(orders => {
           setOrders(orders)
@@ -40,7 +43,7 @@ export default function HeaderStats() {
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
                 <CardStats
-                  statTitle="Nombre de commandes totales"
+                  statTitle="Nombre de commandes"
                   statValue={orders.length}
                   statIconName="far fa-chart-bar"
                   statIconColor="bg-red-500"
