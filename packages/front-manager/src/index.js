@@ -1,10 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "assets/styles/index.css";
+
+// Layouts
+
+import Admin from "layouts/Admin.js";
+import Auth from "layouts/Auth.js";
 
 ReactDOM.render(
-    <App />,
-  document.getElementById('root')
+    <BrowserRouter>
+        <Switch>
+            {/* add routes with layouts */}
+            <Route path="/admin" component={Admin} />
+            <Route path="/auth" component={Auth} />
+            {/* add redirect for first page */}
+            <Redirect from="*" to="/auth" />
+        </Switch>
+    </BrowserRouter>,
+    document.getElementById("root")
 );

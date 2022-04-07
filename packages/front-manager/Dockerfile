@@ -3,7 +3,7 @@ FROM node:14 as build-stage
 
 WORKDIR /front-manager
 COPY package.json .
-RUN npm install
+RUN yarn install
 COPY . .
 
 ARG REACT_APP_API_BASE_URL
