@@ -16,10 +16,10 @@ const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant,
                 }
             },
             (error) => {
-                setIsLoaded(true);
+                setIsLoaded(false);
                 setError(error);
             }
         )
-}
+};
 
 export default fetchRestaurantById;
