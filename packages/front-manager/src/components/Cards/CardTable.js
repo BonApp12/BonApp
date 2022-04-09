@@ -24,7 +24,7 @@ export default function CardTable() {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    fetchFullOrder(31)
+    fetchFullOrder(1, 'to-do')
         .then(resOrder => resOrder.json())
         .then(orders => {
           setOrders(orders)
@@ -34,9 +34,7 @@ export default function CardTable() {
 
   return (
     <>
-      <div
-        className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white"
-      >
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
         <div className="rounded-t mb-0 px-4 py-3 border-0">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
@@ -95,11 +93,10 @@ export default function CardTable() {
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
             {orders.map((order)  => (
               <tr key={order.id}>
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4
-                text-left flex items-center">
+                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 flex items-center">
                   <img
                     src="https://www.svgrepo.com/show/103223/fast-food.svg"
                     className="h-12 w-12 bg-white rounded-full border"
@@ -134,7 +131,7 @@ export default function CardTable() {
                       'Terminé'
                   }
                 </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4t">
                   {checkStatus(order.status) ? (
                       <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
                               onClick={() => updateOrder(order.id)}>
