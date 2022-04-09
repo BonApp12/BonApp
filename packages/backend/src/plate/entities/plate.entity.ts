@@ -21,12 +21,12 @@ export class Plate extends BaseEntity {
     @Column('float')
     price: number;
 
-    @OneToMany(() => Ingredient, (ingredient) => ingredient.plates)
+    @OneToMany(() => Ingredient, (ingredient: Ingredient) => ingredient.plates)
     ingredients: Ingredient[];
 
-  @ManyToOne(() => PlateCategory, (plateCategory:PlateCategory) => plateCategory.name)
-  category: PlateCategory;
+    @ManyToOne(() => PlateCategory, (plateCategory: PlateCategory) => plateCategory.name)
+    category: PlateCategory;
 
-  @OneToMany(() => Order, (order:Order) => order.plate)
-  orders: Order[];
+    @OneToMany(() => Order, (order: Order) => order.plate)
+    orders: Order[];
 }

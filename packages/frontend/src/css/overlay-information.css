@@ -1,4 +1,4 @@
-.Modal {
+.modal-swipe {
     position: fixed;
     bottom: -150vh;
     background-color: #fff;
@@ -12,12 +12,12 @@
     border-top-right-radius: 30px;
 }
 
-.Modal.Show {
+.modal-swipe.show {
     bottom: 0;
     transition: bottom 0.6s ease-out;
 }
 
-.Overlay {
+.overlay {
     background-color: rgba(0, 0, 0, 0.55);
     top: 0;
     bottom: 0;
@@ -29,7 +29,7 @@
     z-index: 5;
 }
 
-.Overlay.Show {
+.overlay.show {
     display: block;
 }
 
