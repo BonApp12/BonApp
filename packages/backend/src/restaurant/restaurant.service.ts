@@ -22,9 +22,9 @@ export class RestaurantService {
         return this.restaurantRepository.find({relations: ['address', 'plates']});
     }
 
-    findOne(id: number): Promise<Restaurant> {
+    findOne(id: number) {
         return this.restaurantRepository.findOne(id, {
-            relations: ['address', 'plates'],
+            relations: ['address', 'plates', 'plates.ingredients'],
         });
     }
 

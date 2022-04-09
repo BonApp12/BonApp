@@ -1,6 +1,9 @@
 import {Button} from "../Button/Button";
+import React from "react";
+import {GrCircleInformation} from "react-icons/gr";
+import '../../css/overlayInformaiton.css';
 
-const Card = ({name, cart, plateProps, removeFromCart, addToCart}) => {
+const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModal}) => {
     return (
         <div className="card card-bordered card-compact content-center m-5">
             <figure>
@@ -23,11 +26,19 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart}) => {
                             +
                         </button>
                     </div> :
-                    <Button classStyle={' btn-primary animate__animated animate__bounce'}
-                            onClick={addToCart}>
-                        Commander
-                    </Button>
+                    <div>
+
+                        <Button classStyle={' btn-primary animate__animated animate__bounce'}
+                                onClick={addToCart}>
+                            Commander
+                        </Button>
+                    </div>
                 }
+                <div className="information-wrapper">
+                    <button className="Button CenterAlign" onClick={setDisplayModal}>
+                        <GrCircleInformation/>
+                    </button>
+                </div>
             </div>
         </div>
     );
