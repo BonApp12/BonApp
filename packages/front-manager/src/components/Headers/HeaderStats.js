@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from "react";
 
 // Requests
-
 import fetchFullPlate from "requests/fetchFullPlate";
 import fetchFullOrder from "requests/fetchFullOrder";
-// import updateOrder from "requests/updateOrder";
 
-// components
-
+// Components
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
@@ -15,7 +12,7 @@ export default function HeaderStats() {
   const [plates, setPlate] = useState(0)
 
   useEffect(() => {
-    fetchFullPlate(31)
+    fetchFullPlate(1)
         .then(resPlate => resPlate.json())
         .then(plates => {
           setPlate(plates)
@@ -25,7 +22,7 @@ export default function HeaderStats() {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    fetchFullOrder(31)
+    fetchFullOrder(1, 'only-orders')
         .then(resOrder => resOrder.json())
         .then(orders => {
           setOrders(orders)

@@ -24,7 +24,7 @@ export default function CardTable() {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    fetchFullOrder(31)
+    fetchFullOrder(1, 'to-do')
         .then(resOrder => resOrder.json())
         .then(orders => {
           setOrders(orders)
