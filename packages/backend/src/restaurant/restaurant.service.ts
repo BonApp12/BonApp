@@ -10,6 +10,7 @@ export class RestaurantService {
     constructor(
         @InjectRepository(Restaurant)
         private restaurantRepository: Repository<Restaurant>,
+        // private addressService: AddressService,
     ) {
     }
 
@@ -27,7 +28,9 @@ export class RestaurantService {
         });
     }
 
-    async update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
+    async update(id: number, updateRestaurantDto: UpdateRestaurantDto): Promise<Restaurant> {
+        //TODO: DEMANDER A WASS POURQUOI EST-CE QU'IL NE RENVOIE PAS DIRECTEMENT ÇA ET QU'IL EXECUTE 2 REQUETES
+        // Et simplifier le update
         await this.restaurantRepository.update(id, {
             ...(updateRestaurantDto.name && {name: updateRestaurantDto.name}),
             ...(updateRestaurantDto.siren && {siren: updateRestaurantDto.siren}),
@@ -43,7 +46,7 @@ export class RestaurantService {
     }
 
     async handleRegisterForm(restaurant: CreateRestaurantDto) {
-        const restaurantEntity = this.hydrateRestaurantEntity(restaurant);
+        // const restaurantEntity = RestaurantService.hydrateRestaurantEntity(restaurant);
         // Pour l'instant on rajoute l'adresse 1, mais faire en sorte de récupérer l'adresse depuis le front
         // const address = await this.addressService.findOne(1);
 
@@ -51,23 +54,23 @@ export class RestaurantService {
     }
 
     async handleUpdateForm(restaurant: UpdateRestaurantDto) {
-        const restaurantEntity = this.hydrateRestaurantEntity(restaurant);
+        // const restaurantEntity = RestaurantService.hydrateRestaurantEntity(restaurant);
     }
 
-    hydrateRestaurantEntity(
-        restaurant: CreateRestaurantDto | UpdateRestaurantDto,
-    ): Restaurant {
-        const restaurantEntity: Restaurant = Restaurant.create();
-
-        restaurantEntity.id = restaurant.id;
-        restaurantEntity.name = restaurant.name;
-        restaurantEntity.siren = restaurant.siren;
-        restaurantEntity.address = restaurant.address;
-        restaurantEntity.contact_email = restaurant.contact_email;
-        restaurantEntity.contact_firstname = restaurant.contact_firstname;
-        restaurantEntity.contact_lastname = restaurant.contact_lastname;
-        restaurantEntity.contact_phone = restaurant.contact_phone;
-
-        return restaurantEntity;
-    }
+    // private static hydrateRestaurantEntity(
+    //     restaurant: CreateRestaurantDto | UpdateRestaurantDto,
+    // ): Restaurant {
+    //     const restaurantEntity: Restaurant = Restaurant.create();
+    //
+    //     restaurantEntity.id = restaurant.id;
+    //     restaurantEntity.name = restaurant.name;
+    //     restaurantEntity.siren = restaurant.siren;
+    //     restaurantEntity.address = restaurant.address;
+    //     restaurantEntity.contact_email = restaurant.contact_email;
+    //     restaurantEntity.contact_firstname = restaurant.contact_firstname;
+    //     restaurantEntity.contact_lastname = restaurant.contact_lastname;
+    //     restaurantEntity.contact_phone = restaurant.contact_phone;
+    //
+    //     return restaurantEntity;
+    // }
 }

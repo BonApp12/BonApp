@@ -1,4 +1,4 @@
-import {Plate} from 'src/plate/entities/plate.entity';
+import {Plate} from '../../plate/entities/plate.entity';
 import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn,} from 'typeorm';
 
 @Entity()
