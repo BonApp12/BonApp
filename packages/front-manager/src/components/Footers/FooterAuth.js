@@ -1,16 +1,16 @@
 import React from "react";
 
-export default function FooterAuth(props) {
+export default function FooterAuth({absolute}) {
   return (
-    <>
-      <footer
-        className={
-          (props.absolute
-            ? "absolute w-full bottom-0 bg-orange-300"
-            : "relative") + " pb-6"
-        }
-      >
-        <div className="container mx-auto px-4">
+      <>
+        <footer
+            className={
+                (absolute
+                    ? "absolute w-full bottom-0 bg-orange-300"
+                    : "relative") + " pb-6"
+            }
+        >
+          <div className="container mx-auto px-4">
           <hr className="mb-6 border-b-1 border-white" />
           <div className="flex flex-wrap items-center md:justify-between justify-center">
             <div className="w-full md:w-4/12 px-4">

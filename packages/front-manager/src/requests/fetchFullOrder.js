@@ -1,19 +1,13 @@
 const fetchFullOrder = (idOrder, params) => {
-    if (params === 'only-orders') {
-        return fetch(process.env.REACT_APP_URL_BACKEND + '/orders/restaurant/' + idOrder, {
-            crossDomain: true,
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'include',
-        })
-    } else if (params === 'to-do') {
-        return fetch(process.env.REACT_APP_URL_BACKEND + '/orders/restaurant/' + idOrder + '/status/to-do', {
-            crossDomain: true,
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'include',
-        })
-    }
+    let url = process.env.REACT_APP_URL_BACKEND + '/orders/restaurant/' + idOrder;
+    if (params === 'to-do') url = process.env.REACT_APP_URL_BACKEND + `/orders/restaurant/1/status/to-do`;
+
+    return fetch(url, {
+        crossDomain: true,
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include',
+    })
 }
 
 export default fetchFullOrder;

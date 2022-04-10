@@ -1,34 +1,17 @@
 import React, {useEffect, useState} from "react";
-
-// Requests
 import fetchFullPlate from "requests/fetchFullPlate";
 import fetchFullOrder from "requests/fetchFullOrder";
-
-// Components
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
 
   const [plates, setPlate] = useState(0)
-
-  useEffect(() => {
-    fetchFullPlate(1)
-        .then(resPlate => resPlate.json())
-        .then(plates => {
-          setPlate(plates)
-        })
-  }, [plates])
-
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    fetchFullOrder(1, 'only-orders')
-        .then(resOrder => resOrder.json())
-        .then(orders => {
-          setOrders(orders)
-        })
-  }, [orders])
-
+    fetchFullPlate(1).then(async resPlate => setPlate(await resPlate.json()))
+    fetchFullOrder(1, 'only-orders').then(async resOrder => setOrders(await resOrder.json()))
+  }, [])
 
   return (
     <>
@@ -40,18 +23,18 @@ export default function HeaderStats() {
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
                 <CardStats
-                  statTitle="Nombre de commandes"
-                  statValue={orders.length}
-                  statIconName="far fa-chart-bar"
-                  statIconColor="bg-red-500"
+                    statTitle="Nombre de commandes"
+                    statValue={`${orders.length}`}
+                    statIconName="far fa-chart-bar"
+                    statIconColor="bg-red-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
                 <CardStats
-                  statTitle="Nombre de plats"
-                  statValue={plates.length}
-                  statIconName="fas fa-hamburger"
-                  statIconColor="bg-pink-500"
+                    statTitle="Nombre de plats"
+                    statValue={`${plates.length}`}
+                    statIconName="fas fa-hamburger"
+                    statIconColor="bg-pink-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-4/12 px-4">

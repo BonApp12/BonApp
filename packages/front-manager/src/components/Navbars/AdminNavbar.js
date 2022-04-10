@@ -1,21 +1,14 @@
 import React from "react";
-
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
 export default function Navbar() {
 
-    //TODO: Trouver une autre solution que location.pathname (plus propre) ?
+    let title = "";
+    const pathname = window.location.pathname;
 
-    let title;
-
-    if (window.location.pathname === '/admin/dashboard') {
-        title = 'dashboard';
-    } else if (window.location.pathname === '/admin/settings') {
-        title = 'paramètres';
-    } else if (window.location.pathname === '/admin/orders') {
-        title = 'commandes';
-    }
-
+    if (pathname === '/admin/dashboard') title = 'dashboard';
+    if (pathname === '/admin/settings') title = 'paramètres';
+    if (pathname === '/admin/orders') title = 'commandes';
 
     return (
         <>
@@ -26,13 +19,9 @@ export default function Navbar() {
                 <div
                     className="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
                     {/* Brand */}
-                    <a
-                        className="text-white text-sm uppercase hidden lg:inline-block font-semibold"
-                        href="/"
-                        onClick={(e) => e.preventDefault()}
-                    >
+                    <span className="text-white text-sm uppercase hidden lg:inline-block font-semibold cursor-pointer">
                         {title}
-                    </a>
+                    </span>
                     {/* User */}
                     <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
                         <UserDropdown/>
