@@ -3,7 +3,7 @@ import {Button} from "../Button/Button";
 import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
 import { toast } from "react-toastify";
-import {PaymentEnum} from "./PaymentEnum";
+import {PAYMENTENUM} from "./PaymentEnum";
 
 const CheckoutForm = (opt) => {
     const stripe = useStripe();
@@ -22,10 +22,10 @@ const CheckoutForm = (opt) => {
         setButton(true);
 
         stripe.retrievePaymentIntent(clientSecret).then(( { paymentIntent }) => {
-            if (paymentIntent.status === "succeeded") return toast.success(PaymentEnum.PAYMENT_SUCCESS);
-            if (paymentIntent.status === "processing") return toast.info(PaymentEnum.PAYMENT_PROCESSING);
-            if (paymentIntent.status === "requires_payment_method") return toast.dark(PaymentEnum.PAYMENT_REQUIRES_PAYMENT_METHOD);
-            return toast.error(PaymentEnum.ERROR.TYPE.PAYMENT)
+            if (paymentIntent.status === PAYMENTENUM.STATUS.SUCCEEDED) return toast.success(PAYMENTENUM.PAYMENT_SUCCESS);
+            if (paymentIntent.status === PAYMENTENUM.STATUS.PROCESSING) return toast.info(PAYMENTENUM.PAYMENT_PROCESSING);
+            if (paymentIntent.status === PAYMENTENUM.STATUS.REQUIRES_PAYMENT_METHOD) return toast.dark(PAYMENTENUM.PAYMENT_REQUIRES_PAYMENT_METHOD);
+            return toast.error(PAYMENTENUM.ERROR.TYPE.PAYMENT)
         });
     }, [stripe]);
 
@@ -43,11 +43,9 @@ const CheckoutForm = (opt) => {
             },
         });
 
-        if (error.type === PaymentEnum.ERROR.TYPE.CARD || error.type === PaymentEnum.ERROR.TYPE.VALIDATION) {
-            toast.error(error.message);
-        } else {
-            toast.error("Une erreur est survenue");
-        }
+        if (error.type === PAYMENTENUM.ERROR.TYPE.CARD ||
+            error.type === PAYMENTENUM.ERROR.TYPE.VALIDATION) toast.error(error.message);
+        toast.error(PAYMENTENUM.ERROR.TYPE.GENERAL);
         setIsLoading(false);
     }
 

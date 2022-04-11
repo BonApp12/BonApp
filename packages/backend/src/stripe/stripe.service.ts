@@ -14,7 +14,7 @@ export default class StripeService {
 
   public async charge(amount: number) {
     return this.stripe.paymentIntents.create({
-      amount: amount,
+      amount,
       currency: 'eur',
       payment_method_types: ['card'],
     });
