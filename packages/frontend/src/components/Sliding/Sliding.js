@@ -34,7 +34,7 @@ export const Sliding = () => {
 
     function checkout() {
         // Récupération du client_secret pour le paiement.
-        fetch(process.env.REACT_APP_URL_BACKEND + '/stripe/pay', {
+        fetch(process.env.REACT_APP_URL_BACKEND + '/payment/pay', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
