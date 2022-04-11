@@ -3,6 +3,7 @@ import {Button} from "../Button/Button";
 import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
 import { toast } from "react-toastify";
+import {PaymentEnum} from "./PaymentEnum";
 
 const CheckoutForm = (opt) => {
     const stripe = useStripe();
@@ -10,6 +11,7 @@ const CheckoutForm = (opt) => {
 
     // Utiliser des toasts pour afficher les messages de succès et d'erreur
     const [isLoading, setIsLoading] = useState(false);
+    const [button, setButton] = useState(false);
 
     const clientSecret = opt.clientSecret;
 
@@ -17,43 +19,34 @@ const CheckoutForm = (opt) => {
         if (!stripe || !clientSecret) {
             return;
         }
+        setButton(true);
 
         stripe.retrievePaymentIntent(clientSecret).then(( { paymentIntent }) => {
-            switch (paymentIntent.status) {
-                case "succeeded":
-                    toast.success('Votre paiement a été effectué avec succès !');
-                    break;
-                case "processing":
-                    toast.info('Votre paiement est en cours de traitement...');
-                    break;
-                case "requires_payment_method":
-                    toast.dark('Veuillez renseigner vos informations bancaires');
-                    break;
-                default:
-                    toast.error('Une erreur est survenue');
-                    break;
-            }
+            if (paymentIntent.status === "succeeded") return toast.success(PaymentEnum.PAYMENT_SUCCESS);
+            if (paymentIntent.status === "processing") return toast.info(PaymentEnum.PAYMENT_PROCESSING);
+            if (paymentIntent.status === "requires_payment_method") return toast.dark(PaymentEnum.PAYMENT_REQUIRES_PAYMENT_METHOD);
+            return toast.error(PaymentEnum.ERROR.TYPE.PAYMENT)
         });
-    }, [stripe])
+    }, [stripe]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
         if (!stripe || !elements) {
-            return; // TODO : Faire en sorte de désactiver le bouton de paiement tant que Stripe n'est pas chargé.
+            return;
         }
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: window.location.href, // TODO : Faire en sorte de ne pas rediriger du tout - Revoir le workflow et rediriger autre part, suivi de commande?
+                return_url: window.location.href, // Redirection obligatoire
             },
         });
 
-        if (error.type === "card_error" || error.type === "validation_error") {
+        if (error.type === PaymentEnum.ERROR.TYPE.CARD || error.type === PaymentEnum.ERROR.TYPE.VALIDATION) {
             toast.error(error.message);
         } else {
-            toast.error("Une autre erreur est survenue");
+            toast.error("Une erreur est survenue");
         }
         setIsLoading(false);
     }
@@ -62,7 +55,7 @@ const CheckoutForm = (opt) => {
         <form className="m-5">
             {isLoading && <Loading />}
             <PaymentElement id="payment-element" />
-            <Button classStyle="m-3" onClick={handleSubmit}>Payer 💸</Button>
+            {button && <Button classStyle="m-3" onClick={handleSubmit}>Payer 💸</Button>}
         </form>
     )
 }

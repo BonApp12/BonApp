@@ -17,9 +17,7 @@ export const Sliding = () => {
     const [isCheckout, setIsCheckout] = useState(false);
     const [stripeOptions, setStripeOptions] = useState({});
     const totalAmount =  cart.reduce((partialSum, a) => partialSum + parseFloat(a.price), 0);
-
-    const stripePromise = loadStripe('pk_test_51KdcTkFhZUmq77L090zgjyIkpZQYMTiUKH42dbtO0DeoKIdeR3c4AksFg5bo55vMNjGSAl0z5wtrdUkjSJ0hULOE00Dr3meZpt');
-
+    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
     function formattedCart() {
         const cartMap = new Map();
@@ -30,16 +28,12 @@ export const Sliding = () => {
                 return cartMap.set(plate.name, [plate]);
             }
             return cartMap.set(plate.name, [...cartMap.get(plate.name), plate]);
-
         });
         return Array.from(cartMap);
     }
 
     function checkout() {
-        console.log('Time to khalass');
-
         // Récupération du client_secret pour le paiement.
-
         fetch(process.env.REACT_APP_URL_BACKEND + '/stripe/pay', {
             method: 'POST',
             headers: {
