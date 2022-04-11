@@ -54,7 +54,6 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "stripe": "^8.210.0",
     "typeorm": "^0.2.41",
     "typeorm-seeding": "^1.6.1",
     "uuid": "^8.3.2"

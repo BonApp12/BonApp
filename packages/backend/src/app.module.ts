@@ -11,7 +11,6 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { OrdersModule } from './orders/orders.module';
 import * as Joi from 'joi';
-import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -26,13 +25,10 @@ import { StripeModule } from './stripe/stripe.module';
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
-        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-        STRIPE_SECRET_KEY: Joi.string(),
-        STRIPE_CURRENCY: Joi.string(),
+        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required()
       }),
     }),
     OrdersModule,
-    StripeModule,
   ],
   controllers: [AppController],
 })
