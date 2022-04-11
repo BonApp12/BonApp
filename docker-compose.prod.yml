@@ -5,6 +5,8 @@ services:
     build:
       context: ./packages/frontend
       dockerfile: Dockerfile.production
+      args:
+        - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
     restart: always
     env_file: .env
     ports:
@@ -18,7 +20,7 @@ services:
     container_name: backend
     build:
       context: ./packages/backend
-      dockerfile: Dockerfile.production
+      dockerfile: Dockerfile.local
     restart: always
     env_file: .env
     volumes:

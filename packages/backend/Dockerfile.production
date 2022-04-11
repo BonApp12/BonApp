@@ -1,11 +1,17 @@
-FROM node:16-alpine
+FROM node:14-alpine
 
-RUN apk --no-cache add pkgconfig autoconf automake libtool nasm build-base zlib-dev libpng-dev git
+RUN mkdir -p /svr/app
 
-WORKDIR /app
-COPY package.json /app
-COPY yarn.lock /app
+WORKDIR /svr/app
+
+RUN yarn add global @nestjs/cli
+
+COPY package.json .
+COPY yarn.lock .
+
 RUN yarn install
-COPY . /app
+
+COPY . . /svr/app/
+EXPOSE $BACKEND_PORT
 
 CMD ["yarn", "start:prod"]
