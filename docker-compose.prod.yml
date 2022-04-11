@@ -8,7 +8,7 @@ services:
     restart: always
     env_file: .env
     ports:
-      - "${REACT_PORT}:${REACT_PORT}"
+      - "${REACT_PROD_PORT}:${REACT_DOCKER_PORT}"
     volumes:
       - "./packages/frontend/:/app/"
     networks:
@@ -43,7 +43,7 @@ services:
       args:
         - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
     ports:
-      - "${REACT_LOCAL_PORT}:${REACT_DOCKER_PORT}"
+      - "${REACT_PROD_PORT_MANAGER}:${REACT_DOCKER_PORT}"
     networks:
       - bp-network
 
