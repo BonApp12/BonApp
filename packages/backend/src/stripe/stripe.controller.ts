@@ -7,8 +7,8 @@ export default class StripeController {
 
   @Post('/pay')
   async createCharge(@Body() charge, @Res() res) {
-    await this.stripeService.charge(charge.amount).then((response) => {
-      res.json({ client_secret: response.client_secret });
-    });
+    await this.stripeService
+      .charge(charge.amount)
+      .then(response => res.json({ client_secret: response.client_secret }));
   }
 }

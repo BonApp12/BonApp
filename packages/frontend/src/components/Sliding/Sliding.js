@@ -24,9 +24,7 @@ export const Sliding = () => {
 
         cart.forEach(plate => {
 
-            if (!cartMap.has(plate.name)) {
-                return cartMap.set(plate.name, [plate]);
-            }
+            if (!cartMap.has(plate.name)) return cartMap.set(plate.name, [plate]);
             return cartMap.set(plate.name, [...cartMap.get(plate.name), plate]);
         });
         return Array.from(cartMap);
@@ -39,9 +37,9 @@ export const Sliding = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
+            body: {
                 amount: totalAmount * 100, // En centimes, donc on multiplie par 100.
-            })
+            }
         })
             .then(response => response.json())
             .then(data => {
