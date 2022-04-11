@@ -1,0 +1,52 @@
+version: "3.3"
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./packages/frontend
+      dockerfile: Dockerfile.production
+    restart: always
+    env_file: .env
+    ports:
+      - "${REACT_PORT}:${REACT_PORT}"
+    volumes:
+      - "./packages/frontend/:/app/"
+    networks:
+      - bp-network
+
+  backend:
+    container_name: backend
+    build:
+      context: ./packages/backend
+      dockerfile: Dockerfile.production
+    restart: always
+    env_file: .env
+    volumes:
+      - ./packages/backend:/svr/app
+      - "./scripts/wait.sh:/wait.sh"
+      - /svr/app/node_modules
+    networks:
+      - bp-network
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    depends_on:
+      - bp-pg-db
+    links:
+      - bp-pg-db
+
+  front-manager:
+    depends_on:
+      - backend
+    build:
+      context: ./packages/front-manager
+      dockerfile: Dockerfile.production
+      args:
+        - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
+    ports:
+      - "${REACT_LOCAL_PORT}:${REACT_DOCKER_PORT}"
+    networks:
+      - bp-network
+
+networks:
+  bp-network:
+    driver: bridge
