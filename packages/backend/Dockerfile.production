@@ -1,13 +1,17 @@
-FROM node:12-alpine
-ARG NODE_ENV=staging
+FROM node:14-alpine
 
-WORKDIR /app
+RUN mkdir -p /svr/app
 
-COPY . .
+WORKDIR /svr/app
 
-RUN npm install --silent 
-RUN npm run build
+RUN yarn add global @nestjs/cli
 
-EXPOSE 3000
+COPY package.json .
+COPY yarn.lock .
 
-CMD ["node", "dist/main"]
+RUN yarn install
+
+COPY . . /svr/app/
+EXPOSE $BACKEND_PORT
+
+CMD ["yarn", "start:prod"]
