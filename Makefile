@@ -1,7 +1,7 @@
 local-build:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down && docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --remove-orphans --build
 
-local-start:
+local-up:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down && docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --remove-orphans
 
 local-down:
@@ -10,7 +10,7 @@ local-down:
 prod-build:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans --build
 
-prod-start:
+prod-up:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
 
 prod-down:

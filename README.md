@@ -12,10 +12,8 @@ Pour que l'installation se déroule sans accroc, vous aurez besoin de créer vou
 ```packages/backend/.env```:
 
 ```
-JWT_ACCESS_TOKEN_SECRET=VOTRE_CLE_SECRETE
-JWT_ACCESS_TOKEN_EXPIRATION_TIME=1500000
-JWT_REFRESH_TOKEN_SECRET=UNE_AUTRE_CLE_SECRETE
-JWT_REFRESH_TOKEN_EXPIRATION_TIME=1500000
+JWT_ACCESS_TOKEN_SECRET=VOTRE-CLE-SECRETE
+JWT_ACCESS_TOKEN_EXPIRATION_TIME=10000
 ```
 
 
@@ -34,8 +32,10 @@ REACT_APP_SOCKET_BACKEND=ws://localhost:4000
 ```
 NODE_ENV=development
 
-FRONTEND_PORT=3000
+REACT_PORT=3000
 BACKEND_PORT=4000
+
+FRONTEND_MANAGER_PORT=3001
 
 JWT_SECRET=jwt_secret_key
 JWT_EXPIRES_IN=30d
@@ -53,10 +53,15 @@ PGADMIN_PORT=5055
 DB_URL=postgres://postgres:root@bp-pg-db:5432/bp-pg-db
 ENTITY_PATH=dist/**/**/*.entity{.js,.ts}
 
+NODE_LOCAL_PORT=6868
+NODE_DOCKER_PORT=8080
+
 CLIENT_ORIGIN=http://127.0.0.1:8888
 CLIENT_API_BASE_URL=http://127.0.0.1:6868/api
 
-REACT_LOCAL_PORT=8888
+REACT_PROD_PORT_MANAGER=8888
+REACT_PROD_PORT=8081
+
 REACT_DOCKER_PORT=80
 ```
 
@@ -79,8 +84,17 @@ Rappel : Une fois que la base de données est initialisée, repasser ce paramèt
 ## Installation
 
 ```bash
-# Make (recommandé)
-$ make local 
+# Launch local build and up
+$ make local-build 
+
+# Launch local up
+$ make local-up
+
+# Launch prod build and up
+$ make prod-build
+
+# Launch prod up
+$ make prod-up
 
 # YARN
 $ yarn install
