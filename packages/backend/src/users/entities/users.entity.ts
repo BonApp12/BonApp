@@ -1,4 +1,13 @@
-import {BaseEntity, BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
+import {
+    BaseEntity,
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
 import {UserRole} from '../UserRole.enum';
 import {Exclude, instanceToPlain} from 'class-transformer';
@@ -37,6 +46,7 @@ export class Users extends BaseEntity {
     orders: Order[];
 
     @BeforeInsert()
+    @BeforeUpdate()
     async setPassword(password: string) {
         if(password !== null && password !== undefined) {
             const salt = await bcrypt.genSalt();

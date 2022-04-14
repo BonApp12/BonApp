@@ -6,6 +6,7 @@ import {CreateUsersDto} from './dto/create-users.dto';
 import {UserRole} from './UserRole.enum';
 import {UsersDto} from "./dto/users.dto";
 import {MailerService} from "@nestjs-modules/mailer";
+import {plainToClass} from "class-transformer";
 
 @Injectable()
 export class UsersService {
@@ -40,6 +41,13 @@ export class UsersService {
         return <UsersDto>newUser;
     }
 
+    async update(user: UsersDto): Promise<UsersDto> {
+        //On hydrate le user avec les données du DTO car le beforeUpdate fonctionne seulement avec un objet de type User
+        const newUser = this.hydrateUserEntity(user);
+        newUser.id = user.id;
+        return plainToClass(UsersDto,this.usersRepository.save(newUser));
+    }
+
     async getByEmail(email: string): Promise<Users | undefined> {
         const user = this.usersRepository.findOne({
             relations: ['restaurant'],
@@ -67,15 +75,26 @@ export class UsersService {
         );
     }
 
+    hydrateUserEntity(userDetails: CreateUsersDto|UsersDto): Users {
+        // Cette fonction doit permettre d'hydrater un objet User
+        // Faire en sorte qu'elle soit la plus mainstream possible, éventuellement préciser les champs obligatoires.
+        const userEntity: Users = Users.create();
+
+        userEntity.firstname = userDetails.firstname;
+        userEntity.lastname = userDetails.lastname;
+        userEntity.email = userDetails.email;
+        userEntity.password = userDetails.password;
+        userEntity.role = UserRole[userDetails.role as keyof typeof UserRole];
+    }
 
     delete(id: string): Promise<DeleteResult> {
         return this.usersRepository.delete(id);
-
     }
 
-    update(id: string, user: UsersDto): Promise<UsersDto> {
-        return this.usersRepository.save({id, ...user});
-    }
+    //TODO: Voir avec Yass pour la methode à prendre pour l'update
+    // update(id: string, user: UsersDto): Promise<UsersDto> {
+    //     return this.usersRepository.save({id, ...user});
+    // }
 
     //TODO: intégrer la solution de youcef
     private sendEmail(userData) {

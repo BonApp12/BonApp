@@ -19,7 +19,9 @@ import {JwtAuthGuard} from './jwt-auth.guard';
 import {CreateUsersDto} from '../users/dto/create-users.dto';
 import {UsersDto} from '../users/dto/users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
-import {plainToClass} from 'class-transformer';
+import { plainToClass } from 'class-transformer';
+import {UpdateUsersDto} from "../users/dto/update-users.dto";
+import {SETTINGS} from "../app.utils";
 import {ConfigService} from "@nestjs/config";
 import {UserRole} from "../users/UserRole.enum";
 
@@ -85,8 +87,14 @@ export class AuthController {
         req.res.send();
     }
 
-    @Post('/register')
-    async register(@Body() registrationData: CreateUsersDto) {
-        return this.authService.register(registrationData);
-    }
+  @UseGuards(JwtAuthGuard)
+  @Post('/update')
+  async update(@Body(SETTINGS.VALIDATION_PIPE) updateUserDto: UpdateUsersDto, @Req() req: RequestWithUser) {
+    return this.authService.updateUser(updateUserDto, req.user);
+  }
+
+  @Post('/register')
+  async register(@Body(SETTINGS.VALIDATION_PIPE) registrationData: CreateUsersDto) {
+    return this.authService.register(registrationData);
+  }
 }
