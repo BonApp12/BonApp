@@ -4,7 +4,7 @@ const fetchFullPlate = (idPlate) => {
         method: 'GET',
         mode: 'cors',
         credentials: 'include',
-    })
-}
+    });
+};
 
 export default fetchFullPlate;

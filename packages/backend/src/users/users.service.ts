@@ -1,9 +1,10 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Users} from './entities/users.entity';
-import {Repository} from 'typeorm';
+import {DeleteResult, Repository} from 'typeorm';
 import {CreateUsersDto} from './dto/create-users.dto';
 import {UserRole} from './UserRole.enum';
+import {UsersDto} from "./dto/users.dto";
 
 @Injectable()
 export class UsersService {
@@ -33,6 +34,11 @@ export class UsersService {
     }
 
     async create(userData: CreateUsersDto) {
+        if (userData.role === UserRole.RESTAURANT_SERVER || userData.role === UserRole.RESTAURANT_KITCHEN) {
+            //TODO: On génére un mdp par défaut Penser à forcer le changement de mot passe et l'envoie de mail
+            userData.password = "123";
+            console.log(userData);
+        }
         const newUser = this.usersRepository.create(userData);
         await this.usersRepository.save(newUser);
         return newUser;
@@ -77,5 +83,15 @@ export class UsersService {
         userEntity.role = UserRole[userDetails.role as keyof typeof UserRole];
 
         return userEntity;
+    }
+
+    delete(id: string): Promise<DeleteResult> {
+        return this.usersRepository.delete(id);
+
+    }
+
+    update(id: string, user: UsersDto): Promise<UsersDto> {
+        console.log(user);
+        return this.usersRepository.save({id, ...user});
     }
 }

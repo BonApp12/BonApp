@@ -4,12 +4,16 @@ import {UpdateRestaurantDto} from './dto/update-restaurant.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Restaurant} from './entities/restaurant.entity';
 import {Repository} from 'typeorm';
+import {Users} from "../users/entities/users.entity";
+import {UsersDto} from "../users/dto/users.dto";
 
 @Injectable()
 export class RestaurantService {
     constructor(
         @InjectRepository(Restaurant)
         private restaurantRepository: Repository<Restaurant>,
+        @InjectRepository(Users)
+        private userRepository: Repository<Users>,
         // private addressService: AddressService,
     ) {
     }
@@ -57,20 +61,10 @@ export class RestaurantService {
         // const restaurantEntity = RestaurantService.hydrateRestaurantEntity(restaurant);
     }
 
-    // private static hydrateRestaurantEntity(
-    //     restaurant: CreateRestaurantDto | UpdateRestaurantDto,
-    // ): Restaurant {
-    //     const restaurantEntity: Restaurant = Restaurant.create();
-    //
-    //     restaurantEntity.id = restaurant.id;
-    //     restaurantEntity.name = restaurant.name;
-    //     restaurantEntity.siren = restaurant.siren;
-    //     restaurantEntity.address = restaurant.address;
-    //     restaurantEntity.contact_email = restaurant.contact_email;
-    //     restaurantEntity.contact_firstname = restaurant.contact_firstname;
-    //     restaurantEntity.contact_lastname = restaurant.contact_lastname;
-    //     restaurantEntity.contact_phone = restaurant.contact_phone;
-    //
-    //     return restaurantEntity;
-    // }
+    async findEquipiers(id: number): Promise<UsersDto[]> {
+        const equipiers: UsersDto[] = await this.userRepository.find({where: {restaurant: id}});
+        return equipiers
+
+    }
+
 }

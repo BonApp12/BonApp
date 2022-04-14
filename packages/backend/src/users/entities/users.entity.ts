@@ -20,7 +20,8 @@ export class Users extends BaseEntity {
     email: string;
 
     @Exclude({toPlainOnly: true})
-    @Column('varchar', {length: 255})
+    @Column('varchar', {length: 255, select: false})
+
     password: string;
 
     @Column({
@@ -38,7 +39,7 @@ export class Users extends BaseEntity {
 
     @BeforeInsert()
     async setPassword(password: string) {
-        const salt = await bcrypt.genSalt()
+        const salt = await bcrypt.genSalt();
         this.password = await bcrypt.hash(password || this.password, salt)
     }
 
