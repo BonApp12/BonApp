@@ -2,15 +2,17 @@ import React, {useEffect, useState} from "react";
 import fetchFullPlate from "requests/fetchFullPlate";
 import fetchFullOrder from "requests/fetchFullOrder";
 import CardStats from "components/Cards/CardStats.js";
+import fetchTeamMate from "../../requests/fetchTeamMate";
 
 export default function HeaderStats() {
 
     const [plates, setPlate] = useState([]);
     const [orders, setOrders] = useState([]);
-
+    const [teamMates, setTeamMates] = useState([]);
     useEffect(() => {
         fetchFullPlate(1).then(async resPlate => setPlate(await resPlate.json()));
         fetchFullOrder(1, 'only-orders').then(async resOrder => setOrders(await resOrder.json()));
+        fetchTeamMate(1).then(async resTeamMate => setTeamMates(await resTeamMate.json()));
     }, []);
 
     return (
@@ -21,7 +23,7 @@ export default function HeaderStats() {
                     <div>
                         {/* Card stats */}
                         <div className="flex flex-wrap">
-                            <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
+                            <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                                 <CardStats
                                     statTitle="Nombre de commandes"
                                     statValue={`${orders.length}`}
@@ -29,7 +31,7 @@ export default function HeaderStats() {
                                     statIconColor="bg-red-500"
                                 />
                             </div>
-                            <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
+                            <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                                 <CardStats
                                     statTitle="Nombre de plats"
                                     statValue={`${plates.length}`}
@@ -37,12 +39,20 @@ export default function HeaderStats() {
                                     statIconColor="bg-pink-500"
                                 />
                             </div>
-                            <div className="w-full lg:w-6/12 xl:w-4/12 px-4">
+                            <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                                 <CardStats
                                     statTitle="Plat le plus commandé"
                                     statValue="Grec"
                                     statIconName="fas fa-grin-hearts"
                                     statIconColor="bg-lightBlue-500"
+                                />
+                            </div>
+                            <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                                <CardStats
+                                    statTitle="Membres de l'équipe"
+                                    statValue={`${teamMates.length}`}
+                                    statIconName="fas fa-users"
+                                    statIconColor="bg-red-400"
                                 />
                             </div>
                         </div>

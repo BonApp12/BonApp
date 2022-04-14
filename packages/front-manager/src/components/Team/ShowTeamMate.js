@@ -45,7 +45,8 @@ export default function () {
     }
 
     function deleteUserAction(id) {
-        toast.warn(<ConfirmToaster confirmCallBack={() => confirm(id)}/>, {
+        toast.warn(<ConfirmToaster message={"Ouais pipi caca?"}
+                                   confirmCallBack={() => confirm(id)}/>, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: false,
         });
@@ -179,19 +180,15 @@ export default function () {
                                         <button className="btn btn-square btn-xs btn-outline btn-error"
                                                 onClick={cancelUpdate}><ImCancelCircle/></button>
                                     </div>
-
                                     :
                                     <div>
-
                                         <button className="btn btn-error btn-xs mr-1"
                                                 onClick={() => deleteUserAction(equipier.id)}>Supprimer
                                         </button>
                                         <button className="btn btn-square btn-xs btn-outline btn-warning"
                                                 onClick={() => editMode(index)}><BsPencil/></button>
                                     </div>
-
                                 }
-
                             </td>
                         </tr>
                     ))}

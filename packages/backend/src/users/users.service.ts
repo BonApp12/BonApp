@@ -5,12 +5,15 @@ import {DeleteResult, Repository} from 'typeorm';
 import {CreateUsersDto} from './dto/create-users.dto';
 import {UserRole} from './UserRole.enum';
 import {UsersDto} from "./dto/users.dto";
+import {MailerService} from "@nestjs-modules/mailer";
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(Users)
-        private usersRepository: Repository<Users>
+        private usersRepository: Repository<Users>,
+        //TODO: intégrer le module de youcef quand il sera merger
+        private readonly mailerService: MailerService
     ) {
     }
 
@@ -37,7 +40,7 @@ export class UsersService {
         if (userData.role === UserRole.RESTAURANT_SERVER || userData.role === UserRole.RESTAURANT_KITCHEN) {
             //TODO: On génére un mdp par défaut Penser à forcer le changement de mot passe et l'envoie de mail
             userData.password = "123";
-            console.log(userData);
+            this.sendEmail(userData);
         }
         const newUser = this.usersRepository.create(userData);
         await this.usersRepository.save(newUser);
@@ -91,7 +94,19 @@ export class UsersService {
     }
 
     update(id: string, user: UsersDto): Promise<UsersDto> {
-        console.log(user);
         return this.usersRepository.save({id, ...user});
+    }
+    //TODO: intégrer la solution de youcef
+    private sendEmail(userData) {
+        this.mailerService
+            .sendMail({
+                to: 'yassine.bousaidi@hotmail.com', // list of receivers
+                from: 'bonAPP@noreply.com', // sender address
+                subject: 'Testing Nest MailerModule ✔', // Subject line
+                text: 'welcome', // plaintext body
+                html: '<h1>Bienvenu ' + userData.firstname + '</h1> ' +
+                    '<p>Votre identifiant est:' + userData.email + ' </p>' +
+                    '<p>Votre mot de passe est </p>', // HTML body content
+            });
     }
 }
