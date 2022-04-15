@@ -39,7 +39,7 @@ export class UsersService {
     async create(userData: CreateUsersDto) {
         if (userData.role === UserRole.RESTAURANT_SERVER || userData.role === UserRole.RESTAURANT_KITCHEN) {
             //TODO: On génére un mdp par défaut Penser à forcer le changement de mot passe et l'envoie de mail
-            userData.password = "123";
+            userData.password = UsersService.randomString(10);
             this.sendEmail(userData);
         }
         const newUser = this.usersRepository.create(userData);
@@ -74,6 +74,7 @@ export class UsersService {
         );
     }
 
+    // TODO: Créer un adapter qui renverra l'userDTO sans le champs password
     hydrateUserEntity(userDetails: CreateUsersDto): Users {
         // Cette fonction doit permettre d'hydrater un objet User
         // Faire en sorte qu'elle soit la plus mainstream possible, éventuellement préciser les champs obligatoires.
@@ -96,17 +97,29 @@ export class UsersService {
     update(id: string, user: UsersDto): Promise<UsersDto> {
         return this.usersRepository.save({id, ...user});
     }
+
     //TODO: intégrer la solution de youcef
     private sendEmail(userData) {
         this.mailerService
             .sendMail({
-                to: 'yassine.bousaidi@hotmail.com', // list of receivers
+                to: userData.email, // list of receivers
                 from: 'bonAPP@noreply.com', // sender address
                 subject: 'Testing Nest MailerModule ✔', // Subject line
                 text: 'welcome', // plaintext body
                 html: '<h1>Bienvenu ' + userData.firstname + '</h1> ' +
-                    '<p>Votre identifiant est:' + userData.email + ' </p>' +
-                    '<p>Votre mot de passe est </p>', // HTML body content
+                    '<p>Votre identifiant est: ' + userData.email + ' </p>' +
+                    '<p>Votre mot de passe est: ' + userData.password + ' </p>' +
+                    '<p>Penser à le changer</p>', // HTML body content
             });
+    }
+
+    private static randomString(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_+=-';
+        const charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
     }
 }
