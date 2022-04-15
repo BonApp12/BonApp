@@ -14,6 +14,8 @@ import {RecoilRoot} from "recoil";
 import Toast from "../src/components/Toast/Toast";
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterForm from './components/Register/RegisterForm';
+import ForgetPwd from "./components/ForgetPwd/ForgetPwd";
+import ChangePwd from "./components/ForgetPwd/ChangePwd";
 
 ReactDOM.render(
     <div className="container mt-5">
@@ -31,6 +33,8 @@ ReactDOM.render(
                             <Route path="register" element={<RegisterForm/>}/>
                             <Route path="/already-logged"
                                    element={<MessagePage message={{code:200,message:"Vous êtes déjà connecté"}} />}/>
+                            <Route path={"/forgot-password"} element={<ForgetPwd />}/>
+                            <Route path={"/update-password"} element={<ChangePwd />}/>
                             <Route path="/is-connected" element={<LoginForm/>}/>
                             <Route path="/disconnect" element={<Disconnect/>}/>
                         </Route>

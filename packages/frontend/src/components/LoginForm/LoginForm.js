@@ -65,6 +65,7 @@ function LoginForm() {
                     error={errors?.password?.message}
                     placeHolder="********"
                 />
+                <Link to={"/forgot-password"} className="text-sm text-orange-600 flex mt-2 justify-end">Mot de passe oublié ?</Link>
                 <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-600 hover:bg-orange-500`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
             </form>
             <div className="flex justify-center">

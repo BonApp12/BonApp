@@ -8,7 +8,7 @@ export class MailService {
     constructor(private mailerService: MailerService, private configService: ConfigService) {}
 
     async sendForgetMail(user: UsersDto, token: string, template: string) {
-        const url = `${this.configService.get('URL_API_BACKEND')}/auth/forget-password?token=${token}`;
+        const url = `${this.configService.get('URL_FRONTEND')}/update-password?token=${token}`;
 
         return this.mailerService.sendMail({
             to: user.email,

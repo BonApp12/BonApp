@@ -132,19 +132,15 @@ export class AuthService {
     }
   }
 
-  // private verifyToken(token: string) {
-  //   return this.jwtService.verify(token);
-  // }
-
-    public getJwtAccessToken(userId: number) {
-        const payload: TokenPayload = {userId};
-        return this.jwtService.sign(payload, {
-            secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-            expiresIn: `${this.configService.get(
-                'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-            )}s`,
-        });
-    }
+  public getJwtAccessToken(userId: number) {
+    const payload: TokenPayload = { userId };
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      )}s`,
+    });
+  }
 
     public getCookieWithJwtAccessToken(userId: number) {
         const token = this.getJwtAccessToken(userId);
