@@ -7,6 +7,8 @@ import {UserRole} from './UserRole.enum';
 import {UsersDto} from "./dto/users.dto";
 import {MailerService} from "@nestjs-modules/mailer";
 import {plainToClass} from "class-transformer";
+import {UpdateUsersDto} from "./dto/update-users.dto";
+import {UTILS} from "../app.utils";
 
 @Injectable()
 export class UsersService {
@@ -26,6 +28,12 @@ export class UsersService {
         throw new HttpException('User with this email does not exist !', HttpStatus.NOT_FOUND);
     }
 
+    async findBy(...args): Promise<Users> {
+        const user = await this.usersRepository.findOne(...args);
+        if (user) return user;
+        throw new HttpException('User with this params does not exist !', HttpStatus.NOT_FOUND);
+    }
+
     async findAll(): Promise<Users[]> {
         return this.usersRepository.find({relations: ['restaurant']});
     }
@@ -41,13 +49,40 @@ export class UsersService {
         return <UsersDto>newUser;
     }
 
-    async update(user: UsersDto): Promise<UsersDto> {
+    //Update attribute of a user set in UpdateUserDto
+    async updateUser(updateDto: UpdateUsersDto, user, withoutOldPassword = false) {
+        const newUser = {
+            ...user,
+            ...updateDto,
+        };
+
+        if(updateDto?.oldPassword?.trim().length && !withoutOldPassword){
+            const checkPassword = await UTILS.verifyPassword(newUser.oldPassword, user.password);
+            if(!checkPassword){
+                throw new HttpException(
+                    'Wrong credentials provided (password <- dont forget to remove this after)',
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+            delete newUser.oldPassword;
+        }else if(!withoutOldPassword){
+            delete newUser.password;
+        }else {
+            newUser.token = null;
+        }
+        return this.update(newUser);
+    }
+
+    async update(user: UpdateUsersDto) {
         //On hydrate le user avec les données du DTO car le beforeUpdate fonctionne seulement avec un objet de type User
+        //TODO: Refactor newUser to User Entity
         const newUser = this.hydrateUserEntity(user);
         newUser.id = user.id;
+        newUser.token = user?.token;
         return plainToClass(UsersDto,this.usersRepository.save(newUser));
     }
 
+    //TODO : DELETE DUPLICATE LINE 20
     async getByEmail(email: string): Promise<Users | undefined> {
         const user = this.usersRepository.findOne({
             relations: ['restaurant'],
@@ -75,11 +110,10 @@ export class UsersService {
         );
     }
 
-    hydrateUserEntity(userDetails: CreateUsersDto|UsersDto): Users {
+    hydrateUserEntity(userDetails: CreateUsersDto|UsersDto|UpdateUsersDto): Users {
         // Cette fonction doit permettre d'hydrater un objet User
         // Faire en sorte qu'elle soit la plus mainstream possible, éventuellement préciser les champs obligatoires.
         const userEntity: Users = Users.create();
-
         userEntity.firstname = userDetails.firstname;
         userEntity.lastname = userDetails.lastname;
         userEntity.email = userDetails.email;

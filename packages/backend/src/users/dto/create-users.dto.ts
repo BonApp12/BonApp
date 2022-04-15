@@ -6,7 +6,7 @@ export class CreateUsersDto {
   firstname: string;
   lastname: string;
 
-  @IsEmail()
+  @IsEmail({}, {message: 'Votre email n\'est pas valide'})
   email: string;
 
   @IsString()

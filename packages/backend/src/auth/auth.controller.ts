@@ -1,16 +1,15 @@
 import {
-    Body,
-    Controller,
-    Get,
-    Headers,
-    HttpCode,
-    HttpException,
-    HttpStatus,
-    Injectable,
-    Post,
-    Req,
-    Res,
-    UseGuards,
+  Controller,
+  Post,
+  Get,
+  Req,
+  UseGuards,
+  Res,
+  Body,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable, Query
 } from '@nestjs/common';
 import {Response} from 'express';
 import {LocalAuthGuard} from './local-auth.guard';
@@ -20,8 +19,9 @@ import {CreateUsersDto} from '../users/dto/create-users.dto';
 import {UsersDto} from '../users/dto/users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { plainToClass } from 'class-transformer';
-import {UpdateUsersDto} from "../users/dto/update-users.dto";
 import {SETTINGS} from "../app.utils";
+import {UpdateUsersDto} from "../users/dto/update-users.dto";
+import {ForgetPasswordDto} from "../users/dto/forget-password.dto";
 import {ConfigService} from "@nestjs/config";
 import {UserRole} from "../users/UserRole.enum";
 
@@ -96,5 +96,23 @@ export class AuthController {
   @Post('/register')
   async register(@Body(SETTINGS.VALIDATION_PIPE) registrationData: CreateUsersDto) {
     return this.authService.register(registrationData);
+  }
+
+  @Post('/forget-password')
+  @HttpCode(200)
+  async forgetPwd(@Body(SETTINGS.VALIDATION_PIPE) forgetPasswordDto: ForgetPasswordDto) {
+    return this.authService.forgetPwd(forgetPasswordDto);
+  }
+
+  @Post('/update-password')
+  @HttpCode(204)
+  async updatePwd(@Body(SETTINGS.VALIDATION_PIPE) updateUsersDto: UpdateUsersDto, @Query() {token}) {
+    return this.authService.changePwd(updateUsersDto, token);
+  }
+
+  @Get('/check-token')
+  @HttpCode(200)
+  async checkToken(@Query() {token}) {
+    return this.authService.checkToken(token);
   }
 }

@@ -4,8 +4,14 @@ import {JwtService} from '@nestjs/jwt';
 import {CreateUsersDto} from '../users/dto/create-users.dto';
 import {ConfigService} from '@nestjs/config';
 import {AuthErrorCode} from './auth-error-code.enum';
-import * as bcrypt from 'bcryptjs';
+import {UTILS} from "../app.utils";
+import {plainToClass} from "class-transformer";
+import {UsersDto} from "../users/dto/users.dto";
+import {MailService} from "../mail/mail.service";
 import {UpdateUsersDto} from "../users/dto/update-users.dto";
+import {ForgetPasswordDto} from "../users/dto/forget-password.dto";
+import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +19,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private readonly configService: ConfigService,
+        private mailerService: MailService
     ) {
     }
 
@@ -50,10 +57,10 @@ export class AuthService {
     }
   }
 
-    public async getAuthenticatedUser(email: string, plainTextPassword: string) {
-        try {
-            const user = await this.usersService.getByEmail(email);
-            const checkPwd = await AuthService.verifyPassword(plainTextPassword, user.password);
+  public async getAuthenticatedUser(email: string, plainTextPassword: string) {
+    try {
+      const user = await this.usersService.getByEmail(email);
+      const checkPwd = await UTILS.verifyPassword(plainTextPassword, user.password);
       if(!checkPwd) {
         throw new HttpException(
             'Wrong credentials provided (password <- dont forget to remove this after)',
@@ -70,9 +77,16 @@ export class AuthService {
     }
   }
 
+  public async checkToken(token: string) {
+    try {
+      return plainToClass(UsersDto, await this.usersService.findBy({token: token}));
+    } catch (e) {
+      throw new HttpException("Vous n'avez pas accès", HttpStatus.UNAUTHORIZED);
+    }
+  }
 
-    private static async verifyPassword(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
-        return bcrypt.compare(plainTextPassword, hashedPassword);
+  private static async verifyPassword(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
+    return bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
   async updateUser(updateDto: UpdateUsersDto, user) {
@@ -95,6 +109,32 @@ export class AuthService {
     }
     return this.usersService.update(newUser);
   }
+
+  public async forgetPwd(updateDto: ForgetPasswordDto = null) {
+    try {
+      const token = uuidv4();
+      const user = plainToClass(UsersDto, await this.usersService.getByEmail(updateDto.email));
+      await this.usersService.updateUser({token}, user);
+      return this.mailerService.sendForgetMail(user, token, 'forget_password');
+    }catch (e) {
+      throw new HttpException("L'utilisateur n'existe pas",HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  public async changePwd(updateDto: UpdateUsersDto, token: string){
+    try {
+      const user = plainToClass(UsersDto, await this.checkToken(token));
+      // set new password in updateDto.password
+      if (updateDto.password) return this.usersService.updateUser(updateDto, user, true);
+      throw new HttpException("Le mot de passe est vide", HttpStatus.BAD_REQUEST);
+    }catch(e){
+      throw new HttpException(`${e}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  // private verifyToken(token: string) {
+  //   return this.jwtService.verify(token);
+  // }
 
     public getJwtAccessToken(userId: number) {
         const payload: TokenPayload = {userId};

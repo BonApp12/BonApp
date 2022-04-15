@@ -1,4 +1,5 @@
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
 
 const PASSWORD_RULE = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.]).{8,}$/;
 
@@ -12,6 +13,10 @@ const VALIDATION_PIPE = new ValidationPipe({
     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
 });
 
+const verifyPassword = (plainTextPassword: string, hashedPassword: string): Promise<boolean> => {
+    return bcrypt.compare(plainTextPassword, hashedPassword);
+};
+
 export const REGEX = {
     PASSWORD_RULE,
 };
@@ -23,4 +28,8 @@ export const MESSAGES = {
 
 export const SETTINGS = {
     VALIDATION_PIPE,
+};
+
+export const UTILS = {
+    verifyPassword,
 };

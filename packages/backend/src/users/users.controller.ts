@@ -1,7 +1,11 @@
-import {Body, Controller, Delete, Get, Param, Patch} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Req, UseGuards, Patch} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {UsersDto} from "./dto/users.dto";
 import {DeleteResult} from "typeorm";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {SETTINGS} from "../app.utils";
+import {UpdateUsersDto} from "./dto/update-users.dto";
+import RequestWithUser from "../auth/interfaces/requestWithUser.interface";
 
 @Controller('user')
 export class UsersController {
@@ -26,7 +30,13 @@ export class UsersController {
     }
 
     @Patch('/:id')
-    update(@Param('id') id: string, @Body() user: UsersDto): Promise<UsersDto> {
+    updateYass(@Param('id') id: string, @Body() user: UsersDto): Promise<UsersDto> {
         return this.userService.update(id, user)
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/update')
+    async update(@Body(SETTINGS.VALIDATION_PIPE) updateUserDto: UpdateUsersDto, @Req() req: RequestWithUser) {
+        return this.userService.updateUser(updateUserDto, req.user);
     }
 }

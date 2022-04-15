@@ -32,6 +32,9 @@ export class Users extends BaseEntity {
     @Column('varchar', {length: 255, nullable: true})
     password: string;
 
+    @Column('varchar', {length: 150, unique:true, nullable: true})
+    token?: string;
+
     @Column({
         type: 'enum',
         enum: UserRole,
