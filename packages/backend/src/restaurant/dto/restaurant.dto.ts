@@ -1,4 +1,6 @@
-export class CreateRestaurantDto {
+import {PlateDto} from "../../plate/dto/plate.dto";
+
+export class RestaurantDto {
   id: number;
   name: string;
   siren: string;
@@ -7,4 +9,5 @@ export class CreateRestaurantDto {
   contact_lastname: string;
   contact_email: string;
   contact_phone: string;
+  plates: PlateDto[];
 }

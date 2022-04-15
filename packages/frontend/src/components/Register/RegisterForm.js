@@ -19,7 +19,6 @@ export default function RegisterForm() {
             .then(res => res.json())
             .then(data => {
                 if(data?.statusCode === 422){
-                    console.log(data);
                     setLoading(false);
                     setError('register',{
                         type: 'emailAlreadyExist',
