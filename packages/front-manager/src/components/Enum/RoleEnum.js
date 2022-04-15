@@ -1,0 +1,8 @@
+export default Object.freeze({
+    RESTAURANT_MANAGER : 'R_MANAGER',
+    RESTAURANT_SERVER : 'R_SERVER',
+    RESTAURANT_KITCHEN : 'R_KITCHEN',
+    CLIENT : 'CLIENT',
+    ADMINISTRATOR : 'ADMIN',
+    MODERATOR : 'MOD',
+});

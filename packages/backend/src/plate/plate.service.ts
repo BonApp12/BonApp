@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePlateDto } from './dto/create-plate.dto';
-import { UpdatePlateDto } from './dto/update-plate.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Plate } from './entities/plate.entity';
-import { Repository } from 'typeorm';
+import {Injectable} from '@nestjs/common';
+import {UpdatePlateDto} from './dto/update-plate.dto';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Plate} from './entities/plate.entity';
+import {Repository} from 'typeorm';
 
 @Injectable()
 export class PlateService {
@@ -11,7 +10,7 @@ export class PlateService {
     @InjectRepository(Plate)
     private plateRepository: Repository<Plate>,
   ) {}
-  create(createPlateDto: CreatePlateDto) {
+  create() {
     return 'This action adds a new plate';
   }
 
