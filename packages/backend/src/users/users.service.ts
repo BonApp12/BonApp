@@ -104,7 +104,7 @@ export class UsersService {
             .sendMail({
                 to: userData.email, // list of receivers
                 from: 'bonAPP@noreply.com', // sender address
-                subject: 'Testing Nest MailerModule ✔', // Subject line
+                subject: 'Hop, bientot au boulot 😊 ✔', // Subject line
                 text: 'welcome', // plaintext body
                 html: '<h1>Bienvenu ' + userData.firstname + '</h1> ' +
                     '<p>Votre identifiant est: ' + userData.email + ' </p>' +
