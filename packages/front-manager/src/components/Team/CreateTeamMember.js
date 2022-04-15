@@ -1,13 +1,13 @@
 import React from "react";
 import {useForm} from "react-hook-form";
-import postNewTeamMate from "../../requests/postNewTeamMate";
+import postNewTeamMember from "../../requests/postNewTeamMember";
 import {toast} from "react-toastify";
 import roleEnum from "../Enum/RoleEnum";
 
 export default function () {
-    const {register: registerTeamMate, handleSubmit, reset, formState: {errors}} = useForm();
+    const {register: registerTeamMember, handleSubmit, reset, formState: {errors}} = useForm();
     const onSubmit = newUser => {
-        postNewTeamMate(newUser).then(res => res.json()).then(response => {
+        postNewTeamMember(newUser).then(res => res.json()).then(response => {
             if (response.firstname) {
                 toast.success("Le nouvel équipier a bien été ajouté, un email lui a été envoyé. 📧⚡");
                 reset({lastname: "", firstname: "", email: "", role: ""});
@@ -32,7 +32,7 @@ export default function () {
                                 Adresse email de l'équipier
                             </label>
                             <input
-                                {...registerTeamMate("email", {
+                                {...registerTeamMember("email", {
                                     required: true,
                                     pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
                                 })}
@@ -54,7 +54,7 @@ export default function () {
                             </label>
                             <input
                                 type="text"
-                                {...registerTeamMate("firstname", {minLength: 2, required: true})}
+                                {...registerTeamMember("firstname", {minLength: 2, required: true})}
                                 className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded
                     text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                 defaultValue="Lucky"
@@ -71,7 +71,7 @@ export default function () {
                             </label>
                             <input
                                 type="text"
-                                {...registerTeamMate("lastname", {minLength: 2, required: true})}
+                                {...registerTeamMember("lastname", {minLength: 2, required: true})}
                                 className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded
                     text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                 defaultValue="Jesse"
@@ -87,11 +87,11 @@ export default function () {
                             >
                                 Nom de l'équipier
                             </label>
-                            <select {...registerTeamMate("role")}
+                            <select {...registerTeamMember("role")}
                                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded
                     text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             >
-                                <option value={roleEnum.RESTAURANT_SERVER}>serveur</option>
+                                <option value={roleEnum.RESTAURANT_SERVER}>Serveur</option>
                                 <option value={roleEnum.RESTAURANT_MANAGER}>Manager</option>
                                 <option value={roleEnum.RESTAURANT_KITCHEN}>Cuisine</option>
                             </select>
@@ -100,7 +100,7 @@ export default function () {
 
                     </div>
                     <input type="hidden"
-                           {...registerTeamMate("restaurant")}
+                           {...registerTeamMember("restaurant")}
                            value="1"/>
                     <div className="w-full lg:w-6/12 px-4">
                         <div className="relative w-full mb-3">

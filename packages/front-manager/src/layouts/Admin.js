@@ -26,7 +26,7 @@ export default function Admin() {
                     <Switch>
                         <Route path="/admin/dashboard" exact component={Dashboard}/>
                         <Route path="/admin/settings" exact component={Settings}/>
-                        <Route path="/admin/equipe" exact component={Teams}/>
+                        <Route path="/admin/teams" exact component={Teams}/>
                         <Route path="/admin/orders" exact component={Tables}/>
                         <Redirect from="/admin" to="/admin/dashboard"/>
                     </Switch>

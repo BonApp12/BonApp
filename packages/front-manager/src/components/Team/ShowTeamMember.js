@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import fetchTeamMate from "../../requests/fetchTeamMate";
+import fetchTeamMember from "../../requests/fetchTeamMember";
 import ReactPaginate from "react-paginate";
 import {toast} from "react-toastify";
 import ConfirmToaster from '../Utils/ConfirmToaster';
@@ -10,9 +10,9 @@ import {ImCancelCircle} from "react-icons/im";
 import roleEnum from "../Enum/RoleEnum";
 
 export default function () {
-    const [equipiers, setEquipiers] = useState([]);
+    const [teamMembers, setTeamMembers] = useState([]);
     // EditMode
-    const [editable, setEditable] = useState({index: null, isEditable: false, updatedEquipier: {}});
+    const [editable, setEditable] = useState({index: null, isEditable: false, updatedTeamMember: {}});
     // Pagination
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
@@ -21,20 +21,20 @@ export default function () {
 
 
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % equipiers.length;
+        const newOffset = (event.selected * itemsPerPage) % teamMembers.length;
         setItemOffset(newOffset);
     };
 
     useEffect(() => {
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        setCurrentItems(equipiers.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(equipiers.length / itemsPerPage));
-    }, [equipiers, itemOffset, itemsPerPage]);
+        setCurrentItems(teamMembers.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(teamMembers.length / itemsPerPage));
+    }, [teamMembers, itemOffset, itemsPerPage]);
 
     useEffect(() => {
         //TODO: mettre l'id dynamique en fonction du restaurant connecté
-        fetchTeamMate(1).then(async res => res.json()).then(data => setEquipiers(data));
+        fetchTeamMember(1).then(async res => res.json()).then(teamMembersFetched => setTeamMembers(teamMembersFetched));
     }, []);
 
 
@@ -45,7 +45,7 @@ export default function () {
     }
 
     function deleteUserAction(id) {
-        toast.warn(<ConfirmToaster message={"Ouais pipi caca?"}
+        toast.warn(<ConfirmToaster message={"Voulez-vous supprimer cet équipier?"}
                                    confirmCallBack={() => confirm(id)}/>, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: false,
@@ -56,26 +56,26 @@ export default function () {
 
     function confirm(id) {
         deleteUser(id).then(res => res.json())
-            .then(data => {
-                if (data.affected) {
+            .then(rowDeleted => {
+                if (rowDeleted.affected) {
                     toast.success(`l'équipier a bien été supprimé.`);
-                    setEquipiers(equipiers.filter(equipier => equipier.id !== id));
+                    setTeamMembers(teamMembers.filter(teamMember => teamMember.id !== id));
                 } else {
-                    toast.error(data.message);
+                    toast.error(rowDeleted.message);
                 }
             });
     }
 
     function editMode(index) {
-        setEditable({index, isEditable: true, updatedEquipier: equipiers[index]});
+        setEditable({index, isEditable: true, updatedTeamMember: teamMembers[index]});
     }
 
 
-    function updateEquipier() {
-        updateUser(editable.updatedEquipier).then(res => res.json())
+    function updateTeamMember() {
+        updateUser(editable.updatedTeamMember).then(res => res.json())
             .then(data => {
-                setEquipiers(equipiers.map(e => e.id === editable.updatedEquipier.id ? editable.updatedEquipier : e));
-                setEditable({index: null, isEditable: false, updatedEquipier: {}});
+                setTeamMembers(teamMembers.map(e => e.id === editable.updatedTeamMember.id ? editable.updatedTeamMember : e));
+                setEditable({index: null, isEditable: false, updatedTeamMember: {}});
                 if (data.id) return toast.success(`l'équipier a bien été mis à jour.`);
                 return toast.error(data.message);
             });
@@ -83,7 +83,7 @@ export default function () {
     }
 
     function cancelUpdate() {
-        setEditable({index: null, isEditable: false, updatedEquipier: {}});
+        setEditable({index: null, isEditable: false, updatedTeamMember: {}});
     }
 
     return (
@@ -106,8 +106,8 @@ export default function () {
                     </tr>
                     </thead>
                     <tbody>
-                    {currentItems?.map((equipier, index) => (
-                        <tr key={equipier.id}>
+                    {currentItems?.map((teamMember, index) => (
+                        <tr key={teamMember.id}>
                             <th>
 
                             </th>
@@ -122,16 +122,16 @@ export default function () {
                                 <div className="flex items-center space-x-3">
                                     <div>
                                         {index === editable.index && editable.isEditable ?
-                                            <input type="text" className="w-full" defaultValue={equipier.lastname}
+                                            <input type="text" className="w-full" defaultValue={teamMember.lastname}
                                                    onInput={e => setEditable({
                                                        ...editable,
-                                                       updatedEquipier: {
-                                                           ...editable.updatedEquipier,
+                                                       updatedTeamMember: {
+                                                           ...editable.updatedTeamMember,
                                                            lastname: e.target.value
                                                        }
                                                    })}/> :
                                             <div
-                                                className="font-bold">{equipier.lastname}</div>
+                                                className="font-bold">{teamMember.lastname}</div>
                                         }
                                     </div>
                                 </div>
@@ -140,27 +140,27 @@ export default function () {
                                 <div className="flex items-center space-x-3">
                                     <div>
                                         {index === editable.index && editable.isEditable ?
-                                            <input type="text" className="w-full" defaultValue={equipier.firstname}
+                                            <input type="text" className="w-full" defaultValue={teamMember.firstname}
                                                    onInput={e => setEditable({
                                                        ...editable,
-                                                       updatedEquipier: {
-                                                           ...editable.updatedEquipier,
+                                                       updatedTeamMember: {
+                                                           ...editable.updatedTeamMember,
                                                            firstname: e.target.value
                                                        }
                                                    })}/> :
                                             <div
-                                                className="font-bold">{equipier.firstname}</div>
+                                                className="font-bold">{teamMember.firstname}</div>
                                         }
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 {index === editable.index && editable.isEditable ?
-                                    <select className="w-full" defaultValue={equipier.role}
+                                    <select className="w-full" defaultValue={teamMember.role}
                                             onChange={e => setEditable({
                                                 ...editable,
-                                                updatedEquipier: {
-                                                    ...editable.updatedEquipier,
+                                                updatedTeamMember: {
+                                                    ...editable.updatedTeamMember,
                                                     role: e.target.value
                                                 }
                                             })}>
@@ -168,14 +168,14 @@ export default function () {
                                         <option value={roleEnum.RESTAURANT_SERVER}>Serveur</option>
                                         <option value={roleEnum.RESTAURANT_MANAGER}>Manager</option>
                                     </select> :
-                                    <div className="font-bold">{getRole(equipier.role)}</div>
+                                    <div className="font-bold">{getRole(teamMember.role)}</div>
                                 }
                             </td>
                             <td>
                                 {index === editable.index && editable.isEditable ?
                                     <div>
                                         <button className="btn btn-success btn-xs mr-1"
-                                                onClick={updateEquipier}>valider
+                                                onClick={updateTeamMember}>valider
                                         </button>
                                         <button className="btn btn-square btn-xs btn-outline btn-error"
                                                 onClick={cancelUpdate}><ImCancelCircle/></button>
@@ -183,7 +183,7 @@ export default function () {
                                     :
                                     <div>
                                         <button className="btn btn-error btn-xs mr-1"
-                                                onClick={() => deleteUserAction(equipier.id)}>Supprimer
+                                                onClick={() => deleteUserAction(teamMember.id)}>Supprimer
                                         </button>
                                         <button className="btn btn-square btn-xs btn-outline btn-warning"
                                                 onClick={() => editMode(index)}><BsPencil/></button>

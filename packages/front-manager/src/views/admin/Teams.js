@@ -1,6 +1,6 @@
 import React from "react";
-import ShowTeamMate from "../../components/Team/ShowTeamMate";
-import CreateTeamMate from "../../components/Team/CreateTeamMate";
+import ShowTeamMember from "../../components/Team/ShowTeamMember";
+import CreateTeamMember from "../../components/Team/CreateTeamMember";
 import {RiTeamLine} from "react-icons/ri";
 import {AiOutlinePlusCircle} from "react-icons/ai";
 
@@ -28,8 +28,8 @@ export default function Teams() {
                     </div>
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                    {showtab === 1 && <ShowTeamMate/>}
-                    {showtab === 2 && <CreateTeamMate/>}
+                    {showtab === 1 && <ShowTeamMember/>}
+                    {showtab === 2 && <CreateTeamMember/>}
                 </div>
             </div>
         </>

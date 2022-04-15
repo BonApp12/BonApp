@@ -1,10 +1,10 @@
-const updateUser = (equipier) => {
-    let url = process.env.REACT_APP_URL_BACKEND + '/user/' + equipier.id;
+const updateUser = (teamMember) => {
+    let url = process.env.REACT_APP_URL_BACKEND + '/user/' + teamMember.id;
 
     return fetch(url, {
         crossDomain: true,
         method: 'PATCH',
-        body: JSON.stringify(equipier),
+        body: JSON.stringify(teamMember),
         headers: {
             'Content-Type': 'application/json'
         },

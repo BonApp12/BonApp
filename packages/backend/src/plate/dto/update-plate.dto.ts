@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreatePlateDto } from './create-plate.dto';
+import {PartialType} from '@nestjs/mapped-types';
+import {PlateDto} from './plate.dto';
 
-export class UpdatePlateDto extends PartialType(CreatePlateDto) {}
+export class UpdatePlateDto extends PartialType(PlateDto) {}

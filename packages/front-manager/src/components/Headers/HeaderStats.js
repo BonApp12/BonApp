@@ -2,17 +2,17 @@ import React, {useEffect, useState} from "react";
 import fetchFullPlate from "requests/fetchFullPlate";
 import fetchFullOrder from "requests/fetchFullOrder";
 import CardStats from "components/Cards/CardStats.js";
-import fetchTeamMate from "../../requests/fetchTeamMate";
+import fetchTeamMembers from "../../requests/fetchTeamMember";
 
 export default function HeaderStats() {
 
     const [plates, setPlate] = useState([]);
     const [orders, setOrders] = useState([]);
-    const [teamMates, setTeamMates] = useState([]);
+    const [teamMembers, setTeamMembers] = useState([]);
     useEffect(() => {
         fetchFullPlate(1).then(async resPlate => setPlate(await resPlate.json()));
         fetchFullOrder(1, 'only-orders').then(async resOrder => setOrders(await resOrder.json()));
-        fetchTeamMate(1).then(async resTeamMate => setTeamMates(await resTeamMate.json()));
+        fetchTeamMembers(1).then(async resTeamMember => setTeamMembers(await resTeamMember.json()));
     }, []);
 
     return (
@@ -50,7 +50,7 @@ export default function HeaderStats() {
                             <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                                 <CardStats
                                     statTitle="Membres de l'équipe"
-                                    statValue={`${teamMates.length}`}
+                                    statValue={`${teamMembers.length}`}
                                     statIconName="fas fa-users"
                                     statIconColor="bg-red-400"
                                 />

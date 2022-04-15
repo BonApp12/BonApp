@@ -20,8 +20,7 @@ export class Users extends BaseEntity {
     email: string;
 
     @Exclude({toPlainOnly: true})
-    @Column('varchar', {length: 255, select: false})
-
+    @Column('varchar', {length: 255})
     password: string;
 
     @Column({

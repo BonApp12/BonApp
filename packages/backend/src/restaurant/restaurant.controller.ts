@@ -1,6 +1,6 @@
 import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards,} from '@nestjs/common';
 import {RestaurantService} from './restaurant.service';
-import {CreateRestaurantDto} from './dto/create-restaurant.dto';
+import {RestaurantDto} from './dto/restaurant.dto';
 import {UpdateRestaurantDto} from './dto/update-restaurant.dto';
 import {JwtAuthGuard} from '../auth/jwt-auth.guard';
 import {UsersDto} from "../users/dto/users.dto";
@@ -12,12 +12,12 @@ export class RestaurantController {
 
     /** Route qui permettra de valider une demande de restaurant une fois que tout le workflow sera OK */
     @Post('/validate-restaurant')
-    validateRestaurant(@Body() createRestaurantDto: CreateRestaurantDto) {
+    validateRestaurant(@Body() createRestaurantDto: RestaurantDto) {
         return this.restaurantService.create(createRestaurantDto);
     }
 
     @Post('/register-my-restaurant')
-    sendForm(@Body() restaurant: CreateRestaurantDto) {
+    sendForm(@Body() restaurant: RestaurantDto) {
         return this.restaurantService.handleRegisterForm(restaurant);
     }
 
@@ -36,9 +36,9 @@ export class RestaurantController {
         return this.restaurantService.findOne(+id);
     }
 
-    @Get('/mon-equipe/:id')
-    findEquipier(@Param('id') id: number): Promise<UsersDto[]> {
-        return this.restaurantService.findEquipiers(id);
+    @Get('/teams/:id')
+    findTeamMembers(@Param('id') id: number): Promise<UsersDto[]> {
+        return this.restaurantService.findTeamMembers(id);
     }
 
     @UseGuards(JwtAuthGuard)

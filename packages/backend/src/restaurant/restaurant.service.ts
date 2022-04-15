@@ -1,11 +1,13 @@
 import {Injectable} from '@nestjs/common';
-import {CreateRestaurantDto} from './dto/create-restaurant.dto';
+import {RestaurantDto} from './dto/restaurant.dto';
 import {UpdateRestaurantDto} from './dto/update-restaurant.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Restaurant} from './entities/restaurant.entity';
 import {Repository} from 'typeorm';
 import {Users} from "../users/entities/users.entity";
 import {UsersDto} from "../users/dto/users.dto";
+import {UserAdapter} from "../Adapter/UserAdapter";
+import {RestaurantAdapter} from "../Adapter/RestaurantAdapter";
 
 @Injectable()
 export class RestaurantService {
@@ -18,18 +20,19 @@ export class RestaurantService {
     ) {
     }
 
-    create(createRestaurantDto: CreateRestaurantDto) {
+    create(createRestaurantDto: RestaurantDto) {
         return 'This action adds a new restaurant';
     }
 
-    findAll(): Promise<Restaurant[]> {
-        return this.restaurantRepository.find({relations: ['address', 'plates']});
+    async findAll(): Promise<RestaurantDto[]> {
+        return (await this.restaurantRepository.find({relations: ['address', 'plates']}))
+            .map(restaurant => RestaurantAdapter.toDto(restaurant));
     }
 
-    findOne(id: number) {
-        return this.restaurantRepository.findOne(id, {
+    async findOne(id: number): Promise<RestaurantDto> {
+        return RestaurantAdapter.toDto(await this.restaurantRepository.findOne(id, {
             relations: ['address', 'plates', 'plates.ingredients'],
-        });
+        }));
     }
 
     async update(id: number, updateRestaurantDto: UpdateRestaurantDto): Promise<Restaurant> {
@@ -49,7 +52,7 @@ export class RestaurantService {
         await this.restaurantRepository.delete(id);
     }
 
-    async handleRegisterForm(restaurant: CreateRestaurantDto) {
+    async handleRegisterForm(restaurant: RestaurantDto) {
         // const restaurantEntity = RestaurantService.hydrateRestaurantEntity(restaurant);
         // Pour l'instant on rajoute l'adresse 1, mais faire en sorte de récupérer l'adresse depuis le front
         // const address = await this.addressService.findOne(1);
@@ -61,10 +64,9 @@ export class RestaurantService {
         // const restaurantEntity = RestaurantService.hydrateRestaurantEntity(restaurant);
     }
 
-    async findEquipiers(id: number): Promise<UsersDto[]> {
-        const equipiers: UsersDto[] = await this.userRepository.find({where: {restaurant: id}});
-        return equipiers
-
+    async findTeamMembers(id: number): Promise<UsersDto[]> {
+        return (await this.userRepository.find({where: {restaurant: id}}))
+            .map((teamMember: Users) => UserAdapter.toDto(teamMember))
     }
 
 }

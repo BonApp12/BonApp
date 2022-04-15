@@ -1,5 +1,5 @@
-const fetchTeamMate = (idRestaurant) => {
-    const url = process.env.REACT_APP_URL_BACKEND + '/restaurant/mon-equipe/';
+const fetchTeamMember = (idRestaurant) => {
+    const url = process.env.REACT_APP_URL_BACKEND + '/restaurant/teams/';
     return fetch(url + idRestaurant, {
         crossDomain: true,
         method: 'GET',
@@ -8,4 +8,4 @@ const fetchTeamMate = (idRestaurant) => {
     });
 };
 
-export default fetchTeamMate;
+export default fetchTeamMember;
