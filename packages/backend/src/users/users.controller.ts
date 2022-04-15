@@ -1,6 +1,5 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch} from '@nestjs/common';
 import {UsersService} from './users.service';
-import {CreateUsersDto} from './dto/create-users.dto';
 import {UsersDto} from "./dto/users.dto";
 import {DeleteResult} from "typeorm";
 
@@ -19,11 +18,6 @@ export class UsersController {
     findOneByFirstname(@Param('email') email: string) {
         /** Changer par l'id de l'utilisateur */
         return this.userService.findOne(email);
-    }
-
-    @Post('/register-restaurant-staff')
-    async create(@Body() user: CreateUsersDto) {
-        return this.userService.registerRestaurantManager(user);
     }
 
     @Delete('/:id')

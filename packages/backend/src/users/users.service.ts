@@ -29,22 +29,15 @@ export class UsersService {
         return this.usersRepository.find({relations: ['restaurant']});
     }
 
-    async registerRestaurantManager(userDetails: CreateUsersDto): Promise<Users> {
-        const userEntity = this.hydrateUserEntity(userDetails);
-
-        await Users.save(userEntity);
-        return userEntity;
-    }
-
-    async create(userData: CreateUsersDto) {
-        if (userData.role === UserRole.RESTAURANT_SERVER || userData.role === UserRole.RESTAURANT_KITCHEN) {
-            //TODO: On génére un mdp par défaut Penser à forcer le changement de mot passe et l'envoie de mail
+    async create(userData: CreateUsersDto): Promise<UsersDto> {
+        if (userData.role === UserRole.RESTAURANT_SERVER
+            || userData.role === UserRole.RESTAURANT_KITCHEN) {
             userData.password = UsersService.randomString(10);
             this.sendEmail(userData);
         }
         const newUser = this.usersRepository.create(userData);
         await this.usersRepository.save(newUser);
-        return newUser;
+        return <UsersDto>newUser;
     }
 
     async getByEmail(email: string): Promise<Users | undefined> {
@@ -74,20 +67,6 @@ export class UsersService {
         );
     }
 
-    // TODO: Créer un adapter qui renverra l'userDTO sans le champs password
-    hydrateUserEntity(userDetails: CreateUsersDto): Users {
-        // Cette fonction doit permettre d'hydrater un objet User
-        // Faire en sorte qu'elle soit la plus mainstream possible, éventuellement préciser les champs obligatoires.
-        const userEntity: Users = Users.create();
-
-        userEntity.firstname = userDetails.firstname;
-        userEntity.lastname = userDetails.lastname;
-        userEntity.email = userDetails.email;
-        userEntity.password = userDetails.password;
-        userEntity.role = UserRole[userDetails.role as keyof typeof UserRole];
-
-        return userEntity;
-    }
 
     delete(id: string): Promise<DeleteResult> {
         return this.usersRepository.delete(id);
