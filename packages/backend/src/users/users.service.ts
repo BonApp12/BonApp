@@ -119,6 +119,7 @@ export class UsersService {
         userEntity.email = userDetails.email;
         userEntity.password = userDetails.password;
         userEntity.role = UserRole[userDetails.role as keyof typeof UserRole];
+        return userEntity;
     }
 
     delete(id: string): Promise<DeleteResult> {
@@ -126,9 +127,9 @@ export class UsersService {
     }
 
     //TODO: Voir avec Yass pour la methode à prendre pour l'update
-    // update(id: string, user: UsersDto): Promise<UsersDto> {
-    //     return this.usersRepository.save({id, ...user});
-    // }
+    updateYass(id: string, user: UsersDto): Promise<UsersDto> {
+        return this.usersRepository.save({id, ...user});
+    }
 
     //TODO: intégrer la solution de youcef
     private sendEmail(userData) {

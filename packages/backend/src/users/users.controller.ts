@@ -31,7 +31,7 @@ export class UsersController {
 
     @Patch('/:id')
     updateYass(@Param('id') id: string, @Body() user: UsersDto): Promise<UsersDto> {
-        return this.userService.update(id, user)
+        return this.userService.updateYass(id, user)
     }
 
     @UseGuards(JwtAuthGuard)
