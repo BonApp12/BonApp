@@ -7,6 +7,7 @@ import ValidationSchemaLogin from "../../validations/ValidationSchemaLogin";
 import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import login from "../../requests/login";
+import {toast} from "react-toastify";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -26,11 +27,13 @@ export default function Login() {
           setLoading(false);
           (data.statusCode === 400 || data.statusCode === 401) && setError('auth',{type: 'error', message: data.message});
           data.statusCode === 200 && setUserState(data.user);
+          toast.success("Connexion réussi")
+          history.push('/admin');
         })
         .catch(err => {
           setLoading(false);
           console.log(err);
-          setError('auth',{type: 'invalidCredentials', message: err.response.data.message});
+          setError('auth',{type: 'error', message: err.response.data.message});
         });
   }
 
