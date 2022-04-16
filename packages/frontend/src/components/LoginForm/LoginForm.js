@@ -17,7 +17,7 @@ function LoginForm() {
 
     useEffect(() => {
         userState !== '' && navigate('/already-logged');
-    },[])
+    },[userState,navigate]);
 
     const onSubmit = (data) => {
         setLoading(true);
@@ -25,19 +25,16 @@ function LoginForm() {
             .then(res => res.json())
             .then(res => {
                 setLoading(false);
-                if(res.statusCode === 400){
-                    setError('auth',{
-                        type: 'invalidCredentials',
-                        message: "L'email ou le mot de passe est incorrect"
-                    })
+                if(res.statusCode === 400 || res.statusCode === 401){
+                    setError('auth',{type: 'error', message: res.message});
                 }else if(res.statusCode === 200){
                     toast.success('Connexion réussie');
                     setUserState(res.user);
                     navigate('/already-logged');
                 }
             })
-            .catch(err => {
-                toast.danger('Une erreur est survenue');
+            .catch(() => {
+                toast.error('Une erreur est survenue');
             })
 
     }

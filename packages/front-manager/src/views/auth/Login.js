@@ -1,6 +1,39 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import Input from "../../components/Input/Input";
+import {useHistory} from "react-router-dom";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import ValidationSchemaLogin from "../../validations/ValidationSchemaLogin";
+import {useRecoilState} from "recoil";
+import {userAtom} from "../../states/user";
+import login from "../../requests/login";
 
 export default function Login() {
+  const [loading, setLoading] = useState(false);
+  const {register, handleSubmit, setError, formState: {errors}} = useForm({resolver: yupResolver(ValidationSchemaLogin())})
+  const history = useHistory();
+  const [userState, setUserState] = useRecoilState(userAtom);
+
+  useEffect(() => {
+    userState !== '' && userState.role !== 'CLIENT' && history.push('/admin');
+  },[userState, history]);
+
+  const onSubmit = (user) => {
+    setLoading(true);
+    login(user)
+        .then(res => res.json())
+        .then(data => {
+          setLoading(false);
+          (data.statusCode === 400 || data.statusCode === 401) && setError('auth',{type: 'error', message: data.message});
+          data.statusCode === 200 && setUserState(data.user);
+        })
+        .catch(err => {
+          setLoading(false);
+          console.log(err);
+          setError('auth',{type: 'invalidCredentials', message: err.response.data.message});
+        });
+  }
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -8,46 +41,41 @@ export default function Login() {
           <div className="w-full lg:w-4/12 px-4">
             <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200
             border-0">
-              <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <form>
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2 mt-5"
-                      htmlFor="grid-password"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm
-                      shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Votre adresse mail"
-                    />
-                  </div>
+              <div className="flex-auto px-4 lg:px-10 pb-10">
+                {
+                    errors?.auth?.message && (
+                        <div className="mt-5 text-center">
+                          <span className="text-sm text-red-500">{errors?.auth?.message}*</span>
+                        </div>
+                    )
+                }
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <Input
+                    register={{...register('email')}}
+                    error={errors.email}
+                    label="Email"
+                    type="email"
+                    name="email"
+                    placeHolder="Votre adresse email"
+                  />
 
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Mot de passe
-                    </label>
-                    <input
-                      type="password"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm
-                      shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Votre mot de passe"
-                    />
-                  </div>
+                  <Input
+                    register={{...register('password')}}
+                    error={errors.password}
+                    label="Mot de passe"
+                    type="password"
+                    name="password"
+                    placeHolder="Votre mot de passe"
+                  />
 
                   <div className="text-center mt-6">
                     <button
-                      className="bg-orange-300 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3
+                      className={`btn ${loading && 'loading'} bg-orange-300 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3
                       rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear
-                      transition-all duration-150"
-                      type="button"
+                      transition-all duration-150`}
+                      type="submit"
                     >
-                      Se connecter
+                      {loading ? 'En cours...' : 'Se connecter'}
                     </button>
                   </div>
                 </form>

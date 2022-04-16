@@ -5,11 +5,12 @@ import {
   Req,
   UseGuards,
   Res,
+  Headers,
   Body,
   HttpCode,
-  Injectable,
+  Injectable, HttpException, HttpStatus,
 } from '@nestjs/common';
-import { Response } from 'express';
+import {Response} from 'express';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -40,12 +41,22 @@ export class AuthController {
   // 1/ Test si tout fonctionnel -> a) Status 200 + token | b) UserDto
   // 2/ mot de passe ou email incorrect -> test le retour
   // 3/ mauvais objet (mauvais format) -> return 400
-  async login(@Req() req: RequestWithUser) {
+  async login(@Req() req: RequestWithUser, @Headers() headers: any) {
     const userDto = plainToClass(UsersDto,req.user);
+    if((headers.origin === process.env.URL_FRONTMANAGER && userDto.role !== 'CLIENT')||(headers.origin === process.env.URL_FRONTEND && userDto.role === 'CLIENT')) {
+      return this.loginUser(req,userDto);
+    }
+    throw new HttpException(
+        "Vous n'avez pas accès",
+        HttpStatus.UNAUTHORIZED,
+    );
+  }
+
+  private loginUser(req,user) {
     req.res.setHeader('Set-Cookie', [
-      this.authService.getCookieWithJwtAccessToken(userDto.id),
+      this.authService.getCookieWithJwtAccessToken(user.id),
     ]);
-    return { statusCode: 200, user: userDto };
+    return { statusCode: 200, user: user };
   }
 
   @UseGuards(JwtAuthGuard)
