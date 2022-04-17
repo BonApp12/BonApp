@@ -12,8 +12,8 @@ import {ConfigModule} from '@nestjs/config';
 import {OrdersModule} from './orders/orders.module';
 import {MailerModule} from '@nestjs-modules/mailer';
 import * as Joi from 'joi';
-import {StripeModule} from './stripe/stripe.module';
-import {RatingsModule} from './ratings/ratings.module';
+import { StripeModule } from './stripe/stripe.module';
+import { RatingsController } from './ratings/ratings.controller';
 
 @Module({
   imports: [
@@ -49,8 +49,7 @@ import {RatingsModule} from './ratings/ratings.module';
     }),
     OrdersModule,
     StripeModule,
-    RatingsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, RatingsController],
 })
 export class AppModule {}
