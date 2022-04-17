@@ -1,5 +1,6 @@
 import React from "react";
 import {createPopper} from "@popperjs/core";
+import {Link} from "react-router-dom";
 
 const UserDropdown = () => {
   // Props du dropdown (pour le popper)
@@ -44,10 +45,6 @@ const UserDropdown = () => {
       >
         <span
             className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
-          Action
-        </span>
-        <span
-            className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
           Another action
         </span>
         <span
@@ -55,10 +52,9 @@ const UserDropdown = () => {
           Something else here
         </span>
         <div className="h-0 my-2 border border-solid border-blueGray-100"/>
-        <span
-            className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
-          Separated link
-        </span>
+          <Link to={"/admin/logout"} className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
+              Déconnexion
+          </Link>
       </div>
     </>
   );

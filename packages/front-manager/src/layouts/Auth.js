@@ -7,6 +7,8 @@ import FooterAuth from "components/Footers/FooterAuth.js";
 
 // Views
 import Login from "views/auth/Login.js";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Auth() {
   return (
@@ -28,6 +30,7 @@ export default function Auth() {
           <FooterAuth absolute />
         </section>
       </main>
+      <ToastContainer />
     </>
   );
 }

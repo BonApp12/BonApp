@@ -1,5 +1,5 @@
-import React from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 
 // Components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
@@ -13,8 +13,18 @@ import Tables from "views/admin/Tables.js";
 import Teams from "../views/admin/Teams";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import Logout from "../components/Logout/Logout";
+import {useRecoilValue} from "recoil";
+import {userAtom} from "../states/user";
 
 export default function Admin() {
+    const userState = useRecoilValue(userAtom);
+    const history = useHistory();
+
+    useEffect(() => {
+        userState === '' && history.push('/');
+    },[userState,history]);
+
     return (
         <>
             <Sidebar/>
@@ -28,6 +38,7 @@ export default function Admin() {
                         <Route path="/admin/settings" exact component={Settings}/>
                         <Route path="/admin/teams" exact component={Teams}/>
                         <Route path="/admin/orders" exact component={Tables}/>
+                        <Route path="/admin/logout" exact component={Logout}/>
                         <Redirect from="/admin" to="/admin/dashboard"/>
                     </Switch>
                     <ToastContainer/>
