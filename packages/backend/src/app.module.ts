@@ -13,6 +13,7 @@ import {OrdersModule} from './orders/orders.module';
 import {MailerModule} from '@nestjs-modules/mailer';
 import * as Joi from 'joi';
 import { StripeModule } from './stripe/stripe.module';
+import { RatingsController } from './ratings/ratings.controller';
 
 @Module({
   imports: [
@@ -49,6 +50,6 @@ import { StripeModule } from './stripe/stripe.module';
     OrdersModule,
     StripeModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, RatingsController],
 })
 export class AppModule {}
