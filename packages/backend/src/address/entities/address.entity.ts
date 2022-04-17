@@ -16,6 +16,8 @@ export class Address {
     city: string;
 
     /** Permets d'accéder aux restaurants ayant cette adresse si c'est le cas */
-    @OneToMany(() => Restaurant, (restaurant) => restaurant.address)
-    restaurant: Restaurant[];
+    @OneToMany(() => Restaurant, (restaurant) => restaurant.address, {
+        cascade: true,
+    })
+    restaurant: Restaurant;
 }

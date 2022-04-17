@@ -36,7 +36,7 @@ export class Plate extends BaseEntity {
     orders: Order[];
 
     @OneToMany(() => PlateCategory, (category: PlateCategory) => category.plates)
-    category: PlateCategory;
+    category: PlateCategory[];
 
     @OneToMany(() => Ratings, (rating: Ratings) => rating.plate)
     ratings: Ratings[];

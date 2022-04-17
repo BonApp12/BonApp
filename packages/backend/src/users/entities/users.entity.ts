@@ -31,13 +31,19 @@ export class Users extends BaseEntity {
     })
     role: UserRole;
 
-    @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
+    @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.users, {
+        onDelete: 'CASCADE',
+    })
     restaurant: Restaurant;
 
-    @OneToMany(() => Order, (order) => order.user)
+    @OneToMany(() => Order, (order: Order) => order.user, {
+        onDelete: 'CASCADE',
+    })
     orders: Order[];
 
-    @OneToMany(() => Ratings, (rating) => rating.user)
+    @OneToMany(() => Ratings, (rating: Ratings) => rating.user, {
+        onDelete: 'CASCADE',
+    })
     ratings: Ratings[];
 
     @BeforeInsert()
@@ -45,7 +51,6 @@ export class Users extends BaseEntity {
         const salt = await bcrypt.genSalt();
         this.password = await bcrypt.hash(password || this.password, salt)
     }
-
 
     toJson() {
         return instanceToPlain(this);

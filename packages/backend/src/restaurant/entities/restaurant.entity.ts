@@ -29,18 +29,18 @@ export class Restaurant extends BaseEntity {
   @Column('char', { length: 10, nullable: true })
   contact_phone: string;
 
-  @ManyToOne(() => Address, (address: Address) => address.restaurant)
+  @ManyToOne(() => Address, (address: Address) => address.restaurant, {onDelete: 'CASCADE'})
   address: number;
 
-  @OneToMany(() => Plate, (plate: Plate) => plate.restaurant)
+  @OneToMany(() => Plate, (plate: Plate) => plate.restaurant, {onDelete: 'CASCADE'})
   plates: Plate[];
 
-  @OneToMany(() => Users, (user: Users) => user.restaurant)
+  @OneToMany(() => Users, (user: Users) => user.restaurant, {onDelete: 'CASCADE'})
   users: Users[];
 
-  @OneToMany(() => Order, (order: Order) => order.restaurant)
+  @OneToMany(() => Order, (order: Order) => order.restaurant, {onDelete: 'CASCADE'})
   orders: Order[];
 
-  @OneToMany(() => Tables, (table: Tables) => table.restaurant)
-  table: Tables[];
+  @OneToMany(() => Tables, (table: Tables) => table.restaurant, {onDelete: 'CASCADE'})
+  tables: Tables[];
 }
