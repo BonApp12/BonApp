@@ -3,6 +3,7 @@ import {Restaurant} from 'src/restaurant/entities/restaurant.entity';
 import {Ingredient} from 'src/ingredients/entities/ingredient.entity';
 import {PlateCategory} from 'src/plate-category/entities/plate-category.entity';
 import {Order} from "../../orders/entities/order.entity";
+import {Ratings} from "../../ratings/entities/ratings.entity";
 
 @Entity()
 export class Plate extends BaseEntity {
@@ -29,4 +30,7 @@ export class Plate extends BaseEntity {
 
     @OneToMany(() => PlateCategory, (category: PlateCategory) => category.plates)
     category: PlateCategory;
+
+    @OneToMany(() => Ratings, (rating) => rating.user)
+    ratings: Ratings[];
 }

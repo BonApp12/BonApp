@@ -4,6 +4,7 @@ import {UserRole} from '../UserRole.enum';
 import {Exclude, instanceToPlain} from 'class-transformer';
 import {Order} from '../../orders/entities/order.entity';
 import * as bcrypt from 'bcryptjs';
+import {Ratings} from "../../ratings/entities/ratings.entity";
 
 @Entity()
 export class Users extends BaseEntity {
@@ -35,6 +36,9 @@ export class Users extends BaseEntity {
 
     @OneToMany(() => Order, (order) => order.user)
     orders: Order[];
+
+    @OneToMany(() => Ratings, (rating) => rating.user)
+    ratings: Ratings[];
 
     @BeforeInsert()
     async setPassword(password: string) {
