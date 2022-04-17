@@ -1,6 +1,5 @@
 import {PartialType} from '@nestjs/mapped-types';
-import {CreateRatingsDto} from './create-ratings.dto';
+import {RatingsDto} from './ratings.dto';
 
-export class UpdateRatingsDto extends PartialType(CreateRatingsDto) {
-    id: number;
+export class UpdateRatingsDto extends PartialType(RatingsDto) {
 }

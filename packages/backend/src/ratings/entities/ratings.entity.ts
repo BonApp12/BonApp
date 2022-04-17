@@ -13,9 +13,15 @@ export class Ratings extends BaseEntity {
     @Column('text')
     description: string;
 
-    @ManyToOne(() => Plate, (plate: Plate) => plate.orders)
+    @ManyToOne(() => Plate, (plate: Plate) => plate.ratings, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
     plate: Plate;
 
-    @ManyToOne(() => Users, (user: Users) => user.ratings)
+    @ManyToOne(() => Users, (user: Users) => user.ratings, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
     user: Users;
 }

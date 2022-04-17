@@ -24,14 +24,14 @@ export class Order extends BaseEntity {
     @ManyToOne(() => Users, (user: Users) => user.orders)
     user: Users;
 
-    @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.orders)
+    @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.orders, {onDelete: 'CASCADE'})
     restaurant: Restaurant;
 
-    @ManyToOne(() => Plate, (plate: Plate) => plate.orders)
+    @ManyToOne(() => Plate, (plate: Plate) => plate.orders, {onDelete: 'CASCADE'})
     plate: Plate;
 
-    @OneToMany(() => Tables, (table: Tables) => table.order)
-    table: Tables[];
+    @OneToMany(() => Tables, (table: Tables) => table.order, {onDelete: 'CASCADE'})
+    tables: Tables[];
 
     @CreateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)"})
     public created_at: Date;
