@@ -15,5 +15,3 @@ define(Plate, (faker: typeof Faker) => {
     plate.ingredients = factory(Ingredient)().createMany(8) as any;
     return plate;
 });
-
-

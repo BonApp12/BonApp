@@ -12,8 +12,8 @@ import {ConfigModule} from '@nestjs/config';
 import {OrdersModule} from './orders/orders.module';
 import {MailerModule} from '@nestjs-modules/mailer';
 import * as Joi from 'joi';
-import { StripeModule } from './stripe/stripe.module';
-import { RatingsController } from './ratings/ratings.controller';
+import {StripeModule} from './stripe/stripe.module';
+import {RatingsModule} from './ratings/ratings.module';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { RatingsController } from './ratings/ratings.controller';
         STRIPE_CURRENCY: Joi.string(),
       }),
     }),
-      //TODO: à supprimer quand Le travail de youced est mergé
+    //TODO: à supprimer quand Le travail de youced est mergé
     MailerModule.forRoot({
       transport: {
         host: 'smtp.gmail.com',
@@ -49,7 +49,8 @@ import { RatingsController } from './ratings/ratings.controller';
     }),
     OrdersModule,
     StripeModule,
+    RatingsModule,
   ],
-  controllers: [AppController, RatingsController],
+  controllers: [AppController],
 })
 export class AppModule {}
