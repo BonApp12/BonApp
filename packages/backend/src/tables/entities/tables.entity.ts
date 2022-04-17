@@ -15,4 +15,5 @@ export class Tables extends BaseEntity {
 
     @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.table)
     restaurant: Restaurant;
+    table: any;
 }
