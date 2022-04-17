@@ -24,9 +24,9 @@ export class Plate extends BaseEntity {
     @OneToMany(() => Ingredient, (ingredient: Ingredient) => ingredient.plates)
     ingredients: Ingredient[];
 
-    @ManyToOne(() => PlateCategory, (plateCategory: PlateCategory) => plateCategory.name)
-    category: PlateCategory;
-
     @OneToMany(() => Order, (order: Order) => order.plate)
     orders: Order[];
+
+    @OneToMany(() => PlateCategory, (category: PlateCategory) => category.plates)
+    category: PlateCategory;
 }
