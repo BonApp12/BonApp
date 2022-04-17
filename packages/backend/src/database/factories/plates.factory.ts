@@ -1,4 +1,3 @@
-// user.factory.ts
 import Faker from '@faker-js/faker'
 import {define, factory} from 'typeorm-seeding';
 import {Plate} from "../../plate/entities/plate.entity";
