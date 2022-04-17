@@ -6,8 +6,8 @@ export class Address {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('varchar', { length: 155 })
-    address: string;
+    @Column('varchar', {length: 155})
+    street: string;
 
     @Column('char', { length: 5 })
     postal_code: string;
