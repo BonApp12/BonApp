@@ -35,15 +35,16 @@ services:
       - bp-pg-db
 
   front-manager:
-    depends_on:
-      - backend
+    container_name: front-manager
     build:
       context: ./packages/front-manager
       dockerfile: Dockerfile.local
-      args:
-        - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
+    restart: always
+    env_file: .env
     ports:
       - "${FRONTEND_MANAGER_PORT}:${REACT_PORT}"
+    volumes:
+      - "./packages/front-manager/:/app/"
     networks:
       - bp-network
 
