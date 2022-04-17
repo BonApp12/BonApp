@@ -201,12 +201,13 @@ export default function () {
                         onPageChange={handlePageClick}
                         pageRangeDisplayed={5}
                         pageCount={pageCount}
+                        className={'btn-group'}
                         previousLabel="<"
-                        pageLinkClassName={"badge"}
-                        pageClassName="inline-block"
-                        nextClassName={"badge badge-secondary badge-outline "}
-                        previousClassName={"badge badge-secondary badge-outline "}
-                        activeLinkClassName={"badge badge-primary badge-accent"}
+                        breakClassName={'btn rounded-none'}
+                        pageLinkClassName={"btn rounded-none"}
+                        nextLinkClassName={"btn rounded-none"}
+                        previousLinkClassName={"btn rounded-none"}
+                        activeLinkClassName={"btn-primary"}
                     />
                 </div>
 

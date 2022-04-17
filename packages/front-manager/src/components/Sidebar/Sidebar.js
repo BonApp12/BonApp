@@ -98,6 +98,27 @@ export default function Sidebar() {
                                 <Link
                                     className={
                                         "text-xs uppercase py-3 font-bold block " +
+                                        (window.location.href.indexOf("/admin/plates") !== -1
+                                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                                            : "text-blueGray-700 hover:text-blueGray-500")
+                                    }
+                                    to="/admin/plates"
+                                >
+                                    <i
+                                        className={
+                                            "fas fa-hamburger mr-2 text-sm " +
+                                            (window.location.href.indexOf("/admin/plates") !== -1
+                                                ? "opacity-75"
+                                                : "text-blueGray-300")
+                                        }
+                                    />{" "}
+                                    Mes plats
+                                </Link>
+                            </li>
+                            <li className="items-center">
+                                <Link
+                                    className={
+                                        "text-xs uppercase py-3 font-bold block " +
                                         (window.location.href.indexOf("/admin/orders") !== -1
                                             ? "text-lightBlue-500 hover:text-lightBlue-600"
                                             : "text-blueGray-700 hover:text-blueGray-500")

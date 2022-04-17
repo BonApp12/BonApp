@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Ingredient } from './entities/ingredient.entity';
-import { Repository } from 'typeorm';
+import {Injectable} from '@nestjs/common';
+import {IngredientDto} from './dto/ingredient.dto';
+import {UpdateIngredientDto} from './dto/update-ingredient.dto';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Ingredient} from './entities/ingredient.entity';
+import {Repository} from 'typeorm';
 
 @Injectable()
 export class IngredientsService {
@@ -11,7 +11,7 @@ export class IngredientsService {
     @InjectRepository(Ingredient)
     private ingredientRepository: Repository<Ingredient>,
   ) {}
-  create(createIngredientDto: CreateIngredientDto) {
+  create(createIngredientDto: IngredientDto) {
     return 'This action adds a new ingredient';
   }
 

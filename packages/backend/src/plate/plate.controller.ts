@@ -9,8 +9,8 @@ export class PlateController {
     }
 
     @Post()
-    create(@Body() createPlateDto: PlateDto) {
-        return this.plateService.create();
+    create(@Body() createPlateDto: PlateDto): Promise<PlateDto> {
+        return this.plateService.create(createPlateDto);
     }
 
     @Get()
@@ -24,7 +24,7 @@ export class PlateController {
     }
 
     @Get('/restaurant/:id')
-    findByRestaurant(@Param('id') id: string) {
+    findByRestaurant(@Param('id') id: string): Promise<PlateDto[]> {
         return this.plateService.findByRestaurant(+id);
     }
 

@@ -3,43 +3,47 @@ import {UpdatePlateDto} from './dto/update-plate.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Plate} from './entities/plate.entity';
 import {Repository} from 'typeorm';
+import {PlateDto} from "./dto/plate.dto";
+import {PlateAdapter} from "../Adapter/PlateAdapter";
 
 @Injectable()
 export class PlateService {
-  constructor(
-    @InjectRepository(Plate)
-    private plateRepository: Repository<Plate>,
-  ) {}
-  create() {
-    return 'This action adds a new plate';
-  }
+    constructor(
+        @InjectRepository(Plate)
+        private plateRepository: Repository<Plate>,
+    ) {
+    }
 
-  findAll() {
-    /** Récupération de tous les plats avec la relation Category */
-    return this.plateRepository.find({ relations: ['category'] });
-  }
+    async create(createPlateDto: PlateDto): Promise<PlateDto> {
+        return PlateAdapter.toDto(await this.plateRepository.save(createPlateDto));
+    }
 
-  findOne(id: number) {
-    /** Récupération d'un seul plat avec la relation Category */
-    return this.plateRepository.findOne(id, {
-      relations: ['category', 'ingredient'],
-    });
-  }
+    findAll() {
+        /** Récupération de tous les plats avec la relation Category */
+        return this.plateRepository.find({relations: ['category']});
+    }
 
-  findByRestaurant(id: number) {
-    return this.plateRepository.find( {
-      relations: ['restaurant'],
-      where: {
-        'restaurant': {id}
-      }
-    });
-  }
+    findOne(id: number) {
+        /** Récupération d'un seul plat avec la relation Category */
+        return this.plateRepository.findOne(id, {
+            relations: ['category', 'ingredient'],
+        });
+    }
 
-  update(id: number, updatePlateDto: UpdatePlateDto) {
-    return `This action updates a #${id} plate`;
-  }
+    async findByRestaurant(id: number): Promise<PlateDto[]> {
+        return (await this.plateRepository.find({
+            relations: ['restaurant', 'ingredients', "category"],
+            where: {
+                'restaurant': {id}
+            }
+        })).map(plate => PlateAdapter.toDto(plate));
+    }
 
-  async remove(id: number): Promise<void> {
-    await this.plateRepository.delete(id);
-  }
+    update(id: number, updatePlateDto: UpdatePlateDto) {
+        return `This action updates a #${id} plate`;
+    }
+
+    async remove(id: number): Promise<void> {
+        await this.plateRepository.delete(id);
+    }
 }
