@@ -3,6 +3,7 @@ import {Plate} from '../../plate/entities/plate.entity';
 import {Users} from '../../users/entities/users.entity';
 import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {Order} from "../../orders/entities/order.entity";
+import {Tables} from "../../tables/entities/tables.entity";
 
 @Entity()
 export class Restaurant extends BaseEntity {
@@ -28,15 +29,18 @@ export class Restaurant extends BaseEntity {
   @Column('char', { length: 10, nullable: true })
   contact_phone: string;
 
-  @ManyToOne(() => Address, (address) => address.restaurant)
+  @ManyToOne(() => Address, (address: Address) => address.restaurant)
   address: number;
 
-  @OneToMany(() => Plate, (plate) => plate.restaurant)
+  @OneToMany(() => Plate, (plate: Plate) => plate.restaurant)
   plates: Plate[];
 
-  @OneToMany(() => Users, (user) => user.restaurant)
+  @OneToMany(() => Users, (user: Users) => user.restaurant)
   users: Users[];
 
-  @OneToMany(() => Order, (order) => order.restaurant)
+  @OneToMany(() => Order, (order: Order) => order.restaurant)
   orders: Order[];
+
+  @OneToMany(() => Tables, (table: Tables) => table.order)
+  table: Tables[];
 }
