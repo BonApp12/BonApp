@@ -4,7 +4,6 @@ import {Ingredient} from 'src/ingredients/entities/ingredient.entity';
 import {PlateCategory} from 'src/plate-category/entities/plate-category.entity';
 import {Order} from "../../orders/entities/order.entity";
 import {Ratings} from "../../ratings/entities/ratings.entity";
-import {UserRole} from "../../users/UserRole.enum";
 import {PlateRole} from "../PlateRole.enum";
 
 @Entity()
@@ -28,7 +27,7 @@ export class Plate extends BaseEntity {
         type: 'enum',
         enum: PlateRole,
     })
-    role: UserRole;
+    type: PlateRole;
 
     @OneToMany(() => Ingredient, (ingredient: Ingredient) => ingredient.plates)
     ingredients: Ingredient[];
@@ -39,6 +38,6 @@ export class Plate extends BaseEntity {
     @OneToMany(() => PlateCategory, (category: PlateCategory) => category.plates)
     category: PlateCategory;
 
-    @OneToMany(() => Ratings, (rating: Ratings) => rating.user)
+    @OneToMany(() => Ratings, (rating: Ratings) => rating.plate)
     ratings: Ratings[];
 }
