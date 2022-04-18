@@ -3,6 +3,7 @@ import {define, factory} from 'typeorm-seeding';
 import {Plate} from "../../plate/entities/plate.entity";
 import {Ingredient} from "../../ingredients/entities/ingredient.entity";
 import {PlateRole} from "../../plate/PlateRole.enum";
+import {Ratings} from "../../ratings/entities/ratings.entity";
 
 define(Plate, (faker: typeof Faker) => {
     const plate = new Plate();
@@ -13,5 +14,6 @@ define(Plate, (faker: typeof Faker) => {
         "<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>" +
         "<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>";
     plate.ingredients = factory(Ingredient)().createMany(8) as any;
+    plate.ratings = factory(Ratings)().createMany(8) as any;
     return plate;
 });
