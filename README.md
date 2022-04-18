@@ -151,4 +151,4 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 ## Schema base de donnée
-![alt text](./bdd_bonApp.jpeg)
+![alt text](./docs/bonapp_database.png)
