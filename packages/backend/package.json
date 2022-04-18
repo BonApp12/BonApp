@@ -45,6 +45,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",
+    "googleapis": "^100.0.0",
     "joi": "^17.5.0",
     "nestjs-joi": "^1.6.0",
     "nodemailer": "^6.7.3",

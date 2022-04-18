@@ -13,6 +13,7 @@ import {OrdersModule} from './orders/orders.module';
 import {MailerModule} from '@nestjs-modules/mailer';
 import * as Joi from 'joi';
 import { StripeModule } from './stripe/stripe.module';
+import { GoogleModule } from './google/google.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { StripeModule } from './stripe/stripe.module';
     }),
     OrdersModule,
     StripeModule,
+    GoogleModule,
   ],
   controllers: [AppController],
 })

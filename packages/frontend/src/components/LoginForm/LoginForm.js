@@ -2,15 +2,18 @@ import React, {useState,useEffect} from "react";
 import LoginWithCredentials from "../../requests/auth/loginWithCredentials";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useForm} from "react-hook-form";
-import {useNavigate,Link} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 import ValidationSchemaLogin from "../../validations/ValidationSchemaLogin";
 import {useRecoilState} from 'recoil';
 import {userAtom} from '../../states/user';
 import Input from '../Input/Input';
 import {toast} from "react-toastify";
+import GoogleButton from "../GoogleButton/GoogleButton";
+import {AiOutlineLoading3Quarters} from "react-icons/ai";
 
 function LoginForm() {
     const [loading, setLoading] = useState(false);
+    const [loadingGoogle, setLoadingGoogle] = useState(false);
     const {register, handleSubmit, setError, formState: {errors}} = useForm({resolver: yupResolver(ValidationSchemaLogin())})
     const navigate = useNavigate();
     const [userState, setUserState] = useRecoilState(userAtom);
@@ -36,7 +39,6 @@ function LoginForm() {
             .catch(() => {
                 toast.error('Une erreur est survenue');
             })
-
     }
 
     return (
@@ -65,6 +67,16 @@ function LoginForm() {
                 />
                 <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-600 hover:bg-orange-500`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
             </form>
+            <div className="flex justify-center">
+                <GoogleButton setLoadingGoogle={setLoadingGoogle}/>
+            </div>
+            {
+                loadingGoogle && (
+                    <div className="absolute w-screen h-screen bg-black/50 top-0 flex justify-center items-center">
+                        <AiOutlineLoading3Quarters className="text-white animate-spin" size={80} />
+                    </div>
+                )
+            }
         </>
     )
 }

@@ -9,4 +9,8 @@ module.exports = Object.defineProperties(router, {
         value: process.env.REACT_APP_URL_BACKEND + '/auth/login',
         writable: false
     },
+    google: {
+        value: process.env.REACT_APP_URL_BACKEND + '/google',
+        writable: false
+    }
 })
