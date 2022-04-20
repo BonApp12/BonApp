@@ -18,6 +18,7 @@ function useGoogleAuthentication() {
                     if(responseGoogle.statusCode === 200) {
                         setUserState(responseGoogle.user);
                         toast.success('Connexion réussie');
+                        //TODO: redirect to account client page (change this)
                         navigate('/already-logged');
                     }
                 })

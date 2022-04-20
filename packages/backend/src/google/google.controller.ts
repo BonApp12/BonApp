@@ -16,7 +16,7 @@ export class GoogleController {
   @Post()
   @HttpCode(200)
   async authenticate(@Body() tokenGoogle: GoogleDto, @Req() req: Request) {
-    const user = plainToClass(UsersDto,await this.googleService.authenticate(tokenGoogle.token));
+    const user = plainToClass(UsersDto, await this.googleService.authenticate(tokenGoogle.token));
     const token = this.authService.getCookieWithJwtAccessToken(user.id);
     req.res.setHeader('Set-Cookie', [token]);
     return {statusCode: 200, user: user};
