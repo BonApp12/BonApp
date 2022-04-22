@@ -14,6 +14,7 @@ import {MailerModule} from '@nestjs-modules/mailer';
 import * as Joi from 'joi';
 import {StripeModule} from './stripe/stripe.module';
 import {RatingsModule} from './ratings/ratings.module';
+import { GoogleModule } from './google/google.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import {RatingsModule} from './ratings/ratings.module';
     }),
     OrdersModule,
     StripeModule,
+    GoogleModule,
     RatingsModule,
   ],
   controllers: [AppController],
