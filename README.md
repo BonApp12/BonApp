@@ -12,17 +12,34 @@ Pour que l'installation se déroule sans accroc, vous aurez besoin de créer vou
 ```packages/backend/.env```:
 
 ```
-JWT_ACCESS_TOKEN_SECRET=VOTRE-CLE-SECRETE
+JWT_ACCESS_TOKEN_SECRET=VOTRE_SECRET_JWT
 JWT_ACCESS_TOKEN_EXPIRATION_TIME=10000
+
+URL_API_BACKEND=http://localhost:4000
+URL_FRONTEND=http://localhost:3000
+URL_FRONTMANAGER=http://localhost:3001
+
+# mail
+MAIL_HOST=smtp.gmail.com
+MAIL_USER=VOTRE_USER_MAIL
+MAIL_PASSWORD=VOTRE_PASSWORD_MAIL
+MAIL_FROM=noreply@bon-app.fr
+
+# GOOGLE OAUTH
+GOOGLE_CLIENT_ID=VOTRE_CLIENT_ID
+GOOGLE_SECRET=VOTRE_SECRET_GOOGLE
+GOOGLE_REDIRECT_URI=http://localhost:4000/google/redirect
 ```
 
 
 Pour mutualiser les url dans le front:  
+
 ```packages/frontend/.env```:
 
 ```
 REACT_APP_URL_BACKEND=http://localhost:4000
 REACT_APP_SOCKET_BACKEND=ws://localhost:4000
+REACT_APP_GOOGLE_AUTH_CLIENT_ID=VOTRE_CLIENT_ID
 ```
 
 
@@ -122,6 +139,12 @@ $ yarn run start:dev
 # production mode
 $ yarn run start:prod
 ```
+
+**_NOTE_** :
+- Renseigner et remplir les fichiers .env (backend, frontend et racine)
+- Mettre l'option **synchronise** a TRUE dans le fichier ```ormconfig.js``` situé dans le dossier ```packages/backend```.
+- Lancer les fixtures qu'on explique juste après.
+
 
 ## Générer les fixtures
 
