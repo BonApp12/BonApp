@@ -30,7 +30,7 @@ export class Users extends BaseEntity {
 
     @Exclude({toPlainOnly: true})
     @Column('varchar', {length: 255, nullable: true})
-    password: string;
+    password?: string;
 
     @Column('varchar', {length: 150, unique:true, nullable: true})
     token?: string;
@@ -48,15 +48,14 @@ export class Users extends BaseEntity {
     @OneToMany(() => Order, (order) => order.user)
     orders: Order[];
 
-    @BeforeInsert()
     @BeforeUpdate()
+    @BeforeInsert()
     async setPassword(password: string) {
-        if(password !== null && password !== undefined) {
+        if(password || this.password) {
             const salt = await bcrypt.genSalt();
             this.password = await bcrypt.hash(password || this.password, salt);
         }
     }
-
 
     toJson() {
         return instanceToPlain(this);

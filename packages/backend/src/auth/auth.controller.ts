@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Headers,
   Req,
   UseGuards,
   Res,
@@ -15,7 +16,6 @@ import {Response} from 'express';
 import {LocalAuthGuard} from './local-auth.guard';
 import {AuthService} from './auth.service';
 import {JwtAuthGuard} from './jwt-auth.guard';
-import {CreateUsersDto} from '../users/dto/create-users.dto';
 import {UsersDto} from '../users/dto/users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { plainToClass } from 'class-transformer';
@@ -89,13 +89,13 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/update')
-  async update(@Body(SETTINGS.VALIDATION_PIPE) updateUserDto: UpdateUsersDto, @Req() req: RequestWithUser) {
+  async update(@Body(SETTINGS.VALIDATION_PIPE) updateUserDto: UsersDto, @Req() req: RequestWithUser) {
     return this.authService.updateUser(updateUserDto, req.user);
   }
 
   @Post('/register')
-  async register(@Body(SETTINGS.VALIDATION_PIPE) registrationData: CreateUsersDto) {
-    return this.authService.register(registrationData);
+  async register(@Body(SETTINGS.VALIDATION_PIPE) registrationData: UsersDto) {
+      return this.authService.register(registrationData);
   }
 
   @Post('/forget-password')

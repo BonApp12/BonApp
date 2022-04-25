@@ -3,7 +3,6 @@ import {UsersService} from '../users/users.service';
 import {JwtService} from '@nestjs/jwt';
 import {CreateUsersDto} from '../users/dto/create-users.dto';
 import {ConfigService} from '@nestjs/config';
-import {AuthErrorCode} from './auth-error-code.enum';
 import {UTILS} from "../app.utils";
 import {plainToClass} from "class-transformer";
 import {UsersDto} from "../users/dto/users.dto";
@@ -36,24 +35,16 @@ export class AuthService {
     return this.usersService.findOne(user.email);
   }
 
-  public async register(registrationData: CreateUsersDto) {
+  public async register(registrationData: UsersDto) {
     try {
-      const createdUser = await this.usersService.create({
+      if(!registrationData.password) {
+        throw new HttpException("Mot de passe requis", HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      return await this.usersService.create({
         ...registrationData,
       });
-      createdUser.password = undefined;
-      return createdUser;
     } catch (error) {
-      if (AuthErrorCode.USER_ALREADY_EXIST === error?.code) {
-        throw new HttpException(
-          "L'email existe déjà",
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      }
-      throw new HttpException(
-        'Something went wrong',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(error.message, error.status !== undefined ? error.status : HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -89,7 +80,7 @@ export class AuthService {
     return bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
-  async updateUser(updateDto: UpdateUsersDto, user) {
+  async updateUser(updateDto: UsersDto, user) {
     const newUser = {
       ...user,
       ...updateDto,
@@ -113,9 +104,10 @@ export class AuthService {
   public async forgetPwd(updateDto: ForgetPasswordDto = null) {
     try {
       const token = uuidv4();
+      const url = `${this.configService.get('URL_FRONTEND')}/update-password?token=${token}`;
       const user = plainToClass(UsersDto, await this.usersService.getByEmail(updateDto.email));
       await this.usersService.updateUser({token}, user);
-      return this.mailerService.sendForgetMail(user, token, 'forget_password');
+      return this.mailerService.sendMail(user.email,'forget_password','Mot de passe oublié',{name:user.firstname,url});
     }catch (e) {
       throw new HttpException("L'utilisateur n'existe pas",HttpStatus.BAD_REQUEST);
     }

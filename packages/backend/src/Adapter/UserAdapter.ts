@@ -15,7 +15,18 @@ export class UserAdapter {
         UserDto.role = user.role;
         UserDto.restaurant = user.restaurant;
         return UserDto;
+    }
 
-
+    static toModelDto(user: UsersDto): Users {
+        const users = new Users();
+        users.id = user.id;
+        users.firstname = user.firstname;
+        users.lastname = user.lastname;
+        users.email = user.email;
+        users.password = user.password;
+        users.role = user.role;
+        users.token = user.token;
+        users.restaurant = user.restaurant;
+        return users;
     }
 }

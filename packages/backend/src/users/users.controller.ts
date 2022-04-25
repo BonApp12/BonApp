@@ -30,8 +30,8 @@ export class UsersController {
     }
 
     @Patch('/:id')
-    updateYass(@Param('id') id: string, @Body() user: UsersDto): Promise<UsersDto> {
-        return this.userService.updateYass(id, user)
+    updateUserRestaurant(@Param('id') id: string, @Body() user: UsersDto): Promise<UsersDto> {
+        return this.userService.update(user);
     }
 
     @UseGuards(JwtAuthGuard)

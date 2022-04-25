@@ -1,23 +1,16 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import {ConfigService} from "@nestjs/config";
-import {UsersDto} from "../users/dto/users.dto";
 
 @Injectable()
 export class MailService {
-    constructor(private mailerService: MailerService, private configService: ConfigService) {}
+    constructor(private mailerService: MailerService) {}
 
-    async sendForgetMail(user: UsersDto, token: string, template: string) {
-        const url = `${this.configService.get('URL_FRONTEND')}/update-password?token=${token}`;
-
+    async sendMail(to, template: string, subject: string, context: object) {
         return this.mailerService.sendMail({
-            to: user.email,
-            subject: 'Mot de passe oublié',
-            template: template,
-            context: {
-                name: user.firstname,
-                url,
-            },
+            to,
+            subject,
+            template,
+            context
         });
     }
 }

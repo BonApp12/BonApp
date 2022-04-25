@@ -5,10 +5,11 @@ import {DeleteResult, Repository} from 'typeorm';
 import {CreateUsersDto} from './dto/create-users.dto';
 import {UserRole} from './UserRole.enum';
 import {UsersDto} from "./dto/users.dto";
-import {MailerService} from "@nestjs-modules/mailer";
-import {plainToClass} from "class-transformer";
+import {MailService} from "../mail/mail.service";
 import {UpdateUsersDto} from "./dto/update-users.dto";
 import {UTILS} from "../app.utils";
+import {UserAdapter} from "../Adapter/UserAdapter";
+import {generate} from "generate-password";
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,7 @@ export class UsersService {
         @InjectRepository(Users)
         private usersRepository: Repository<Users>,
         //TODO: intégrer le module de youcef quand il sera merger
-        private readonly mailerService: MailerService
+        private readonly mailerService: MailService
     ) {
     }
 
@@ -38,15 +39,26 @@ export class UsersService {
         return this.usersRepository.find({relations: ['restaurant']});
     }
 
-    async create(userData: CreateUsersDto): Promise<UsersDto> {
-        if (userData.role === UserRole.RESTAURANT_SERVER
-            || userData.role === UserRole.RESTAURANT_KITCHEN) {
-            userData.password = UsersService.randomString(10);
-            this.sendEmail(userData);
+    async create(userData: UsersDto): Promise<UsersDto> {
+        try {
+            if (userData.role === UserRole.RESTAURANT_SERVER
+                || userData.role === UserRole.RESTAURANT_KITCHEN) {
+                userData.password = generate({
+                    length: 12,
+                    numbers: true,
+                    uppercase: true,
+                    symbols: '#?!@$%^&*-.'
+                });
+                await this.mailerService.sendMail(userData.email, 'create_user', 'Hop, bientot au boulot 😊 ✔', {
+                    ...userData
+                });
+            }
+            const newUser = this.usersRepository.create(userData);
+            await this.usersRepository.save(newUser);
+            return <UsersDto>newUser;
+        }catch (e) {
+            throw new HttpException(e.message, e.status);
         }
-        const newUser = this.usersRepository.create(userData);
-        await this.usersRepository.save(newUser);
-        return <UsersDto>newUser;
     }
 
     //Update attribute of a user set in UpdateUserDto
@@ -73,13 +85,8 @@ export class UsersService {
         return this.update(newUser);
     }
 
-    async update(user: UpdateUsersDto) {
-        //On hydrate le user avec les données du DTO car le beforeUpdate fonctionne seulement avec un objet de type User
-        //TODO: Refactor newUser to User Entity
-        const newUser = this.hydrateUserEntity(user);
-        newUser.id = user.id;
-        newUser.token = user?.token;
-        return plainToClass(UsersDto,this.usersRepository.save(newUser));
+    async update(user: UsersDto) {
+        return this.usersRepository.save(UserAdapter.toModelDto(user));
     }
 
     //TODO : DELETE DUPLICATE LINE 20
@@ -124,35 +131,5 @@ export class UsersService {
 
     delete(id: string): Promise<DeleteResult> {
         return this.usersRepository.delete(id);
-    }
-
-    //TODO: Voir avec Yass pour la methode à prendre pour l'update
-    updateYass(id: string, user: UsersDto): Promise<UsersDto> {
-        return this.usersRepository.save({id, ...user});
-    }
-
-    //TODO: intégrer la solution de youcef
-    private sendEmail(userData) {
-        this.mailerService
-            .sendMail({
-                to: userData.email, // list of receivers
-                from: 'bonAPP@noreply.com', // sender address
-                subject: 'Hop, bientot au boulot 😊 ✔', // Subject line
-                text: 'welcome', // plaintext body
-                html: '<h1>Bienvenu ' + userData.firstname + '</h1> ' +
-                    '<p>Votre identifiant est: ' + userData.email + ' </p>' +
-                    '<p>Votre mot de passe est: ' + userData.password + ' </p>' +
-                    '<p>Penser à le changer</p>', // HTML body content
-            });
-    }
-
-    private static randomString(length) {
-        let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_+=-';
-        const charactersLength = characters.length;
-        for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
     }
 }

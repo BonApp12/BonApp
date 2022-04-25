@@ -20,7 +20,7 @@ module.exports = Object.defineProperties(router, {
     updatePwd: {
         value: process.env.REACT_APP_URL_BACKEND + '/auth/update-password',
         writable: false
-    }
+    },
     google: {
         value: process.env.REACT_APP_URL_BACKEND + '/google',
         writable: false

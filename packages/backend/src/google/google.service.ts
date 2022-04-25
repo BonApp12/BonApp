@@ -3,8 +3,8 @@ import { ConfigService } from "@nestjs/config";
 import { google, Auth } from 'googleapis';
 import {AuthService} from "../auth/auth.service";
 import {UsersService} from "../users/users.service";
-import {CreateUsersDto} from "../users/dto/create-users.dto";
 import {plainToClass} from "class-transformer";
+import {UsersDto} from "../users/dto/users.dto";
 
 @Injectable()
 export class GoogleService {
@@ -29,7 +29,7 @@ export class GoogleService {
 
   async registerUser(token: string) {
     const userData = await this.getUserData(token);
-    const createUserDto = plainToClass(CreateUsersDto, {
+    const createUserDto = plainToClass(UsersDto, {
       email: userData.email,
       firstname: userData.given_name,
       lastname: userData.family_name,

@@ -1,5 +1,4 @@
-import {IsString, IsNotEmpty, IsEmail, Length, Matches} from 'class-validator';
-import { MESSAGES, REGEX } from 'src/app.utils';
+import {IsEmail} from 'class-validator';
 import { UserRole } from '../UserRole.enum';
 
 export class CreateUsersDto {
@@ -9,13 +8,7 @@ export class CreateUsersDto {
   @IsEmail({}, {message: 'Votre email n\'est pas valide'})
   email: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @Length(8,15, {
-    message: MESSAGES.PASSWORD_LENGTH
-  })
-  @Matches(REGEX.PASSWORD_RULE, { message: MESSAGES.PASSWORD_RULE_MESSAGE })
-  password: string;
+  password?: string;
 
   role: UserRole;
 }
