@@ -1,7 +1,6 @@
 import route from "../../router/route";
 
 const forgetPassword = (email) => {
-    console.log(email);
     return fetch(route.forgetPwd, {
         crossDomain: true,
         method: 'POST',

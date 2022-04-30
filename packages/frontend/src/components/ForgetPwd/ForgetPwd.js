@@ -18,7 +18,7 @@ export default function ForgetPwd() {
             .then((res) => {
                 setLoading(false);
                 if(res.status === 200){
-                    toast.success('Une modification de mot de passe a été envoyer par mail');
+                    toast.success("Un e-mail viens d'être envoyé à l'adresse renseignée");
                     navigate('/');
                 }
                 return res.json();

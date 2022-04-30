@@ -36,7 +36,7 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/update')
-    async update(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto, @Req() req: RequestWithUser) {
+    async update(@Body(SETTINGS.VALIDATION_PIPE_USER) usersDto: UsersDto, @Req() req: RequestWithUser) {
         return this.userService.updateUser(usersDto, req.user);
     }
 }

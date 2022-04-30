@@ -89,25 +89,25 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/update')
-    async update(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto, @Req() req: RequestWithUser) {
+    async update(@Body(SETTINGS.VALIDATION_PIPE_USER) usersDto: UsersDto, @Req() req: RequestWithUser) {
         return this.usersService.updateUser(usersDto, req.user);
     }
 
     @Post('/register')
-    async register(@Body(SETTINGS.VALIDATION_PIPE) registrationData: UsersDto) {
+    async register(@Body(SETTINGS.VALIDATION_PIPE_USER) registrationData: UsersDto) {
         return this.authService.register(registrationData);
     }
 
     @Post('/forget-password')
     @HttpCode(200)
-    async forgetPwd(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto) {
-        return this.authService.forgetPwd(usersDto);
+    async forgetPassword(@Body(SETTINGS.VALIDATION_PIPE_USER) usersDto: UsersDto) {
+        return this.authService.forgetPassword(usersDto);
     }
 
     @Post('/update-password')
     @HttpCode(204)
-    async updatePwd(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto, @Query() {token}) {
-        return this.authService.changePwd(usersDto, token);
+    async updatePassword(@Body(SETTINGS.VALIDATION_PIPE_USER) usersDto: UsersDto, @Query() {token}) {
+        return this.authService.changePassword(usersDto, token);
     }
 
     @Get('/check-token')

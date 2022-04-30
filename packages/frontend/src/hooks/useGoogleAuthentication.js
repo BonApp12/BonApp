@@ -14,7 +14,6 @@ function useGoogleAuthentication() {
             googleAuth(accessToken)
                 .then(res => res.json())
                 .then(responseGoogle => {
-                    console.log(responseGoogle);
                     if(responseGoogle.statusCode === 200) {
                         setUserState(responseGoogle.user);
                         toast.success('Connexion réussie');

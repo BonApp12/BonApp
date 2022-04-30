@@ -1,6 +1,4 @@
-const router = {};
-
-module.exports = Object.defineProperties(router, {
+module.exports = Object.defineProperties({}, {
     register: {
         value: process.env.REACT_APP_URL_BACKEND + '/auth/register',
         writable: false

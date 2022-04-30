@@ -74,7 +74,7 @@ export class AuthService {
     }
   }
 
-  public async forgetPwd(usersDto: UsersDto = null) {
+  public async forgetPassword(usersDto: UsersDto = null) {
     try {
       const token = uuidv4();
       usersDto.token = token;
@@ -87,7 +87,7 @@ export class AuthService {
     }
   }
 
-  public async changePwd(usersDto: UsersDto, token: string){
+  public async changePassword(usersDto: UsersDto, token: string){
     try {
       const user = await this.checkToken(token);
       // set new password in updateDto.password

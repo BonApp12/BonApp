@@ -9,7 +9,7 @@ const PASSWORD_RULE_MESSAGE =
 const PASSWORD_LENGTH =
     'Votre mot de passe doit contenir au moins 8 caractères et maximum 15 caractères';
 
-const VALIDATION_PIPE = new ValidationPipe({
+const VALIDATION_PIPE_USER = new ValidationPipe({
     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
 });
 
@@ -27,7 +27,7 @@ export const MESSAGES = {
 };
 
 export const SETTINGS = {
-    VALIDATION_PIPE,
+    VALIDATION_PIPE_USER,
 };
 
 export const UTILS = {
