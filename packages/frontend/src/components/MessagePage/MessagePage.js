@@ -1,10 +1,10 @@
 import {useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {userAtom} from '../../states/user';
-import {useRecoilState} from "recoil";
+import {useRecoilValue} from "recoil";
 
 const MessagePage = ({message}) => {
-    const userState = useRecoilState(userAtom);
+    const userState = useRecoilValue(userAtom);
     const navigate = useNavigate();
 
     useEffect(() => {

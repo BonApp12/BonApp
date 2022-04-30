@@ -14,7 +14,7 @@ import {AiOutlineLoading3Quarters} from "react-icons/ai";
 function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [loadingGoogle, setLoadingGoogle] = useState(false);
-    const {register, handleSubmit, setError, formState: {errors}} = useForm({resolver: yupResolver(ValidationSchemaLogin())})
+    const {register, handleSubmit, formState: {errors}} = useForm({resolver: yupResolver(ValidationSchemaLogin())})
     const navigate = useNavigate();
     const [userState, setUserState] = useRecoilState(userAtom);
 
@@ -28,8 +28,8 @@ function LoginForm() {
             .then(res => res.json())
             .then(res => {
                 setLoading(false);
-                if(res.statusCode === 400 || res.statusCode === 401){
-                    setError('auth',{type: 'error', message: res.message});
+                if(res.statusCode === 400 || res.status === 401){
+                    toast.error(res.message);
                 }else if(res.statusCode === 200){
                     toast.success('Connexion réussie');
                     setUserState(res.user);
@@ -45,11 +45,6 @@ function LoginForm() {
         <>
             <h3 className="text-lg">Connectez-vous !</h3>
             <p className="m-4 text-sm">Vous n'avez pas encore de compte, <Link to="/register" className="text-orange-600">inscrivez-vous</Link> dès maintenant</p>
-            {
-                errors?.auth?.message && (
-                    <span className="text-sm text-red-500">{errors?.auth?.message}*</span>
-                )
-            }
             <form onSubmit={handleSubmit(onSubmit)} className="m-5">
                 <Input
                     type="email"
@@ -65,6 +60,7 @@ function LoginForm() {
                     error={errors?.password?.message}
                     placeHolder="********"
                 />
+                <Link to={"/forgot-password"} className="text-sm text-orange-600 flex mt-2 justify-end">Mot de passe oublié ?</Link>
                 <button className={`btn ${loading && 'loading'} btn-primary mt-2 text-white border-none bg-orange-600 hover:bg-orange-500`} type="submit">{loading ? 'En cours...' : 'Connexion'}</button>
             </form>
             <div className="flex justify-center">

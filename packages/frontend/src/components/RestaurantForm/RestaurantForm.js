@@ -14,7 +14,6 @@ function RestaurantForm(props) {
 
     const handleSubmit = (evt) => {
         setLoading('loading');
-        console.log({name, siren, contact_firstname, contact_lastname})
         editRestaurantInformations({name, siren, contact_firstname, contact_lastname}, props.restaurant.id)
             .then(res => {
                 if (res.status >= 200 && res.status < 300) {
@@ -22,7 +21,6 @@ function RestaurantForm(props) {
                     window.location.reload();
                 } else {
                     setLoading('error');
-                    console.log('Something went wrong ?');
                 }
             })
             .catch(err => err);
