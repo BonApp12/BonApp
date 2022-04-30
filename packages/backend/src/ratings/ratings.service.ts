@@ -21,27 +21,27 @@ export class RatingsService {
         return this.ratingRepository.find({relations: ['user', 'plate']});
     }
 
-    findOne(id: number) {
+    findOne(ratingId: number) {
         /** Retourne une note avec les relations User et Plate */
-        return this.ratingRepository.findOne(id, {relations: ['user', 'plate']});
+        return this.ratingRepository.findOne(ratingId, {relations: ['user', 'plate']});
     }
 
-    findByPlate(id: number) {
+    findByPlate(plateId: number) {
         /** Retourne les notes d'un plat avec les relations User et Plate */
         return this.ratingRepository.find({
             relations: ['user', 'plate'],
             where: {
-                'plate': {id}
+                'plate': {plateId}
             }
         });
     }
 
-    findByUser(id: number) {
+    findByUser(userId: number) {
         /** Retourne les notes d'un utilisateur avec les relations User et Plate */
         return this.ratingRepository.find({
             relations: ['user', 'plate'],
             where: {
-                'user': {id}
+                'user': {userId}
             }
         });
     }
@@ -57,12 +57,12 @@ export class RatingsService {
         });
     }
 
-    update(id: number, updateRatingsDto: UpdateRatingsDto) {
-        return `This action updates a #${id} rating`;
+    update(ratingId: number, updateRatingsDto: UpdateRatingsDto) {
+        return `This action updates a #${ratingId} rating`;
     }
 
-    async remove(id: number) {
-        await this.ratingRepository.delete(id);
-        return `This action removes a #${id} rating`;
+    async remove(ratingId: number) {
+        await this.ratingRepository.delete(ratingId);
+        return `This action removes a #${ratingId} rating`;
     }
 }
