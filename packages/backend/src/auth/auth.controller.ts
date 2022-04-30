@@ -1,16 +1,16 @@
 import {
-  Controller,
-  Post,
-  Get,
-  Headers,
-  Req,
-  UseGuards,
-  Res,
-  Body,
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  Injectable, Query
+    Controller,
+    Post,
+    Get,
+    Headers,
+    Req,
+    UseGuards,
+    Res,
+    Body,
+    HttpCode,
+    HttpException,
+    HttpStatus,
+    Injectable, Query
 } from '@nestjs/common';
 import {Response} from 'express';
 import {LocalAuthGuard} from './local-auth.guard';
@@ -18,19 +18,19 @@ import {AuthService} from './auth.service';
 import {JwtAuthGuard} from './jwt-auth.guard';
 import {UsersDto} from '../users/dto/users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
-import { plainToClass } from 'class-transformer';
+import {plainToClass} from 'class-transformer';
 import {SETTINGS} from "../app.utils";
-import {UpdateUsersDto} from "../users/dto/update-users.dto";
-import {ForgetPasswordDto} from "../users/dto/forget-password.dto";
 import {ConfigService} from "@nestjs/config";
 import {UserRole} from "../users/UserRole.enum";
+import {UsersService} from "../users/users.service";
 
 @Injectable()
 @Controller('auth')
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly usersService: UsersService
     ) {
     }
 
@@ -56,7 +56,7 @@ export class AuthController {
             return this.loginUser(req, userDto);
         }
         throw new HttpException(
-            {type: "role", message: "Vous n'avez pas le droit d'accéder à cette ressource"},
+            {type: "role", message: "Vous n'avez pas le droit d'accéder à cette ressource", status: HttpStatus.UNAUTHORIZED},
             HttpStatus.UNAUTHORIZED,
         );
     }
@@ -87,32 +87,32 @@ export class AuthController {
         req.res.send();
     }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/update')
-  async update(@Body(SETTINGS.VALIDATION_PIPE) updateUserDto: UsersDto, @Req() req: RequestWithUser) {
-    return this.authService.updateUser(updateUserDto, req.user);
-  }
+    @UseGuards(JwtAuthGuard)
+    @Post('/update')
+    async update(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto, @Req() req: RequestWithUser) {
+        return this.usersService.updateUser(usersDto, req.user);
+    }
 
-  @Post('/register')
-  async register(@Body(SETTINGS.VALIDATION_PIPE) registrationData: UsersDto) {
-      return this.authService.register(registrationData);
-  }
+    @Post('/register')
+    async register(@Body(SETTINGS.VALIDATION_PIPE) registrationData: UsersDto) {
+        return this.authService.register(registrationData);
+    }
 
-  @Post('/forget-password')
-  @HttpCode(200)
-  async forgetPwd(@Body(SETTINGS.VALIDATION_PIPE) forgetPasswordDto: ForgetPasswordDto) {
-    return this.authService.forgetPwd(forgetPasswordDto);
-  }
+    @Post('/forget-password')
+    @HttpCode(200)
+    async forgetPwd(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto) {
+        return this.authService.forgetPwd(usersDto);
+    }
 
-  @Post('/update-password')
-  @HttpCode(204)
-  async updatePwd(@Body(SETTINGS.VALIDATION_PIPE) updateUsersDto: UpdateUsersDto, @Query() {token}) {
-    return this.authService.changePwd(updateUsersDto, token);
-  }
+    @Post('/update-password')
+    @HttpCode(204)
+    async updatePwd(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto, @Query() {token}) {
+        return this.authService.changePwd(usersDto, token);
+    }
 
-  @Get('/check-token')
-  @HttpCode(200)
-  async checkToken(@Query() {token}) {
-    return this.authService.checkToken(token);
-  }
+    @Get('/check-token')
+    @HttpCode(200)
+    async checkToken(@Query() {token}) {
+        return this.authService.checkToken(token);
+    }
 }

@@ -2,11 +2,9 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Users} from './entities/users.entity';
 import {DeleteResult, Repository} from 'typeorm';
-import {CreateUsersDto} from './dto/create-users.dto';
 import {UserRole} from './UserRole.enum';
 import {UsersDto} from "./dto/users.dto";
 import {MailService} from "../mail/mail.service";
-import {UpdateUsersDto} from "./dto/update-users.dto";
 import {UTILS} from "../app.utils";
 import {UserAdapter} from "../Adapter/UserAdapter";
 import {generate} from "generate-password";
@@ -16,15 +14,12 @@ export class UsersService {
     constructor(
         @InjectRepository(Users)
         private usersRepository: Repository<Users>,
-        //TODO: intégrer le module de youcef quand il sera merger
         private readonly mailerService: MailService
     ) {
     }
 
     async findOne(email: string): Promise<Users> {
         const user = await this.usersRepository.findOne({relations: ['restaurant'], where: {email}});
-
-        // TODO: Créer un adapter qui renverra l'userDTO sans le champs password
         if (user) return user;
         throw new HttpException('User with this email does not exist !', HttpStatus.NOT_FOUND);
     }
@@ -41,8 +36,7 @@ export class UsersService {
 
     async create(userData: UsersDto): Promise<UsersDto> {
         try {
-            if (userData.role === UserRole.RESTAURANT_SERVER
-                || userData.role === UserRole.RESTAURANT_KITCHEN) {
+            if (userData.role === UserRole.RESTAURANT_SERVER || userData.role === UserRole.RESTAURANT_KITCHEN) {
                 userData.password = generate({
                     length: 12,
                     numbers: true,
@@ -55,20 +49,20 @@ export class UsersService {
             }
             const newUser = this.usersRepository.create(userData);
             await this.usersRepository.save(newUser);
-            return <UsersDto>newUser;
+            return UserAdapter.toDto(newUser);
         }catch (e) {
             throw new HttpException(e.message, e.status);
         }
     }
 
     //Update attribute of a user set in UpdateUserDto
-    async updateUser(updateDto: UpdateUsersDto, user, withoutOldPassword = false) {
+    async updateUser(usersDto: UsersDto, user, withoutOldPassword = false) {
         const newUser = {
             ...user,
-            ...updateDto,
+            ...usersDto,
         };
 
-        if(updateDto?.oldPassword?.trim().length && !withoutOldPassword){
+        if(usersDto?.oldPassword?.trim().length && !withoutOldPassword){
             const checkPassword = await UTILS.verifyPassword(newUser.oldPassword, user.password);
             if(!checkPassword){
                 throw new HttpException(
@@ -86,7 +80,7 @@ export class UsersService {
     }
 
     async update(user: UsersDto) {
-        return this.usersRepository.save(UserAdapter.toModelDto(user));
+        return this.usersRepository.save(UserAdapter.toModel(user));
     }
 
     //TODO : DELETE DUPLICATE LINE 20
@@ -115,18 +109,6 @@ export class UsersService {
             'User with this id does not exist',
             HttpStatus.NOT_FOUND,
         );
-    }
-
-    hydrateUserEntity(userDetails: CreateUsersDto|UsersDto|UpdateUsersDto): Users {
-        // Cette fonction doit permettre d'hydrater un objet User
-        // Faire en sorte qu'elle soit la plus mainstream possible, éventuellement préciser les champs obligatoires.
-        const userEntity: Users = Users.create();
-        userEntity.firstname = userDetails.firstname;
-        userEntity.lastname = userDetails.lastname;
-        userEntity.email = userDetails.email;
-        userEntity.password = userDetails.password;
-        userEntity.role = UserRole[userDetails.role as keyof typeof UserRole];
-        return userEntity;
     }
 
     delete(id: string): Promise<DeleteResult> {

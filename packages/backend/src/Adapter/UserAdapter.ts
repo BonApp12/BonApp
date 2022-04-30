@@ -17,7 +17,19 @@ export class UserAdapter {
         return UserDto;
     }
 
-    static toModelDto(user: UsersDto): Users {
+    static toDtoUpdatePassword(user: Users): UsersDto {
+        const UserDto = new UsersDto();
+        UserDto.id = user.id;
+        UserDto.firstname = user.firstname;
+        UserDto.lastname = user.lastname;
+        UserDto.email = user.email;
+        UserDto.password = user.password;
+        UserDto.token = user.token;
+        UserDto.role = user.role;
+        return UserDto;
+    }
+
+    static toModel(user: UsersDto): Users {
         const users = new Users();
         users.id = user.id;
         users.firstname = user.firstname;

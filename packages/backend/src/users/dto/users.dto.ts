@@ -9,6 +9,7 @@ export class UsersDto {
     lastname: string;
 
     @IsEmail({}, {message: "L'email n'est pas valide"})
+    @IsOptional()
     email: string;
 
     @Matches(REGEX.PASSWORD_RULE, { message: MESSAGES.PASSWORD_RULE_MESSAGE })

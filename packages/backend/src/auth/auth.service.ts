@@ -4,13 +4,11 @@ import {JwtService} from '@nestjs/jwt';
 import {CreateUsersDto} from '../users/dto/create-users.dto';
 import {ConfigService} from '@nestjs/config';
 import {UTILS} from "../app.utils";
-import {plainToClass} from "class-transformer";
 import {UsersDto} from "../users/dto/users.dto";
 import {MailService} from "../mail/mail.service";
-import {UpdateUsersDto} from "../users/dto/update-users.dto";
-import {ForgetPasswordDto} from "../users/dto/forget-password.dto";
-import { v4 as uuidv4 } from 'uuid';
-import * as bcrypt from 'bcryptjs';
+import {v4 as uuidv4} from 'uuid';
+import {UserRole} from "../users/UserRole.enum";
+import {UserAdapter} from "../Adapter/UserAdapter";
 
 @Injectable()
 export class AuthService {
@@ -37,7 +35,7 @@ export class AuthService {
 
   public async register(registrationData: UsersDto) {
     try {
-      if(!registrationData.password) {
+      if(!registrationData.password && registrationData.role === UserRole.CLIENT) {
         throw new HttpException("Mot de passe requis", HttpStatus.UNPROCESSABLE_ENTITY);
       }
       return await this.usersService.create({
@@ -70,54 +68,30 @@ export class AuthService {
 
   public async checkToken(token: string) {
     try {
-      return plainToClass(UsersDto, await this.usersService.findBy({token: token}));
+      return UserAdapter.toDtoUpdatePassword(await this.usersService.findBy({token: token}));
     } catch (e) {
       throw new HttpException("Vous n'avez pas accès", HttpStatus.UNAUTHORIZED);
     }
   }
 
-  private static async verifyPassword(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
-    return bcrypt.compare(plainTextPassword, hashedPassword);
-  }
-
-  async updateUser(updateDto: UsersDto, user) {
-    const newUser = {
-      ...user,
-      ...updateDto,
-    };
-
-    if(updateDto?.oldPassword?.trim().length){
-      const checkPassword = await AuthService.verifyPassword(newUser.oldPassword, user.password);
-      if(!checkPassword){
-        throw new HttpException(
-            'Wrong credentials provided (password <- dont forget to remove this after)',
-            HttpStatus.BAD_REQUEST,
-        );
-      }
-      delete newUser.oldPassword;
-    }else{
-      delete newUser.password;
-    }
-    return this.usersService.update(newUser);
-  }
-
-  public async forgetPwd(updateDto: ForgetPasswordDto = null) {
+  public async forgetPwd(usersDto: UsersDto = null) {
     try {
       const token = uuidv4();
+      usersDto.token = token;
       const url = `${this.configService.get('URL_FRONTEND')}/update-password?token=${token}`;
-      const user = plainToClass(UsersDto, await this.usersService.getByEmail(updateDto.email));
-      await this.usersService.updateUser({token}, user);
+      const user = UserAdapter.toDtoUpdatePassword(await this.usersService.getByEmail(usersDto.email));
+      await this.usersService.updateUser(usersDto, user);
       return this.mailerService.sendMail(user.email,'forget_password','Mot de passe oublié',{name:user.firstname,url});
     }catch (e) {
       throw new HttpException("L'utilisateur n'existe pas",HttpStatus.BAD_REQUEST);
     }
   }
 
-  public async changePwd(updateDto: UpdateUsersDto, token: string){
+  public async changePwd(usersDto: UsersDto, token: string){
     try {
-      const user = plainToClass(UsersDto, await this.checkToken(token));
+      const user = await this.checkToken(token);
       // set new password in updateDto.password
-      if (updateDto.password) return this.usersService.updateUser(updateDto, user, true);
+      if (usersDto.password) return this.usersService.updateUser(usersDto, user, true);
       throw new HttpException("Le mot de passe est vide", HttpStatus.BAD_REQUEST);
     }catch(e){
       throw new HttpException(`${e}`, HttpStatus.BAD_REQUEST);

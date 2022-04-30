@@ -4,7 +4,6 @@ import {UsersDto} from "./dto/users.dto";
 import {DeleteResult} from "typeorm";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {SETTINGS} from "../app.utils";
-import {UpdateUsersDto} from "./dto/update-users.dto";
 import RequestWithUser from "../auth/interfaces/requestWithUser.interface";
 
 @Controller('user')
@@ -29,6 +28,7 @@ export class UsersController {
         return this.userService.delete(id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('/:id')
     updateUserRestaurant(@Param('id') id: string, @Body() user: UsersDto): Promise<UsersDto> {
         return this.userService.update(user);
@@ -36,7 +36,7 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/update')
-    async update(@Body(SETTINGS.VALIDATION_PIPE) updateUserDto: UpdateUsersDto, @Req() req: RequestWithUser) {
-        return this.userService.updateUser(updateUserDto, req.user);
+    async update(@Body(SETTINGS.VALIDATION_PIPE) usersDto: UsersDto, @Req() req: RequestWithUser) {
+        return this.userService.updateUser(usersDto, req.user);
     }
 }

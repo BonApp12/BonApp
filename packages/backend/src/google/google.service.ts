@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from "@nestjs/config";
-import { google, Auth } from 'googleapis';
+import {Injectable} from '@nestjs/common';
+import {ConfigService} from "@nestjs/config";
+import {Auth, google} from 'googleapis';
 import {AuthService} from "../auth/auth.service";
 import {UsersService} from "../users/users.service";
-import {plainToClass} from "class-transformer";
-import {UsersDto} from "../users/dto/users.dto";
+import {UserAdapter} from "../Adapter/UserAdapter";
+import {UserRole} from "../users/UserRole.enum";
+import {Users} from "../users/entities/users.entity";
 
 @Injectable()
 export class GoogleService {
@@ -23,18 +24,17 @@ export class GoogleService {
     const tokenInfo = await this.oauthClient.getTokenInfo(token);
     const email = tokenInfo.email;
     const user = await this.usersService.getByEmail(email);
-    if(user) return user;
+    if(user) return UserAdapter.toDto(user);
     return this.registerUser(token);
   }
 
   async registerUser(token: string) {
     const userData = await this.getUserData(token);
-    const createUserDto = plainToClass(UsersDto, {
+    const createUserDto = UserAdapter.toDto(<Users>{
       email: userData.email,
-      firstname: userData.given_name,
-      lastname: userData.family_name,
-      password: null,
-      role: 'CLIENT'
+      firstname: userData.given_name || '',
+      lastname: userData.family_name || '',
+      role: UserRole.CLIENT
     });
     return this.usersService.create(createUserDto);
   }
@@ -42,14 +42,9 @@ export class GoogleService {
   async getUserData(token: string) {
     const userInfoClient = google.oauth2('v2').userinfo;
 
-    this.oauthClient.setCredentials({
-      access_token: token
-    })
+    this.oauthClient.setCredentials({access_token: token});
 
-    const userInfoResponse = await userInfoClient.get({
-      auth: this.oauthClient
-    });
-
+    const userInfoResponse = await userInfoClient.get({auth: this.oauthClient});
     return userInfoResponse.data;
   }
 }
