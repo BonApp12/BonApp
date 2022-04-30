@@ -1,4 +1,13 @@
-import {BaseEntity, BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
+import {
+    BaseEntity,
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
 import {UserRole} from '../UserRole.enum';
 import {Exclude, instanceToPlain} from 'class-transformer';
@@ -22,7 +31,10 @@ export class Users extends BaseEntity {
 
     @Exclude({toPlainOnly: true})
     @Column('varchar', {length: 255, nullable: true})
-    password: string;
+    password?: string;
+
+    @Column('varchar', {length: 150, unique:true, nullable: true})
+    token?: string;
 
     @Column({
         type: 'enum',
@@ -41,6 +53,7 @@ export class Users extends BaseEntity {
     })
     orders: Order[];
 
+    @BeforeUpdate()
     @OneToMany(() => Ratings, (rating: Ratings) => rating.user, {
         onDelete: 'CASCADE',
     })
@@ -48,7 +61,7 @@ export class Users extends BaseEntity {
 
     @BeforeInsert()
     async setPassword(password: string) {
-        if(password !== null && password !== undefined) {
+        if(password || this.password) {
             const salt = await bcrypt.genSalt();
             this.password = await bcrypt.hash(password || this.password, salt);
         }
