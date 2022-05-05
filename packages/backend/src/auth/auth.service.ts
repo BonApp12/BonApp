@@ -68,7 +68,8 @@ export class AuthService {
 
   public async checkToken(token: string) {
     try {
-      return UserAdapter.toDtoUpdatePassword(await this.usersService.findBy({token: token}));
+      const user = await this.usersService.findBy({token: token});
+      return UserAdapter.toDtoUpdatePassword(user);
     } catch (e) {
       throw new HttpException("Vous n'avez pas accès", HttpStatus.UNAUTHORIZED);
     }

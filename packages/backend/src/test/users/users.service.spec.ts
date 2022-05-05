@@ -76,6 +76,10 @@ describe('usersService', () => {
         });
     });
 
+    it("should return user updated", async() => {
+        //await usersService.updateUser(users, );
+    })
+
 
     it('should return a user', async () => {
         const email = "yassine.bousaidi@gmail.com";
