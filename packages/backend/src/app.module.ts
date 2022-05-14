@@ -28,7 +28,6 @@ import { RatingsController } from './ratings/ratings.controller';
     TypeOrmModule.forRoot(),
     AuthModule,
     ConfigModule.forRoot({
-      isGlobal: true,
       validationSchema: Joi.object({
         JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
         JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
@@ -56,6 +55,6 @@ import { RatingsController } from './ratings/ratings.controller';
     RatingsModule,
     MailModule,
   ],
-  controllers: [AppController, RatingsController],
+  controllers: [AppController],
 })
 export class AppModule {}
