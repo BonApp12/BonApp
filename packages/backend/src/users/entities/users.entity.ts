@@ -1,18 +1,10 @@
-import {
-    BaseEntity,
-    BeforeInsert,
-    BeforeUpdate,
-    Column,
-    Entity,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import {BaseEntity, BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
 import {UserRole} from '../UserRole.enum';
 import {Exclude, instanceToPlain} from 'class-transformer';
 import {Order} from '../../orders/entities/order.entity';
 import * as bcrypt from 'bcryptjs';
+import {Ratings} from "../../ratings/entities/ratings.entity";
 
 @Entity()
 export class Users extends BaseEntity {
@@ -29,11 +21,8 @@ export class Users extends BaseEntity {
     email: string;
 
     @Exclude({toPlainOnly: true})
-    @Column('varchar', {length: 255, nullable: true})
-    password?: string;
-
-    @Column('varchar', {length: 150, unique:true, nullable: true})
-    token?: string;
+    @Column('varchar', {length: 255})
+    password: string;
 
     @Column({
         type: 'enum',
@@ -42,19 +31,25 @@ export class Users extends BaseEntity {
     })
     role: UserRole;
 
-    @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
+    @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.users, {
+        onDelete: 'CASCADE',
+    })
     restaurant: Restaurant;
 
-    @OneToMany(() => Order, (order) => order.user)
+    @OneToMany(() => Order, (order: Order) => order.user, {
+        onDelete: 'CASCADE',
+    })
     orders: Order[];
 
-    @BeforeUpdate()
+    @OneToMany(() => Ratings, (rating: Ratings) => rating.user, {
+        onDelete: 'CASCADE',
+    })
+    ratings: Ratings[];
+
     @BeforeInsert()
     async setPassword(password: string) {
-        if(password || this.password) {
-            const salt = await bcrypt.genSalt();
-            this.password = await bcrypt.hash(password || this.password, salt);
-        }
+        const salt = await bcrypt.genSalt();
+        this.password = await bcrypt.hash(password || this.password, salt)
     }
 
     toJson() {

@@ -6,9 +6,12 @@ export class Ingredient extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 100 })
+  @Column('varchar', {length: 100})
   name: string;
 
-  @ManyToOne(() => Plate, (plates) => plates.ingredients)
-  plates: Plate[];
+  @ManyToOne(() => Plate, (plates) => plates.ingredients, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  plates: Plate;
 }

@@ -6,8 +6,8 @@ export class Address {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('varchar', { length: 155 })
-    address: string;
+    @Column('varchar', {length: 155})
+    street: string;
 
     @Column('char', { length: 5 })
     postal_code: string;
@@ -16,6 +16,8 @@ export class Address {
     city: string;
 
     /** Permets d'accéder aux restaurants ayant cette adresse si c'est le cas */
-    @OneToMany(() => Restaurant, (restaurant) => restaurant.address)
-    restaurant: Restaurant[];
+    @OneToMany(() => Restaurant, (restaurant) => restaurant.address, {
+        cascade: true,
+    })
+    restaurant: Restaurant;
 }
