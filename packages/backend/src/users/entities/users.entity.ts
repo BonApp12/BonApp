@@ -13,6 +13,7 @@ import {UserRole} from '../UserRole.enum';
 import {Exclude, instanceToPlain} from 'class-transformer';
 import {Order} from '../../orders/entities/order.entity';
 import * as bcrypt from 'bcryptjs';
+import {Ratings} from "../../ratings/entities/ratings.entity";
 
 @Entity()
 export class Users extends BaseEntity {
@@ -42,11 +43,21 @@ export class Users extends BaseEntity {
     })
     role: UserRole;
 
-    @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
+    @ManyToOne(() => Restaurant, (restaurant) => restaurant.users, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
     restaurant: Restaurant;
 
-    @OneToMany(() => Order, (order) => order.user)
+    @OneToMany(() => Order, (order) => order.user, {
+        onDelete: 'CASCADE',
+    })
     orders: Order[];
+
+    @OneToMany(() => Ratings, (rating: Ratings) => rating.user, {
+        onDelete: 'CASCADE',
+    })
+    ratings: Ratings[];
 
     @BeforeUpdate()
     @BeforeInsert()

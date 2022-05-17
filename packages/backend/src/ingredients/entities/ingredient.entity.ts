@@ -9,6 +9,9 @@ export class Ingredient extends BaseEntity {
   @Column('varchar', { length: 100 })
   name: string;
 
-  @ManyToOne(() => Plate, (plates) => plates.ingredients)
+  @ManyToOne(() => Plate, (plates) => plates.ingredients, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   plates: Plate[];
 }
