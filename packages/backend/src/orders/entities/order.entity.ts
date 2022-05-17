@@ -1,7 +1,17 @@
-import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn} from 'typeorm';
-import { Users } from '../../users/entities/users.entity';
-import { Restaurant } from '../../restaurant/entities/restaurant.entity';
-import { Plate } from "../../plate/entities/plate.entity";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm';
+import {Users} from '../../users/entities/users.entity';
+import {Restaurant} from '../../restaurant/entities/restaurant.entity';
+import {Plate} from "../../plate/entities/plate.entity";
+import {Tables} from "../../tables/entities/tables.entity";
 
 @Entity()
 export class Order extends BaseEntity {
@@ -11,18 +21,21 @@ export class Order extends BaseEntity {
   @Column('varchar', {length: 10, default: 'to-do'})
   status: string;
 
-  @ManyToOne(() => Users, (user:Users) => user.orders)
+  @ManyToOne(() => Users, (user: Users) => user.orders)
   user: Users;
 
-  @ManyToOne(() => Restaurant, (restaurant:Restaurant) => restaurant.orders)
+  @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.orders, {onDelete: 'CASCADE'})
   restaurant: Restaurant;
 
-  @ManyToOne(() => Plate, (plate:Plate) => plate.orders)
+  @ManyToOne(() => Plate, (plate: Plate) => plate.orders, {onDelete: 'CASCADE'})
   plate: Plate;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  @OneToMany(() => Tables, (table: Tables) => table.order, {onDelete: 'CASCADE'})
+  tables: Tables[];
+
+  @CreateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)"})
   public created_at: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+  @UpdateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)"})
   public updated_at: Date;
 }

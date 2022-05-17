@@ -3,6 +3,8 @@ import {Restaurant} from 'src/restaurant/entities/restaurant.entity';
 import {Ingredient} from 'src/ingredients/entities/ingredient.entity';
 import {PlateCategory} from 'src/plate-category/entities/plate-category.entity';
 import {Order} from "../../orders/entities/order.entity";
+import {Ratings} from "../../ratings/entities/ratings.entity";
+import {PlateRole} from "../PlateRole.enum";
 
 @Entity()
 export class Plate extends BaseEntity {
@@ -21,12 +23,21 @@ export class Plate extends BaseEntity {
     @Column('float')
     price: number;
 
+    @Column({
+        type: 'enum',
+        enum: PlateRole,
+    })
+    type: PlateRole;
+
     @OneToMany(() => Ingredient, (ingredient: Ingredient) => ingredient.plates)
     ingredients: Ingredient[];
 
-    @ManyToOne(() => PlateCategory, (plateCategory: PlateCategory) => plateCategory.name)
-    category: PlateCategory;
-
     @OneToMany(() => Order, (order: Order) => order.plate)
     orders: Order[];
+
+    @OneToMany(() => PlateCategory, (category: PlateCategory) => category.plates)
+    category: PlateCategory[];
+
+    @OneToMany(() => Ratings, (rating: Ratings) => rating.plate)
+    ratings: Ratings[];
 }

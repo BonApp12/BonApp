@@ -1,9 +1,9 @@
-// user.factory.ts
 import {Users} from '../../users/entities/users.entity';
 import Faker from '@faker-js/faker'
 import {define, factory} from 'typeorm-seeding';
 import {UserRole} from '../../users/UserRole.enum';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
+import {Ratings} from "../../ratings/entities/ratings.entity";
 
 define(Users, (faker: typeof Faker) => {
     const firstName = faker.name.firstName();
@@ -20,7 +20,6 @@ define(Users, (faker: typeof Faker) => {
     } else {
         user.restaurant = null;
     }
+    user.ratings = factory(Ratings)().createMany(30) as any;
     return user;
 });
-
-
