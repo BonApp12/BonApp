@@ -19,8 +19,8 @@ export default function ChangePwd(){
 
     useEffect(() => {
         checkToken(token).then(res => res.json()).then(res => {
-            if(res.statusCode === 401){
-                toast.error("Vous n'avez pas accès");
+            if(res.statusCode){
+                toast.error("Une erreur est survenue, veuillez retenter ultérieurement");
                 navigate('/');
             }
         });
@@ -48,11 +48,6 @@ export default function ChangePwd(){
     return (
         <div className="px-5">
             <h3 className="text-lg">Changer votre mot de passe</h3>
-            {
-                errors?.auth?.message && (
-                    <span className="text-sm text-red-500">{errors?.auth?.message}*</span>
-                )
-            }
             <form onSubmit={handleSubmit(onSubmit)} className="m-2">
                 <Input
                     type="password"

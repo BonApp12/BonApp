@@ -18,11 +18,11 @@ import {AuthService} from './auth.service';
 import {JwtAuthGuard} from './jwt-auth.guard';
 import {UsersDto} from '../users/dto/users.dto';
 import RequestWithUser from './interfaces/requestWithUser.interface';
-import {plainToClass} from 'class-transformer';
 import {SETTINGS} from "../app.utils";
 import {ConfigService} from "@nestjs/config";
 import {UserRole} from "../users/UserRole.enum";
 import {UsersService} from "../users/users.service";
+import {UserAdapter} from "../Adapter/UserAdapter";
 
 @Injectable()
 @Controller('auth')
@@ -50,7 +50,7 @@ export class AuthController {
     // 2/ mot de passe ou email incorrect -> test le retour
     // 3/ mauvais objet (mauvais format) -> return 400
     async login(@Req() req: RequestWithUser, @Headers() headers: any) {
-        const userDto = plainToClass(UsersDto, req.user);
+        const userDto = UserAdapter.toDto(req.user);
         if ((headers.origin === this.configService.get("URL_FRONTMANAGER") && userDto.role !== UserRole.CLIENT)
             || (headers.origin === this.configService.get("URL_FRONTEND") && userDto.role === UserRole.CLIENT)) {
             return this.loginUser(req, userDto);

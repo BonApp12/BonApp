@@ -71,7 +71,7 @@ export class AuthService {
       const user = await this.usersService.findBy({token: token});
       return UserAdapter.toDtoUpdatePassword(user);
     } catch (e) {
-      throw new HttpException("Vous n'avez pas accès", HttpStatus.UNAUTHORIZED);
+      throw new HttpException(e.message, e.status);
     }
   }
 
@@ -84,7 +84,7 @@ export class AuthService {
       await this.usersService.updateUser(usersDto, user);
       return this.mailerService.sendMail(user.email,'forget_password','Mot de passe oublié',{name:user.firstname,url});
     }catch (e) {
-      throw new HttpException("L'utilisateur n'existe pas",HttpStatus.BAD_REQUEST);
+      throw new HttpException(e.message,e.status);
     }
   }
 
@@ -92,10 +92,9 @@ export class AuthService {
     try {
       const user = await this.checkToken(token);
       // set new password in updateDto.password
-      if (usersDto.password) return this.usersService.updateUser(usersDto, user, true);
-      throw new HttpException("Le mot de passe est vide", HttpStatus.BAD_REQUEST);
+      return this.usersService.updateUser(usersDto, user, true);
     }catch(e){
-      throw new HttpException(`${e}`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(e.message,e.status);
     }
   }
 
