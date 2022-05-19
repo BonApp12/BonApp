@@ -4,35 +4,39 @@ import {UpdateIngredientDto} from './dto/update-ingredient.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Ingredient} from './entities/ingredient.entity';
 import {Repository} from 'typeorm';
+import {IngredientAdapter} from "../Adapter/IngredientAdapter";
 
 @Injectable()
 export class IngredientsService {
-  constructor(
-    @InjectRepository(Ingredient)
-    private ingredientRepository: Repository<Ingredient>,
-  ) {}
-  create(createIngredientDto: IngredientDto) {
-    return 'This action adds a new ingredient';
-  }
+    constructor(
+        @InjectRepository(Ingredient)
+        private ingredientRepository: Repository<Ingredient>,
+    ) {
+    }
 
-  findAll() {
-    return this.ingredientRepository.find();
-  }
+    async create(createIngredientDto: IngredientDto) {
+        return await this.ingredientRepository.save(IngredientAdapter.toModel(createIngredientDto));
+    }
 
-  findOne(id: number) {
-    return this.ingredientRepository.findOne(id);
-  }
+    findAll() {
+        return this.ingredientRepository.find();
+    }
 
-  findIngredientsAndPlatesLinked(id: number) {
-    return this.ingredientRepository.findOne(id, {
-      relations: ['plates'],
-    });
-  }
-  update(id: number, updateIngredientDto: UpdateIngredientDto) {
-    return `This action updates a #${id} ingredient`;
-  }
+    findOne(id: number) {
+        return this.ingredientRepository.findOne(id);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} ingredient`;
-  }
+    findIngredientsAndPlatesLinked(id: number) {
+        return this.ingredientRepository.findOne(id, {
+            relations: ['plates'],
+        });
+    }
+
+    update(id: number, updateIngredientDto: UpdateIngredientDto) {
+        return `This action updates a #${id} ingredient`;
+    }
+
+    remove(id: number) {
+        return `This action removes a #${id} ingredient`;
+    }
 }

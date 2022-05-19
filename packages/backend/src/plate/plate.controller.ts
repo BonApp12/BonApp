@@ -2,6 +2,8 @@ import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common'
 import {PlateService} from './plate.service';
 import {PlateDto} from './dto/plate.dto';
 import {UpdatePlateDto} from './dto/update-plate.dto';
+import {PlateAdapter} from "../Adapter/PlateAdapter";
+import {Plate} from "./entities/plate.entity";
 
 @Controller('plate')
 export class PlateController {
@@ -9,8 +11,9 @@ export class PlateController {
     }
 
     @Post()
-    create(@Body() createPlateDto: PlateDto): Promise<PlateDto> {
-        return this.plateService.create(createPlateDto);
+    create(@Body() plate: Plate) {
+        const plateDto = PlateAdapter.toDto(plate);
+        return this.plateService.create(plateDto);
     }
 
     @Get()

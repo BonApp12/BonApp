@@ -26,12 +26,23 @@ export class RestaurantAdapter {
         restaurantModel.name = restaurant.name;
         restaurantModel.address = restaurant.address;
         restaurantModel.siren = restaurant.siren;
-        // A convertir ici aussi en DTO
-        restaurantModel.plates = restaurant.plates.map(plate => PlateAdapter.toModel(plate));
+        restaurantModel.plates = restaurant?.plates?.map(plate => PlateAdapter.toModel(plate));
         restaurantModel.contact_firstname = restaurant.contact_firstname;
         restaurantModel.contact_lastname = restaurant.contact_lastname;
         restaurantModel.contact_phone = restaurant.contact_phone;
         restaurantModel.contact_email = restaurant.contact_email;
         return restaurantModel;
     }
+    static toModelInsert(restaurant: RestaurantDto) {
+        const restaurantModel = new Restaurant();
+        restaurantModel.name = restaurant.name;
+        restaurantModel.address = restaurant.address;
+        restaurantModel.siren = restaurant.siren;
+        restaurantModel.contact_firstname = restaurant.contact_firstname;
+        restaurantModel.contact_lastname = restaurant.contact_lastname;
+        restaurantModel.contact_phone = restaurant.contact_phone;
+        restaurantModel.contact_email = restaurant.contact_email;
+        return restaurantModel;
+    }
+
 }

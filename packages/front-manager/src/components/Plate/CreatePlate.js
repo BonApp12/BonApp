@@ -4,19 +4,22 @@ import createPlate from "../../requests/createPlate";
 import {toast} from "react-toastify";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import {useRecoilValue} from "recoil";
+import {userAtom} from "../../states/user";
 
 export default function () {
     const {register: registerTeamMember, handleSubmit, reset, formState: {errors}} = useForm();
     const [ingredients, setIngredients] = useState([]);
     const [description, setDescription] = useState('');
-
+    const userState = useRecoilValue(userAtom);
 
     const onSubmit = newPlate => {
-        //TODO: Ajouter le vrai restaurant quand la connexion sera mise en place sur cette partie.
+        // TODO: en attente de LA PR DE marwane Pour la refonte de la bdd
         newPlate = {
-            ...newPlate, ingredients, description: description || '', restaurant: {id: 1}
-        }
-        ;
+            ...newPlate, ingredients,
+            description: description || '',
+            restaurant: userState.restaurant
+        };
         createPlate(newPlate)
             .then(res => res.json())
             .then(response => {
@@ -30,7 +33,9 @@ export default function () {
             });
     };
 
+
     function addIngredient(e) {
+        e.preventDefault();
         if (e.key === 'Enter')
             setIngredients([...ingredients, {name: e.target.value}]);
         e.target.value = '';

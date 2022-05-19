@@ -4,6 +4,6 @@ import {RestaurantDto} from "../../restaurant/dto/restaurant.dto";
 export class IngredientDto {
     id: number;
     name: string;
-    plates: PlateDto[];
+    plates: PlateDto;
     restaurant: RestaurantDto;
 }

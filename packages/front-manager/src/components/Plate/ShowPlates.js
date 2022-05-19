@@ -2,10 +2,15 @@ import React, {useEffect, useState} from "react";
 import Modal from "../Modal/Modal";
 import fetchPlatesByRestaurants from "../../requests/fetchPlatesByRestaurants";
 import ReactPaginate from "react-paginate";
+import {useRecoilValue} from "recoil";
+import {userAtom} from "../../states/user";
 
 export default function ShowPlates() {
     const [plates, setPlates] = useState([]);
     const [modalInfo, setModalInfo] = useState({});
+    const userState = useRecoilValue(userAtom);
+
+
     // Pagination
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
@@ -27,7 +32,7 @@ export default function ShowPlates() {
 
 
     useEffect(() => {
-        fetchPlatesByRestaurants(1).then(res => res.json()).then(platesFromRequest => {
+        fetchPlatesByRestaurants(userState.restaurant.id).then(res => res.json()).then(platesFromRequest => {
             setPlates(platesFromRequest);
         });
     }, []);
@@ -70,7 +75,16 @@ export default function ShowPlates() {
                                 </div>
                             </td>
                             <td>
-                                {plate.description.replace(/(<([^>]+)>)/gi, "").slice(0, 20)}
+                                {
+                                    plate.description?.length ?
+                                        plate.description.replace(/(<([^>]+)>)/gi, "").slice(0, 20) + "..." :
+                                        <span className="tooltip"
+                                              data-tip="Modifier ce plat pour avoir une description">
+                                        <span className="badge badge-primary cursor-pointer">
+                                        Aucune description
+                                    </span>
+                                        </span>
+                                }
                             </td>
                             <td>{plate.price} €</td>
                             <th>
@@ -79,8 +93,10 @@ export default function ShowPlates() {
                             <td>
                                 <a href="#my-modal-2" className={"btn btn-primary btn-xs mr-1"}
                                    onClick={() => setModalInfo(plate)}>Détail</a>
+                                <span className="tooltip" data-tip="Supprimer ce plat">
                                 <a className={"btn btn-error btn-xs"}
                                    onClick={() => deletePlate(plate)}>supprimer</a>
+                                </span>
                             </td>
                         </tr>
                     ))}

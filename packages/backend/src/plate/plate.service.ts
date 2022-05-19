@@ -14,8 +14,8 @@ export class PlateService {
     ) {
     }
 
-    async create(createPlateDto: PlateDto): Promise<PlateDto> {
-        return PlateAdapter.toDto(await this.plateRepository.save(createPlateDto));
+    async create(plateDto: PlateDto): Promise<PlateDto> {
+        return PlateAdapter.toDtoLight(await this.plateRepository.save(PlateAdapter.toModelInsert(plateDto)));
     }
 
     findAll() {
