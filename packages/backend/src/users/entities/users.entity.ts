@@ -9,11 +9,11 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
-import {UserRole} from '../UserRole.enum';
 import {Exclude, instanceToPlain} from 'class-transformer';
 import {Order} from '../../orders/entities/order.entity';
 import * as bcrypt from 'bcryptjs';
 import {Ratings} from "../../ratings/entities/ratings.entity";
+import {UserRole} from "../UserRole.enum";
 
 @Entity()
 export class Users extends BaseEntity {

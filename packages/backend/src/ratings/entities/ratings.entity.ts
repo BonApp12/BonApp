@@ -1,6 +1,6 @@
 import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn,} from 'typeorm';
-import {Users} from 'src/users/entities/users.entity';
-import {Plate} from "src/plate/entities/plate.entity";
+import {Users} from '../../users/entities/users.entity';
+import {Plate} from '../../plate/entities/plate.entity';
 
 @Entity()
 export class Ratings extends BaseEntity {
