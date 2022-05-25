@@ -118,5 +118,4 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     update(@MessageBody() updateOrderDto: UpdateOrderDto) {
         return this.ordersService.update(updateOrderDto.id, updateOrderDto);
     }
-
 }
