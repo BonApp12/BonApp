@@ -7,6 +7,7 @@ import {UpdateOrderDto} from './dto/update-order.dto';
 export class OrdersGateway {
   constructor(private readonly ordersService: OrdersService) {}
 
+  // Focus on this snippet :
   @SubscribeMessage('createOrder')
   create(@MessageBody() createOrderDto: CreateOrderDto) {
     this.ordersService.create(createOrderDto);

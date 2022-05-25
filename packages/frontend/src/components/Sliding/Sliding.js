@@ -51,8 +51,6 @@ export const Sliding = () => {
                 });
                 setIsCheckout(true);
             });
-
-
     }
 
     function addToCart(plate) {
@@ -85,23 +83,46 @@ export const Sliding = () => {
                                     <img src="https://picsum.photos/id/1005/400/250" alt="photo aléatoire"
                                          className="w-full"/>
                                 </div>
-                                <div className="col-span-3">{plate[0]}</div>
+                                <div className="col-span-4 text-md font-semibold">
 
-                                <div className="col-span-4 text-orange-600 font-bold">
+                                    <div className="dropdown">
+                                        <label tabIndex="0" className="p-1 flex m-1 hover:bg-orange-100 rounded-md">{plate[0]} <svg
+                                            className="w-4 h-4 ml-2 mt-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
+                                        </svg></label>
+                                        <ul tabIndex="0"
+                                            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box min-w-[10rem] border rounded-md">
+                                                    {plate[1].map((e, i)=>
+                                                        <li key={i}>
+                                                            <div className="flex space-y-1 space-x-2 place-content-center">
+                                                                <span className="text-xs mt-2">{plate[0] + " " + i}</span>
+                                                                <input type="checkbox"  id={plate[0] + i} value="isChecked" className="checkbox checkbox-sm checkbox-primary"/>
+
+                                                            </div>
+                                                        </li>
+                                                    )}
+                                        </ul>
+                                    </div>
+
+
+                                </div>
+
+                                <div className="col-span-4 text-orange-600 font-bold mt-1">
                                     <button onClick={() => removeFromCart(plate[1][0])}
-                                            className="rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg"
+                                            className="rounded-full bg-orange-600 w-6 h-6 text-white mr-3 text-md"
                                     >
                                         -
                                     </button>
 
                                     {plate[1].length}
                                     <button onClick={() => addToCart(plate[1][0])}
-                                            className="rounded-full bg-orange-600 w-8 h-8 text-white ml-3 text-lg"
+                                            className="rounded-full bg-orange-600 w-6 h-6 text-white ml-3 text-md"
                                     >
                                         +
                                     </button>
                                 </div>
-                                <div className="col-span-2">{plate[1][0].price * plate[1].length}€</div>
+                                <div className="col-span-1 mr-4">{plate[1][0].price * plate[1].length}€</div>
 
                             </div>
                         )}

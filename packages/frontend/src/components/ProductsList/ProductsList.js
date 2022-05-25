@@ -49,7 +49,7 @@ const ProductsList = () => {
 
     // useEffect to get orders : just for testing purposes. Change it to send orders in time.
     useEffect(() => {
-        socket.emit("findOneOrder", {id: 1});
+        socket.emit('createOrder', {})
     }, [socket]);
 
     useEffect(() => {
