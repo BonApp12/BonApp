@@ -9,6 +9,7 @@ import {HttpException, HttpStatus} from "@nestjs/common";
 import {UsersDto} from "../../users/dto/users.dto";
 import {UTILS} from "../../app.utils";
 import {MailService} from "../../mail/mail.service";
+import {UserAdapter} from "../../Adapter/UserAdapter";
 
 
 describe('usersService', () => {
@@ -87,6 +88,14 @@ describe('usersService', () => {
     });
 
     describe("update user", () => {
+        const usersDtoToUsers = (usersDto) => {
+            const usersAdapter = UserAdapter.toModel(usersDto);
+            Object.keys(usersAdapter).forEach(key => {
+                if(usersAdapter[key] === undefined) delete usersAdapter[key];
+            });
+            return usersAdapter;
+        }
+
         it('should password not same in base', async() => {
             const userDto = <UsersDto>{
                 oldPassword: "test"
@@ -105,14 +114,7 @@ describe('usersService', () => {
                 if(userDto.oldPassword === users.password) resolve(true);
             }));
             jest.spyOn(usersService, "update").mockImplementation((usersDto) => new Promise((resolve) => {
-                const usersUpdated = new Users();
-                usersUpdated.id = usersDto.id;
-                usersUpdated.firstname = usersDto.firstname;
-                usersUpdated.lastname = usersDto.lastname;
-                usersUpdated.password = usersDto.password;
-                usersUpdated.role = usersDto.role;
-                usersUpdated.restaurant = usersDto.restaurant;
-                resolve(usersUpdated);
+                resolve(usersDtoToUsers(usersDto));
             }));
             const usersData = await usersService.updateUser(userDto, users);
             await expect(usersData).toBeInstanceOf(Users);
@@ -124,13 +126,7 @@ describe('usersService', () => {
                 lastname: "leboss"
             };
             jest.spyOn(usersService, "update").mockImplementation((usersDto) => new Promise((resolve) => {
-                const usersUpdated = new Users();
-                usersUpdated.id = usersDto.id;
-                usersUpdated.firstname = usersDto.firstname;
-                usersUpdated.lastname = usersDto.lastname;
-                usersUpdated.role = usersDto.role;
-                usersUpdated.restaurant = usersDto.restaurant;
-                resolve(usersUpdated);
+                resolve(usersDtoToUsers(usersDto));
             }));
 
             const updateUser = await usersService.updateUser(userDto,users);
@@ -144,19 +140,31 @@ describe('usersService', () => {
                 lastname: "leboss"
             };
             jest.spyOn(usersService, "update").mockImplementation((usersDto) => new Promise((resolve) => {
-                const usersUpdated = new Users();
-                usersUpdated.id = usersDto.id;
-                usersUpdated.firstname = usersDto.firstname;
-                usersUpdated.lastname = usersDto.lastname;
-                usersUpdated.role = usersDto.role;
-                usersUpdated.restaurant = usersDto.restaurant;
-                resolve(usersUpdated);
+                resolve(usersDtoToUsers(usersDto));
             }));
 
             const updateUser = await usersService.updateUser(userDto, users, true);
             expect(updateUser).toBeInstanceOf(Users);
         });
     });
+
+    describe('findBy', () => {
+        it('should not find user', async() => {
+            const search = {firstname: "aaaaa"};
+            jest.spyOn(usersRepository, 'findOne').mockImplementation(({firstname}) => new Promise((resolve) => {
+                if(firstname !== users.firstname) resolve(undefined);
+            }));
+            await expect(usersService.findBy(search)).rejects.toThrowError(HttpException);
+        });
+
+        it('should find user', async() => {
+            const search = {firstname: "pipi"};
+            jest.spyOn(usersRepository, 'findOne').mockImplementation(({firstname}) => new Promise((resolve) => {
+                if(firstname === users.firstname) resolve(users);
+            }));
+            expect(await usersService.findBy(search)).toBeInstanceOf(Users);
+        });
+    })
 
 
     it('should return a user', async () => {
