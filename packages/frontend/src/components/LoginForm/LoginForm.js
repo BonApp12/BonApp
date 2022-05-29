@@ -19,7 +19,7 @@ function LoginForm() {
     const [userState, setUserState] = useRecoilState(userAtom);
 
     useEffect(() => {
-        userState !== '' && navigate('/already-logged');
+        userState && navigate('/profile');
     },[userState,navigate]);
 
     const onSubmit = (data) => {
@@ -33,7 +33,7 @@ function LoginForm() {
                 }else if(res.statusCode === 200){
                     toast.success('Connexion réussie');
                     setUserState(res.user);
-                    navigate('/already-logged');
+                    navigate('/profile');
                 }
             })
             .catch(() => {

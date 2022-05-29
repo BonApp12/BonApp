@@ -10,12 +10,12 @@ const Disconnect = () => {
     const [userState,setUserState] = useRecoilState(userAtom);
 
     useEffect(() => {
-        userState !== '' && navigate('/');
+        userState && navigate('/');
     },[userState]);
 
     disconnectCurrentUser()
-        .then(res => {
-            setUserState('');
+        .then(() => {
+            setUserState(undefined);
             navigate('/');
             toast.success('Déconnexion réussie');
             return false;
