@@ -7,6 +7,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import ProductsList from './components/ProductsList/ProductsList';
 import LoginForm from "./components/LoginForm/LoginForm";
 import Profile from "./components/Profile/Profile";
+import {SettingsAccount} from "./components/Profile/SettingsAccount";
 import Disconnect from "./components/Disconnect/Disconnect";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
 import {SocketContext, socket} from "./context/socket";
@@ -31,8 +32,10 @@ ReactDOM.render(
                             </Route>
                             <Route path="login" element={<LoginForm/>}/>
                             <Route path="register" element={<RegisterForm/>}/>
-                            <Route path="/profile"
-                                   element={<Profile />}/>
+                            <Route path="profile">
+                                <Route path="" element={<Profile />} />
+                                <Route path="settings" element={<SettingsAccount />} />
+                            </Route>
                             <Route path={"/forgot-password"} element={<ForgetPwd />}/>
                             <Route path={"/update-password"} element={<ChangePwd />}/>
                             <Route path="/is-connected" element={<LoginForm/>}/>
