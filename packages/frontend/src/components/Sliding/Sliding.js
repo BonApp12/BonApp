@@ -10,6 +10,14 @@ import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 
+const typesList = {
+    ENTREE: 'ENTREE',
+    PLAT: 'PLAT',
+    DESSERT: 'DESSERT',
+    BOISSON: 'BOISSON',
+    OTHER: 'OTHER'
+}
+
 // create a navigation component that wraps the burger menu
 export const Sliding = () => {
     const ctx = useContext(SlidingContext);
@@ -20,14 +28,27 @@ export const Sliding = () => {
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
     function formattedCart() {
-        const cartMap = new Map();
+        let typesArray = {};
 
-        cart.forEach(plate => {
-
-            if (!cartMap.has(plate.name)) return cartMap.set(plate.name, [plate]);
-            return cartMap.set(plate.name, [...cartMap.get(plate.name), plate]);
-        });
-        return Array.from(cartMap);
+        cart.forEach(item => {
+            if (!typesArray[item.type]) {
+                typesArray[item.type] = {
+                    name: item.type,
+                    items: []
+                }
+            }
+            if (!typesArray[item.type]['items'][item.id]) {
+                typesArray[item.type]['items'][item.id] = {
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: 1,
+                }
+            } else {
+                typesArray[item.type]['items'][item.id].quantity++;
+            }
+        })
+        return Object.values(typesArray);
     }
 
     function checkout() {
@@ -58,72 +79,77 @@ export const Sliding = () => {
     }
 
     function removeFromCart(plate) {
-        const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
-        const copyOfCart = [...cart];
-        copyOfCart.splice(indexPlateToRemove, 1);
-        updateCart(copyOfCart);
+        if (plate.quantity > 1) {
+            --plate.quantity;
+        } else {
+            console.log(cart);
+        }
     }
 
-
     return (
-            <Menu
-                customBurgerIcon={false}
-                isOpen={ctx.isMenuOpen}
-                width={'100%'}
-                className={"my-menu"}
-                onStateChange={(state) => ctx.stateChangeHandler(state)}
-            >
-                <>
-                    <h1 className={"mb-5"}>Mes commandes</h1>
+        <Menu
+            customBurgerIcon={false}
+            isOpen={ctx.isMenuOpen}
+            width={'100%'}
+            className={"my-menu"}
+            onStateChange={(state) => ctx.stateChangeHandler(state)}
+        >
+            <>
+                <h1 className={"mb-5"}>Mes commandes</h1>
 
-                {formattedCart().map((plate, index) =>
-                    //Trouver un moyen d'ajouter l'index ici
-                    <div className="grid grid-cols-12 mb-5" key={index}>
-                        <div className="col-span-3">
-                            <img src="https://picsum.photos/id/1005/400/250" alt="photo aléatoire"
-                                 className="w-full"/>
-                        </div>
-                        <div className="col-span-3">{plate[0]}</div>
-
-                        <div className="col-span-4 text-orange-600 font-bold">
-                            <button onClick={() => removeFromCart(plate[1][0])}
-                                    className="rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg"
-                            >
-                                -
-                            </button>
-
-                            {plate[1].length}
-                            <button onClick={() => addToCart(plate[1][0])}
-                                    className="rounded-full bg-orange-600 w-8 h-8 text-white ml-3 text-lg"
-                            >
-                                +
-                            </button>
-                        </div>
-                        <div className="col-span-2">{plate[1][0].price * plate[1].length}€</div>
-
+                {formattedCart().map((type, idx) => {
+                        return (
+                            <div className={"mb-5"} key={idx}>
+                                <h2>{type.name}</h2>
+                                    {type.items.map((item, idx) => {
+                                        return (
+                                            <div className="grid grid-cols-12 mb-5" key={idx}>
+                                                <div className="col-span-3">
+                                                    <img src="https://picsum.photos/id/1005/400/250" alt="photo aléatoire"
+                                                         className="w-full"/>
+                                                </div>
+                                                <div className="col-span-3">{item.name}</div>
+                                                <div className="col-span-4 text-orange-600 font-bold">
+                                                    <button onClick={() => removeFromCart(item)}
+                                                            className="rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg">
+                                                        -
+                                                    </button>
+                                                    {item.quantity}
+                                                    <button onClick={() => addToCart(item)}
+                                                            className="rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg">
+                                                        +
+                                                    </button>
+                                                </div>
+                                                <div className="col-span-2">{item.price}</div>
+                                            </div>
+                                        )
+                                    })}
                             </div>
-                        )}
-                    {formattedCart().length !== 0 && isCheckout !== true ?
-                        <Button classStyle={'mr-3 btn-success'}
-                                onClick={checkout}>
+                        )
+                    }
+                )}
+
+                {formattedCart().length !== 0 && isCheckout !== true ?
+                    <Button classStyle={'mr-3 btn-success'}
+                            onClick={checkout}>
                             <span
                                 className="mr-5">Payer {cart.reduce((partialSum, a) => partialSum + parseFloat(a.price), 0)}€ </span><MdOutlinePayment/>
-                        </Button>:
-                        <div>
-                            Du coup vous êtes plutot 🍝 ou 🍕 ?
-                        </div>
-                    }
-                    {isCheckout === true ?
-                        <Elements stripe={stripePromise} options={stripeOptions}>
-                            <CheckoutForm clientSecret={stripeOptions.clientSecret} />
-                        </Elements>
-                        : ""}
-                    <Button classStyle={'btn-outline btn-error'}
-                            onClick={ctx.toggleMenu}>
-                        <MdOutlineClose/>
-                    </Button>
-                </>
-            </Menu>
+                    </Button> :
+                    <div>
+                        Du coup vous êtes plutot 🍝 ou 🍕 ?
+                    </div>
+                }
+                {isCheckout === true ?
+                    <Elements stripe={stripePromise} options={stripeOptions}>
+                        <CheckoutForm clientSecret={stripeOptions.clientSecret}/>
+                    </Elements>
+                    : ""}
+                <Button classStyle={'btn-outline btn-error'}
+                        onClick={ctx.toggleMenu}>
+                    <MdOutlineClose/>
+                </Button>
+            </>
+        </Menu>
     );
 };
 
