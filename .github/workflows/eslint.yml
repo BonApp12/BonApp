@@ -22,7 +22,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm install @typescript-eslint/eslint-plugin@latest --save-dev
+          npm install eslint@latest
       - name: Run ESLint
         run: npx eslint .
           --ext .js,.jsx,.ts,.tsx
