@@ -1,5 +1,4 @@
-import {BiArrowBack} from "react-icons/bi";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Input from "../Input/Input";
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
@@ -10,6 +9,7 @@ import {userAtom} from "../../states/user";
 import updateProfile from "../../requests/users/updateProfile";
 import {toast} from "react-toastify";
 import profileFields from "../../fields/profileFields";
+import HeaderAccount from "../HeaderAccount/HeaderAccount";
 
 export function SettingsAccount(){
     const [userState, setUserState] = useRecoilState(userAtom);
@@ -63,10 +63,7 @@ export function SettingsAccount(){
 
     return (
         <div className="px-5">
-            <Link to={"/profile"}>
-                <BiArrowBack size={30}/>
-            </Link>
-            <h1 className="mt-5">Modifier mon compte</h1>
+            <HeaderAccount url={'/profile'} title={'Modifier mon compte'} />
             <form onSubmit={handleSubmit(onSubmit)} className="m-5">
                 {Object.keys(profileFields).map((field,index) => (
                     <div key={index}>

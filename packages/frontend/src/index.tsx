@@ -7,6 +7,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import ProductsList from './components/ProductsList/ProductsList';
 import LoginForm from "./components/LoginForm/LoginForm";
 import Profile from "./components/Profile/Profile";
+import OrdersAccount from "./components/Profile/OrdersAccount";
 import {SettingsAccount} from "./components/Profile/SettingsAccount";
 import Disconnect from "./components/Disconnect/Disconnect";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
@@ -35,6 +36,7 @@ ReactDOM.render(
                             <Route path="profile">
                                 <Route path="" element={<Profile />} />
                                 <Route path="settings" element={<SettingsAccount />} />
+                                <Route path="orders" element={<OrdersAccount />} />
                             </Route>
                             <Route path={"/forgot-password"} element={<ForgetPwd />}/>
                             <Route path={"/update-password"} element={<ChangePwd />}/>

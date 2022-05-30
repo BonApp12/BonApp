@@ -31,7 +31,7 @@ function Profile() {
                         <hr className="my-7"/>
                         <div className="flex flex-col space-y-5">
                             <Link className="flex items-center gap-x-4 text-lg font-bold" to={"/"}><AiOutlineCamera size={30}/> Scanner un QR Code</Link>
-                            <Link className="flex items-center gap-x-4 text-lg font-bold" to={"/"}><MdOutlineFastfood size={30}/> Mes dernières commandes</Link>
+                            <Link className="flex items-center gap-x-4 text-lg font-bold" to={"/profile/orders"}><MdOutlineFastfood size={30}/> Mes dernières commandes</Link>
                             <Link className="flex items-center gap-x-4 text-lg font-bold" to={"/profile/settings"}><BiCog size={30}/> Paramètres du compte</Link>
                         </div>
                     </div>

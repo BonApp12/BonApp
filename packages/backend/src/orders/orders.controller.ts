@@ -22,6 +22,11 @@ export class OrdersController {
         return this.ordersService.findOne(+id);
     }
 
+    @Get('/user/:id')
+    findByUser(@Param('id') id: string) {
+        return this.ordersService.findOrderByUser(+id);
+    }
+
     @Get('/status/:status')
     findByStatus(@Param('status') status: string) {
         return this.ordersService.findByStatus(status);
