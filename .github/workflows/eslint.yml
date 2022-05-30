@@ -22,7 +22,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm install eslint@latest
+          npm install eslint@5.0.0
       - name: Run ESLint
         run: npx eslint .
           --ext .js,.jsx,.ts,.tsx
