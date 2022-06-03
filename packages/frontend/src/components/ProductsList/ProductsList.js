@@ -10,6 +10,7 @@ import {useRecoilState, useSetRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
+import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import {userAtom} from "../../states/user";
 
 const ProductsList = () => {
@@ -29,16 +30,19 @@ const ProductsList = () => {
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
-        if (!query) {
-            return plates;
+        if (!query && plates !== undefined) {
+            return plates.map((item) => ({
+                ...item,
+                quantity: 1,
+            }))
+        } else if (query && plates !== undefined) {
+            return plates.filter((plate) => {
+                // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
+                const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                return plateName.includes(finalQuery.toLowerCase());
+            });
         }
-
-        return plates.filter((plate) => {
-            // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
-            const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            return plateName.includes(finalQuery.toLowerCase());
-        });
     };
 
     // Searching query
@@ -46,6 +50,11 @@ const ProductsList = () => {
     const query = new URLSearchParams(search).get('s');
     const [searchQuery, setSearchQuery] = useState(query || '');
     const filteredPlates = filterPlates(restaurant.plates, searchQuery);
+
+    // Handling cart quantity system.
+    cart.map((item) => {
+        filteredPlates[filteredPlates.findIndex(plate => plate.id === item.id)].quantity = item.quantity;
+    });
 
     // useEffect to get orders : just for testing purposes. Change it to send orders in time.
     useEffect(() => {
@@ -59,7 +68,15 @@ const ProductsList = () => {
 
 
     function addToCart(plate) {
-        updateCart([...cart, plate]);
+        let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
+        if (indexPlateExists === -1) updateCart([...cart, plate]);
+        else {
+            let plateIndex = filteredPlates.findIndex(plates => plates.id === plate.id);
+            let newCart = cloneDeep(cart);
+            filteredPlates[plateIndex].name = "ARGH";
+            newCart[indexPlateExists].quantity++;
+            updateCart(newCart);
+        }
     }
 
     function removeFromCart(plate) {

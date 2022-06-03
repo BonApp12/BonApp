@@ -19,7 +19,7 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
                             -
                         </button>
                         <span className="text-lg">
-                            {cart?.filter(plate => plate.id === plateProps.id).length}
+                            {plateProps.quantity}
                         </span>
                         <button className="rounded-full bg-orange-600 w-8 h-8 text-white ml-3 text-lg"
                                 onClick={addToCart}>

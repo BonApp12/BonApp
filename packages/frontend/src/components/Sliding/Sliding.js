@@ -9,14 +9,7 @@ import {MdOutlineClose, MdOutlinePayment} from "react-icons/md";
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
-
-const typesList = {
-    ENTREE: 'ENTREE',
-    PLAT: 'PLAT',
-    DESSERT: 'DESSERT',
-    BOISSON: 'BOISSON',
-    OTHER: 'OTHER'
-}
+import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 
 // create a navigation component that wraps the burger menu
 export const Sliding = () => {
@@ -79,10 +72,12 @@ export const Sliding = () => {
     }
 
     function removeFromCart(plate) {
-        if (plate.quantity > 1) {
-            --plate.quantity;
-        } else {
-            console.log(cart);
+        let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
+        if (indexPlateExists === -1) updateCart([...cart, plate]);
+        else {
+            let newCart = cloneDeep(cart);
+            newCart[indexPlateExists].quantity++;
+            updateCart(newCart);
         }
     }
 
