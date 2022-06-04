@@ -12,7 +12,7 @@ ENV PORT $PORT
 EXPOSE $PORT $REACT_NATIVE_PORT_DEBUG_1 $REACT_NATIVE_PORT_DEBUG_2
 
 # install global packages
-ENV NPM_CONFIG_PREFIX=/home/node/.yarn-global
+ENV YARN_CONFIG_PREFIX=/home/node/.yarn-global
 ENV PATH /home/node/.yarn-global/bin:$PATH
 RUN yarn global add expo-cli@latest
 
