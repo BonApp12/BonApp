@@ -50,6 +50,31 @@ services:
     networks:
       - bp-network
 
+  mobile:
+    container_name: mobile
+    build:
+      context: ./packages/mobile
+      args:
+        - NODE_ENV=development
+    environment:
+      - NODE_ENV=development
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+    tty: true
+    ports:
+      - "${REACT_NATIVE_PORT_DEFAULT}:${REACT_NATIVE_PORT_DEFAULT}"
+      - "${REACT_NATIVE_PORT_DEBUG_1}:${REACT_NATIVE_PORT_DEBUG_1}"
+      - "${REACT_NATIVE_PORT_DEBUG_2}:${REACT_NATIVE_PORT_DEBUG_2}"
+    volumes:
+      - ./packages/mobile:/opt/mobile/app:delegated
+      - ./packages/mobile/package.json:/opt/mobile/package.json
+      - ./packages/mobile/package-lock.json:/opt/mobile/package-lock.json
+      - notused:/opt/mobile/app/node_modules
+    healthcheck:
+      disable: true
+
+volumes:
+  notused:
+
 networks:
   bp-network:
     driver: bridge
