@@ -17,7 +17,7 @@ export const Sliding = () => {
     const [cart, updateCart] = useRecoilState(cartAtom);
     const [isCheckout, setIsCheckout] = useState(false);
     const [stripeOptions, setStripeOptions] = useState({});
-    const totalAmount = cart.reduce((partialSum, a) => partialSum + parseFloat(a.price), 0);
+    const totalAmount = cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0);
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
     function formattedCart() {
@@ -35,12 +35,13 @@ export const Sliding = () => {
                     id: item.id,
                     name: item.name,
                     price: item.price,
-                    quantity: 1,
+                    quantity: item.quantity,
                 }
             } else {
                 typesArray[item.type]['items'][item.id].quantity++;
             }
         })
+
         return Object.values(typesArray);
     }
 
@@ -68,16 +69,23 @@ export const Sliding = () => {
     }
 
     function addToCart(plate) {
-        updateCart([...cart, plate])
+        // No need to care about new adding. If quantity is at 0, we must add it from ProductsList screen.
+        let indexPlate = cart.findIndex(plateInCart => plateInCart.id === plate.id);
+        let cartCopy = cloneDeep(cart);
+        cartCopy[indexPlate].quantity++;
+        updateCart(cartCopy);
     }
 
-    function removeFromCart(plate) {
-        let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
-        if (indexPlateExists === -1) updateCart([...cart, plate]);
-        else {
-            let newCart = cloneDeep(cart);
-            newCart[indexPlateExists].quantity++;
-            updateCart(newCart);
+    function removeFromCart(plate) { // TODO : Externaliser la fonction
+        const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
+        if (cart[indexPlateToRemove].quantity === 1) {
+            let cartCopy = [...cart];
+            cartCopy.splice(indexPlateToRemove, 1);
+            updateCart(cartCopy)
+        } else {
+            let cartCopy = cloneDeep(cart);
+            cartCopy[indexPlateToRemove].quantity--;
+            updateCart(cartCopy);
         }
     }
 
@@ -100,7 +108,7 @@ export const Sliding = () => {
                                         return (
                                             <div className="grid grid-cols-12 mb-5" key={idx}>
                                                 <div className="col-span-3">
-                                                    <img src="https://picsum.photos/id/1005/400/250" alt="photo aléatoire"
+                                                    <img src="https://picsum.photos/id/1005/400/250" alt="aléatoire"
                                                          className="w-full"/>
                                                 </div>
                                                 <div className="col-span-3">{item.name}</div>
@@ -115,7 +123,7 @@ export const Sliding = () => {
                                                         +
                                                     </button>
                                                 </div>
-                                                <div className="col-span-2">{item.price}</div>
+                                                <div className="col-span-2">{item.price * item.quantity}</div>
                                             </div>
                                         )
                                     })}
@@ -128,7 +136,7 @@ export const Sliding = () => {
                     <Button classStyle={'mr-3 btn-success'}
                             onClick={checkout}>
                             <span
-                                className="mr-5">Payer {cart.reduce((partialSum, a) => partialSum + parseFloat(a.price), 0)}€ </span><MdOutlinePayment/>
+                                className="mr-5">Payer {cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)}€ </span><MdOutlinePayment/>
                     </Button> :
                     <div>
                         Du coup vous êtes plutot 🍝 ou 🍕 ?

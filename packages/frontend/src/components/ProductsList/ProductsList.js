@@ -71,19 +71,24 @@ const ProductsList = () => {
         let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
         if (indexPlateExists === -1) updateCart([...cart, plate]);
         else {
-            let plateIndex = filteredPlates.findIndex(plates => plates.id === plate.id);
-            let newCart = cloneDeep(cart);
-            filteredPlates[plateIndex].name = "ARGH";
-            newCart[indexPlateExists].quantity++;
-            updateCart(newCart);
+            let cartCopy = cloneDeep(cart);
+            cartCopy[indexPlateExists].quantity++;
+            updateCart(cartCopy);
         }
     }
 
-    function removeFromCart(plate) {
+    function removeFromCart(plate) { // TODO : Externaliser la fonction
         const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
-        const copyOfCart = [...cart];
-        copyOfCart.splice(indexPlateToRemove, 1);
-        updateCart(copyOfCart);
+        // If plates quantity is at 1, remove it from cart
+        if (cart[indexPlateToRemove].quantity === 1) {
+            let cartCopy = [...cart];
+            cartCopy.splice(indexPlateToRemove, 1);
+            updateCart(cartCopy);
+        } else {
+            let cartCopy = cloneDeep(cart);
+            cartCopy[indexPlateToRemove].quantity--;
+            updateCart(cartCopy);
+        }
     }
 
 
