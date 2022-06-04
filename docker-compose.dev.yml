@@ -67,7 +67,7 @@ services:
     volumes:
       - ./packages/mobile:/opt/mobile/app:delegated
       - ./packages/mobile/package.json:/opt/mobile/package.json
-      - ./packages/mobile/package-lock.json:/opt/mobile/package-lock.json
+      - ./packages/mobile/yarn.lock:/opt/mobile/yarn.lock
       - notused:/opt/mobile/app/node_modules
     healthcheck:
       disable: true
