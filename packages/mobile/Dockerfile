@@ -12,14 +12,15 @@ ENV PORT $PORT
 EXPOSE $PORT $REACT_NATIVE_PORT_DEBUG_1 $REACT_NATIVE_PORT_DEBUG_2
 
 # install global packages
+ENV NPM_CONFIG_PREFIX=/home/node/.yarn-global
+ENV PATH /home/node/.yarn-global/bin:$PATH
 RUN yarn global add expo-cli@latest
 
 # install dependencies first, in a different location for easier app bind mounting for local development
 # due to default /opt permissions we have to create the dir with root and change perms
-RUN mkdir /opt/mobile && chown node:node /opt/mobile
+RUN mkdir /opt/mobile && chown -R 755 /opt/mobile
 WORKDIR /opt/mobile
 ENV PATH /opt/mobile/.bin:$PATH
-USER node
 COPY package.json yarn.lock ./
 RUN yarn install
 
