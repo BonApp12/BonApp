@@ -1,0 +1,32 @@
+name: build front
+
+on:
+  push:
+    branches: [ pipeline-yass ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: TGPSKI/name-generator-node-action@v2
+        id: generator
+        with:
+          separator: '_'
+          length: '4'
+          style: 'upperCase'
+      - name: Build & Push Image for front
+
+        run: |
+          cd packages/frontend/
+          echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+          docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:${{ steps.generator.outputs.name }} .
+          docker push yassansplus/frontendbonapp:${{ steps.generator.outputs.name }}
+      - name: Build & Push Image for back
+        run: |
+          cd packages/backend/
+          echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+          docker image build -f Dockerfile.local --tag yassansplus/backendbonapp:${{ steps.generator.outputs.name }} .
+          docker push yassansplus/backendbonapp:${{ steps.generator.outputs.name }}
