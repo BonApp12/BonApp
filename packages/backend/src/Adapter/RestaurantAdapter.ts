@@ -33,8 +33,10 @@ export class RestaurantAdapter {
         restaurantModel.contact_email = restaurant.contact_email;
         return restaurantModel;
     }
+
     static toModelInsert(restaurant: RestaurantDto) {
         const restaurantModel = new Restaurant();
+        restaurantModel.id = restaurant?.id;
         restaurantModel.name = restaurant.name;
         restaurantModel.address = restaurant.address;
         restaurantModel.siren = restaurant.siren;

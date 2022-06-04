@@ -19,7 +19,7 @@ export class IngredientAdapter {
         const ingredientModel = new Ingredient();
         ingredientModel.id = ingredient?.id;
         ingredientModel.name = ingredient.name;
-        ingredientModel.plates = PlateAdapter.toModel(ingredient.plates);
+        ingredientModel.plates = [PlateAdapter.toModel(ingredient.plates)];
         return ingredientModel;
     }
 

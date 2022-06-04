@@ -3,16 +3,19 @@ import fetchFullPlate from "requests/fetchFullPlate";
 import fetchFullOrder from "requests/fetchFullOrder";
 import CardStats from "components/Cards/CardStats.js";
 import fetchTeamMembers from "../../requests/fetchTeamMember";
+import {useRecoilValue} from "recoil";
+import {userAtom} from "../../states/user";
 
 export default function HeaderStats() {
 
     const [plates, setPlate] = useState([]);
     const [orders, setOrders] = useState([]);
+    const userState = useRecoilValue(userAtom);
     const [teamMembers, setTeamMembers] = useState([]);
     useEffect(() => {
-        fetchFullPlate(1).then(async resPlate => setPlate(await resPlate.json()));
-        fetchFullOrder(1, 'only-orders').then(async resOrder => setOrders(await resOrder.json()));
-        fetchTeamMembers(1).then(async resTeamMember => setTeamMembers(await resTeamMember.json()));
+        fetchFullPlate(userState.restaurant.id).then(async resPlate => setPlate(await resPlate.json()));
+        fetchFullOrder(userState.restaurant.id, 'only-orders').then(async resOrder => setOrders(await resOrder.json()));
+        fetchTeamMembers(userState.restaurant.id).then(async resTeamMember => setTeamMembers(await resTeamMember.json()));
     }, []);
 
     return (

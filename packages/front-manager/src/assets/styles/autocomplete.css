@@ -1,0 +1,14 @@
+.autocomplete .suggestion {
+    position: absolute;
+    top: 45px;
+    font-size: 14px;
+    color: grey;
+}
+
+.close-button {
+    position: absolute;
+    top: 8px;
+    right: 11px;
+    cursor: pointer;
+    font-size: 25px;
+}

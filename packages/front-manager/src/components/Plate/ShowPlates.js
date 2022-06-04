@@ -4,6 +4,7 @@ import fetchPlatesByRestaurants from "../../requests/fetchPlatesByRestaurants";
 import ReactPaginate from "react-paginate";
 import {useRecoilValue} from "recoil";
 import {userAtom} from "../../states/user";
+import deletePlateRequest from "../../requests/deletePlate";
 
 export default function ShowPlates() {
     const [plates, setPlates] = useState([]);
@@ -38,7 +39,10 @@ export default function ShowPlates() {
     }, []);
 
     function deletePlate(plate) {
-        console.log("let's delete this plate: ", plate);
+        deletePlateRequest(plate.id).then(res => res.json()).then(() => {
+            const newPlates = plates.filter(p => p.id !== plate.id);
+            setPlates(newPlates);
+        });
     }
 
     return (
@@ -58,47 +62,53 @@ export default function ShowPlates() {
                     </thead>
                     <tbody>
                     {currentItems?.map(plate => (
-                        <tr key={plate.id} className="text-center">
-                            <th>
-                            </th>
-                            <td>
-                                <div className="flex items-center space-x-3">
-                                    <div className="avatar">
-                                        <div className="mask mask-squircle w-12 h-12">
-                                            <img src="/tailwind-css-component-profile-2@56w.png"
-                                                 alt="Avatar Tailwind CSS Component"/>
+                            <tr key={plate.id} className="text-center">
+                                <th>
+                                </th>
+                                <td>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="avatar">
+                                            <div className="mask mask-squircle w-12 h-12">
+                                                {plate.photo ?
+                                                    <img
+                                                        src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + plate.photo}
+                                                        alt={plate.name}/>
+                                                    :
+                                                    <img
+                                                        src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + 'img.png'}
+                                                        alt={plate.name}/>}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="font-bold">{plate.name}</div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <div className="font-bold">{plate.name}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {
-                                    plate.description?.length ?
-                                        plate.description.replace(/(<([^>]+)>)/gi, "").slice(0, 20) + "..." :
-                                        <span className="tooltip"
-                                              data-tip="Modifier ce plat pour avoir une description">
+                                </td>
+                                <td>
+                                    {
+                                        plate.description?.length ?
+                                            plate.description.replace(/(<([^>]+)>)/gi, "").slice(0, 20) + "..." :
+                                            <span className="tooltip"
+                                                  data-tip="Modifier ce plat pour avoir une description">
                                         <span className="badge badge-primary cursor-pointer">
                                         Aucune description
                                     </span>
                                         </span>
-                                }
-                            </td>
-                            <td>{plate.price} €</td>
-                            <th>
-                                {plate.category?.name}
-                            </th>
-                            <td>
-                                <a href="#my-modal-2" className={"btn btn-primary btn-xs mr-1"}
-                                   onClick={() => setModalInfo(plate)}>Détail</a>
-                                <span className="tooltip" data-tip="Supprimer ce plat">
+                                    }
+                                </td>
+                                <td>{plate.price} €</td>
+                                <th>
+                                    {plate.category?.name}
+                                </th>
+                                <td>
+                                    <a href="#my-modal-2" className={"btn btn-primary btn-xs mr-1"}
+                                       onClick={() => setModalInfo(plate)}>Détail</a>
+                                    <span className="tooltip" data-tip="Supprimer ce plat">
                                 <a className={"btn btn-error btn-xs"}
                                    onClick={() => deletePlate(plate)}>supprimer</a>
                                 </span>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                     ))}
 
                     </tbody>

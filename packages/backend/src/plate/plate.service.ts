@@ -2,15 +2,18 @@ import {Injectable} from '@nestjs/common';
 import {UpdatePlateDto} from './dto/update-plate.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Plate} from './entities/plate.entity';
-import {Repository} from 'typeorm';
+import {DeleteResult, Repository} from 'typeorm';
 import {PlateDto} from "./dto/plate.dto";
 import {PlateAdapter} from "../Adapter/PlateAdapter";
+import {PlateCategory} from "../plate-category/entities/plate-category.entity";
 
 @Injectable()
 export class PlateService {
     constructor(
         @InjectRepository(Plate)
         private plateRepository: Repository<Plate>,
+        @InjectRepository(PlateCategory)
+        private plateCategories: Repository<PlateCategory>,
     ) {
     }
 
@@ -23,6 +26,10 @@ export class PlateService {
         return this.plateRepository.find({relations: ['category']});
     }
 
+    findCategories(): Promise<PlateCategory[]> {
+        return this.plateCategories.find();
+    }
+
     findOne(id: number) {
         /** Récupération d'un seul plat avec la relation Category */
         return this.plateRepository.findOne(id, {
@@ -32,7 +39,7 @@ export class PlateService {
 
     async findByRestaurant(id: number): Promise<PlateDto[]> {
         return (await this.plateRepository.find({
-            relations: ['restaurant', 'ingredients', "category"],
+            relations: ['restaurant', 'ingredients', "categories"],
             where: {
                 'restaurant': {id}
             }
@@ -43,7 +50,7 @@ export class PlateService {
         return `This action updates a #${id} plate`;
     }
 
-    async remove(id: number): Promise<void> {
-        await this.plateRepository.delete(id);
+    remove(id: number): Promise<DeleteResult> {
+        return this.plateRepository.delete(id);
     }
 }

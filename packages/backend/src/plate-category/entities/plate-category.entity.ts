@@ -1,14 +1,15 @@
 import {Plate} from '../../plate/entities/plate.entity';
-import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn,} from 'typeorm';
+import {BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn,} from 'typeorm';
 
 @Entity()
 export class PlateCategory extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column('varchar', { length: 100 })
-  name: string;
+    @Column('varchar', {length: 100})
+    name: string;
 
-  @ManyToOne(() => Plate, (plates:Plate) => plates.category)
-  plates: Plate[];
+    @ManyToMany(() => Plate, (plate: Plate) => plate.categories)
+    @JoinTable()
+    plates: Plate[];
 }

@@ -33,12 +33,13 @@
     "react-toastify": "^8.2.0",
     "recoil": "^0.7.2",
     "recoil-persist": "^4.1.0",
+    "string-similarity": "^4.0.4",
     "tailwindcss": "^3.0.23",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "PORT=3001 craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

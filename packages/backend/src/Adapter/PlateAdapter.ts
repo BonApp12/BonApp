@@ -3,6 +3,8 @@ import {Plate} from "../plate/entities/plate.entity";
 import {PlateDto} from "../plate/dto/plate.dto";
 import {RestaurantAdapter} from "./RestaurantAdapter";
 import {IngredientAdapter} from "./IngredientAdapter";
+import {setPlateRole} from "../plate/PlateRole.enum";
+import {CategoryAdapter} from "./CategoryAdapter";
 
 @Injectable()
 export class PlateAdapter {
@@ -15,8 +17,26 @@ export class PlateAdapter {
         plateDto.restaurant = RestaurantAdapter.toDto(plate?.restaurant);
         plateDto.description = plate?.description;
         plateDto.ingredients = plate?.ingredients.map(ingredient => IngredientAdapter.toDto(ingredient));
-        plateDto.category = plate?.category;
+        plateDto.categories = [...plate?.categories];
+        plateDto.type = setPlateRole(plate?.type);
         plateDto.orders = plate?.orders;
+        plateDto.photo = plate?.photo;
+        return plateDto;
+    }
+
+
+    static toDtoWithMultiPart(plate: any): PlateDto {
+        const plateDto = new PlateDto();
+        plateDto.id = plate?.id;
+        plateDto.name = plate?.name;
+        plateDto.price = plate?.price;
+        plateDto.restaurant = RestaurantAdapter.toDto(JSON.parse(plate?.restaurant));
+        plateDto.description = plate?.description;
+        plateDto.ingredients = JSON.parse(plate?.ingredients).map(ingredient => IngredientAdapter.toDto(ingredient));
+        plateDto.categories = [...JSON.parse(plate?.categories)];
+        plateDto.type = setPlateRole(JSON.parse(plate?.type));
+        plateDto.orders = JSON.parse(plate?.orders || '[{}]');
+        plateDto.photo = plate?.photo;
         return plateDto;
     }
 
@@ -28,7 +48,7 @@ export class PlateAdapter {
         plateModel.restaurant = plate?.restaurant ? RestaurantAdapter.toModel(plate?.restaurant) : null;
         plateModel.description = plate?.description;
         plateModel.ingredients = plate?.ingredients.map(ingredient => IngredientAdapter.toModel(ingredient));
-        plateModel.category = plate?.category;
+        plateModel.categories = [...plate?.categories];
         plateModel.orders = plate?.orders;
         return plateModel;
     }
@@ -40,8 +60,10 @@ export class PlateAdapter {
         plateModel.restaurant = plate?.restaurant ? RestaurantAdapter.toModelInsert(plate?.restaurant) : null;
         plateModel.description = plate?.description;
         plateModel.ingredients = plate?.ingredients.map(ingredient => IngredientAdapter.toModelInsert(ingredient));
-        plateModel.category = plate?.category;
+        plateModel.categories = plate?.categories ? CategoryAdapter.ToArrayModel(plate.categories) : null;
         plateModel.orders = plate?.orders;
+        plateModel.type = plate?.type;
+        plateModel.photo = plate?.photo;
         return plateModel;
     }
 
@@ -56,7 +78,8 @@ export class PlateAdapter {
         plateDto.price = plate?.price;
         plateDto.description = plate?.description;
         plateDto.ingredients = plate?.ingredients.map(ingredient => IngredientAdapter.toDto(ingredient));
-        plateDto.category = plate?.category;
+        plateDto.categories = [...plate?.categories];
+        plateDto.photo = plate?.photo;
         return plateDto;
     }
 }

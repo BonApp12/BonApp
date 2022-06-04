@@ -1,15 +1,9 @@
-const createPlate = (plate) => {
+const createPlate = (body) => {
     let url = process.env.REACT_APP_URL_BACKEND + '/plate';
-
     return fetch(url, {
-        crossDomain: true,
+        // crossDomain: true,
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            ...plate
-        }),
+        body,
         mode: 'cors',
         credentials: 'include',
     });
