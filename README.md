@@ -104,14 +104,8 @@ Rappel : Une fois que la base de données est initialisée, repasser ce paramèt
 # Launch local build and up
 $ make local-build 
 
-# Launch local up
-$ make local-up
-
 # Launch prod build and up
 $ make prod-build
-
-# Launch prod up
-$ make prod-up
 
 # YARN
 $ yarn install
@@ -123,11 +117,17 @@ Concernant l'installation de l'application, la stack étant exclusivement en Jav
 ## Lancer l'application
 
 ```bash
-# En local
-$ make local # Cette commande supprime les anciennes instances du projet et le rebuild.
+# In local
+$ make local-build # this command build and launch the project
 
-# docker-compose (building is optional)
-$ docker-compose up --build -d # Sans supression des anciennes instances.
+# or to launch the project only 
+$ make local-up
+
+#In Prod
+$ make prod-build # this command build and launch the project
+
+# or to launch the project only 
+$ make prod-up
 
 #### YARN ####
 # development
@@ -139,6 +139,9 @@ $ yarn run start:dev
 # production mode
 $ yarn run start:prod
 ```
+
+### Lancer l'application mobile
+Après avoir fait les installations, il suffit de se rendre directement sur le lien : ```localhost:19006```
 
 **_NOTE_** :
 - Renseigner et remplir les fichiers .env (backend, frontend et racine)
