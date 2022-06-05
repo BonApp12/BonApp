@@ -29,7 +29,6 @@ export default function () {
             categories: JSON.stringify(categories),
             image
         };
-        console.log(categories);
         const formData = toFormData(newPlate);
         createPlate(formData)
             .then(res => res.json())
@@ -174,7 +173,6 @@ export default function () {
                                 </label>
                                 <AddCategory
                                     confirmCategories={(categoriesAdded) => {
-                                        console.log(categoriesAdded);
                                         setCategories(categoriesAdded);
                                     }}
                                 />

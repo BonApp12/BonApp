@@ -8,7 +8,6 @@ export default function ({closeModalEvent, openModal, confirmCategories}) {
     return (
         <>
             <div className={"modal " + (openModal && 'modal-open')}>
-                {/*<div className={"modal modal-open"}>*/}
                 <div className="modal-box">
                     <span className={'close-button'} onClick={closeModalEvent}>
                     <AiOutlineCloseCircle/>
