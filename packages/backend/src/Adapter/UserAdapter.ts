@@ -4,8 +4,6 @@ import {UsersDto} from "../users/dto/users.dto";
 
 @Injectable()
 export class UserAdapter {
-
-
     static toDto(user: Users): UsersDto {
         const UserDto = new UsersDto();
         UserDto.id = user.id;
@@ -17,7 +15,7 @@ export class UserAdapter {
         return UserDto;
     }
 
-    static toDtoUpdatePassword(user: Users): UsersDto {
+    public static toDtoUpdatePassword(user: Users): UsersDto {
         const UserDto = new UsersDto();
         UserDto.id = user.id;
         UserDto.firstname = user.firstname;

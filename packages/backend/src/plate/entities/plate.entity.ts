@@ -1,10 +1,10 @@
 import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
-import {Restaurant} from 'src/restaurant/entities/restaurant.entity';
-import {Ingredient} from 'src/ingredients/entities/ingredient.entity';
-import {PlateCategory} from 'src/plate-category/entities/plate-category.entity';
 import {Order} from "../../orders/entities/order.entity";
 import {Ratings} from "../../ratings/entities/ratings.entity";
 import {PlateRole} from "../PlateRole.enum";
+import {Restaurant} from "../../restaurant/entities/restaurant.entity";
+import {Ingredient} from "../../ingredients/entities/ingredient.entity";
+import {PlateCategory} from "../../plate-category/entities/plate-category.entity";
 
 @Entity()
 export class Plate extends BaseEntity {
