@@ -8,6 +8,7 @@ export default function Navbar() {
 
     if (pathname === '/admin/dashboard') title = 'dashboard';
     if (pathname === '/admin/settings') title = 'paramètres';
+    if (pathname === '/admin/teams') title = 'équipes';
     if (pathname === '/admin/orders') title = 'commandes';
 
     return (

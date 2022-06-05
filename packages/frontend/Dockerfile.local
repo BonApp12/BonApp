@@ -1,19 +1,15 @@
 FROM node:14
 
 WORKDIR /app
+COPY package.json .
+COPY yarn.lock .
 
-COPY package.json /app
-COPY yarn.lock /app
 RUN yarn install
 
-COPY . /app
+COPY . .
+COPY . . /app/
 
-ENV GENERATE_SOURCEMAP=false
 
 EXPOSE $REACT_PORT
 
-# this what make hot reloading works
-# because you are starting your project
-# in the same way you running it locally
-RUN yarn run build
-CMD yarn start
+CMD ["yarn", "start"]

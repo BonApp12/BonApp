@@ -8,8 +8,11 @@ import updateUser from '../../requests/updateUser';
 import {BsPencil} from "react-icons/bs";
 import {ImCancelCircle} from "react-icons/im";
 import roleEnum from "../Enum/RoleEnum";
+import {useRecoilValue} from "recoil";
+import {userAtom} from "../../states/user";
 
 export default function () {
+    const userState = useRecoilValue(userAtom);
     const [teamMembers, setTeamMembers] = useState([]);
     // EditMode
     const [editable, setEditable] = useState({index: null, isEditable: false, updatedTeamMember: {}});
@@ -33,8 +36,7 @@ export default function () {
     }, [teamMembers, itemOffset, itemsPerPage]);
 
     useEffect(() => {
-        //TODO: mettre l'id dynamique en fonction du restaurant connecté
-        fetchTeamMember(1).then(async res => res.json()).then(teamMembersFetched => setTeamMembers(teamMembersFetched));
+        fetchTeamMember(userState.restaurant.id).then(async res => res.json()).then(teamMembersFetched => setTeamMembers(teamMembersFetched));
     }, []);
 
 
@@ -201,12 +203,13 @@ export default function () {
                         onPageChange={handlePageClick}
                         pageRangeDisplayed={5}
                         pageCount={pageCount}
+                        className={'btn-group'}
                         previousLabel="<"
-                        pageLinkClassName={"badge"}
-                        pageClassName="inline-block"
-                        nextClassName={"badge badge-secondary badge-outline "}
-                        previousClassName={"badge badge-secondary badge-outline "}
-                        activeLinkClassName={"badge badge-primary badge-accent"}
+                        breakClassName={'btn rounded-none'}
+                        pageLinkClassName={"btn rounded-none"}
+                        nextLinkClassName={"btn rounded-none"}
+                        previousLinkClassName={"btn rounded-none"}
+                        activeLinkClassName={"btn-primary"}
                     />
                 </div>
 

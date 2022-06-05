@@ -2,44 +2,55 @@ import {Injectable} from '@nestjs/common';
 import {UpdatePlateDto} from './dto/update-plate.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Plate} from './entities/plate.entity';
-import {Repository} from 'typeorm';
+import {DeleteResult, Repository} from 'typeorm';
+import {PlateDto} from "./dto/plate.dto";
+import {PlateAdapter} from "../Adapter/PlateAdapter";
+import {PlateCategory} from "../plate-category/entities/plate-category.entity";
 
 @Injectable()
 export class PlateService {
-  constructor(
-    @InjectRepository(Plate)
-    private plateRepository: Repository<Plate>,
-  ) {}
-  create() {
-    return 'This action adds a new plate';
-  }
+    constructor(
+        @InjectRepository(Plate)
+        private plateRepository: Repository<Plate>,
+        @InjectRepository(PlateCategory)
+        private plateCategories: Repository<PlateCategory>,
+    ) {
+    }
 
-  findAll() {
-    /** Récupération de tous les plats avec la relation Category */
-    return this.plateRepository.find({ relations: ['category'] });
-  }
+    async create(plateDto: PlateDto): Promise<PlateDto> {
+        return PlateAdapter.toDtoLight(await this.plateRepository.save(PlateAdapter.toModelInsert(plateDto)));
+    }
 
-  findOne(id: number) {
-    /** Récupération d'un seul plat avec la relation Category */
-    return this.plateRepository.findOne(id, {
-      relations: ['category', 'ingredient'],
-    });
-  }
+    findAll() {
+        /** Récupération de tous les plats avec la relation Category */
+        return this.plateRepository.find({relations: ['category']});
+    }
 
-  findByRestaurant(id: number) {
-    return this.plateRepository.find( {
-      relations: ['restaurant'],
-      where: {
-        'restaurant': {id}
-      }
-    });
-  }
+    findCategories(): Promise<PlateCategory[]> {
+        return this.plateCategories.find();
+    }
 
-  update(id: number, updatePlateDto: UpdatePlateDto) {
-    return `This action updates a #${id} plate`;
-  }
+    findOne(id: number) {
+        /** Récupération d'un seul plat avec la relation Category */
+        return this.plateRepository.findOne(id, {
+            relations: ['category', 'ingredient'],
+        });
+    }
 
-  async remove(id: number): Promise<void> {
-    await this.plateRepository.delete(id);
-  }
+    async findByRestaurant(id: number): Promise<PlateDto[]> {
+        return (await this.plateRepository.find({
+            relations: ['restaurant', 'ingredients', "categories"],
+            where: {
+                'restaurant': {id}
+            }
+        })).map(plate => PlateAdapter.toDto(plate));
+    }
+
+    update(id: number, updatePlateDto: UpdatePlateDto) {
+        return `This action updates a #${id} plate`;
+    }
+
+    remove(id: number): Promise<DeleteResult> {
+        return this.plateRepository.delete(id);
+    }
 }

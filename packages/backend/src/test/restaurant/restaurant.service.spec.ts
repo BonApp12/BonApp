@@ -61,7 +61,7 @@ describe('RestaurantService', () => {
             // On mock le repository pour qu'il retourne un tableau de restaurants
             jest.spyOn(restaurantRepository, 'find').mockImplementation(() => {
                 return new Promise((resolve) => {
-                    let restaurant = new Restaurant();
+                    const restaurant = new Restaurant();
                     restaurant.id = 1;
                     restaurant.name = "string";
                     restaurant.siren = "string";

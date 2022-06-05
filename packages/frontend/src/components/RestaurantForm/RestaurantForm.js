@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import editRestaurantInformations from "../../requests/restaurant/editRestaurantInformations";
 import Loading from "../Loading/Loading";
 import ErrorAlert from "../Alerts/ErrorAlert";

@@ -41,8 +41,10 @@ services:
       dockerfile: Dockerfile.local
     restart: always
     env_file: .env
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
     ports:
-      - "${FRONTEND_MANAGER_PORT}:${REACT_PORT}"
+      - "${FRONTEND_MANAGER_PORT}:3001"
     volumes:
       - "./packages/front-manager/:/app/"
     networks:
