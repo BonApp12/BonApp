@@ -34,3 +34,9 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 /src/coverage
+/client/uploads/7ee3f4ed-0017-490c-8f42-05f442029b91.png
+/client/uploads/11300eec-efe1-4586-afe1-46cfde2b548a.png
+/client/uploads/a7e69e53-0533-4e06-b9d2-2a077bf00ace.png
+
+# Image from uploads
+/client/uploads/*
