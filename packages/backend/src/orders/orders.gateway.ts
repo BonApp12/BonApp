@@ -1,37 +1,46 @@
-import {MessageBody, SubscribeMessage, WebSocketGateway,} from '@nestjs/websockets';
+import {
+    WebSocketGateway,
+    SubscribeMessage,
+    MessageBody, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer,
+} from '@nestjs/websockets';
 import {OrdersService} from './orders.service';
 import {CreateOrderDto} from './dto/create-order.dto';
 import {UpdateOrderDto} from './dto/update-order.dto';
+import {Server, Socket} from 'socket.io';
+import {Logger} from "@nestjs/common";
 
-@WebSocketGateway({ cors: true })
-export class OrdersGateway {
-  constructor(private readonly ordersService: OrdersService) {}
+@WebSocketGateway({cors: true})
+export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    constructor(private readonly ordersService: OrdersService) {
+    }
 
-  // Focus on this snippet :
-  @SubscribeMessage('createOrder')
-  create(@MessageBody() createOrderDto: CreateOrderDto) {
-    this.ordersService.create(createOrderDto);
-  }
+    @WebSocketServer() wss: Server;
 
-  @SubscribeMessage('findAllOrders')
-  findAll() {
-    return this.ordersService.findAll();
-  }
+    private logger: Logger = new Logger('OrdersGateway');
 
-  @SubscribeMessage('findOneOrder')
-  async findOne(@MessageBody() id: number) {
-    const event = 'oneOrder';
-    const data = await this.ordersService.findOne(id);
-    return { event, data };
-  }
 
-  @SubscribeMessage('updateOrder')
-  update(@MessageBody() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.update(updateOrderDto.id, updateOrderDto);
-  }
+    afterInit(server: Server) {
+      this.logger.log('Initialized');
+    }
 
-  @SubscribeMessage('removeOrder')
-  remove(@MessageBody() id: number) {
-    return this.ordersService.remove(id);
-  }
+    handleDisconnect(client: Socket) {
+      this.logger.log(`Disconnecting client ${client.id}`);
+    }
+
+    handleConnection(client: Socket, ...args: any[]) {
+        this.logger.log(`Client ${client.id} connected`);
+        this.wss.socketsJoin(`ordersRoom${client.id}`);
+    }
+
+    @SubscribeMessage('createOrder')
+    update(client: Socket) {
+        // TODO : Check why it sends the message to every sockets
+        this.logger.log(`Client ${client.id} created an order`)
+        this.wss.to(`ordersRoom${client.id}`).emit("orderCreated", "Order created");
+    }
+
+    @SubscribeMessage('removeOrder')
+    remove(@MessageBody() id: number) {
+        return this.ordersService.remove(id);
+    }
 }

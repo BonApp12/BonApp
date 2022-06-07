@@ -56,10 +56,11 @@ const ProductsList = () => {
         filteredPlates[filteredPlates.findIndex(plate => plate.id === item.id)].quantity = item.quantity;
     });
 
-    // useEffect to get orders : just for testing purposes. Change it to send orders in time.
-    useEffect(() => {
-        socket.emit('createOrder', {})
-    }, [socket]);
+
+    // TODO : Testing purposes, remove it later.
+    socket.on('orderCreated', (socket) => {
+        console.log('Order Created', socket);
+    })
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
@@ -95,6 +96,7 @@ const ProductsList = () => {
     if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
     if (!isLoaded) return <div><Loading/></div>;
 
+    // TODO : Socket button to be removed, testing purpose.
     return (
         <div className="sidebar-cart">
             <Layout restaurant={restaurant}/>
@@ -103,19 +105,22 @@ const ProductsList = () => {
                 {
                     filteredPlates.map(plate => {
                         return (
-                            <Card name={plate.name} key={plate.id}
-                                  removeFromCart={() => removeFromCart(plate)}
-                                  addToCart={() => addToCart(plate)}
-                                  plateProps={plate}
-                                  setDisplayModal={() => {
-                                      setModalManagement({
-                                          data: {ingredients: plate?.ingredients, description: plate.description},
-                                          isOpen: !modalManagement.isOpen
-                                      });
-                                  }}
-                                  restaurant={restaurant}
-                                  cart={cart}
-                            />
+                            <>
+                                <Card name={plate.name} key={plate.id}
+                                      removeFromCart={() => removeFromCart(plate)}
+                                      addToCart={() => addToCart(plate)}
+                                      plateProps={plate}
+                                      setDisplayModal={() => {
+                                          setModalManagement({
+                                              data: {ingredients: plate?.ingredients, description: plate.description},
+                                              isOpen: !modalManagement.isOpen
+                                          });
+                                      }}
+                                      restaurant={restaurant}
+                                      cart={cart}
+                                />
+                                <button onClick={() => socket.emit('createOrder', {})}>Socket</button>
+                            </>
                         );
                     })
                 }
