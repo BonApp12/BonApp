@@ -21,7 +21,7 @@ export default function Login() {
     const [userState, setUserState] = useRecoilState(userAtom);
 
     useEffect(() => {
-        userState?.length && history.push('/admin');
+        userState !== null && history.push('/admin');
     }, [userState, history]);
 
     const onSubmit = (user) => {

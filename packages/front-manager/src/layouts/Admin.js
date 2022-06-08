@@ -23,7 +23,7 @@ export default function Admin() {
     const history = useHistory();
 
     useEffect(() => {
-        userState === '' && history.push('/');
+        userState === null && history.push('/');
     },[userState,history]);
 
     return (

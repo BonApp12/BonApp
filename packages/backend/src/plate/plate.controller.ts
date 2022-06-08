@@ -1,4 +1,16 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Res, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Res,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {PlateService} from './plate.service';
 import {PlateDto} from './dto/plate.dto';
 import {UpdatePlateDto} from './dto/update-plate.dto';
@@ -8,6 +20,7 @@ import {v4 as uuidv4} from 'uuid';
 import {Plate} from "./entities/plate.entity";
 import {PlateAdapter} from "../Adapter/PlateAdapter";
 import * as fs from "fs";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 
 @Controller('plate')
@@ -30,10 +43,9 @@ export class PlateController {
             }
         }),
     }))
+    @UseGuards(JwtAuthGuard)
     @Post()
     create(@UploadedFile() file: Express.Multer.File, @Body() plate: Plate) {
-
-
         const plateDto = PlateAdapter.toDtoWithMultiPart({...plate, photo: file?.filename});
         return this.plateService.create(plateDto);
     }
@@ -53,6 +65,7 @@ export class PlateController {
         return this.plateService.findOne(+id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('/restaurant/:id')
     findByRestaurant(@Param('id') id: string): Promise<PlateDto[]> {
         return this.plateService.findByRestaurant(+id);

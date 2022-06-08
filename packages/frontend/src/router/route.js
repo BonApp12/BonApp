@@ -3,6 +3,10 @@ module.exports = Object.defineProperties({}, {
         value: process.env.REACT_APP_URL_BACKEND + '/auth/register',
         writable: false
     },
+    isConnected: {
+        value: process.env.REACT_APP_URL_BACKEND + '/auth/isConnected',
+        writable: false
+    },
     login: {
         value: process.env.REACT_APP_URL_BACKEND + '/auth/login',
         writable: false

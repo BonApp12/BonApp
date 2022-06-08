@@ -10,7 +10,7 @@ const Logout = () => {
 
     logout()
         .then(() => {
-            setUserState('');
+            setUserState(null);
             history.push('/');
             toast.success('Déconnexion réussie');
             return false;

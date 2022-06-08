@@ -4,12 +4,18 @@ import 'dayjs/locale/fr'
 
 import fetchFullOrder from "requests/fetchFullOrder";
 import updateOrder from "requests/updateOrder";
+import resetUserConnected from "../../helpers/resetUserConnected";
+import {useSetRecoilState} from "recoil";
+import {userAtom} from "../../states/user";
+import {useHistory} from "react-router-dom";
 
 export default function CardTable() {
 
   let checkStatus, formattedDate;
   const [orders, setOrders] = useState([])
   const TODO = 'to-do';
+  const setUserState = useSetRecoilState(userAtom);
+  const history = useHistory();
 
   checkStatus = (status) => {
     return status === TODO;
@@ -22,10 +28,13 @@ export default function CardTable() {
 
   useEffect(() => {
     fetchFullOrder(1, TODO)
-        .then(resOrder => resOrder.json())
-        .then(orders => {
-          setOrders(orders)
+        .then(async resOrder => {
+          if(resOrder.status === 401) resetUserConnected(setUserState,history);
+          setOrders(await resOrder.json())
         })
+    return function cleanup(){
+      setOrders([])
+    }
   }, [])
 
 

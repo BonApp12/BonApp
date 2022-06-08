@@ -23,6 +23,7 @@ export class UsersController {
         return this.userService.findOne(email);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete('/:id')
     delete(@Param('id') id: string): Promise<DeleteResult> {
         return this.userService.delete(id);

@@ -3,6 +3,9 @@ const isUserConnected = () => {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         credentials: 'include',
     });
 }
