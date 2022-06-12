@@ -11,7 +11,7 @@ function Profile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        !userState && navigate('/');
+        userState === null && navigate('/');
     },[userState]);
 
     return (

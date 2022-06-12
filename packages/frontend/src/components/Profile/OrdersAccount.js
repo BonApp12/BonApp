@@ -18,7 +18,7 @@ dayjs.extend(timezone);
 
 export default function OrdersAccount(){
     const [orders,setOrders] = useState([]);
-    const [filter, setFilter] = useState([]);
+    const [filterOrder, setFilterOrder] = useState([]);
     const [loading, setLoading] = useState(false);
     const userState = useRecoilValue(userAtom);
 
@@ -32,21 +32,21 @@ export default function OrdersAccount(){
             });
     },[]);
 
-    const activeBtn = (event,type) => {
+    const activeBtn = (event,statusOrder) => {
         const isCheck = event.currentTarget.classList.contains('bg-white');
 
         if(isCheck){
             event.currentTarget.classList.replace('bg-white','bg-orange-500');
             event.currentTarget.classList.replace('text-orange-500','text-white');
             event.currentTarget.querySelector('span').classList.remove('hidden');
-            filter.push(type);
+            filterOrder.push(statusOrder);
         }else{
             event.currentTarget.classList.replace('bg-orange-500','bg-white');
             event.currentTarget.classList.replace('text-white','text-orange-500');
             event.currentTarget.querySelector('span').classList.add('hidden');
-            filter.splice(filter.indexOf(type),1);
+            filterOrder.splice(filterOrder.indexOf(statusOrder),1);
         }
-        setFilter([...filter]);
+        setFilterOrder([...filterOrder]);
     }
 
     if (!loading) {
@@ -61,7 +61,7 @@ export default function OrdersAccount(){
                     orders.length >= 1 ? orders.map((order, index) =>
                         (
                             <div key={index}>
-                                <div className={`relative ${filter.length === 0 || !filter.includes(order.status) && 'hidden'}`}>
+                                <div className={`relative ${filterOrder.length === 0 || !filterOrder.includes(order.status) && 'hidden'}`}>
                                     <div className="card mx-auto w-full bg-base-100 shadow-xl mb-6">
                                         <figure><img src={plateImg} alt="plate"/></figure>
                                         <div className="card-body relative">

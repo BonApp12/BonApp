@@ -1,4 +1,3 @@
-import {useNavigate} from "react-router-dom";
 import Input from "../Input/Input";
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
@@ -22,7 +21,6 @@ export function SettingsAccount(){
         resolver: yupResolver(ValidationSchemaUpdateProfile())
     });
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const onSubmit = (user) => {
         //delete property thanks to condition
@@ -54,7 +52,7 @@ export function SettingsAccount(){
                         setLoading(false);
                         delete data.password;
                         setUserState(data);
-                        ['oldPassword','password','confirmPassword'].forEach(field => setValue(field,''));
+                        Object.keys(profileFields).forEach(field => (field === 'oldPassword' || field === 'password' || field === 'confirmPassword') && setValue(field,''));
                         toast.success('✅ Modification réussie !');
                     }
                 });
