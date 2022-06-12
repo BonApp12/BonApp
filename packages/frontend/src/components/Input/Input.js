@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Input({type,name,register,placeHolder,error=null,label=null}){
+export default function Input({type,name,register,placeHolder,error=null,label=null, disabled=false}){
     return (
         <div className="form-control">
             <label className="label">
@@ -9,9 +9,10 @@ export default function Input({type,name,register,placeHolder,error=null,label=n
             <input
                 {...register}
                 type={type}
-                className="input input-bordered"
+                className="input input-bordered shadow"
                 placeholder={placeHolder}
                 name={name}
+                disabled={disabled}
                 autoComplete={"off"}
             />
             {

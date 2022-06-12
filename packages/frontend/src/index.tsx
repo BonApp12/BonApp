@@ -6,7 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import ProductsList from './components/ProductsList/ProductsList';
 import LoginForm from "./components/LoginForm/LoginForm";
-import MessagePage from "./components/MessagePage/MessagePage";
+import Profile from "./components/Profile/Profile";
+import OrdersAccount from "./components/Profile/OrdersAccount";
+import {SettingsAccount} from "./components/Profile/SettingsAccount";
 import Disconnect from "./components/Disconnect/Disconnect";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
 import {SocketContext, socket} from "./context/socket";
@@ -31,8 +33,11 @@ ReactDOM.render(
                             </Route>
                             <Route path="login" element={<LoginForm/>}/>
                             <Route path="register" element={<RegisterForm/>}/>
-                            <Route path="/already-logged"
-                                   element={<MessagePage message={{code:200,message:"Vous êtes déjà connecté"}} />}/>
+                            <Route path="profile">
+                                <Route path="" element={<Profile />} />
+                                <Route path="settings" element={<SettingsAccount />} />
+                                <Route path="orders" element={<OrdersAccount />} />
+                            </Route>
                             <Route path={"/forgot-password"} element={<ForgetPwd />}/>
                             <Route path={"/update-password"} element={<ChangePwd />}/>
                             <Route path="/is-connected" element={<LoginForm/>}/>

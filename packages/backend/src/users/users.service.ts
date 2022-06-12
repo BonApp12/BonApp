@@ -66,7 +66,7 @@ export class UsersService {
             const checkPassword = await UTILS.verifyPassword(newUser.oldPassword, user.password);
             if(!checkPassword){
                 throw new HttpException(
-                    'Wrong credentials provided (password <- dont forget to remove this after)',
+                    "Le mot de passe ne correspond pas à l'ancien",
                     HttpStatus.BAD_REQUEST,
                 );
             }

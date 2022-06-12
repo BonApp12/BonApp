@@ -35,7 +35,7 @@ const ProductDetail = () => {
     };
 
     if (error) return <div>Une erreur est survenue lors de la récupération du plat. Veuillez réessayer</div>;
-    else if (!isLoaded) return <div><LoadingPage/></div>;
+    if (!isLoaded) return <div><LoadingPage color={"gray"}/></div>;
     return (
         <Layout restaurant={props.restaurant}>
             <p onClick={handleGoBack}>Retour</p>

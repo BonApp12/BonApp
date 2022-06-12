@@ -22,5 +22,13 @@ module.exports = Object.defineProperties({}, {
     google: {
         value: process.env.REACT_APP_URL_BACKEND + '/google',
         writable: false
-    }
+    },
+    updateProfile: {
+        value: process.env.REACT_APP_URL_BACKEND + '/user/update',
+        writable: false
+    },
+    ordersUser: {
+        value: process.env.REACT_APP_URL_BACKEND + '/orders/user/',
+        writable: false
+    },
 })

@@ -28,6 +28,16 @@ export class OrdersService {
     });
   }
 
+  findOrderByUser(id: number){
+    return this.orderRepository.find( {
+      relations: ['restaurant', 'plate'],
+      where: {'user': {id}},
+      order: {
+        created_at: "DESC"
+      }
+    });
+  }
+
   findByRestaurant(id: number) {
     return this.orderRepository.find( {
       relations: ['user', 'plate'],
