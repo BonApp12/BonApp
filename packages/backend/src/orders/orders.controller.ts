@@ -23,6 +23,7 @@ export class OrdersController {
         return this.ordersService.findOne(+id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('/user/:id')
     findByUser(@Param('id') id: string) {
         return this.ordersService.findOrderByUser(+id);

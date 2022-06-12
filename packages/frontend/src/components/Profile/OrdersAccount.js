@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import orderByUser from "../../requests/orders/orderByUser";
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import plateImg from '../../img/plate.jpg';
 import starter from '../../img/foodCategory/starter.png';
@@ -12,6 +12,8 @@ import timezone from "dayjs/plugin/timezone";
 import HeaderAccount from "../HeaderAccount/HeaderAccount";
 import LoadingPage from "../Loading/LoadingPage";
 import {AiOutlineCheck} from "react-icons/ai";
+import resetUserConnected from "../../helpers/resetUserConnected";
+import {useNavigate} from "react-router-dom";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -20,16 +22,26 @@ export default function OrdersAccount(){
     const [orders,setOrders] = useState([]);
     const [filterOrder, setFilterOrder] = useState([]);
     const [loading, setLoading] = useState(false);
-    const userState = useRecoilValue(userAtom);
+    const [userState, setUserState] = useRecoilState(userAtom);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        setLoading(true);
-        orderByUser(userState.id)
-            .then(res => res.json())
-            .then(ordersData => {
-                setLoading(false);
-                setOrders(ordersData)
-            });
+        userState === null && navigate('/');
+        if(userState !== null) {
+            setLoading(true);
+            orderByUser(userState.id)
+                .then(async (res) => {
+                    if (res.status === 401) resetUserConnected(setUserState, navigate);
+                    setLoading(false);
+                    setOrders(await res.json())
+                });
+        }
+
+        return function cleanup(){
+            setLoading(false);
+            setOrders([]);
+            setFilterOrder([]);
+        }
     },[]);
 
     const activeBtn = (event,statusOrder) => {

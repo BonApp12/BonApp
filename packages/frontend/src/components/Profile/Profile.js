@@ -24,7 +24,7 @@ function Profile() {
                                 <span className="text-white font-bold text-xl">{userState?.firstname?.trim().charAt(0).toUpperCase() + userState?.lastname?.trim().charAt(0).toUpperCase()}</span>
                             </div>
                             <div className="flex flex-col items-start justify-center">
-                                <p className="text-2xl font-bold text-black">{userState?.firstname?.charAt(0).toUpperCase() + userState?.firstname.slice(1)}</p>
+                                <p className="text-2xl font-bold text-black">{userState?.firstname?.charAt(0).toUpperCase() + userState?.firstname?.slice(1)}</p>
                                 <p className="text-lg">{userState?.email}</p>
                             </div>
                         </div>
