@@ -15,7 +15,7 @@ export class GoogleController {
   @HttpCode(200)
   async authenticate(@Body() tokenGoogle: GoogleDto, @Req() req: Request) {
     const user = await this.googleService.authenticate(tokenGoogle.token);
-    const token = this.authService.getCookieWithJwtAccessToken(user.id);
+    const token = this.authService.getCookieWithJwtAccessToken(user.id, req.body.device);
     req.res.setHeader('Set-Cookie', [token]);
     return {statusCode: 200, user: user};
   }
