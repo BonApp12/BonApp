@@ -52,6 +52,7 @@ export class RestaurantService {
         }).catch((err) => {
             return err;
         });
+
     }
 
     /**

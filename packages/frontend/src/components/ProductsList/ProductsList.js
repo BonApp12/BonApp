@@ -13,6 +13,7 @@ import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {userAtom} from "../../states/user";
 
+
 const ProductsList = () => {
     let params = useParams();
     const idRestaurant = params.idRestaurant;
@@ -95,6 +96,7 @@ const ProductsList = () => {
             updateOtherCart(otherCarts);
         })
     }, []);
+
 
     useEffect(() => {
         socket.emit('userCartUpdated', {cart, user: userState});
