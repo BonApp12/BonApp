@@ -1,17 +1,17 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
 import Loading from "../Loading/Loading";
-import {useRecoilState, useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
-import {userAtom} from "../../states/user";
+import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 
 const ProductsList = () => {
     let params = useParams();
@@ -25,8 +25,6 @@ const ProductsList = () => {
     const [cart, updateCart] = useRecoilState(cartAtom);
     // Handling socket
     const socket = useContext(SocketContext);
-    const navigate = useNavigate();
-    const setUser = useSetRecoilState(userAtom);
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
@@ -64,8 +62,9 @@ const ProductsList = () => {
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
-        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant,navigate,setUser);
-    }, [params.idRestaurant]);
+        let idTable = params.idTable;
+        fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable);
+    }, [params.idRestaurant, params.idTable]);
 
 
     function addToCart(plate) {

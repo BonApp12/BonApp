@@ -42,6 +42,13 @@ export class RestaurantService {
         }));
     }
 
+    async findOneWithTable(id: number, idTable: number): Promise<RestaurantDto> {
+        // Récupérer un restaurant si l'id de la table correspond bien.
+        return RestaurantAdapter.toDto(await this.restaurantRepository.findOne(id, {
+            relations: ['address', 'plates', 'plates.ingredients'],
+        }));
+    }
+
     /**
      *
      * @param id
