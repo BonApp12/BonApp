@@ -18,6 +18,8 @@ export class RestaurantService {
         @InjectRepository(Users)
         private userRepository: Repository<Users>,
         @InjectRepository(Tables)
+        private tablesRepository: Repository<Tables>,
+        @InjectRepository(Tables)
         private tableRepository: Repository<Tables>,
         // private addressService: AddressService,
     ) {
@@ -52,7 +54,6 @@ export class RestaurantService {
         }).catch((err) => {
             return err;
         });
-
     }
 
     /**
