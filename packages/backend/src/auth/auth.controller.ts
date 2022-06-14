@@ -59,7 +59,7 @@ export class AuthController {
 
     private loginUser(req, user) {
         req.res.setHeader('Set-Cookie', [
-            this.authService.getCookieWithJwtAccessToken(user.id,req.body.device),
+            this.authService.getCookieWithJwtAccessToken(user.id,req.body?.device),
         ]);
         return {statusCode: 200, user: user};
     }
