@@ -13,6 +13,7 @@ const fetchRestaurantByIdTable = (setRestaurant, setIsLoaded, setError, idRestau
                 }else{
                     setRestaurant(result);
                     setIsLoaded(true);
+                    console.log(result);
                 }
             },
             (error) => {

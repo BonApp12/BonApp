@@ -1,4 +1,5 @@
 import {PlateDto} from "../../plate/dto/plate.dto";
+import {Tables} from "../../tables/entities/tables.entity";
 
 export class RestaurantDto {
   id: number;
@@ -10,4 +11,5 @@ export class RestaurantDto {
   contact_email: string;
   contact_phone: string;
   plates: PlateDto[];
+  tables: Tables[] | Tables;
 }

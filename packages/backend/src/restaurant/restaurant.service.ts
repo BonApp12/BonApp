@@ -3,7 +3,7 @@ import {RestaurantDto} from './dto/restaurant.dto';
 import {UpdateRestaurantDto} from './dto/update-restaurant.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Restaurant} from './entities/restaurant.entity';
-import {Repository} from 'typeorm';
+import {createQueryBuilder, Repository} from 'typeorm';
 import {Users} from "../users/entities/users.entity";
 import {UsersDto} from "../users/dto/users.dto";
 import {UserAdapter} from "../Adapter/UserAdapter";
@@ -43,10 +43,9 @@ export class RestaurantService {
     }
 
     async findOneWithTable(id: number, idTable: number): Promise<RestaurantDto> {
-        // Récupérer un restaurant si l'id de la table correspond bien.
-        return RestaurantAdapter.toDto(await this.restaurantRepository.findOne(id, {
-            relations: ['address', 'plates', 'plates.ingredients'],
-        }));
+        return RestaurantAdapter.fromTableToDto(await this.tableRepository.findOne(idTable, {
+            relations: ['restaurant', 'restaurant.address', 'restaurant.plates', 'restaurant.plates.ingredients'],
+        }))
     }
 
     /**

@@ -56,9 +56,11 @@ const ProductsList = () => {
 
 
     // TODO : Testing purposes, remove it later.
-    socket.on('orderCreated', (socket) => {
-        console.log('Order Created', socket);
-    })
+    useEffect(() => {
+        socket.on('orderCreated', (socket) => {
+            console.log(socket); // Correspond au message reçu émis par le serveur. (lancé qu'une seule fois grâce au useEffect)
+        })
+    }, [socket])
 
     useEffect(() => {
         let idRestaurant = params.idRestaurant;
@@ -118,7 +120,7 @@ const ProductsList = () => {
                                       restaurant={restaurant}
                                       cart={cart}
                                 />
-                                <button onClick={() => socket.emit('createOrder', {})}>Socket</button>
+                                <button key={socket.id} onClick={() => socket.emit('createOrder', {})}>Socket</button>
                             </>
                         );
                     })
