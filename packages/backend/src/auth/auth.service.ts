@@ -98,20 +98,20 @@ export class AuthService {
     }
   }
 
-  public getJwtAccessToken(userId: number) {
+  public getJwtAccessToken(userId: number, device = 'web') {
     const payload: TokenPayload = { userId };
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: `${this.configService.get(
-        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+          `JWT_ACCESS_TOKEN_EXPIRATION_TIME_${device === 'mobile' ? 'MOBILE' : 'WEB'}`,
       )}s`,
     });
   }
 
-    public getCookieWithJwtAccessToken(userId: number) {
-        const token = this.getJwtAccessToken(userId);
+    public getCookieWithJwtAccessToken(userId: number, device = 'web') {
+        const token = this.getJwtAccessToken(userId,device);
         return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-            'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+            `JWT_ACCESS_TOKEN_EXPIRATION_TIME_${device === 'mobile' ? 'MOBILE' : 'WEB'}`,
         )}`;
     }
 

@@ -45,10 +45,6 @@ export class AuthController {
     @HttpCode(200)
     @UseGuards(LocalAuthGuard)
     @Post('/login')
-    //TODO: TEST:
-    // 1/ Test si tout fonctionnel -> a) Status 200 + token | b) UserDto
-    // 2/ mot de passe ou email incorrect -> test le retour
-    // 3/ mauvais objet (mauvais format) -> return 400
     async login(@Req() req: RequestWithUser, @Headers() headers: any) {
         const userDto = UserAdapter.toDto(req.user);
         if ((headers.origin === this.configService.get("URL_FRONTMANAGER") && userDto.role !== UserRole.CLIENT)
@@ -63,7 +59,7 @@ export class AuthController {
 
     private loginUser(req, user) {
         req.res.setHeader('Set-Cookie', [
-            this.authService.getCookieWithJwtAccessToken(user.id),
+            this.authService.getCookieWithJwtAccessToken(user.id,req.body?.device),
         ]);
         return {statusCode: 200, user: user};
     }

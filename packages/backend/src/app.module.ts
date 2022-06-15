@@ -31,7 +31,8 @@ import {ServeStaticModule} from "@nestjs/serve-static";
             isGlobal: true,
             validationSchema: Joi.object({
                 JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
-                JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+                JWT_ACCESS_TOKEN_EXPIRATION_TIME_WEB: Joi.string().required(),
+                JWT_ACCESS_TOKEN_EXPIRATION_TIME_MOBILE: Joi.string().required(),
                 STRIPE_SECRET_KEY: Joi.string(),
                 STRIPE_CURRENCY: Joi.string(),
             }),
