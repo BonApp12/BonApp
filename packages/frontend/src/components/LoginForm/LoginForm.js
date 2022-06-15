@@ -19,7 +19,7 @@ function LoginForm() {
     const [userState, setUserState] = useRecoilState(userAtom);
 
     useEffect(() => {
-        userState !== null && navigate('/profile');
+        userState !== null ? navigate('/profile') : navigate('/');
     },[userState,navigate]);
 
     const onSubmit = (data) => {

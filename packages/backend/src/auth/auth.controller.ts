@@ -67,7 +67,7 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Post('/isConnected')
     async isConnected(@Req() req) {
-        return this.authService.isUserConnected(req.user);
+        return true;
     }
 
     @UseGuards(JwtAuthGuard)

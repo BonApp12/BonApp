@@ -3,17 +3,29 @@ import {useForm} from "react-hook-form";
 import postNewTeamMember from "../../requests/postNewTeamMember";
 import {toast} from "react-toastify";
 import roleEnum from "../Enum/RoleEnum";
+import resetUserConnected from "../../helpers/resetUserConnected";
+import {useHistory} from "react-router-dom";
+import {useSetRecoilState} from "recoil";
+import {userAtom} from "../../states/user";
 
 export default function () {
     const {register: registerTeamMember, handleSubmit, reset, formState: {errors}} = useForm();
+    const history = useHistory();
+    const setUserState = useSetRecoilState(userAtom);
+
     const onSubmit = newUser => {
-        postNewTeamMember(newUser).then(res => res.json()).then(response => {
+        postNewTeamMember(newUser).then(res => {
+            if(res.status === 401) resetUserConnected(setUserState, history);
+            return res.json();
+        }).then(response => {
             if (response.firstname) {
                 toast.success("Le nouvel équipier a bien été ajouté, un email lui a été envoyé. 📧⚡");
                 reset({lastname: "", firstname: "", email: "", role: ""});
                 return;
             }
             toast.error(response.message);
+        }).catch(() => {
+            toast.error('Une erreur est survenue, veuillez réessayer plus tard.');
         });
     };
     return (

@@ -4,10 +4,12 @@ import createPlate from "../../requests/createPlate";
 import {toast} from "react-toastify";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import Ingredients from "../Utils/Ingredients";
 import {AddCategory} from "../Utils/PlateCategories";
+import resetUserConnected from "../../helpers/resetUserConnected";
+import {useHistory} from "react-router-dom";
 
 export default function () {
     const {register: registerTeamMember, handleSubmit, reset, formState: {errors}} = useForm();
@@ -16,7 +18,8 @@ export default function () {
     const [categories, setCategories] = useState('');
     const [description, setDescription] = useState('');
     const [type, setType] = useState('ENTREE');
-    const userState = useRecoilValue(userAtom);
+    const [userState,setUserState] = useRecoilState(userAtom);
+    const history = useHistory();
 
 
     const onSubmit = newPlate => {
@@ -31,16 +34,26 @@ export default function () {
         };
         const formData = toFormData(newPlate);
         createPlate(formData)
-            .then(res => res.json())
+            .then(res => {
+                if(res.status === 401){
+                    resetUserConnected(setUserState,history);
+                }else{
+                    return res.json();
+                }
+            })
             .then(response => {
-                if (response.id) {
+                if (response?.id) {
                     toast.success("Le nouveau plat a bien été ajouté 🍝");
                     reset({name: "", ingredient: ""});
                     setIngredients([]);
                     return;
                 }
                 toast.error(response.message);
-            });
+            })
+            .catch(() => {
+                toast.error('Une erreur est survenue, veuillez réessayer plus tard 😕');
+            })
+
     };
 
     function toFormData(newPlate) {

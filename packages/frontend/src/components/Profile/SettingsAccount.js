@@ -1,5 +1,5 @@
 import Input from "../Input/Input";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
 import ValidationSchemaUpdateProfile from "../../validations/ValidationSchemaUpdateProfile";
@@ -9,18 +9,28 @@ import updateProfile from "../../requests/users/updateProfile";
 import {toast} from "react-toastify";
 import profileFields from "../../fields/profileFields";
 import HeaderAccount from "../HeaderAccount/HeaderAccount";
+import {useNavigate} from "react-router-dom";
+import resetUserConnected from "../../helpers/resetUserConnected";
 
 export function SettingsAccount(){
     const [userState, setUserState] = useRecoilState(userAtom);
     const {register, handleSubmit, formState: {errors}, setError, setValue} = useForm({
         defaultValues: {
-            firstname: userState.firstname,
-            lastname: userState.lastname,
-            email: userState.email,
+            firstname: userState?.firstname,
+            lastname: userState?.lastname,
+            email: userState?.email,
         },
         resolver: yupResolver(ValidationSchemaUpdateProfile())
     });
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        userState === null && navigate('/');
+        return function cleanup(){
+            setLoading(false);
+        }
+    },[userState]);
 
     const onSubmit = (user) => {
         //delete property thanks to condition
@@ -40,20 +50,27 @@ export function SettingsAccount(){
         if(Object.keys(user).length !== 0){
             setLoading(true);
             updateProfile(user)
-                .then(res => res.json())
-                .then(data => {
-                    if(data?.statusCode === 422 || data?.statusCode === 400) {
-                        setLoading(false);
-                        let errorMsg = '';
-                        if (typeof data.message === "object") data.message.forEach(error => errorMsg += '*'+ error + '\n');
-                        if (typeof data.message === "string") errorMsg = data.message;
-                        toast.error(errorMsg, {autoClose: 6000});
+                .then(res => {
+                    if(res.status === 401){
+                        resetUserConnected(setUserState, navigate);
                     }else{
-                        setLoading(false);
-                        delete data.password;
-                        setUserState(data);
-                        Object.keys(profileFields).forEach(field => (field === 'oldPassword' || field === 'password' || field === 'confirmPassword') && setValue(field,''));
-                        toast.success('✅ Modification réussie !');
+                        return res.json();
+                    }
+                })
+                .then(data => {
+                    setLoading(false);
+                    if(data !== undefined){
+                        if(data?.statusCode === 422 || data?.statusCode === 400) {
+                            let errorMsg = '';
+                            if (typeof data.message === "object") data.message.forEach(error => errorMsg += '*'+ error + '\n');
+                            if (typeof data.message === "string") errorMsg = data.message;
+                            toast.error(errorMsg, {autoClose: 6000});
+                        }else{
+                            delete data.password;
+                            setUserState(data);
+                            Object.keys(profileFields).forEach(field => (field === 'oldPassword' || field === 'password' || field === 'confirmPassword') && setValue(field,''));
+                            toast.success('✅ Modification réussie !');
+                        }
                     }
                 });
         }

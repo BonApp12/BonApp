@@ -3,19 +3,38 @@ import fetchFullPlate from "requests/fetchFullPlate";
 import fetchFullOrder from "requests/fetchFullOrder";
 import CardStats from "components/Cards/CardStats.js";
 import fetchTeamMembers from "../../requests/fetchTeamMember";
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
+import resetUserConnected from "../../helpers/resetUserConnected";
+import {useHistory} from "react-router-dom";
 
 export default function HeaderStats() {
-
     const [plates, setPlate] = useState([]);
     const [orders, setOrders] = useState([]);
-    const userState = useRecoilValue(userAtom);
+    const [userState,setUserState] = useRecoilState(userAtom);
     const [teamMembers, setTeamMembers] = useState([]);
+    const history = useHistory();
+
     useEffect(() => {
-        fetchFullPlate(userState.restaurant.id).then(async resPlate => setPlate(await resPlate.json()));
-        fetchFullOrder(userState.restaurant.id, 'only-orders').then(async resOrder => setOrders(await resOrder.json()));
-        fetchTeamMembers(userState.restaurant.id).then(async resTeamMember => setTeamMembers(await resTeamMember.json()));
+        fetchFullPlate(userState?.restaurant.id).then(async resPlate => {
+            if(resPlate.status === 401) resetUserConnected(setUserState,history);
+            setPlate(await resPlate.json());
+        });
+        fetchFullOrder(userState?.restaurant.id, 'only-orders').then(async resOrder => {
+            if(resOrder.status === 401) resetUserConnected(setUserState,history);
+            setOrders(await resOrder.json())
+        });
+        fetchTeamMembers(userState?.restaurant.id).then(async resTeamMember => {
+            if(resTeamMember.status === 401) resetUserConnected(setUserState,history);
+            setTeamMembers(await resTeamMember.json())
+        });
+
+        //Créer une fonction de nettoyage (cleanup) pour eviter les memory leaks
+        return function cleanup(){
+            setPlate([]);
+            setOrders([]);
+            setTeamMembers([]);
+        }
     }, []);
 
     return (

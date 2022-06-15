@@ -2,14 +2,17 @@ import React, {useEffect, useState} from "react";
 import Modal from "../Modal/Modal";
 import fetchPlatesByRestaurants from "../../requests/fetchPlatesByRestaurants";
 import ReactPaginate from "react-paginate";
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import deletePlateRequest from "../../requests/deletePlate";
+import resetUserConnected from "../../helpers/resetUserConnected";
+import {useHistory} from "react-router-dom";
 
 export default function ShowPlates() {
+    const history = useHistory();
     const [plates, setPlates] = useState([]);
     const [modalInfo, setModalInfo] = useState({});
-    const userState = useRecoilValue(userAtom);
+    const [userState,setUserState] = useRecoilState(userAtom);
 
 
     // Pagination
@@ -33,13 +36,19 @@ export default function ShowPlates() {
 
 
     useEffect(() => {
-        fetchPlatesByRestaurants(userState.restaurant.id).then(res => res.json()).then(platesFromRequest => {
-            setPlates(platesFromRequest);
+        fetchPlatesByRestaurants(userState.restaurant.id).then(async platesFromRequest => {
+            if(platesFromRequest.status === 401) resetUserConnected(setUserState,history);
+            setPlates(await platesFromRequest.json());
         });
+
+        return function cleanup() {
+            setPlates([]);
+        }
     }, []);
 
     function deletePlate(plate) {
-        deletePlateRequest(plate.id).then(res => res.json()).then(() => {
+        deletePlateRequest(plate.id).then(async(res) => {
+            if(res.status === 401) resetUserConnected(setUserState,history);
             const newPlates = plates.filter(p => p.id !== plate.id);
             setPlates(newPlates);
         });

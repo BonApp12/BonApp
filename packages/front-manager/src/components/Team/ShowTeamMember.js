@@ -8,11 +8,13 @@ import updateUser from '../../requests/updateUser';
 import {BsPencil} from "react-icons/bs";
 import {ImCancelCircle} from "react-icons/im";
 import roleEnum from "../Enum/RoleEnum";
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
+import resetUserConnected from "../../helpers/resetUserConnected";
+import {useHistory} from "react-router-dom";
 
 export default function () {
-    const userState = useRecoilValue(userAtom);
+    const [userState,setUserState] = useRecoilState(userAtom);
     const [teamMembers, setTeamMembers] = useState([]);
     // EditMode
     const [editable, setEditable] = useState({index: null, isEditable: false, updatedTeamMember: {}});
@@ -21,6 +23,7 @@ export default function () {
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
     const itemsPerPage = 4;
+    const history = useHistory();
 
 
     const handlePageClick = (event) => {
@@ -36,7 +39,13 @@ export default function () {
     }, [teamMembers, itemOffset, itemsPerPage]);
 
     useEffect(() => {
-        fetchTeamMember(userState.restaurant.id).then(async res => res.json()).then(teamMembersFetched => setTeamMembers(teamMembersFetched));
+        fetchTeamMember(userState.restaurant.id).then(async res => {
+            if (res.status === 401) resetUserConnected(setUserState,history);
+            setTeamMembers(await res.json());
+        });
+        return function cleanup(){
+            setTeamMembers([]);
+        }
     }, []);
 
 
@@ -57,7 +66,10 @@ export default function () {
     }
 
     function confirm(id) {
-        deleteUser(id).then(res => res.json())
+        deleteUser(id).then(res => {
+            if (res.status === 401) resetUserConnected(setUserState,history);
+            else return res.json();
+        })
             .then(rowDeleted => {
                 if (rowDeleted.affected) {
                     toast.success(`l'équipier a bien été supprimé.`);
@@ -65,6 +77,9 @@ export default function () {
                 } else {
                     toast.error(rowDeleted.message);
                 }
+            })
+            .catch(() => {
+                toast.error('Erreur lors de la suppression de l\'équipier');
             });
     }
 
@@ -74,13 +89,17 @@ export default function () {
 
 
     function updateTeamMember() {
-        updateUser(editable.updatedTeamMember).then(res => res.json())
+        updateUser(editable.updatedTeamMember).then(res => {
+            if(res.status === 401) resetUserConnected(setUserState,history);
+            else return res.json();
+        })
             .then(data => {
                 setTeamMembers(teamMembers.map(e => e.id === editable.updatedTeamMember.id ? editable.updatedTeamMember : e));
                 setEditable({index: null, isEditable: false, updatedTeamMember: {}});
                 if (data.id) return toast.success(`l'équipier a bien été mis à jour.`);
                 return toast.error(data.message);
-            });
+            })
+            .catch(err => toast.error('Une erreur est survenue lors de la mise à jour de l\'équipier.'));
 
     }
 

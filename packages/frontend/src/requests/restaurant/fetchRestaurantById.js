@@ -1,4 +1,6 @@
-const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant, navigate) => {
+import resetUserConnected from "../../helpers/resetUserConnected";
+
+const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant, navigate, setUser) => {
     fetch(process.env.REACT_APP_URL_BACKEND + "/restaurant/" + idRestaurant, {
         crossDomain: true,
         method: 'GET',
@@ -9,7 +11,7 @@ const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant,
         .then(
             (result) => {
                 if(result.hasOwnProperty('statusCode') && result.statusCode === 401){
-                    navigate('/');
+                    resetUserConnected(setUser,navigate);
                 }else{
                     setRestaurant(result);
                     setIsLoaded(true);
