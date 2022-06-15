@@ -1,12 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
-import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
 import Loading from "../Loading/Loading";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
@@ -33,6 +32,8 @@ const ProductsList = () => {
 
     // Initializing socket
     const socket = useContext(SocketContext);
+    const navigate = useNavigate();
+    const setUser = useSetRecoilState(userAtom);
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
