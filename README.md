@@ -13,7 +13,10 @@ Pour que l'installation se déroule sans accroc, vous aurez besoin de créer vou
 
 ```
 JWT_ACCESS_TOKEN_SECRET=VOTRE_SECRET_JWT
-JWT_ACCESS_TOKEN_EXPIRATION_TIME=10000
+#2,7 heures
+JWT_ACCESS_TOKEN_EXPIRATION_TIME_WEB=10000
+#18 heures
+JWT_ACCESS_TOKEN_EXPIRATION_TIME_MOBILE=64800
 
 URL_API_BACKEND=http://localhost:4000
 URL_FRONTEND=http://localhost:3000
