@@ -1,4 +1,4 @@
-import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn,} from 'typeorm';
+import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {Order} from "../../orders/entities/order.entity";
 import {Restaurant} from "../../restaurant/entities/restaurant.entity";
 
@@ -10,11 +10,8 @@ export class Tables extends BaseEntity {
     @Column('varchar', {length: 10})
     libelle: string;
 
-    @ManyToOne(() => Order, (order: Order) => order.tables, {
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    })
-    order: Order;
+    @OneToMany(() => Order, (order: Order) => order.table, {onDelete: 'CASCADE'})
+    orders: Order[];
 
     @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.tables, {
         onDelete: 'CASCADE',

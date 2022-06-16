@@ -7,6 +7,7 @@ export default function Navbar() {
     const pathname = window.location.pathname;
 
     if (pathname === '/admin/dashboard') title = 'dashboard';
+    if (pathname === '/admin/tables') title = 'tables';
     if (pathname === '/admin/settings') title = 'paramètres';
     if (pathname === '/admin/teams') title = 'équipes';
     if (pathname === '/admin/orders') title = 'commandes';

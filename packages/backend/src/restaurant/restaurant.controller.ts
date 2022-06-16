@@ -4,6 +4,7 @@ import {RestaurantDto} from './dto/restaurant.dto';
 import {UpdateRestaurantDto} from './dto/update-restaurant.dto';
 import {JwtAuthGuard} from '../auth/jwt-auth.guard';
 import {UsersDto} from "../users/dto/users.dto";
+import {Tables} from "../tables/entities/tables.entity";
 
 @Controller('restaurant')
 export class RestaurantController {
@@ -24,6 +25,21 @@ export class RestaurantController {
     @Post(':id/edit-restaurant')
     sendEditForm(@Body() restaurant: UpdateRestaurantDto) {
         return this.restaurantService.handleUpdateForm(restaurant);
+    }
+
+    @Post('/add-table')
+    addTable(@Param('id') id: string, @Body() table: Tables) {
+        return this.restaurantService.addTable(table);
+    }
+
+    @Get('/:id/tables')
+    getTables(@Param('id') id: string) {
+        return this.restaurantService.findAllTables(+id);
+    }
+
+    @Delete('/table/:id')
+    deleteTable(@Param('id') id: string) {
+        return this.restaurantService.deleteTable(+id);
     }
 
     @Get()

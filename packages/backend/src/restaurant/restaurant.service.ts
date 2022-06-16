@@ -8,6 +8,7 @@ import {Users} from "../users/entities/users.entity";
 import {UsersDto} from "../users/dto/users.dto";
 import {UserAdapter} from "../Adapter/UserAdapter";
 import {RestaurantAdapter} from "../Adapter/RestaurantAdapter";
+import {Tables} from "../tables/entities/tables.entity";
 
 @Injectable()
 export class RestaurantService {
@@ -16,10 +17,16 @@ export class RestaurantService {
         private restaurantRepository: Repository<Restaurant>,
         @InjectRepository(Users)
         private userRepository: Repository<Users>,
+        @InjectRepository(Tables)
+        private tableRepository: Repository<Tables>,
         // private addressService: AddressService,
     ) {
     }
-
+    /**
+     *
+     * @param createRestaurantDto
+     * @Deprecated
+     */
     create(createRestaurantDto: RestaurantDto) {
         return 'This action adds a new restaurant';
     }
@@ -35,9 +42,14 @@ export class RestaurantService {
         }));
     }
 
+    /**
+     *
+     * @param id
+     * @param updateRestaurantDto
+     * @Deprecated
+     */
     async update(id: number, updateRestaurantDto: UpdateRestaurantDto): Promise<Restaurant> {
-        //TODO: DEMANDER A WASS POURQUOI EST-CE QU'IL NE RENVOIE PAS DIRECTEMENT ÇA ET QU'IL EXECUTE 2 REQUETES
-        // Et simplifier le update
+        //FIXME: à supprimer
         await this.restaurantRepository.update(id, {
             ...(updateRestaurantDto.name && {name: updateRestaurantDto.name}),
             ...(updateRestaurantDto.siren && {siren: updateRestaurantDto.siren}),
@@ -51,17 +63,20 @@ export class RestaurantService {
     async remove(id: number): Promise<void> {
         await this.restaurantRepository.delete(id);
     }
-
+    /**
+     * @Deprecated
+     * @param restaurant
+     */
     async handleRegisterForm(restaurant: RestaurantDto) {
-        // const restaurantEntity = RestaurantService.hydrateRestaurantEntity(restaurant);
-        // Pour l'instant on rajoute l'adresse 1, mais faire en sorte de récupérer l'adresse depuis le front
-        // const address = await this.addressService.findOne(1);
-
-        // await Restaurant.save(restaurantEntity);
+        return;
     }
 
+    /**
+     * @Deprecated
+     * @param restaurant
+     */
     async handleUpdateForm(restaurant: UpdateRestaurantDto) {
-        // const restaurantEntity = RestaurantService.hydrateRestaurantEntity(restaurant);
+       return;
     }
 
     async findTeamMembers(id: number): Promise<UsersDto[]> {
@@ -69,4 +84,16 @@ export class RestaurantService {
             .map((teamMember: Users) => UserAdapter.toDto(teamMember))
     }
 
+    addTable(table: Tables) {
+        return this.tableRepository.save(table);
+
+    }
+
+    findAllTables(number: number) {
+        return this.tableRepository.find({where: {restaurant: number}});
+    }
+
+    deleteTable(id: number) {
+        return this.tableRepository.delete(id);
+    }
 }
