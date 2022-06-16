@@ -56,5 +56,11 @@ export default StyleSheet.create({
         textTransform: 'uppercase',
         fontWeight: 'bold',
         textAlign: "center",
+    },
+    textError: {
+        color: "#ff0000",
+        marginTop: 5,
+        marginLeft: 5,
+        fontSize: 16,
     }
 });
