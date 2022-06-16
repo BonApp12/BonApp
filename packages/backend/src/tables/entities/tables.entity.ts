@@ -10,11 +10,10 @@ export class Tables extends BaseEntity {
     @Column('varchar', {length: 10})
     libelle: string;
 
-    @OneToMany(() => Order, (order: Order) => order.tables, {
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    })
-    order: Order[];
+
+    @OneToMany(() => Order, (order: Order) => order.table, {onDelete: 'CASCADE'})
+    orders: Order[];
+
 
     @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.tables, {
         onDelete: 'CASCADE',
