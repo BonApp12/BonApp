@@ -110,6 +110,7 @@ const ProductsList = () => {
             cartCopy[indexPlateExists].quantity++;
             updateCart(cartCopy);
         }
+        socket.emit('addToCart', {idTable, idRestaurant, plate});
     }
 
     function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
