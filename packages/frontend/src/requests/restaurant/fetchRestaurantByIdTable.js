@@ -1,4 +1,4 @@
-const fetchRestaurantByIdTable = (setRestaurant, setIsLoaded, setError, idRestaurant, idTable, navigate) => {
+const fetchRestaurantByIdTable = (setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists, navigate) => {
     fetch(process.env.REACT_APP_URL_BACKEND + "/restaurant/" + idRestaurant + "/" + idTable, {
         crossDomain: true,
         method: 'GET',
@@ -10,17 +10,20 @@ const fetchRestaurantByIdTable = (setRestaurant, setIsLoaded, setError, idRestau
             (result) => {
                 if(result.hasOwnProperty('statusCode') && result.statusCode === 401){
                     navigate('/');
-                }else{
+                } else if (!result){
+                    setError(true);
+                    setIsLoaded(true);
+                } else {
                     setRestaurant(result);
                     setIsLoaded(true);
-                    console.log(result);
+                    setTableExists(true);
                 }
             },
             (error) => {
-                setIsLoaded(false);
+                setIsLoaded(true);
                 setError(error);
             }
-        )
+        );
 };
 
 export default fetchRestaurantByIdTable;

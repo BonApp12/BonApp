@@ -27,7 +27,20 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
     handleConnection(client: Socket, ...args: any[]) {
         this.logger.log(`Client ${client.id} connected`);
-        this.wss.socketsJoin(`ordersRoom${client.id}`);
+    }
+
+    @SubscribeMessage('joinTable')
+    joinTable(client: Socket, args: Record<string, unknown>) {
+        const roomId = `ordersRoomTable:${args.idTable}Restaurant:${args.idRestaurant}`;
+        this.logger.log(`Client ${client.id} joined table ${args.idTable} of restaurant ${args.idRestaurant}`);
+        this.wss.socketsJoin(roomId);
+        this.wss.to(roomId).emit("userJoinedRoom", `User ${client.id} joined table ${args.idTable}`);
+    }
+
+    @SubscribeMessage('addToCart')
+    addToCart(client: Socket, args: Record<string, unknown>) {
+        this.logger.log(`Client ${client.id} from table ${args.idTable} added something to his cart`);
+        console.log(args.plate);
     }
 
     @SubscribeMessage('createOrder')

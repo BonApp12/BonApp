@@ -42,10 +42,16 @@ export class RestaurantService {
         }));
     }
 
-    async findOneWithTable(id: number, idTable: number): Promise<RestaurantDto> {
-        return RestaurantAdapter.fromTableToDto(await this.tableRepository.findOne(idTable, {
+    async findOneWithTable(id: number, idTable: number): Promise<RestaurantDto | boolean> {
+        return await this.tableRepository.findOne(idTable, {
+            where: {restaurant: id},
             relations: ['restaurant', 'restaurant.address', 'restaurant.plates', 'restaurant.plates.ingredients'],
-        }))
+        }).then(table => {
+            if (table !== undefined) return RestaurantAdapter.fromTableToDto(table);
+            return false;
+        }).catch((err) => {
+            return err;
+        });
     }
 
     /**
