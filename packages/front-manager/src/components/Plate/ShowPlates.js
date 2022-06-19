@@ -163,9 +163,14 @@ export default function ShowPlates() {
                     <h2 className="ml-auto mr-auto font-bold text-lg">{modalInfo.type}</h2>
                 </div>
                 <div className="mask mask-circle w-32 h-32 ml-auto mr-auto">
-                    <img
-                        src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + modalInfo.photo}
-                        alt={modalInfo.name}/>
+                        {modalInfo.photo ?
+                            <img
+                                src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + modalInfo.photo}
+                                alt={modalInfo.name}/>
+                            :
+                            <img
+                                src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + 'img.png'}
+                                alt={modalInfo.name}/>}
                 </div>
                 <div className="flex mt-2 mb-5 px-5">
                     <h2 className="ml-auto mr-auto font-bold text-lg">{modalInfo.name} : {modalInfo.price}€</h2>
@@ -180,7 +185,13 @@ export default function ShowPlates() {
                     <div className="">
                         <h3 className="font-bold text-lg mb-1 w-full">Ingrédients</h3>
                         <div className="w-full px-5">
-                            {modalInfo.ingredients?.map(ingredient => (
+                            {modalInfo.ingredients?.length === 0 ? (
+                                    <>
+                                        <span className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}>Aucun ingrédients renseignés</span>
+                                    </>
+
+                                ):
+                            modalInfo.ingredients?.map(ingredient => (
                                 <>
                                         <span key={ingredient.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}> {ingredient.name}</span>
                                 </>
@@ -192,9 +203,14 @@ export default function ShowPlates() {
                     <div className="">
                         <h3 className="font-bold text-lg mb-1 w-full">Catégories</h3>
                         <div className="w-full px-5">
-                            {modalInfo.categories?.map(category => (
+                            {modalInfo.categories?.length === 0 ? (
                                 <>
+                                    <span className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}>Aucunes catégories</span>
+                                </>
 
+                            ):
+                            modalInfo.categories?.map(category => (
+                                <>
                                     <span key={category.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}> {category.name}</span>
                                 </>
                             ))}
@@ -204,7 +220,7 @@ export default function ShowPlates() {
                 <div className=" modal-action">
                     <a href="#" className="btn">Fermer
                     </a>
-                    <a onClick={() => deletePlate(modalInfo)} className="btn btn-error">Supprimer</a>
+                    <a href="#" onClick={() => deletePlate(modalInfo)} className="btn btn-error">Supprimer</a>
                 </div>
             </Modal>
         </>)
