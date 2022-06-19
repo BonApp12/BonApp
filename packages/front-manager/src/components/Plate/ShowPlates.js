@@ -46,6 +46,11 @@ export default function ShowPlates() {
         }
     }, []);
 
+    function colorHexa(){
+        let randomColor = Math.floor(Math.random()*16777215).toString(16);
+        return randomColor;
+    }
+
     function deletePlate(plate) {
         deletePlateRequest(plate.id).then(async(res) => {
             if(res.status === 401) resetUserConnected(setUserState,history);
@@ -107,7 +112,7 @@ export default function ShowPlates() {
                                 </td>
                                 <td>{plate.price} €</td>
                                 <th>
-                                    {plate.category?.name}
+                                    {plate.type}
                                 </th>
                                 <td>
                                     <a href="#my-modal-2" className={"btn btn-primary btn-xs mr-1"}
@@ -154,16 +159,43 @@ export default function ShowPlates() {
 
 
             <Modal idModal={modalInfo.id} buttonClass={"btn-primary"}>
-                <h3 className="font-bold text-lg mb-5">{modalInfo.name}</h3>
-                <div dangerouslySetInnerHTML={{__html: modalInfo.description}}>
+                <div className="flex mt-2 px-5 mb-5">
+                    <h2 className="ml-auto mr-auto font-bold text-lg">{modalInfo.type}</h2>
                 </div>
-                <div>
+                <div className="mask mask-circle w-32 h-32 ml-auto mr-auto">
+                    <img
+                        src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + modalInfo.photo}
+                        alt={modalInfo.name}/>
+                </div>
+                <div className="flex mt-2 mb-5 px-5">
+                    <h2 className="ml-auto mr-auto font-bold text-lg">{modalInfo.name} : {modalInfo.price}€</h2>
+                </div>
+
+                <div className="px-5 mb-5">
+                    <h3 className="font-bold">Description : </h3>
+                    <div className="px-5 text-justify" dangerouslySetInnerHTML={{__html: modalInfo.description}}>
+                    </div>
+                </div>
+                <div className="px-5">
                     <div className="">
-                        <h3 className="font-bold text-lg mb-5 w-full">Ingrédients</h3>
-                        <div className="w-full">
+                        <h3 className="font-bold text-lg mb-1 w-full">Ingrédients</h3>
+                        <div className="w-full px-5">
                             {modalInfo.ingredients?.map(ingredient => (
                                 <>
-                                    <div key={ingredient.id} className="w-6/12"> {ingredient.name}</div>
+                                        <span key={ingredient.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}> {ingredient.name}</span>
+                                </>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="px-5 mt-2">
+                    <div className="">
+                        <h3 className="font-bold text-lg mb-1 w-full">Catégories</h3>
+                        <div className="w-full px-5">
+                            {modalInfo.categories?.map(category => (
+                                <>
+
+                                    <span key={category.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}> {category.name}</span>
                                 </>
                             ))}
                         </div>
@@ -172,7 +204,7 @@ export default function ShowPlates() {
                 <div className=" modal-action">
                     <a href="#" className="btn">Fermer
                     </a>
-                    <a href="#" className="btn btn-warning">Modifier</a>
+                    <a onClick={() => deletePlate(modalInfo)} className="btn btn-error">Supprimer</a>
                 </div>
             </Modal>
         </>)
