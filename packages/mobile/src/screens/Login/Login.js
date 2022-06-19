@@ -1,13 +1,15 @@
-import {View, ImageBackground, Pressable, Text, Alert} from "react-native";
+import {View, ImageBackground, Pressable, Text} from "react-native";
 import styles from "./LoginStyle";
 import {useFonts} from "expo-font";
 import OpenURLButton from "../../components/OpenUrlButton";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import validateFormatEmail from "../../help/validateFormatEmail";
 import Input from "../../components/Input";
 import loginError from "../../errors/loginError";
+import {AuthContext} from "../../context/AuthContext";
 
 export default function Login() {
+    const {login} = useContext(AuthContext);
     const [loaded] = useFonts({
         'FascinateRegular': require("../../../assets/fonts/Fascinate-Regular.ttf")
     });
@@ -29,7 +31,7 @@ export default function Login() {
             setError({...error});
         });
         if(Object.keys(error).filter(attr => error[attr].length > 0).length === 0){
-            Alert.alert('Connexion réussie', 'Vous êtes maintenant connecté');
+            login({email: user.email, password: user.password});
         }
     }
 
