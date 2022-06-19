@@ -68,7 +68,7 @@ export function AddCategory({confirmCategories}) {
                 <div className={'flex-1'}>
                     <div
                         className={'suggestion'}>
-                        {suggestions?.bestMatch?.target?.length > 0 && "taper entrer pour la suggestion:"} {suggestions?.bestMatch?.target}
+                        {suggestions?.bestMatch?.target?.length > 0 && "Taper sur tabulation pour la suggestion :"} {suggestions?.bestMatch?.target}
                     </div>
                     <input type="text" placeholder="Ajouter une catégorie"
                            onChange={handleTypingSearch}
