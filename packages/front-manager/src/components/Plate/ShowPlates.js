@@ -46,9 +46,8 @@ export default function ShowPlates() {
         }
     }, []);
 
-    function colorHexa(){
-        let randomColor = Math.floor(Math.random()*16777215).toString(16);
-        return randomColor;
+    function generateHexaColor(){
+        return Math.floor(Math.random()*16777215).toString(16);
     }
 
     function deletePlate(plate) {
@@ -187,13 +186,13 @@ export default function ShowPlates() {
                         <div className="w-full px-5">
                             {modalInfo.ingredients?.length === 0 ? (
                                     <>
-                                        <span className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}>Aucun ingrédients renseignés</span>
+                                        <span className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + generateHexaColor()}}>Aucun ingrédients renseignés</span>
                                     </>
 
                                 ):
                             modalInfo.ingredients?.map(ingredient => (
                                 <>
-                                        <span key={ingredient.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}> {ingredient.name}</span>
+                                        <span key={ingredient.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + generateHexaColor()}}> {ingredient.name}</span>
                                 </>
                             ))}
                         </div>
@@ -205,13 +204,13 @@ export default function ShowPlates() {
                         <div className="w-full px-5">
                             {modalInfo.categories?.length === 0 ? (
                                 <>
-                                    <span className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}>Aucunes catégories</span>
+                                    <span className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + generateHexaColor()}}>Aucunes catégories</span>
                                 </>
 
                             ):
                             modalInfo.categories?.map(category => (
                                 <>
-                                    <span key={category.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + colorHexa()}}> {category.name}</span>
+                                    <span key={category.id} className={'btn btn-primary btn-xs mr-2 rounded-full text-white '} style={{backgroundColor: '#' + generateHexaColor()}}> {category.name}</span>
                                 </>
                             ))}
                         </div>
