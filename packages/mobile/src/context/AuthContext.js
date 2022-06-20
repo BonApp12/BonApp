@@ -1,6 +1,6 @@
 import createDataContext from './createDataContext';
 import loginRequest from "../request/loginRequest";
-import Toast from "react-native-toast-message";
+import toast from "../help/toast";
 
 const authReducer = (state, action) => {
     switch (action.type) {
@@ -19,25 +19,19 @@ const login = dispatch => {
             .then(res => res.data)
             .then(data => {
                 if(data.statusCode === 200){
-                    dispatch({
-                        type: 'login',
-                        payload: {user: data.user},
-                    });
-                    Toast.show({
-                        type: 'success',
-                        text1: 'Connexion réussie',
-                        text2: 'Vous êtes désormais connecté 🎉',
-                        position: 'bottom'
-                    });
+                    if(data.user.role === 'CLIENT') {
+                        toast('error', 'Erreur', 'Une erreur est survenue. Réessayez plus tard ⏳');
+                    }else{
+                        dispatch({
+                            type: 'login',
+                            payload: {user: data.user},
+                        });
+                        toast('success','Connexion réussie','Vous êtes désormais connecté 🎉');
+                    }
                 }
             })
             .catch(e => {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Connexion échouée',
-                    text2: e.response.data.message + '😭',
-                    position: 'bottom'
-                });
+                toast('error','Connexion échouée',e.response.data.message + ' 😭');
             });
     };
 };
