@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {View} from 'react-native';
 import {Divider, Icon, Layout, Text, TopNavigationAction} from '@ui-kitten/components';
 
 const BackIcon = (props) => (
@@ -12,11 +12,11 @@ export const Details = ({navigation}) => {
     );
 
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <View style={{flex: 1}}>
             <Divider/>
             <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                 <Text category="h1">DETAILS</Text>
             </Layout>
-        </SafeAreaView>
+        </View>
     );
 };

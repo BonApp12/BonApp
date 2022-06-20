@@ -27,8 +27,8 @@ export default function Main() {
                     ) : (
                         <Stack.Navigator>
                             <Stack.Screen name="TabFlow" options={{headerShown:false}} component={BottomTabBarStack}/>
-                            <Stack.Screen name="Detail" component={Details}/>
-                            <Stack.Screen name="help" component={Help}/>
+                            <Stack.Screen name="Detail" options={{headerShown:false}} component={Details}/>
+                            <Stack.Screen name="help" options={{headerShown:false}} component={Help}/>
                         </Stack.Navigator>
                     )}
 

@@ -29,7 +29,7 @@ const tabs = [
 
 export default function BottomTabBarStack() {
     return (
-        <Tab.Navigator name={"TabFlow"} tabBar={props => <BottomTabBar {...props} tabs={tabs} />} screenOptions={{headerShown: true}}>
+        <Tab.Navigator name={"TabFlow"} tabBar={props => <BottomTabBar {...props} tabs={tabs} />} screenOptions={{headerShown: false}}>
             {tabs.map((tab,index) => (
                 <Tab.Screen
                     key={index}
