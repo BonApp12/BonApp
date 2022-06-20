@@ -14,7 +14,7 @@ import resetUserConnected from "../../helpers/resetUserConnected";
 import {useHistory} from "react-router-dom";
 
 export default function () {
-    const [userState,setUserState] = useRecoilState(userAtom);
+    const [userState, setUserState] = useRecoilState(userAtom);
     const [teamMembers, setTeamMembers] = useState([]);
     // EditMode
     const [editable, setEditable] = useState({index: null, isEditable: false, updatedTeamMember: {}});
@@ -42,10 +42,12 @@ export default function () {
         fetchTeamMember(userState.restaurant.id).then(async res => {
             if (res.status === 401) resetUserConnected(setUserState,history);
             setTeamMembers(await res.json());
+        }).catch(err => {
+            toast.error(err.message);
         });
         return function cleanup(){
             setTeamMembers([]);
-        }
+        };
     }, []);
 
 
@@ -67,7 +69,7 @@ export default function () {
 
     function confirm(id) {
         deleteUser(id).then(res => {
-            if (res.status === 401) resetUserConnected(setUserState,history);
+            if (res.status === 401) resetUserConnected(setUserState, history);
             else return res.json();
         })
             .then(rowDeleted => {
@@ -90,7 +92,7 @@ export default function () {
 
     function updateTeamMember() {
         updateUser(editable.updatedTeamMember).then(res => {
-            if(res.status === 401) resetUserConnected(setUserState,history);
+            if (res.status === 401) resetUserConnected(setUserState, history);
             else return res.json();
         })
             .then(data => {
@@ -99,7 +101,7 @@ export default function () {
                 if (data.id) return toast.success(`l'équipier a bien été mis à jour.`);
                 return toast.error(data.message);
             })
-            .catch(err => toast.error('Une erreur est survenue lors de la mise à jour de l\'équipier.'));
+            .catch(() => toast.error('Une erreur est survenue lors de la mise à jour de l\'équipier.'));
 
     }
 
