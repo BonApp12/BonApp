@@ -14,6 +14,7 @@ const Stack = createNativeStackNavigator()
 
 export default function Main() {
     const {state} = useContext(AuthContext);
+
     return (
         <>
             <IconRegistry icons={EvaIconsPack}/>

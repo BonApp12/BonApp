@@ -1,4 +1,4 @@
-import {View, ImageBackground, Pressable, Text} from "react-native";
+import {View, ImageBackground, Pressable, Text, Image} from "react-native";
 import styles from "./LoginStyle";
 import {useFonts} from "expo-font";
 import OpenURLButton from "../../components/OpenUrlButton";
@@ -7,6 +7,7 @@ import validateFormatEmail from "../../help/validateFormatEmail";
 import Input from "../../components/Input";
 import loginError from "../../errors/loginError";
 import {AuthContext} from "../../context/AuthContext";
+import loader from "../../../assets/loader.gif";
 
 export default function Login() {
     const {login} = useContext(AuthContext);
@@ -19,6 +20,8 @@ export default function Login() {
         password: ""
     });
 
+    const [loading, setLoading] = useState(false);
+
     const [error, setError] = useState({email: "", password: ""});
 
     if (!loaded) {
@@ -26,13 +29,19 @@ export default function Login() {
     }
 
     const handleSubmit = () => {
-        Object.keys(user).forEach(attr => {
-            error[attr] =  ((attr === "email" && (!validateFormatEmail(user[attr]) || user[attr].length === 0)) || (attr === "password" && user[attr].length === 0)) ? loginError[attr] : "";
-            setError({...error});
-        });
-        if(Object.keys(error).filter(attr => error[attr].length > 0).length === 0){
-            login({email: user.email, password: user.password});
-        }
+        setLoading(true);
+        setTimeout(() => {
+            Object.keys(user).forEach(attr => {
+                error[attr] =  ((attr === "email" && (!validateFormatEmail(user[attr]) || user[attr].length === 0)) || (attr === "password" && user[attr].length === 0)) ? loginError[attr] : "";
+                setError({...error});
+            });
+            if(Object.keys(error).filter(attr => error[attr].length > 0).length === 0){
+                setLoading(false);
+                login({email: user.email, password: user.password});
+            }else{
+                setLoading(false);
+            }
+        },2000);
     }
 
     return (
@@ -48,8 +57,9 @@ export default function Login() {
                     <Input placeholder={'Votre mot de passe...'} changeText={(e) => setUser({...user, password: e})} error={error.password} secureText={true}/>
 
                     <OpenURLButton url={'http://localhost:3000/forgot-password/'}>Mot de passe oublié ?</OpenURLButton>
-                    <Pressable style={styles.button} onPress={() => handleSubmit()}>
-                        <Text style={styles.textButton}>Se connecter</Text>
+                    <Pressable style={{...styles.button, height:loading ? 70 : 55}} onPress={() => handleSubmit()}>
+                        <Image source={loader} style={{width:80,height:80,alignSelf:'center',position:'absolute',top:-12,display: loading ? 'flex' : 'none'}}/>
+                        {!loading && (<Text style={styles.textButton}>Se connecter</Text>)}
                     </Pressable>
                 </View>
             </ImageBackground>

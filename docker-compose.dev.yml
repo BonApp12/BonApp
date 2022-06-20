@@ -50,30 +50,19 @@ services:
     networks:
       - bp-network
 
-  mobile:
-    container_name: mobile
-    build:
-      context: ./packages/mobile
-      args:
-        - NODE_ENV=development
-    environment:
-      - NODE_ENV=development
-      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-    tty: true
+  caddy:
+    image: abiosoft/caddy
+    container_name: caddy
     ports:
-      - "${REACT_NATIVE_PORT_DEFAULT}:${REACT_NATIVE_PORT_DEFAULT}"
-      - "${REACT_NATIVE_PORT_DEBUG_1}:${REACT_NATIVE_PORT_DEBUG_1}"
-      - "${REACT_NATIVE_PORT_DEBUG_2}:${REACT_NATIVE_PORT_DEBUG_2}"
+      - "80:80"
+      - "443:443"
+    links:
+      - backend
     volumes:
-      - ./packages/mobile:/opt/mobile/app:delegated
-      - ./packages/mobile/package.json:/opt/mobile/package.json
-      - ./packages/mobile/yarn.lock:/opt/mobile/yarn.lock
-      - notused:/opt/mobile/app/node_modules
-    healthcheck:
-      disable: true
-
-volumes:
-  notused:
+      - "./Caddyfile:/etc/Caddyfile"
+      - "./caddy:/root/.caddy"
+    networks:
+      - bp-network
 
 networks:
   bp-network:

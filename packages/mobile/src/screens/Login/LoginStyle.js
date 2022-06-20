@@ -45,6 +45,7 @@ export default StyleSheet.create({
         elevation: 10,
     },
     button: {
+        position: "relative",
         padding: 10,
         borderRadius: 10,
         color: "#fff",

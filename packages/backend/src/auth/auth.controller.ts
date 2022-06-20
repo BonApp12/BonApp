@@ -47,8 +47,8 @@ export class AuthController {
     @Post('/login')
     async login(@Req() req: RequestWithUser, @Headers() headers: any) {
         const userDto = UserAdapter.toDto(req.user);
-        if ((headers.origin === this.configService.get("URL_FRONTMANAGER") && userDto.role !== UserRole.CLIENT)
-            || (headers.origin === this.configService.get("URL_FRONTEND") && userDto.role === UserRole.CLIENT)) {
+        if (((headers.origin === this.configService.get("URL_FRONTMANAGER") && userDto.role !== UserRole.CLIENT)
+            || (headers.origin === this.configService.get("URL_FRONTEND") && userDto.role === UserRole.CLIENT)) || headers.origin === undefined) {
             return this.loginUser(req, userDto);
         }
         throw new HttpException(

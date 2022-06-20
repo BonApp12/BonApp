@@ -1,0 +1,4 @@
+bonapp.fr:443 {
+    proxy / backend:4000
+    tls self_signed
+}
