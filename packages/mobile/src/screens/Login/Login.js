@@ -2,8 +2,8 @@ import {View, ImageBackground, Pressable, Text, Image, Keyboard} from "react-nat
 import styles from "./LoginStyle";
 import {useFonts} from "expo-font";
 import OpenURLButton from "../../components/OpenUrlButton";
-import {useContext, useState} from "react";
-import validateFormatEmail from "../../help/validateFormatEmail";
+import {useContext, useEffect, useState} from "react";
+import validateFormatEmail from "../../utils/validateFormatEmail";
 import Input from "../../components/Input";
 import loginError from "../../errors/loginError";
 import {AuthContext} from "../../context/AuthContext";
@@ -14,6 +14,14 @@ export default function Login() {
     const [loaded] = useFonts({
         'FascinateRegular': require("../../../assets/fonts/Fascinate-Regular.ttf")
     });
+
+    useEffect(() => {
+        return () => {
+            setLoading(false);
+            setError({email: "",password: ""});
+            setUser({email: "",password: ""});
+        }
+    },[])
 
     const [user, setUser] = useState({
         email: "",

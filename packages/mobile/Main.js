@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
@@ -9,18 +9,29 @@ import {Help} from "./src/screens/Help/Help";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Login from "./src/screens/Login/Login";
 import {AuthContext} from './src/context/AuthContext';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axiosConfig from "./src/utils/axiosConfig";
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
 export default function Main() {
-    const {state} = useContext(AuthContext);
+    const {state,setState} = useContext(AuthContext);
+    axiosConfig(setState);
+
+    useEffect(() => {
+        AsyncStorage.getItem('user').then(user => {
+            if(user !== null){
+                setState(JSON.parse(user));
+            }
+        })
+    },[])
 
     return (
         <>
             <IconRegistry icons={EvaIconsPack}/>
             <ApplicationProvider {...eva} theme={eva.light}>
                 <NavigationContainer>
-                    {!state.user ? (
+                    {state.user === null || state.user === undefined ? (
                         <Stack.Navigator>
                             <Stack.Screen name="login" options={{headerShown:false}} component={Login}/>
                         </Stack.Navigator>

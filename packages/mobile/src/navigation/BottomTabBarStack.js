@@ -2,6 +2,7 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {Home} from "../screens/Home/Home";
 import {Details} from "../screens/Details/Details";
 import {Help} from "../screens/Help/Help";
+import {Settings} from "../screens/Settings/Settings";
 import BottomTabBar from "./BottomTabBar";
 
 const Tab = createBottomTabNavigator();
@@ -24,6 +25,12 @@ const tabs = [
         icon: 'question-mark-circle-outline',
         name: 'Demande d\'aide',
         component: Help,
+    },
+    {
+        id:3,
+        icon: 'settings-2-outline',
+        name: 'Paramètres',
+        component: Settings,
     }
 ];
 
