@@ -1,4 +1,4 @@
-import {View, ImageBackground, Pressable, Text, Image, Keyboard} from "react-native";
+import {Image, ImageBackground, Keyboard, Pressable, Text, View} from "react-native";
 import styles from "./LoginStyle";
 import {useFonts} from "expo-font";
 import OpenURLButton from "../../components/OpenUrlButton";
@@ -24,8 +24,8 @@ export default function Login() {
     },[])
 
     const [user, setUser] = useState({
-        email: "",
-        password: ""
+        email: "barton.balistreri@gmail.com",
+        password: "123"
     });
 
     const [loading, setLoading] = useState(false);
@@ -39,17 +39,17 @@ export default function Login() {
     const handleSubmit = () => {
         Keyboard.dismiss();
         Object.keys(user).forEach(attr => {
-            error[attr] =  ((attr === "email" && (!validateFormatEmail(user[attr]) || user[attr].length === 0)) || (attr === "password" && user[attr].length === 0)) ? loginError[attr] : "";
+            error[attr] = ((attr === "email" && (!validateFormatEmail(user[attr]) || user[attr].length === 0)) || (attr === "password" && user[attr].length === 0)) ? loginError[attr] : "";
             setError({...error});
         });
-        if(Object.keys(error).filter(attr => error[attr].length > 0).length === 0) {
+        if (Object.keys(error).filter(attr => error[attr].length > 0).length === 0) {
             setLoading(true);
             setTimeout(() => {
                 setLoading(false);
                 login({email: user.email, password: user.password});
             }, 2000);
         }
-    }
+    };
 
     return (
         <View style={styles.container}>

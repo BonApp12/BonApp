@@ -1,15 +1,39 @@
-import {View} from 'react-native';
-import {Button, Layout} from '@ui-kitten/components';
-import axios from "axios";
-import {restaurant} from "../../router/routes";
+import React, {useState} from 'react';
+import {ScrollView, StyleSheet, Text} from 'react-native';
+import SafeAreaView from "react-native/Libraries/Components/SafeAreaView/SafeAreaView";
+import ListItem from "../../components/listItem";
 
+// MOCK LES ORDERS
+const TITLES = [
+    'Record the dismissible tutorial 🎥',
+    'Leave 👍🏼 to the video',
+    'Check YouTube comments',
+    'Subscribe to the channel 🚀',
+    'Leave a ⭐️ on the GitHub Repo',
+];
+const TASKS = TITLES.map((title, index) => ({index, title}));
 
 export const Home = () => {
+    const [tasks, setTasks] = useState(TASKS);
     return (
-        <View style={{flex: 1, backgroundColor: '#000000'}}>
-            <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Button onPress={() => axios.get(restaurant+'1',{credential: true, withCredentials: true}).then(res => res.data).then(data => alert(data.id))}>OPEN DETAILS</Button>
-            </Layout>
-        </View>
+        <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+            <Text style={styles.title}>Commande prête</Text>
+            <ScrollView>
+                {tasks.map(task =>
+                    <ListItem task={task}
+                              onDismiss={(id) => {
+                                  setTasks(tasks.filter(task => task.index !== id));
+                              }}
+                              key={task.index}
+                    />)}
+            </ScrollView>
+        </SafeAreaView>
     );
 };
+const styles = StyleSheet.create({
+    title: {
+        fontSize: 40,
+        marginVertical: 20,
+        paddingLeft: '5%',
+    }
+});
