@@ -26,7 +26,7 @@ const ListItem = ({task, onDismiss, openModal}) => {
         },
         onEnd: () => {
             const shouldBeDismissed = translateX.value < -TRANSLATE_X_THRESHOLD;
-            const shouldOpenModal = translateX.value > -TRANSLATE_X_THRESHOLD;
+            const shouldOpenModal = translateX.value > TRANSLATE_X_THRESHOLD;
             if (shouldBeDismissed) {
                 translateX.value = withTiming(-SCREEN_WIDTH);
                 itemHeight.value = withTiming(0);

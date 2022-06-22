@@ -10,6 +10,7 @@ const ModalBottom = forwardRef(({taskToDisplay}, ref) => {
     useImperativeHandle(ref, () => ({
         handlePresentModalPress() {
             bottomSheetModalRef.current?.present();
+            bottomSheetModalRef.current?.present();
         }
     }));
 
