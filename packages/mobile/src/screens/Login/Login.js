@@ -19,9 +19,9 @@ export default function Login() {
         return () => {
             setLoading(false);
             setError({email: "",password: ""});
-            setUser({email: "",password: ""});
+            setUser({email: "barton.balistreri@gmail.com",password: "123"});
         }
-    },[])
+    },[]);
 
     const [user, setUser] = useState({
         email: "barton.balistreri@gmail.com",

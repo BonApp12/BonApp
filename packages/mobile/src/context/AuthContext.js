@@ -20,24 +20,26 @@ const login = dispatch => {
     return ({email, password}) => {
         loginRequest(email, password)
             .then(res => res.data)
-            .then(async(data) => {
-                if(data.statusCode === 200){
-                    if(data.user.role === 'CLIENT') {
+            .then(async (data) => {
+                console.log(data);
+                if (data.statusCode === 200) {
+                    if (data.user.role === 'CLIENT') {
                         toast('error', 'Erreur', 'Une erreur est survenue. Réessayez plus tard ⏳');
-                    }else{
+                    } else {
                         await AsyncStorage.setItem('user', JSON.stringify({...data.user}));
                         dispatch({
                             type: 'login',
                             payload: {user: data.user},
                         });
-                        toast('success','Connexion réussie','Vous êtes désormais connecté 🎉');
+                        toast('success', 'Connexion réussie', 'Vous êtes désormais connecté 🎉');
                     }
-                }else if(data.statusCode === 400){
-                    toast('error','Connexion échouée', data.message + ' 😭');
+                } else if (data.statusCode === 400) {
+                    toast('error', 'Connexion échouée', data.message + ' 😭');
                 }
             })
-            .catch(() => {
-                toast('error','Erreur','Une erreur est survenue 😭');
+            .catch((e) => {
+                console.log(e);
+                toast('error', 'Erreur', 'Une erreur est survenue 😭');
             });
     };
 };
@@ -45,18 +47,18 @@ const login = dispatch => {
 const logout = dispatch => {
     return () => {
         logoutRequest().then(async () => {
-            dispatch({type:'logout', payload: {user: null}});
+            dispatch({type: 'logout', payload: {user: null}});
             await AsyncStorage.removeItem('user');
-            toast('success','Déconnexion réussie','Vous êtes désormais déconnecté 🎉');
-        })
+            toast('success', 'Déconnexion réussie', 'Vous êtes désormais déconnecté 🎉');
+        });
     };
 };
 
 const setState = dispatch => {
     return (state) => {
-        dispatch({type:'setState', payload: {user:state}});
-    }
-}
+        dispatch({type: 'setState', payload: {user: state}});
+    };
+};
 
 export const {AuthContext, AuthProvider} = createDataContext(
     authReducer,

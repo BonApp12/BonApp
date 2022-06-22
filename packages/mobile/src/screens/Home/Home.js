@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {ScrollView, StyleSheet, Text} from 'react-native';
 import SafeAreaView from "react-native/Libraries/Components/SafeAreaView/SafeAreaView";
 import ListItem from "../../components/listItem";
+import ModalBottom from "../../components/modalBottom";
+
 
 // MOCK LES ORDERS
 const TITLES = [
@@ -15,18 +17,28 @@ const TASKS = TITLES.map((title, index) => ({index, title}));
 
 export const Home = () => {
     const [tasks, setTasks] = useState(TASKS);
+    const [taskToDisplay, setTaskToDisplay] = useState({});
+    const modalBottomRef = useRef(null);
+    const handleClick = (task) => {
+        setTaskToDisplay(task);
+        modalBottomRef.current?.handlePresentModalPress();
+    };
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
             <Text style={styles.title}>Commande prête</Text>
             <ScrollView>
                 {tasks.map(task =>
                     <ListItem task={task}
+                              key={task.index}
+                              openModal={() => handleClick(task)}
                               onDismiss={(id) => {
                                   setTasks(tasks.filter(task => task.index !== id));
                               }}
-                              key={task.index}
-                    />)}
+
+                    />
+                )}
             </ScrollView>
+            <ModalBottom taskToDisplay={taskToDisplay} ref={modalBottomRef}/>
         </SafeAreaView>
     );
 };

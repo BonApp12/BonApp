@@ -9,25 +9,25 @@ const Tab = createBottomTabNavigator();
 
 const tabs = [
     {
-        id:0,
+        id: 0,
         icon: 'checkmark-circle-outline',
-        name: 'Commande prête',
+        name: 'Prête',
         component: Home
     },
     {
-        id:1,
+        id: 1,
         icon: 'flip-outline',
         name: 'En préparation',
         component: Details
     },
     {
-        id:2,
-        icon: 'question-mark-circle-outline',
-        name: 'Demande d\'aide',
+        id: 2,
+        icon: 'message-circle-outline',
+        name: 'En direct',
         component: Help,
     },
     {
-        id:3,
+        id: 3,
         icon: 'settings-2-outline',
         name: 'Paramètres',
         component: Settings,
@@ -36,8 +36,9 @@ const tabs = [
 
 export default function BottomTabBarStack() {
     return (
-        <Tab.Navigator name={"TabFlow"} tabBar={props => <BottomTabBar {...props} tabs={tabs} />} screenOptions={{headerShown: false}}>
-            {tabs.map((tab,index) => (
+        <Tab.Navigator name={"TabFlow"} tabBar={props => <BottomTabBar {...props} tabs={tabs}/>}
+                       screenOptions={{headerShown: false}}>
+            {tabs.map((tab, index) => (
                 <Tab.Screen
                     key={index}
                     name={tab.name}
@@ -45,5 +46,5 @@ export default function BottomTabBarStack() {
                 />
             ))}
         </Tab.Navigator>
-    )
+    );
 }

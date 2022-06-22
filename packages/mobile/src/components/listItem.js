@@ -14,7 +14,7 @@ const LIST_ITEM_HEIGHT = 70;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const TRANSLATE_X_THRESHOLD = SCREEN_WIDTH * 0.3;
-const ListItem = ({task, onDismiss}) => {
+const ListItem = ({task, onDismiss, openModal}) => {
     const translateX = useSharedValue(0);
     const itemHeight = useSharedValue(LIST_ITEM_HEIGHT);
     const marginVertical = useSharedValue(10);
@@ -25,8 +25,8 @@ const ListItem = ({task, onDismiss}) => {
             translateX.value = event.translationX;
         },
         onEnd: () => {
-            console.log(TRANSLATE_X_THRESHOLD, translateX.value, SCREEN_WIDTH);
-            const shouldBeDismissed = translateX.value < TRANSLATE_X_THRESHOLD;
+            const shouldBeDismissed = translateX.value < -TRANSLATE_X_THRESHOLD;
+            const shouldOpenModal = translateX.value > -TRANSLATE_X_THRESHOLD;
             if (shouldBeDismissed) {
                 translateX.value = withTiming(-SCREEN_WIDTH);
                 itemHeight.value = withTiming(0);
@@ -37,9 +37,13 @@ const ListItem = ({task, onDismiss}) => {
                     }
                 });
 
+            } else if (shouldOpenModal) {
+                runOnJS(openModal)(task);
+                translateX.value = withTiming(0);
             } else {
                 translateX.value = withTiming(0);
             }
+
         }
     });
 
@@ -69,6 +73,10 @@ const ListItem = ({task, onDismiss}) => {
         <Animated.View style={[styles.taskContainer, rTaskContainerStyle]}>
             <Animated.View style={[styles.iconContainer, rIconContainerStyle]}>
                 <FontAwesome5 name={"trash-alt"} size={LIST_ITEM_HEIGHT * 0.4} color={'red'}/>
+            </Animated.View>
+            <Animated.View style={[styles.iconContainer, styles.iconContainerInfo, rIconContainerStyle]}>
+                <FontAwesome5 name={"question-circle"} size={LIST_ITEM_HEIGHT * 0.4} color={'blue'}/>
+                <Text style={{fontSize: 10}}>Information</Text>
             </Animated.View>
             <PanGestureHandler onGestureEvent={panGesture}>
                 <Animated.View style={[styles.task, rStyle]}>
@@ -112,5 +120,9 @@ const styles = StyleSheet.create({
         right: '5%',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    iconContainerInfo: {
+        left: '5%',
+        color: 'blue',
     }
 });
