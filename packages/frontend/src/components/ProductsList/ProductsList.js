@@ -69,7 +69,6 @@ const ProductsList = () => {
         fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists);
     }, [idRestaurant, idTable, socket]);
 
-
     useEffect(() => {
         if (tableExists){
             socket.emit('joinTable', {
@@ -110,7 +109,6 @@ const ProductsList = () => {
             cartCopy[indexPlateExists].quantity++;
             updateCart(cartCopy);
         }
-        socket.emit('addToCart', {idTable, idRestaurant, plate});
     }
 
     function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
@@ -132,7 +130,6 @@ const ProductsList = () => {
     if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
     if (!isLoaded) return <div><Loading/></div>;
 
-    // TODO : Socket button to be removed, testing purpose.
     return (
         <div className="sidebar-cart">
             <Layout restaurant={restaurant} otherCart={otherCart}/>
