@@ -12,21 +12,26 @@ import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
+import {userAtom} from "../../states/user";
 
 const ProductsList = () => {
     let params = useParams();
-
     const idRestaurant = params.idRestaurant;
     const idTable = params.idTable;
+
     // Setting up states
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [tableExists, setTableExists] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
-    //Gère la modal, si true, affiche la modal et le contenu de la modal
+    const [otherCart, updateOtherCart] = useRecoilState(cartAtom); // Fill this variables with the sockets and the connection.
+
+    // Handling ingredients modal
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
     const [cart, updateCart] = useRecoilState(cartAtom);
-    // Handling socket
+    const [userState, setUserState] = useRecoilState(userAtom);
+
+    // Initializing socket
     const socket = useContext(SocketContext);
 
     // Filtering plates depending of query
@@ -57,20 +62,54 @@ const ProductsList = () => {
         return filteredPlates[filteredPlates.findIndex(plate => plate.id === item.id)].quantity = item.quantity;
     });
 
+    // Gathering restaurant informations & setting up sockets events.
     useEffect(() => {
-        // Gathering restaurant informations and emitting to socket that an user has joined a Room and a table.
         fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists);
     }, [idRestaurant, idTable, socket]);
-
     useEffect(() => {
         if (tableExists){
-            socket.emit('joinTable', {idTable, idRestaurant});
+            socket.emit('joinTable', {
+                idTable,
+                idRestaurant,
+                user: {
+                    email: userState.email,
+                    firstName: userState.firstname,
+                    lastName: userState.lastname
+                },
+            })
             socket.on('userJoinedRoom', (message) => {
-                console.log(message);
+                console.log('Liste des utilisateurs dans la room : ', message);
             });
+            socket.on('userLeftRoom', (message) => {
+                console.log(message);
+            })
         }
     }, [tableExists, idTable, idRestaurant, socket]);
 
+    useEffect(() => {
+        socket.on('itemCartUpdated', (informations) => {
+            console.log(informations.user, informations.cart);
+            // Mettre à jour le cart avec le format suivant :
+            // informations -> user && cart.
+            /*
+               user ->
+                    cart ->
+                        plate ->
+                            ingredients
+                user2 ->
+                    cart2 ->
+                        plate2 ->
+                            ingredients2..
+             */
+        })
+    }, []);
+
+
+    useEffect(() => {
+        if (cart.length > 0){
+            socket.emit('userCartUpdated', {cart, user: userState});
+        }
+    }, [cart]);
 
     function addToCart(plate) {
         let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
@@ -80,10 +119,9 @@ const ProductsList = () => {
             cartCopy[indexPlateExists].quantity++;
             updateCart(cartCopy);
         }
-        socket.emit('addToCart', {idTable, idRestaurant, plate});
     }
 
-    function removeFromCart(plate) { // TODO : Externaliser la fonction
+    function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
         const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
         // If plates quantity is at 1, remove it from cart
         if (cart[indexPlateToRemove].quantity === 1) {
@@ -95,13 +133,13 @@ const ProductsList = () => {
             cartCopy[indexPlateToRemove].quantity--;
             updateCart(cartCopy);
         }
+        socket.emit('removeFromCart', {idTable, idRestaurant, plate});
     }
 
 
     if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
     if (!isLoaded) return <div><Loading/></div>;
 
-    // TODO : Socket button to be removed, testing purpose.
     return (
         <div className="sidebar-cart">
             <Layout restaurant={restaurant}/>
