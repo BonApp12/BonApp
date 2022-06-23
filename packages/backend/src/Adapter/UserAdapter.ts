@@ -39,4 +39,10 @@ export class UserAdapter {
         users.restaurant = user.restaurant;
         return users;
     }
+
+    toDtoMobile(user: Users): UsersDto {
+        let userDto: UsersDto = UserAdapter.toDto(user);
+        userDto.expoToken = user?.expoToken;
+        return userDto;
+    }
 }

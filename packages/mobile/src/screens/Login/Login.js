@@ -24,8 +24,8 @@ export default function Login() {
     },[]);
 
     const [user, setUser] = useState({
-        email: "barton.balistreri@gmail.com",
-        password: "123"
+        email: "",
+        password: ""
     });
 
     const [loading, setLoading] = useState(false);

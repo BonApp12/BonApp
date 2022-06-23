@@ -19,7 +19,11 @@ export class OrdersService {
     }
 
     findAll() {
-        OrdersService.sendNotification();
+        /*TODO: il est placé ici pour des fin de test
+        Quand wass aura intégrer les socket il devra placer cette méthodes dans la méthode associée
+        Se référer à la documentation associée à la méthode pour savoir ce qu'elle attend.
+         */
+        OrdersService.sendNotification(null);
         /* Récupération de toutes les commandes avec les relations User et Restaurant */
         return this.orderRepository.find({relations: ['user', 'restaurant', 'plate']});
     }
@@ -83,28 +87,41 @@ export class OrdersService {
         return `This action removes a #${id} order`;
     }
 
-    private static sendNotification() {
-        console.log("Sending notification");
 
+    /**
+     *
+     * @param order
+     * @private
+     * Cette méthode attend d'avoir les tokens des serveurs pour envoyer les notifications
+     */
+    private static sendNotification(order: Order) {
+        /* TODO: ici on fera la requête en fonction de l'order et des serveurs qui doivent recupérer la notification
+        Typiquement order.restaurant.users.filter(user => user.role === UserRole.RESTAURANT_SERVER)
+        On peut aussi s'en servir pour tout tant que l'on a bien un expoToken en bdd
+         */
+        const tokens = ["ExponentPushToken[yXejFVPZOwh_c45bQmSYih]"];
 // Create a new Expo SDK client
 // optionally providing an access token if you have enabled push security
         let expo = new Expo({accessToken: process.env.EXPO_ACCESS_TOKEN});
 
 // Create the messages that you want to send to clients
         let messages = [];
-        const pushToken = "ExponentPushToken[yXejFVPZOwh_c45bQmSYih]";
-        // Check that all your push tokens appear to be valid Expo push tokens
-        if (!Expo.isExpoPushToken(pushToken)) {
-            console.error(`Push token ${pushToken} is not a valid Expo push token`);
-        }
+        tokens.forEach(pushToken => {
+            // Check that all your push tokens appear to be valid Expo push tokens
+            if (!Expo.isExpoPushToken(pushToken)) {
+                console.error(`Push token ${pushToken} is not a valid Expo push token`);
+            }
 
-        // Construct a message (see https://docs.expo.io/push-notifications/sending-notifications/)
-        messages.push({
-            to: pushToken,
-            sound: 'default',
-            body: 'Une nouvelle commande est prête !',
-            data: {withSome: 'data'},
+            // Construct a message (see https://docs.expo.io/push-notifications/sending-notifications/)
+            messages.push({
+                to: pushToken,
+                sound: 'default',
+                body: 'Une nouvelle commande est prête !',
+                data: {withSome: 'data'},
+            });
         });
+
+
         let chunks = expo.chunkPushNotifications(messages);
         let tickets = [];
         (async () => {
@@ -114,7 +131,6 @@ export class OrdersService {
             for (let chunk of chunks) {
                 try {
                     let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                    console.log(ticketChunk);
                     tickets.push(...ticketChunk);
                     // NOTE: If a ticket contains an error code in ticket.details.error, you
                     // must handle it appropriately. The error codes are listed in the Expo

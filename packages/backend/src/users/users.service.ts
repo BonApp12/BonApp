@@ -50,7 +50,7 @@ export class UsersService {
             const newUser = this.usersRepository.create(userData);
             await this.usersRepository.save(newUser);
             return UserAdapter.toDto(newUser);
-        }catch (e) {
+        } catch (e) {
             throw new HttpException(e.message, e.status);
         }
     }
@@ -62,18 +62,18 @@ export class UsersService {
             ...usersDto,
         };
 
-        if(usersDto?.oldPassword?.trim().length && !withoutOldPassword){
+        if (usersDto?.oldPassword?.trim().length && !withoutOldPassword) {
             const checkPassword = await UTILS.verifyPassword(newUser.oldPassword, user.password);
-            if(!checkPassword){
+            if (!checkPassword) {
                 throw new HttpException(
                     "Le mot de passe ne correspond pas à l'ancien",
                     HttpStatus.BAD_REQUEST,
                 );
             }
             delete newUser.oldPassword;
-        }else if(!withoutOldPassword){
+        } else if (!withoutOldPassword) {
             delete newUser.password;
-        }else {
+        } else {
             newUser.token = null;
         }
         return this.update(newUser);
@@ -113,5 +113,9 @@ export class UsersService {
 
     delete(id: string): Promise<DeleteResult> {
         return this.usersRepository.delete(id);
+    }
+
+    setExpoToken(id: string, expoToken: string) {
+        return this.usersRepository.update(id, {expoToken});
     }
 }

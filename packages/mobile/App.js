@@ -2,7 +2,6 @@ import {AuthProvider} from './src/context/AuthContext';
 import Main from "./Main";
 import Toast from 'react-native-toast-message';
 import * as Notifications from 'expo-notifications';
-import NotificationProvider from "./NotificationProvider";
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -19,7 +18,6 @@ export default function App() {
             <AuthProvider>
                 <Main/>
             </AuthProvider>
-            <NotificationProvider/>
             <Toast/>
         </>
     );

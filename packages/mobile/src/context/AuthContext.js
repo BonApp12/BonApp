@@ -21,7 +21,6 @@ const login = dispatch => {
         loginRequest(email, password)
             .then(res => res.data)
             .then(async (data) => {
-                console.log(data);
                 if (data.statusCode === 200) {
                     if (data.user.role === 'CLIENT') {
                         toast('error', 'Erreur', 'Une erreur est survenue. Réessayez plus tard ⏳');
@@ -38,7 +37,6 @@ const login = dispatch => {
                 }
             })
             .catch((e) => {
-                console.log(e);
                 toast('error', 'Erreur', 'Une erreur est survenue 😭');
             });
     };
