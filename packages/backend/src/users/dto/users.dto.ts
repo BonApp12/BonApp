@@ -1,6 +1,6 @@
 import {IsEmail, IsOptional, Length, Matches} from 'class-validator';
-import { UserRole } from '../UserRole.enum';
-import { Restaurant } from '../../restaurant/entities/restaurant.entity';
+import {UserRole} from '../UserRole.enum';
+import {Restaurant} from '../../restaurant/entities/restaurant.entity';
 import {MESSAGES, REGEX} from "../../app.utils";
 
 export class UsersDto {
@@ -12,8 +12,8 @@ export class UsersDto {
     @IsOptional()
     email: string;
 
-    @Matches(REGEX.PASSWORD_RULE, { message: MESSAGES.PASSWORD_RULE_MESSAGE })
-    @Length(8,15, {
+    @Matches(REGEX.PASSWORD_RULE, {message: MESSAGES.PASSWORD_RULE_MESSAGE})
+    @Length(8, 15, {
         message: MESSAGES.PASSWORD_LENGTH
     })
     @IsOptional()
@@ -23,4 +23,5 @@ export class UsersDto {
     restaurant: Restaurant;
     oldPassword?: string;
     token?: string;
+    expoToken?: string;
 }

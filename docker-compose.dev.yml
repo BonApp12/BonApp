@@ -50,6 +50,20 @@ services:
     networks:
       - bp-network
 
+  caddy:
+    image: abiosoft/caddy
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - backend
+    volumes:
+      - "./Caddyfile:/etc/Caddyfile"
+      - "./caddy:/root/.caddy"
+    networks:
+      - bp-network
+
 networks:
   bp-network:
     driver: bridge

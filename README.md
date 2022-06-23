@@ -13,12 +13,16 @@ Pour que l'installation se déroule sans accroc, vous aurez besoin de créer vou
 
 ```
 JWT_ACCESS_TOKEN_SECRET=VOTRE_SECRET_JWT
-JWT_ACCESS_TOKEN_EXPIRATION_TIME=10000
+#2,7 heures
+JWT_ACCESS_TOKEN_EXPIRATION_TIME_WEB=10000
+#18 heures
+JWT_ACCESS_TOKEN_EXPIRATION_TIME_MOBILE=64800
 
 URL_API_BACKEND=http://localhost:4000
 URL_FRONTEND=http://localhost:3000
 URL_FRONTMANAGER=http://localhost:3001
-
+# for notifications
+EXPO_ACCESS_TOKEN=2NphbUgGqb0NM66mG8qU_6F4C2LgbWfbZq8pG5Qs
 # mail
 MAIL_HOST=smtp.gmail.com
 MAIL_USER=VOTRE_USER_MAIL
@@ -31,8 +35,7 @@ GOOGLE_SECRET=VOTRE_SECRET_GOOGLE
 GOOGLE_REDIRECT_URI=http://localhost:4000/google/redirect
 ```
 
-
-Pour mutualiser les url dans le front:  
+Pour mutualiser les url dans le front:
 
 ```packages/frontend/.env```:
 
@@ -41,8 +44,6 @@ REACT_APP_URL_BACKEND=http://localhost:4000
 REACT_APP_SOCKET_BACKEND=ws://localhost:4000
 REACT_APP_GOOGLE_AUTH_CLIENT_ID=VOTRE_CLIENT_ID
 ```
-
-
 
 ```/.env```:
 
@@ -104,14 +105,8 @@ Rappel : Une fois que la base de données est initialisée, repasser ce paramèt
 # Launch local build and up
 $ make local-build 
 
-# Launch local up
-$ make local-up
-
 # Launch prod build and up
 $ make prod-build
-
-# Launch prod up
-$ make prod-up
 
 # YARN
 $ yarn install
@@ -123,11 +118,17 @@ Concernant l'installation de l'application, la stack étant exclusivement en Jav
 ## Lancer l'application
 
 ```bash
-# En local
-$ make local # Cette commande supprime les anciennes instances du projet et le rebuild.
+# In local
+$ make local-build # this command build and launch the project
 
-# docker-compose (building is optional)
-$ docker-compose up --build -d # Sans supression des anciennes instances.
+# or to launch the project only 
+$ make local-up
+
+#In Prod
+$ make prod-build # this command build and launch the project
+
+# or to launch the project only 
+$ make prod-up
 
 #### YARN ####
 # development
@@ -140,11 +141,20 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-**_NOTE_** :
-- Renseigner et remplir les fichiers .env (backend, frontend et racine)
-- Mettre l'option **synchronise** a TRUE dans le fichier ```ormconfig.js``` situé dans le dossier ```packages/backend```.
-- Lancer les fixtures qu'on explique juste après.
+### Lancer l'application mobile
+Après l'installation des packages, vous devez créer un .env avec les informations suivantes :
+```
+#.env
+BACKEND_URL=(url de votre backend)
 
+```
+
+**_NOTE_** :
+
+- Renseigner et remplir les fichiers .env (backend, frontend et racine)
+- Mettre l'option **synchronise** a TRUE dans le fichier ```ormconfig.js``` situé dans le dossier ```packages/backend```
+  .
+- Lancer les fixtures qu'on explique juste après.
 
 ## Générer les fixtures
 
@@ -173,5 +183,7 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
 ## Schema base de donnée
+
 ![alt text](./bdd_bonApp.jpeg)

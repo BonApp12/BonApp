@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/local/Burger.png",
+          "color": "#ffffff",
+          "sounds": [
+            "assets/local/snoring.wav"
+          ]
+        }
+      ]
+    ],
+    "name": "Bonapp - serveur",
+    "slug": "mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/local/Burger.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/local/Burger.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
+      },
+      "bundleIdentifier": "com.yassansplus.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/Burger.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.yassansplus.mobile"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "description": ""
+  }
+}

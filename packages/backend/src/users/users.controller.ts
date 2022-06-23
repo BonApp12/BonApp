@@ -1,7 +1,7 @@
-import {Body, Controller, Delete, Get, Param, Post, Req, UseGuards, Patch} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {UsersDto} from "./dto/users.dto";
-import {DeleteResult} from "typeorm";
+import {DeleteResult, UpdateResult} from "typeorm";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {SETTINGS} from "../app.utils";
 import RequestWithUser from "../auth/interfaces/requestWithUser.interface";
@@ -33,6 +33,12 @@ export class UsersController {
     @Patch('/:id')
     updateUserRestaurant(@Param('id') id: string, @Body() user: UsersDto): Promise<UsersDto> {
         return this.userService.update(user);
+    }
+
+    // @UseGuards(JwtAuthGuard)
+    @Patch('/update-expoToken/:id')
+    setExpoToken(@Param('id') id: string, @Body('expoToken') expoToken: string): Promise<UpdateResult> {
+        return this.userService.setExpoToken(id, expoToken);
     }
 
     @UseGuards(JwtAuthGuard)
