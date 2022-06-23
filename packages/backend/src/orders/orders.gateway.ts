@@ -6,6 +6,8 @@ import {
 import {OrdersService} from './orders.service';
 import {Server, Socket} from 'socket.io';
 import {Logger} from "@nestjs/common";
+import {UpdateOrderDto} from "./dto/update-order.dto";
+import {CreateOrderDto} from "./dto/create-order.dto";
 
 @WebSocketGateway({cors: true})
 export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -18,11 +20,11 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     public users = new Map();
 
     afterInit(server: Server) {
-      this.logger.log('Initialized');
+        this.logger.log('Initialized');
     }
 
     handleDisconnect(client: Socket) {
-      this.logger.log(`Disconnecting client ${client.id}`);
+        this.logger.log(`Disconnecting client ${client.id}`);
     }
 
     handleConnection(client: Socket, ...args: any[]) {
@@ -86,19 +88,35 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         }
     }
 
-        /* PERSISTER L'ID ET FAIRE EN SORTE DE POUVOIR LE RÉCUPÉRER, PEUT-ÊTRE VIA UN CUSTOM ID OU JSP
-         (CONCATENER L'EMAIL OU UTILISER L'EMAIL DE LA PERSONNE) (OU PROMPTER L'USER AU DEBUT DU CYCLE D'ACHAT)
-         METTRE TOUT ÇA EN CACHE (DOCS NESTJS CACHING) */
-
-
-    @SubscribeMessage('createOrder')
-    update(client: Socket) {
-        this.logger.log(`Client ${client.id} created an order`)
-        this.wss.to(client.id).emit("orderCreated", `Order created by ${client.id}`);
-    }
+    /* PERSISTER L'ID ET FAIRE EN SORTE DE POUVOIR LE RÉCUPÉRER, PEUT-ÊTRE VIA UN CUSTOM ID OU JSP
+     (CONCATENER L'EMAIL OU UTILISER L'EMAIL DE LA PERSONNE) (OU PROMPTER L'USER AU DEBUT DU CYCLE D'ACHAT)
+     METTRE TOUT ÇA EN CACHE (DOCS NESTJS CACHING) */
 
     @SubscribeMessage('removeOrder')
     remove(@MessageBody() id: number) {
         return this.ordersService.remove(id);
     }
+
+    @SubscribeMessage('createOrder')
+    create(@MessageBody() createOrderDto: CreateOrderDto) {
+        this.ordersService.create(createOrderDto);
+    }
+
+    @SubscribeMessage('findAllOrders')
+    findAll() {
+        return this.ordersService.findAll();
+    }
+
+    @SubscribeMessage('findOneOrder')
+    async findOne(@MessageBody() id: number) {
+        const event = 'oneOrder';
+        const data = await this.ordersService.findOne(id);
+        return {event, data};
+    }
+
+    @SubscribeMessage('updateOrder')
+    update(@MessageBody() updateOrderDto: UpdateOrderDto) {
+        return this.ordersService.update(updateOrderDto.id, updateOrderDto);
+    }
+
 }
