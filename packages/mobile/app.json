@@ -1,13 +1,25 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/local/Burger.png",
+          "color": "#ffffff",
+          "sounds": [
+            "assets/local/snoring.wav"
+          ]
+        }
+      ]
+    ],
     "name": "mobile",
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/local/Burger.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/local/Burger.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,16 +32,18 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSAppTransportSecurity" : {
-          "NSAllowsArbitraryLoads" : true
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
         }
-      }
+      },
+      "bundleIdentifier": "com.yassansplus.mobile"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.yassansplus.mobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
