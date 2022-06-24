@@ -15,21 +15,21 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - uses: actions/checkout@v1
 
-      - name: Build & Push Image for Frontend at ${{ date }}
+      - name: Build & Push Image for Frontend
         run: |
           cd packages/frontend/
           echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
           docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:${{ steps.date.outputs.date }} .
           docker push yassansplus/frontendbonapp:${{ steps.date.outputs.date }}
 
-      - name: Build & Push Image for Backend at ${{ date }}
+      - name: Build & Push Image for Backend
         run: |
           cd packages/backend/
           echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
           docker image build -f Dockerfile.local --tag yassansplus/backendbonapp:${{ steps.date.outputs.date }} .
           docker push yassansplus/backendbonapp:${{ steps.date.outputs.date }}
 
-      - name: Build & Push Image for front-manager at ${{ date }}
+      - name: Build & Push Image for front-manager
         run: |
           cd packages/front-manager/
           echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
