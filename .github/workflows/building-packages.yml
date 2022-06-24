@@ -20,7 +20,8 @@ jobs:
           cd packages/frontend/
           echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
           docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:${{ steps.date.outputs.date }} --tag yassansplus/frontendbonapp:develop .
-          docker push yassansplus/frontendbonapp:${{ steps.date.outputs.date }}
+          docker push yassansplus/frontendbonapp:${{ steps.date.outputs.date }} 
+          docker push yassansplus/frontendbonapp:develop
 
       - name: Build & Push Image for Backend
         run: |
@@ -28,6 +29,7 @@ jobs:
           echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
           docker image build -f Dockerfile.local --tag yassansplus/backendbonapp:${{ steps.date.outputs.date }} --tag yassansplus/backendbonapp:develop .
           docker push yassansplus/backendbonapp:${{ steps.date.outputs.date }}
+          docker push yassansplus/backendbonapp:develop
 
       - name: Build & Push Image for front-manager
         run: |
@@ -35,3 +37,4 @@ jobs:
           echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
           docker image build -f Dockerfile.local --tag yassansplus/front-managerbonapp:${{ steps.date.outputs.date }} --tag yassansplus/front-managerbonapp:develop .
           docker push yassansplus/front-managerbonapp:${{ steps.date.outputs.date }}
+          docker push yassansplus/front-managerbonapp:develop
