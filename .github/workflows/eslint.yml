@@ -19,10 +19,8 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm install eslint@5.0.0
+          npm i @typescript-eslint/eslint-plugin@latest --save-dev
       - name: Run ESLint
         run: npx eslint .
           --ext .js,.jsx,.ts,.tsx
         continue-on-error: true
-
-        # test
