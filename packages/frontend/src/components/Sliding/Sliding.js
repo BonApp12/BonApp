@@ -12,7 +12,7 @@ import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 
 // create a navigation component that wraps the burger menu
-export const Sliding = () => {
+export const Sliding = (props) => {
     const ctx = useContext(SlidingContext);
     const [cart, updateCart] = useRecoilState(cartAtom);
     const [isCheckout, setIsCheckout] = useState(false);
@@ -131,6 +131,23 @@ export const Sliding = () => {
                         )
                     }
                 )}
+
+                <h2>Autres commandes à votre table : </h2>
+                {props.otherCart.map((user) => {
+                    return (
+                        <div className={"mb-5"} key={user.email}>
+                            <h2>{user.email}</h2>
+                            {user.cart.map((plate) => {
+                                return (
+                                    <div>
+                                        <p>{plate.name}</p>
+                                        <p>{plate.quantity}</p>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
 
                 {formattedCart().length !== 0 && isCheckout !== true ?
                     <Button classStyle={'mr-3 btn-success'}

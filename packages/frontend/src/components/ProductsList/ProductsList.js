@@ -24,7 +24,7 @@ const ProductsList = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [tableExists, setTableExists] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
-    const [otherCart, updateOtherCart] = useRecoilState(cartAtom); // Fill this variables with the sockets and the connection.
+    const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
 
     // Handling ingredients modal
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
@@ -66,6 +66,7 @@ const ProductsList = () => {
     useEffect(() => {
         fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists);
     }, [idRestaurant, idTable, socket]);
+
     useEffect(() => {
         if (tableExists){
             socket.emit('joinTable', {
@@ -88,27 +89,17 @@ const ProductsList = () => {
 
     useEffect(() => {
         socket.on('itemCartUpdated', (informations) => {
-            console.log(informations.user, informations.cart);
-            // Mettre à jour le cart avec le format suivant :
-            // informations -> user && cart.
-            /*
-               user ->
-                    cart ->
-                        plate ->
-                            ingredients
-                user2 ->
-                    cart2 ->
-                        plate2 ->
-                            ingredients2..
-             */
+            informations.map((user) => {
+                if (user.email !== userState.email) {
+                    updateOtherCart([...otherCart, user]);
+                }
+            });
         })
     }, []);
 
 
     useEffect(() => {
-        if (cart.length > 0){
-            socket.emit('userCartUpdated', {cart, user: userState});
-        }
+        socket.emit('userCartUpdated', {cart, user: userState}); // TODO : Éviter l'envoi initial.
     }, [cart]);
 
     function addToCart(plate) {
@@ -142,7 +133,7 @@ const ProductsList = () => {
 
     return (
         <div className="sidebar-cart">
-            <Layout restaurant={restaurant}/>
+            <Layout restaurant={restaurant} otherCart={otherCart}/>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
             <ol>
                 {

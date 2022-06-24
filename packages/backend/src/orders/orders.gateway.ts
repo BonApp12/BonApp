@@ -47,22 +47,19 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         // Creating room id and joining it
         const roomId = `ordersRoomTable:${args.idTable}Restaurant:${args.idRestaurant}`;
         this.logger.log(`Client ${client.id} joined table ${args.idTable} of restaurant ${args.idRestaurant}`);
-        client.join(roomId);
+        client.join(roomId); // TODO : Déplacer ce truc
 
         // Adding Client socket ID to User for retrieving it easily
         args.user["socket"] = client.id;
 
-        // Checking if user is already in an existing room (to avoid being in 2 different tables) TODO : Faire en sorte de supprimer l'utilisateur de l'ancienne table (avec tout son contenu)
+        // Checking if user is already in an existing room (to avoid being in 2 different tables)
         if (this.users.has(roomId)) {
-            this.users.get(roomId).map((user) => {
-                if (user.email !== args.user["email"]) {
-                    this.users.set(roomId, [...this.users.get(roomId), args.user]);
-                }
-            });
+            const userExists = this.users.get(roomId).filter((user) => args.user.email === user.email); // Récupére un tableau des utilisateurs existants
+            if (userExists.length === 0) {
+                this.users.set(roomId, [...this.users.get(roomId), args.user]);
+            }
         } else this.users.set(roomId, [args.user]); // Faire en sorte que l'email soit la clé ?
 
-
-        //TODO :  Notifying everybody that this user has joined (except himself, change `args` to user informations and his cart)
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
     }
 
@@ -70,9 +67,21 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     @SubscribeMessage('userCartUpdated')
     userCartUpdated(client: Socket, args: Record<string, unknown>) {
         this.logger.log(`Client ${client.id} updated something from his cart`);
+        // Getting Room
         const rooms = Array.from(client.rooms);
+
+        // Getting this specific user
         const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
-        if (user !== undefined) this.wss.to(rooms[1]).emit("itemCartUpdated", {user: user[0], cart: args.cart[0]});
+
+        // Adding cart inside user
+        user[0].cart = args.cart;
+
+        // Getting every other users except this one and deleting him to add him back again with his new cart.
+        const userMap = this.users.get(rooms[1]).filter((user) => client.id !== user.socket);
+        userMap.push(user[0]);
+        this.users.set(rooms[1], userMap);
+
+        this.wss.to(rooms[1]).emit("itemCartUpdated", this.users.get(rooms[1]));
     }
 
         /* PERSISTER L'ID ET FAIRE EN SORTE DE POUVOIR LE RÉCUPÉRER, PEUT-ÊTRE VIA UN CUSTOM ID OU JSP
