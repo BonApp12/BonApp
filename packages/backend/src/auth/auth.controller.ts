@@ -1,16 +1,17 @@
 import {
+    Body,
     Controller,
-    Post,
     Get,
     Headers,
-    Req,
-    UseGuards,
-    Res,
-    Body,
     HttpCode,
     HttpException,
     HttpStatus,
-    Injectable, Query
+    Injectable,
+    Post,
+    Query,
+    Req,
+    Res,
+    UseGuards
 } from '@nestjs/common';
 import {Response} from 'express';
 import {LocalAuthGuard} from './local-auth.guard';
@@ -52,14 +53,18 @@ export class AuthController {
             return this.loginUser(req, userDto);
         }
         throw new HttpException(
-            {type: "role", message: "Vous n'avez pas le droit d'accéder à cette ressource", status: HttpStatus.UNAUTHORIZED},
+            {
+                type: "role",
+                message: "Vous n'avez pas le droit d'accéder à cette ressource",
+                status: HttpStatus.UNAUTHORIZED
+            },
             HttpStatus.UNAUTHORIZED,
         );
     }
 
     private loginUser(req, user) {
         req.res.setHeader('Set-Cookie', [
-            this.authService.getCookieWithJwtAccessToken(user.id,req.body?.device),
+            this.authService.getCookieWithJwtAccessToken(user.id, req.body?.device),
         ]);
         return {statusCode: 200, user: user};
     }
