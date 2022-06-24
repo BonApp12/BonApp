@@ -2,24 +2,36 @@ name: build front
 
 on:
   push:
-   branches: [ develop ]
-      
+    branches: [ pipeline ]
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Build & Push Image for front
-      run: |
-        cd packages/frontend/
-        echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
-        docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:develop . 
-        docker push yassansplus/frontendbonapp:develop
-    - name: Build & Push Image for back
-      run: |
-        cd packages/backend/
-        echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
-        docker image build -f Dockerfile.local --tag yassansplus/backendbonapp:develop . 
-        docker push yassansplus/backendbonapp:develop
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - uses: actions/checkout@v1
+
+      - name: Build & Push Image for Frontend at ${{ date }}
+        run: |
+          cd packages/frontend/
+          echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+          docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:${{ steps.date.outputs.date }} .
+          docker push yassansplus/frontendbonapp:${{ steps.date.outputs.date }}
+
+      - name: Build & Push Image for Backend at ${{ date }}
+        run: |
+          cd packages/backend/
+          echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+          docker image build -f Dockerfile.local --tag yassansplus/backendbonapp:${{ steps.date.outputs.date }} .
+          docker push yassansplus/backendbonapp:${{ steps.date.outputs.date }}
+
+      - name: Build & Push Image for front-manager at ${{ date }}
+        run: |
+          cd packages/front-manager/
+          echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+          docker image build -f Dockerfile.local --tag yassansplus/front-managerbonapp:${{ steps.date.outputs.date }} .
+          docker push yassansplus/front-managerbonapp:${{ steps.date.outputs.date }}
