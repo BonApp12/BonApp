@@ -32,7 +32,7 @@ jobs:
       - name: Install ESLint
         run: |
           yarn add eslint@8.10.0
-          yarn @typescript-eslint/eslint-plugin@latest --save-dev
+          yarn add @typescript-eslint/eslint-plugin@latest --save-dev
       - name: Run ESLint
         run: yarn run eslint .
           --ext .js,.jsx,.ts,.tsx
