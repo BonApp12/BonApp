@@ -31,8 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint-plugin-react
-
+          yarn add eslint eslint-plugin-react --save-dev
       - name: Run ESLint
         run: yarn run eslint . --ext .js,.jsx,.ts,.tsx --config .eslintrc.yml
         continue-on-error: false
