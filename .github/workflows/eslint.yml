@@ -31,7 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint --dev
+          cd packages/front-manager/
       - name: Run ESLint
         run: ls
         continue-on-error: false
