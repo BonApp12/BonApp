@@ -66,22 +66,24 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
     @SubscribeMessage('userCartUpdated')
     userCartUpdated(client: Socket, args: Record<string, any>) {
-        this.logger.log(`Client ${client.id} updated something from his cart`);
         // Getting Room
         const rooms = Array.from(client.rooms);
 
-        // Getting this specific user TODO : Trouver un moyen d'éviter le premier lancement
-        const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
+        if (this.users.get[rooms[1]] !== undefined) {
+            this.logger.log(`Client ${client.id} updated something from his cart`);
+            // Getting users informations we already have.
+            const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
 
-        // Adding cart inside user
-        user[0].cart = args.cart;
+            // Adding cart inside user
+            user[0].cart = args.cart;
 
-        // Getting every other users except this one and deleting him to add him back again with his new cart.
-        const userMap = this.users.get(rooms[1]).filter((user) => client.id !== user.socket);
-        userMap.push(user[0]);
-        this.users.set(rooms[1], userMap);
+            // Getting every other users except this one and deleting him to add him back again with his new cart.
+            const userMap = this.users.get(rooms[1]).filter((user) => client.id !== user.socket);
+            userMap.push(user[0]);
+            this.users.set(rooms[1], userMap);
 
-        this.wss.to(rooms[1]).emit("itemCartUpdated", this.users.get(rooms[1]));
+            this.wss.to(rooms[1]).emit("itemCartUpdated", this.users.get(rooms[1]));
+        }
     }
 
         /* PERSISTER L'ID ET FAIRE EN SORTE DE POUVOIR LE RÉCUPÉRER, PEUT-ÊTRE VIA UN CUSTOM ID OU JSP

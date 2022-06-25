@@ -79,10 +79,10 @@ const ProductsList = () => {
                 },
             })
             socket.on('userJoinedRoom', (message) => {
-                // console.log('Liste des utilisateurs dans la room : ', message);
+                // console.log('Liste des utilisateurs dans la room : ', message); TODO : Remplacer par des toasts
             });
             socket.on('userLeftRoom', (message) => {
-                console.log(message);
+                // console.log(message); TODO : Remplacer par des toasts
             })
         }
     }, [tableExists, idTable, idRestaurant, socket]);
@@ -95,7 +95,7 @@ const ProductsList = () => {
     }, []);
 
     useEffect(() => {
-        socket.emit('userCartUpdated', {cart, user: userState}); // TODO : Éviter l'envoi initial.
+        socket.emit('userCartUpdated', {cart, user: userState});
     }, [cart]);
 
     function addToCart(plate) {
