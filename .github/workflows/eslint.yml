@@ -31,7 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint
+          yarn add eslint eslint-plugin-react
           yarn run eslint --version
 
       - name: Run ESLint
