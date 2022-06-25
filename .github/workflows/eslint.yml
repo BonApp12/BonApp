@@ -34,6 +34,6 @@ jobs:
           yarn add eslint@8.10.0
           yarn add @typescript-eslint/eslint-plugin@latest --save-dev
       - name: Run ESLint
-        run: yarn run eslint ./packages/front-manager/src/**/*.{js,jsx,ts,tsx}
+        run: yarn run eslint .
           --ext .js,.jsx,.ts,.tsx
         continue-on-error: false
