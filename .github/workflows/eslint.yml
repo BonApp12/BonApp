@@ -31,7 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint eslint-plugin-react
+          yarn add eslint --dev
       - name: Run ESLint
-        run: yarn run eslint . --ext .js,.jsx,.ts,.tsx --config .eslintrc.yml
+        run: yarn run eslint ./packages/front-manager/test-linter.js --config ./packages/front-manager/.eslintrc.js
         continue-on-error: false
