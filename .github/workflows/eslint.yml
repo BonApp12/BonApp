@@ -31,9 +31,5 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint --dev
-      - name: Run ESLint
-        run: |
-          cd packages/front-manager/
-          yarn run eslint test-linter.js
-        continue-on-error: false
+          yarn add eslint
+          yarn run eslint --version
