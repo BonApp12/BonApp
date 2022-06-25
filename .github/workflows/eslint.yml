@@ -7,20 +7,11 @@ on:
     - cron: '21 6 * * 6'
 
 jobs:
-  eslint:
-    name: Run eslint scanning
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install ESLint
-        run: |
-          npm i eslint@latest -g
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
       - name: Run ESLint
-        run: npx eslint ./packages/front-manager/src/**/*.js
-          --ext .js,.jsx,.ts,.tsx
-        continue-on-error: true
+        run: eslint ./packages/front-manager/src/** --ext .js,.jsx,.ts,.tsx
