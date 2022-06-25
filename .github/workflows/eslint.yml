@@ -41,7 +41,7 @@ jobs:
 
       - name: Run ESLint for backend
         run: |
-          yarn run eslint ./packages/backend/src/** --config .eslintrc.js
+          yarn run eslint ./packages/backend/src/* --config .eslintrc.js
         continue-on-error: true
 
       - name: Run ESLint for front-end
