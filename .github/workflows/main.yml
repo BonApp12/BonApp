@@ -4,7 +4,7 @@ name: Deploy
 on:
   # Triggers the workflow on push or pull request events but only for the live branch
   push:
-    branches: [ develop ]
+    branches: [ pipeline ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -25,3 +25,19 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: cd BonApp && sudo sh deploy.sh
+
+  create-envfile:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_DEBUG: false
+          envkey_SOME_API_KEY: "123456abcdef"
+          # envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          # some_other_variable: foobar
+          directory: BonApp
+          file_name: .env
+          fail_on_empty: false
