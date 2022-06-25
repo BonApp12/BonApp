@@ -36,4 +36,4 @@ jobs:
 
       - name: Run ESLint for front-manager
         run: |
-          yarn run eslint ./packages/front-manager/src/* --config ./packages/front-manager/.eslintrc.js
+          yarn run eslint ./packages/front-manager/src/ --config ./packages/front-manager/.eslintrc.js
