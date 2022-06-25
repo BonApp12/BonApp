@@ -33,7 +33,9 @@ jobs:
         run: |
           yarn add eslint@8.10.0
           yarn add @typescript-eslint/eslint-plugin@latest --save-dev
+
       - name: Run ESLint
         run: yarn run eslint .
-          --ext .js,.jsx,.ts,.tsx
+        --ext .js,.jsx,.ts,.tsx
+        --config .eslintrc.yml
         continue-on-error: false
