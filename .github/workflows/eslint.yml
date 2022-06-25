@@ -31,7 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint-plugin-react@8.10.0
+          yarn add eslint-plugin-react
 
       - name: Run ESLint
         run: yarn run eslint . --ext .js,.jsx,.ts,.tsx --config .eslintrc.yml
