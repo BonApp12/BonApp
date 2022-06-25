@@ -42,7 +42,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         });
     }
 
-    @SubscribeMessage('joinTable') // TODO : Déplacer tout le contenu de cette fonction dans handleConnection()
+    @SubscribeMessage('joinTable')
     joinTable(client: Socket, args: any) {
         // Creating room id and joining it
         const roomId = `ordersRoomTable:${args.idTable}Restaurant:${args.idRestaurant}`;
@@ -65,12 +65,12 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
 
     @SubscribeMessage('userCartUpdated')
-    userCartUpdated(client: Socket, args: Record<string, unknown>) {
+    userCartUpdated(client: Socket, args: Record<string, any>) {
         this.logger.log(`Client ${client.id} updated something from his cart`);
         // Getting Room
         const rooms = Array.from(client.rooms);
 
-        // Getting this specific user
+        // Getting this specific user TODO : Trouver un moyen d'éviter le premier lancement
         const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
 
         // Adding cart inside user

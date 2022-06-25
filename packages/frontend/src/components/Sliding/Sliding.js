@@ -134,19 +134,28 @@ export const Sliding = (props) => {
 
                 <h2>Autres commandes à votre table : </h2>
                 {props.otherCart.map((user) => {
-                    return (
-                        <div className={"mb-5"} key={user.email}>
-                            <h2>{user.email}</h2>
-                            {user.cart.map((plate) => {
-                                return (
-                                    <div>
-                                        <p>{plate.name}</p>
-                                        <p>{plate.quantity}</p>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )
+                    if (user.cart !== undefined && user.cart.length > 0) {
+                        return (
+                            <div className={"mb-5"} key={user.email}>
+                                <h2>{user.email}</h2>
+                                {user.cart.map((plate, idx) => {
+                                    return (
+                                        <div className="grid grid-cols-12 mb-5" key={idx}>
+                                            <div className="col-span-3">
+                                                <img src="https://picsum.photos/id/1005/400/250" alt="aléatoire"
+                                                     className="w-full"/>
+                                            </div>
+                                            <div className="col-span-3">{plate.name}</div>
+                                            <div className="col-span-4 text-orange-600 font-bold">
+                                                {plate.quantity}
+                                            </div>
+                                            <div className="col-span-2">{plate.price * plate.quantity}</div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )
+                    }
                 })}
 
                 {formattedCart().length !== 0 && isCheckout !== true ?

@@ -79,7 +79,7 @@ const ProductsList = () => {
                 },
             })
             socket.on('userJoinedRoom', (message) => {
-                console.log('Liste des utilisateurs dans la room : ', message);
+                // console.log('Liste des utilisateurs dans la room : ', message);
             });
             socket.on('userLeftRoom', (message) => {
                 console.log(message);
@@ -89,14 +89,10 @@ const ProductsList = () => {
 
     useEffect(() => {
         socket.on('itemCartUpdated', (informations) => {
-            informations.map((user) => {
-                if (user.email !== userState.email) {
-                    updateOtherCart([...otherCart, user]);
-                }
-            });
+            const otherCarts = informations.filter((user) => user.email !== userState.email);
+            updateOtherCart(otherCarts);
         })
     }, []);
-
 
     useEffect(() => {
         socket.emit('userCartUpdated', {cart, user: userState}); // TODO : Éviter l'envoi initial.
