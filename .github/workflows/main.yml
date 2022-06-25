@@ -25,12 +25,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: cd BonApp && sudo sh deploy.sh
-
-  create-envfile:
-
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
