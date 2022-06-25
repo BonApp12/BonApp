@@ -31,7 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint@8.10.0 -g
+          yarn add eslint --dev
       - name: Run ESLint
         run: |
           cd packages/front-manager/
