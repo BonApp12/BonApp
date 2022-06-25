@@ -11,7 +11,7 @@ import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
-import {userAtom} from "../../states/user";
+import {toast} from "react-toastify";
 
 
 const ProductsList = () => {
@@ -83,14 +83,16 @@ const ProductsList = () => {
             socket.on('userJoinedRoom', (message) => {
                 // console.log('Liste des utilisateurs dans la room : ', message); TODO : Remplacer par des toasts
             });
-            socket.on('userLeftRoom', (message) => {
-                // console.log(message); TODO : Remplacer par des toasts
+            socket.on('userLeftRoom', (currentRoom) => {
+                toast.error(`Quelqu'un a quitté la table...`);
+                updateOtherCart(currentRoom);
             })
         }
     }, [tableExists, idTable, idRestaurant, socket]);
 
     useEffect(() => {
         socket.on('itemCartUpdated', (informations) => {
+            console.log(informations);
             const otherCarts = informations.filter((user) => user.email !== userState.email);
             updateOtherCart(otherCarts);
         })

@@ -42,7 +42,7 @@ ReactDOM.render(
                             <Route path={"/update-password"} element={<ChangePwd />}/>
                             <Route path="/is-connected" element={<LoginForm/>}/>
                             <Route path="/disconnect" element={<Disconnect/>}/>
-                            <Route path='*' element={<MessagePage message={{code: 404, message: "Booba à dit : \"Tombe sur moi tombe sur un os !\""}} /> } /> {/* 404 */}
+                            {/* <Route path='*' element={<MessagePage message={{code: 404, message: "Booba à dit : \"Tombe sur moi tombe sur un os !\""}} /> } />  404 */}
                         </Route>
                     </Routes>
                 </RecoilRoot>

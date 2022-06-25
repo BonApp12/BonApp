@@ -34,10 +34,11 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             client.rooms.forEach((room) => {
                 // client.rooms contains two rooms : users personal (his id) and ordersRoomTable.
                 if (room !== client.id) {
-                    // get every users except the one that disconnects
+                    // get every users except the one that disconnects and reassign
                     const userMap = this.users.get(room).filter((user) => user.socket !== client.id);
                     this.users.set(room, userMap);
-                    this.wss.to(room).emit('userLeftRoom', `${client.id} left the room`);
+
+                    this.wss.to(room).emit('userLeftRoom', this.users.get(room));
                     client.leave(room);
                 }
             })
@@ -80,7 +81,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         // Getting Room
         const rooms = Array.from(client.rooms);
 
-        if (this.users.get[rooms[1]] !== undefined) {
+        if (this.users.get(rooms[1]) !== undefined) {
             this.logger.log(`Client ${client.id} updated something from his cart`);
             // Getting users informations we already have.
             const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
@@ -119,9 +120,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         if (user !== undefined) this.wss.to(rooms[1]).emit("itemCartUpdated", {user: user[0], cart: args.cart[0]});
     }
 
-        /* PERSISTER L'ID ET FAIRE EN SORTE DE POUVOIR LE RÉCUPÉRER, PEUT-ÊTRE VIA UN CUSTOM ID OU JSP
-         (CONCATENER L'EMAIL OU UTILISER L'EMAIL DE LA PERSONNE) (OU PROMPTER L'USER AU DEBUT DU CYCLE D'ACHAT)
-         METTRE TOUT ÇA EN CACHE (DOCS NESTJS CACHING) */
+
 
 
     @SubscribeMessage('createOrder')

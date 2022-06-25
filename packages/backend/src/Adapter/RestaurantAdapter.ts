@@ -43,15 +43,15 @@ export class RestaurantAdapter {
 
     static fromTableToDto(table: Tables): RestaurantDto {
         const restaurantDto = new RestaurantDto();
-        restaurantDto.id = table.restaurant.id;
-        restaurantDto.name = table.restaurant.name;
-        restaurantDto.address = table.restaurant.address;
-        restaurantDto.siren = table.restaurant.siren;
-        restaurantDto.plates = table.restaurant.plates;
-        restaurantDto.contact_firstname = table.restaurant.contact_firstname;
-        restaurantDto.contact_lastname = table.restaurant.contact_lastname;
-        restaurantDto.contact_phone = table.restaurant.contact_phone;
-        restaurantDto.contact_email = table.restaurant.contact_email;
+        restaurantDto.id = table?.restaurant.id;
+        restaurantDto.name = table?.restaurant.name;
+        restaurantDto.address = table?.restaurant.address;
+        restaurantDto.siren = table?.restaurant.siren;
+        restaurantDto.plates = PlateAdapter.toDtoList(table?.restaurant.plates);
+        restaurantDto.contact_firstname = table?.restaurant.contact_firstname;
+        restaurantDto.contact_lastname = table?.restaurant.contact_lastname;
+        restaurantDto.contact_phone = table?.restaurant.contact_phone;
+        restaurantDto.contact_email = table?.restaurant.contact_email;
 
         delete table.restaurant; // Évite le doublon de restaurant dans le DTO
         restaurantDto.tables = table;
