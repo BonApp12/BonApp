@@ -19,8 +19,8 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm i @typescript-eslint/eslint-plugin@latest --save-dev
+          npm i eslint@latest -g
       - name: Run ESLint
-        run: npx eslint ./packages/front-manager/src/**/*.{ts,tsx}
+        run: npx eslint .
           --ext .js,.jsx,.ts,.tsx
         continue-on-error: true
