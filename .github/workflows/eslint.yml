@@ -32,6 +32,4 @@ jobs:
       - name: Install ESLint
         run: |
           cd packages/front-manager/
-      - name: Run ESLint
-        run: ls
-        continue-on-error: false
+          ls
