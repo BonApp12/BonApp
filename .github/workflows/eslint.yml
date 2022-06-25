@@ -34,6 +34,6 @@ jobs:
           yarn add eslint eslint-plugin-react
           yarn run eslint --version
 
-      - name: Run ESLint
+      - name: Run ESLint for front-manager
         run: |
-          yarn run eslint . --config ./packages/front-manager/.eslintrc.js
+          yarn run eslint ./packages/front-manager/test-linter.js --config ./packages/front-manager/.eslintrc.js
