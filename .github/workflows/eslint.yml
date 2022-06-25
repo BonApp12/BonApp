@@ -36,15 +36,15 @@ jobs:
 
       - name: Run ESLint for front-manager
         run: |
-          yarn run eslint ./packages/front-manager/src/ --config ./packages/front-manager/.eslintrc.js
+          yarn run eslint ./packages/front-manager/src/ --config .eslintrc.js
         continue-on-error: true
 
       - name: Run ESLint for backend
         run: |
-          yarn run eslint ./packages/backend/src/ --config ./packages/front-manager/.eslintrc.js
+          yarn run eslint ./packages/backend/src/ --config .eslintrc.js
         continue-on-error: true
 
       - name: Run ESLint for front-end
         run: |
-          yarn run eslint ./packages/frontend/src/ --config ./packages/front-manager/.eslintrc.js
+          yarn run eslint ./packages/frontend/src/ --config .eslintrc.js
         continue-on-error: true
