@@ -10,3 +10,4 @@ parserOptions:
 plugins:
   - react
 rules: { }
+root: true
