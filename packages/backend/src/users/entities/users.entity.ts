@@ -33,10 +33,10 @@ export class Users extends BaseEntity {
     @Column('varchar', {length: 255, nullable: true})
     password?: string;
 
-    @Column('varchar', {length: 150, unique:true, nullable: true})
+    @Column('varchar', {length: 150, unique: true, nullable: true})
     token?: string;
 
-    @Column('varchar', {length: 150, unique:true, nullable: true})
+    @Column('varchar', {length: 150, unique: true, nullable: true})
     expoToken?: string;
 
     @Column({
@@ -47,6 +47,7 @@ export class Users extends BaseEntity {
     role: UserRole;
 
     @ManyToOne(() => Restaurant, (restaurant) => restaurant.users, {
+        cascade: true,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
@@ -65,7 +66,7 @@ export class Users extends BaseEntity {
     @BeforeUpdate()
     @BeforeInsert()
     async setPassword(password: string) {
-        if(password || this.password) {
+        if (password || this.password) {
             const salt = await bcrypt.genSalt();
             this.password = await bcrypt.hash(password || this.password, salt);
         }

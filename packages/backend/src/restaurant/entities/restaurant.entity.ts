@@ -7,40 +7,44 @@ import {Tables} from "../../tables/entities/tables.entity";
 
 @Entity()
 export class Restaurant extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column('varchar', { length: 100 })
-  name: string;
+    @Column('varchar', {length: 100})
+    name: string;
 
-  @Column('char', { length: 13 })
-  siren: string;
+    @Column('char', {length: 13})
+    siren: string;
 
-  /* Spécifique au formulaire de contact, pas systématique donc nullable. */
-  @Column('varchar', { length: 150, nullable: true })
-  contact_firstname: string;
+    /* Spécifique au formulaire de contact, pas systématique donc nullable. */
+    @Column('varchar', {length: 150, nullable: true})
+    contact_firstname: string;
 
-  @Column('varchar', { length: 150, nullable: true })
-  contact_lastname: string;
+    @Column('varchar', {length: 150, nullable: true})
+    contact_lastname: string;
 
-  @Column('varchar', { length: 255, nullable: true })
-  contact_email: string;
+    @Column('varchar', {length: 255, nullable: true})
+    contact_email: string;
 
-  @Column('char', { length: 10, nullable: true })
-  contact_phone: string;
+    @Column('char', {length: 10, nullable: true})
+    contact_phone: string;
 
-  @ManyToOne(() => Address, (address: Address) => address.restaurant, {onDelete: 'CASCADE'})
-  address: number;
+    @ManyToOne(() => Address, (address: Address) => address.restaurant, {
+        cascade: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
+    address: number;
 
-  @OneToMany(() => Plate, (plate: Plate) => plate.restaurant, {onDelete: 'CASCADE'})
-  plates: Plate[];
+    @OneToMany(() => Plate, (plate: Plate) => plate.restaurant, {onDelete: 'CASCADE'})
+    plates: Plate[];
 
-  @OneToMany(() => Users, (user: Users) => user.restaurant, {onDelete: 'CASCADE'})
-  users: Users[];
+    @OneToMany(() => Users, (user: Users) => user.restaurant, {onDelete: 'CASCADE'})
+    users: Users[];
 
-  @OneToMany(() => Order, (order: Order) => order.restaurant, {onDelete: 'CASCADE'})
-  orders: Order[];
+    @OneToMany(() => Order, (order: Order) => order.restaurant, {onDelete: 'CASCADE'})
+    orders: Order[];
 
-  @OneToMany(() => Tables, (table: Tables) => table.restaurant, {onDelete: 'CASCADE'})
-  tables: Tables[];
+    @OneToMany(() => Tables, (table: Tables) => table.restaurant, {onDelete: 'CASCADE'})
+    tables: Tables[];
 }

@@ -9,15 +9,13 @@ export class Address {
     @Column('varchar', {length: 155})
     street: string;
 
-    @Column('char', { length: 5 })
+    @Column('char', {length: 5})
     postal_code: string;
 
-    @Column('varchar', { length: 200 })
+    @Column('varchar', {length: 200})
     city: string;
 
     /** Permets d'accéder aux restaurants ayant cette adresse si c'est le cas */
-    @OneToMany(() => Restaurant, (restaurant) => restaurant.address, {
-        cascade: true,
-    })
+    @OneToMany(() => Restaurant, (restaurant) => restaurant.address)
     restaurant: Restaurant;
 }
