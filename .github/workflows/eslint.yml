@@ -35,6 +35,5 @@ jobs:
 
       - name: Run ESLint
         run: yarn run eslint .
-          --config ./packages/front-manager/.eslintrc.yml
           --ext .js,.jsx,.ts,.tsx
-        continue-on-error: true
+        continue-on-error: false
