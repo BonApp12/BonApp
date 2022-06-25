@@ -1,7 +1,7 @@
 env:
   browser: true
   es2021: true
-extends: react-app
+extends: plugin:react/recommended
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -10,4 +10,3 @@ parserOptions:
 plugins:
   - react
 rules: { }
-
