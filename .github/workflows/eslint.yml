@@ -33,3 +33,7 @@ jobs:
         run: |
           yarn add eslint
           yarn run eslint --version
+
+      - name: Run ESLint
+        run: |
+          yarn run eslint .
