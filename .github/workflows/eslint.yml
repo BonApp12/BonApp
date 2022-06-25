@@ -33,5 +33,5 @@ jobs:
         run: |
           yarn add eslint --dev
       - name: Run ESLint
-        run: yarn run eslint ./packages/front-manager/test-linter.js --config ./packages/front-manager/.eslintrc.js
+        run: ls
         continue-on-error: false
