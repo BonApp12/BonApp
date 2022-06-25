@@ -11,7 +11,7 @@ name: ESLint
 
 on:
   push:
-    branches: [ "pipeline", master ]
+    branches: [ pipeline ]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ "develop" ]
@@ -31,7 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
-          yarn add eslint eslint-plugin-react --save-dev
+          yarn add eslint eslint-plugin-react
       - name: Run ESLint
         run: yarn run eslint . --ext .js,.jsx,.ts,.tsx --config .eslintrc.yml
         continue-on-error: false
