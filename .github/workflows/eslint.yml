@@ -21,6 +21,6 @@ jobs:
         run: |
           npm i eslint@latest -g
       - name: Run ESLint
-        run: npx eslint .
+        run: npx eslint ./packages/front-manager/src/**/*.js
           --ext .js,.jsx,.ts,.tsx
         continue-on-error: true
