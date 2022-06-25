@@ -31,6 +31,7 @@ jobs:
 
       - name: Install ESLint
         run: |
+          yarn i
           yarn add eslint@8.10.0
           yarn add @typescript-eslint/eslint-plugin@latest --save-dev
       - name: Run ESLint
