@@ -13,8 +13,7 @@ import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
-import { uniqueNamesGenerator, adjectives, colors, animals } from'unique-names-generator';
-
+import {uniqueNamesGenerator, adjectives, colors, animals} from 'unique-names-generator';
 
 
 const ProductsList = () => {
@@ -71,7 +70,7 @@ const ProductsList = () => {
 
     useEffect(() => {
         if (userState === null) {
-            let randomGeneratedName = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
+            let randomGeneratedName = uniqueNamesGenerator({dictionaries: [adjectives, colors, animals]});
             setRandomName(randomGeneratedName);
         }
     }, []);
@@ -81,7 +80,7 @@ const ProductsList = () => {
         fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists);
     }, [idRestaurant, idTable, socket]);
     useEffect(() => {
-        if (tableExists){
+        if (tableExists) {
             socket.emit('joinTable', {
                 idTable,
                 idRestaurant,
@@ -150,27 +149,25 @@ const ProductsList = () => {
                     isLoaded && !error ?
                         filteredPlates.map(plate => {
                             return (
-                                <>
-                                    <Card name={plate.name}
-                                          key={plate.id}
-                                          removeFromCart={() => removeFromCart(plate)}
-                                          addToCart={() => addToCart(plate)}
-                                          plateProps={plate}
-                                          setDisplayModal={() => {
-                                              setModalManagement({
-                                                  data: {
-                                                      ingredients: plate?.ingredients,
-                                                      description: plate.description
-                                                  },
-                                                  isOpen: !modalManagement.isOpen
-                                              });
-                                          }}
-                                          restaurant={restaurant}
-                                          cart={cart}
-                                    />
-                                    <button key={socket.id} onClick={() => socket.emit('createOrder', {})}>Socket
-                                    </button>
-                                </>
+
+                                <Card name={plate.name}
+                                      key={plate.id}
+                                      removeFromCart={() => removeFromCart(plate)}
+                                      addToCart={() => addToCart(plate)}
+                                      plateProps={plate}
+                                      setDisplayModal={() => {
+                                          setModalManagement({
+                                              data: {
+                                                  ingredients: plate?.ingredients,
+                                                  description: plate.description
+                                              },
+                                              isOpen: !modalManagement.isOpen
+                                          });
+                                      }}
+                                      restaurant={restaurant}
+                                      cart={cart}
+                                />
+
                             );
                         })
                         : <div key="erreur">Erreur dans le chargement. Veuillez réessayer</div>
