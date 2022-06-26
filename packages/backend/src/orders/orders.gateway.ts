@@ -57,7 +57,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
         // Checking if user is already in an existing room (to avoid being in 2 different tables)
         if (this.users.has(roomId)) {
-            const userExists = this.users.get(roomId).filter((user) => args.user.email === user.email); // Récupére un tableau des utilisateurs existants
+            const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname); // Récupére un tableau des utilisateurs existants
             if (userExists.length === 0) {
                 this.users.set(roomId, [...this.users.get(roomId), args.user]);
             }
@@ -73,9 +73,10 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         const rooms = Array.from(client.rooms);
 
         if (this.users.get(rooms[1]) !== undefined) {
-            this.logger.log(`Client ${client.id} updated something from his cart`);
             // Getting users informations we already have.
             const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
+
+            this.logger.log(`Client ${client.id} (${user[0].nickname}) updated something from his cart`);
 
             // Adding cart inside user
             user[0].cart = args.cart;
