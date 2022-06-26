@@ -30,7 +30,7 @@ const ProductsList = () => {
     const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
     const [cart, updateCart] = useRecoilState(cartAtom);
     const [userState, setUserState] = useRecoilState(userAtom);
-    const [randomName, setRandomName] = useState("");
+    const [randomName, setRandomName] = useState(undefined);
 
     // Handling ingredients modal
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
@@ -71,7 +71,8 @@ const ProductsList = () => {
 
     useEffect(() => {
         if (userState === null) {
-            setRandomName(uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }));
+            let randomGeneratedName = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
+            setRandomName(randomGeneratedName);
         }
     }, []);
 
@@ -96,16 +97,17 @@ const ProductsList = () => {
                 updateOtherCart(currentRoom);
             })
         }
-    }, [tableExists, idTable, idRestaurant, socket]);
+    }, [tableExists, idTable, idRestaurant]);
 
     /* itemCartUpdated/userCartUpdated socket listener / receiver */
     useEffect(() => {
         socket.on('itemCartUpdated', (informations) => {
-            let currentNickname = userState?.email ?? randomName;
+            let currentNickname = "";
+            if (userState) currentNickname = userState.email; else currentNickname = randomName;
             const otherCarts = informations.filter((user) => user.nickname !== currentNickname);
             updateOtherCart(otherCarts);
         })
-    }, []);
+    }, [randomName, userState]);
     useEffect(() => {
         socket.emit('userCartUpdated', {cart, user: userState});
     }, [cart]);
