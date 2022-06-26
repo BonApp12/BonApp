@@ -12,6 +12,7 @@ import {MdOutlineFastfood} from "react-icons/md";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {toast} from "react-toastify";
+import {userAtom} from "../../states/user";
 
 
 const ProductsList = () => {
@@ -92,7 +93,6 @@ const ProductsList = () => {
 
     useEffect(() => {
         socket.on('itemCartUpdated', (informations) => {
-            console.log(informations);
             const otherCarts = informations.filter((user) => user.email !== userState.email);
             updateOtherCart(otherCarts);
         })
