@@ -13,6 +13,8 @@ import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
+import { uniqueNamesGenerator, adjectives, colors, animals } from'unique-names-generator';
+
 
 
 const ProductsList = () => {
@@ -26,14 +28,16 @@ const ProductsList = () => {
     const [tableExists, setTableExists] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
     const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
+    const [cart, updateCart] = useRecoilState(cartAtom);
+    const [userState, setUserState] = useRecoilState(userAtom);
+    const [randomName, setRandomName] = useState("");
 
     // Handling ingredients modal
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
-    const [cart, updateCart] = useRecoilState(cartAtom);
-    const [userState, setUserState] = useRecoilState(userAtom);
 
     // Initializing socket
     const socket = useContext(SocketContext);
+
     const navigate = useNavigate();
     const setUser = useSetRecoilState(userAtom);
 
@@ -65,20 +69,23 @@ const ProductsList = () => {
         return filteredPlates[filteredPlates.findIndex(plate => plate.id === item.id)].quantity = item.quantity;
     });
 
-    // Gathering restaurant informations & setting up sockets events.
+    useEffect(() => {
+        if (userState === null) {
+            setRandomName(uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }));
+        }
+    }, []);
+
+    // Gathering restaurant informations & setting up sockets events - joining table.
     useEffect(() => {
         fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists);
     }, [idRestaurant, idTable, socket]);
-
     useEffect(() => {
         if (tableExists){
             socket.emit('joinTable', {
                 idTable,
                 idRestaurant,
                 user: {
-                    email: userState.email,
-                    firstName: userState.firstname,
-                    lastName: userState.lastname
+                    nickname: userState?.email ?? randomName,
                 },
             })
             socket.on('userJoinedRoom', (message) => {
@@ -91,14 +98,14 @@ const ProductsList = () => {
         }
     }, [tableExists, idTable, idRestaurant, socket]);
 
+    /* itemCartUpdated/userCartUpdated socket listener / receiver */
     useEffect(() => {
         socket.on('itemCartUpdated', (informations) => {
-            const otherCarts = informations.filter((user) => user.email !== userState.email);
+            let currentNickname = userState?.email ?? randomName;
+            const otherCarts = informations.filter((user) => user.nickname !== currentNickname);
             updateOtherCart(otherCarts);
         })
     }, []);
-
-
     useEffect(() => {
         socket.emit('userCartUpdated', {cart, user: userState});
     }, [cart]);

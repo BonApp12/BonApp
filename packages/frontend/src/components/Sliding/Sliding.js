@@ -136,8 +136,8 @@ export const Sliding = (props) => {
                 {props.otherCart.map((user) => {
                     if (user.cart !== undefined && user.cart.length > 0) {
                         return (
-                            <div className={"mb-5"} key={user.email}>
-                                <h2>{user.email}</h2>
+                            <div className={"mb-5"} key={user.nickname}>
+                                <h2>{user.nickname}</h2>
                                 {user.cart.map((plate, idx) => {
                                     return (
                                         <div className="grid grid-cols-12 mb-5" key={idx}>
