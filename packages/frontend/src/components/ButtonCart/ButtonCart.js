@@ -5,7 +5,7 @@ import {SlidingContext} from "../../context/sliding";
 import {RiShoppingCart2Line} from "react-icons/ri";
 
 export const ButtonCart = () => {
-    const cart= useRecoilState(cartAtom)[0];
+    const cart = useRecoilState(cartAtom)[0];
     const ctx = useContext(SlidingContext);
     return (
         <button onClick={ctx.toggleMenu} className="float-right">

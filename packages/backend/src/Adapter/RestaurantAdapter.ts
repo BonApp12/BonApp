@@ -1,6 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {Restaurant} from "../restaurant/entities/restaurant.entity";
 import {RestaurantDto} from "../restaurant/dto/restaurant.dto";
+import {Tables} from "../tables/entities/tables.entity";
 import {PlateAdapter} from "./PlateAdapter";
 
 @Injectable()
@@ -17,6 +18,14 @@ export class RestaurantAdapter {
         restaurantDto.contact_lastname = restaurant?.contact_lastname;
         restaurantDto.contact_phone = restaurant?.contact_phone;
         restaurantDto.contact_email = restaurant?.contact_email;
+        restaurantDto.tables = restaurant?.tables;
+        return restaurantDto;
+    }
+
+    static fromTableToRestaurantDto(table: Tables): RestaurantDto {
+        const restaurantDto = this.toDto(table.restaurant);
+        restaurantDto.tables = table;
+
         return restaurantDto;
     }
 

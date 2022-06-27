@@ -1,36 +1,119 @@
-import {MessageBody, SubscribeMessage, WebSocketGateway,} from '@nestjs/websockets';
+import {
+    WebSocketGateway,
+    SubscribeMessage,
+    MessageBody, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer,
+} from '@nestjs/websockets';
 import {OrdersService} from './orders.service';
-import {CreateOrderDto} from './dto/create-order.dto';
-import {UpdateOrderDto} from './dto/update-order.dto';
+import {Server, Socket} from 'socket.io';
+import {Logger} from "@nestjs/common";
+import {UpdateOrderDto} from "./dto/update-order.dto";
+import {CreateOrderDto} from "./dto/create-order.dto";
 
-@WebSocketGateway({ cors: true })
-export class OrdersGateway {
-  constructor(private readonly ordersService: OrdersService) {}
+@WebSocketGateway({cors: true})
+export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    constructor(private readonly ordersService: OrdersService) {
+    }
 
-  @SubscribeMessage('createOrder')
-  create(@MessageBody() createOrderDto: CreateOrderDto) {
-    this.ordersService.create(createOrderDto);
-  }
+    @WebSocketServer() wss: Server;
 
-  @SubscribeMessage('findAllOrders')
-  findAll() {
-    return this.ordersService.findAll();
-  }
+    private logger: Logger = new Logger('OrdersGateway');
+    public users = new Map();
 
-  @SubscribeMessage('findOneOrder')
-  async findOne(@MessageBody() id: number) {
-    const event = 'oneOrder';
-    const data = await this.ordersService.findOne(id);
-    return { event, data };
-  }
+    afterInit(server: Server) {
+        this.logger.log('Initialized');
+    }
 
-  @SubscribeMessage('updateOrder')
-  update(@MessageBody() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.update(updateOrderDto.id, updateOrderDto);
-  }
+    handleDisconnect(client: Socket) {
+        this.logger.log(`Disconnecting client ${client.id}`);
+    }
 
-  @SubscribeMessage('removeOrder')
-  remove(@MessageBody() id: number) {
-    return this.ordersService.remove(id);
-  }
+    handleConnection(client: Socket, ...args: any[]) {
+        this.logger.log(`Client ${client.id} connected`);
+
+        client.on('disconnecting', () => {
+            client.rooms.forEach((room) => {
+                // client.rooms contains two rooms : users personal (his id) and ordersRoomTable.
+                if (room !== client.id) {
+                    // get every users except the one that disconnects and reassign
+                    const userMap = this.users.get(room).filter((user) => user.socket !== client.id);
+                    this.users.set(room, userMap);
+
+                    this.wss.to(room).emit('userLeftRoom', this.users.get(room));
+                    client.leave(room);
+                }
+            })
+        });
+    }
+
+    @SubscribeMessage('joinTable')
+    joinTable(client: Socket, args: any) {
+        // Creating room id and joining it
+        const roomId = `ordersRoomTable:${args.idTable}Restaurant:${args.idRestaurant}`;
+        this.logger.log(`Client ${client.id} joined table ${args.idTable} of restaurant ${args.idRestaurant}`);
+        client.join(roomId);
+
+        // Adding Client socket ID to User for retrieving it easily
+        args.user["socket"] = client.id;
+
+        // Checking if user is already in an existing room (to avoid being in 2 different tables)
+        if (this.users.has(roomId)) {
+            const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname);
+            if (userExists.length === 0) {
+                this.users.set(roomId, [...this.users.get(roomId), args.user]);
+            }
+        } else this.users.set(roomId, [args.user]);
+
+        this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
+    }
+
+
+    @SubscribeMessage('userCartUpdated')
+    userCartUpdated(client: Socket, args: Record<string, any>) {
+        // Getting Room
+        const rooms = Array.from(client.rooms);
+
+        if (this.users.get(rooms[1]) !== undefined) {
+            // Getting users informations we already have.
+            const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
+
+            this.logger.log(`Client ${client.id} (${user[0].nickname}) updated something from his cart`);
+
+            // Adding cart inside user
+            user[0].cart = args.cart;
+
+            // Getting every other users except this one and deleting him to add him back again with his new cart.
+            const userMap = this.users.get(rooms[1]).filter((user) => client.id !== user.socket);
+            userMap.push(user[0]);
+            this.users.set(rooms[1], userMap);
+
+            this.wss.to(rooms[1]).emit("itemCartUpdated", this.users.get(rooms[1]));
+        }
+    }
+
+    @SubscribeMessage('removeOrder')
+    remove(@MessageBody() id: number) {
+        return this.ordersService.remove(id);
+    }
+
+    @SubscribeMessage('createOrder')
+    create(@MessageBody() createOrderDto: CreateOrderDto) {
+        this.ordersService.create(createOrderDto);
+    }
+
+    @SubscribeMessage('findAllOrders')
+    findAll() {
+        return this.ordersService.findAll();
+    }
+
+    @SubscribeMessage('findOneOrder')
+    async findOne(@MessageBody() id: number) {
+        const event = 'oneOrder';
+        const data = await this.ordersService.findOne(id);
+        return {event, data};
+    }
+
+    @SubscribeMessage('updateOrder')
+    update(@MessageBody() updateOrderDto: UpdateOrderDto) {
+        return this.ordersService.update(updateOrderDto.id, updateOrderDto);
+    }
 }

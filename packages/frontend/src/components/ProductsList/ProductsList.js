@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
-import fetchRestaurantById from "../../requests/restaurant/fetchRestaurantById";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
 import Loading from "../Loading/Loading";
@@ -10,35 +9,52 @@ import {useRecoilState, useSetRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
+import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
+import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
+import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
+import {uniqueNamesGenerator, adjectives, colors, animals} from 'unique-names-generator';
+
 
 const ProductsList = () => {
     let params = useParams();
+    const idRestaurant = params.idRestaurant;
+    const idTable = params.idTable;
 
     // Setting up states
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [tableExists, setTableExists] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
-    //Gère la modal, si true, affiche la modal et le contenu de la modal
-    const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
+    const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
     const [cart, updateCart] = useRecoilState(cartAtom);
-    // Handling socket
+    const [userState, setUserState] = useRecoilState(userAtom);
+    const [randomName, setRandomName] = useState(undefined);
+
+    // Handling ingredients modal
+    const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
+
+    // Initializing socket
     const socket = useContext(SocketContext);
+
     const navigate = useNavigate();
     const setUser = useSetRecoilState(userAtom);
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
-        if (!query) {
-            return plates;
+        if (!query && plates !== undefined) {
+            return plates.map((item) => ({
+                ...item,
+                quantity: 1,
+            }))
+        } else if (query && plates !== undefined) {
+            return plates.filter((plate) => {
+                // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
+                const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                return plateName.includes(finalQuery.toLowerCase());
+            });
         }
-
-        return plates.filter((plate) => {
-            // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
-            const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            return plateName.includes(finalQuery.toLowerCase());
-        });
     };
 
     // Searching query
@@ -47,26 +63,77 @@ const ProductsList = () => {
     const [searchQuery, setSearchQuery] = useState(query || '');
     const filteredPlates = filterPlates(restaurant.plates, searchQuery);
 
-    // useEffect to get orders : just for testing purposes. Change it to send orders in time.
-    useEffect(() => {
-        socket.emit("findOneOrder", {id: 1});
-    }, [socket]);
+    // Handling cart quantity system.
+    cart.map((item) => {
+        return filteredPlates[filteredPlates.findIndex(plate => plate.id === item.id)].quantity = item.quantity;
+    });
 
     useEffect(() => {
-        let idRestaurant = params.idRestaurant;
-        fetchRestaurantById(setRestaurant, setIsLoaded, setError, idRestaurant,navigate,setUser);
-    }, [params.idRestaurant]);
+        if (userState === null) {
+            let randomGeneratedName = uniqueNamesGenerator({dictionaries: [adjectives, colors, animals]});
+            setRandomName(randomGeneratedName);
+        }
+    }, []);
 
+    // Gathering restaurant informations & setting up sockets events - joining table.
+    useEffect(() => {
+        fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists);
+    }, [idRestaurant, idTable, socket]);
+    useEffect(() => {
+        if (tableExists) {
+            socket.emit('joinTable', {
+                idTable,
+                idRestaurant,
+                user: {
+                    nickname: userState?.email ?? randomName,
+                },
+            })
+            socket.on('userJoinedRoom', (message) => {
+                // console.log('Liste des utilisateurs dans la room : ', message); TODO : Remplacer par des toasts
+            });
+            socket.on('userLeftRoom', (currentRoom) => {
+                toast.error(`Quelqu'un a quitté la table...`);
+                updateOtherCart(currentRoom);
+            })
+        }
+    }, [tableExists, idTable, idRestaurant]);
+
+    /* itemCartUpdated/userCartUpdated socket listener / receiver */
+    useEffect(() => {
+        socket.on('itemCartUpdated', (informations) => {
+            let currentNickname = "";
+            if (userState) currentNickname = userState.email; else currentNickname = randomName;
+            const otherCarts = informations.filter((user) => user.nickname !== currentNickname);
+            updateOtherCart(otherCarts);
+        })
+    }, [randomName, userState]);
+    useEffect(() => {
+        socket.emit('userCartUpdated', {cart, user: userState});
+    }, [cart]);
 
     function addToCart(plate) {
-        updateCart([...cart, plate]);
+        let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
+        if (indexPlateExists === -1) updateCart([...cart, plate]);
+        else {
+            let cartCopy = cloneDeep(cart);
+            cartCopy[indexPlateExists].quantity++;
+            updateCart(cartCopy);
+        }
     }
 
-    function removeFromCart(plate) {
+    function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
         const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
-        const copyOfCart = [...cart];
-        copyOfCart.splice(indexPlateToRemove, 1);
-        updateCart(copyOfCart);
+        // If plates quantity is at 1, remove it from cart
+        if (cart[indexPlateToRemove].quantity === 1) {
+            let cartCopy = [...cart];
+            cartCopy.splice(indexPlateToRemove, 1);
+            updateCart(cartCopy);
+        } else {
+            let cartCopy = cloneDeep(cart);
+            cartCopy[indexPlateToRemove].quantity--;
+            updateCart(cartCopy);
+        }
+        socket.emit('removeFromCart', {idTable, idRestaurant, plate});
     }
 
 
@@ -75,27 +142,35 @@ const ProductsList = () => {
 
     return (
         <div className="sidebar-cart">
-            <Layout restaurant={restaurant}/>
+            <Layout restaurant={restaurant} otherCart={otherCart}/>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
             <ol>
                 {
-                    filteredPlates.map(plate => {
-                        return (
-                            <Card name={plate.name} key={plate.id}
-                                  removeFromCart={() => removeFromCart(plate)}
-                                  addToCart={() => addToCart(plate)}
-                                  plateProps={plate}
-                                  setDisplayModal={() => {
-                                      setModalManagement({
-                                          data: {ingredients: plate?.ingredients, description: plate.description},
-                                          isOpen: !modalManagement.isOpen
-                                      });
-                                  }}
-                                  restaurant={restaurant}
-                                  cart={cart}
-                            />
-                        );
-                    })
+                    isLoaded && !error ?
+                        filteredPlates.map(plate => {
+                            return (
+
+                                <Card name={plate.name}
+                                      key={plate.id}
+                                      removeFromCart={() => removeFromCart(plate)}
+                                      addToCart={() => addToCart(plate)}
+                                      plateProps={plate}
+                                      setDisplayModal={() => {
+                                          setModalManagement({
+                                              data: {
+                                                  ingredients: plate?.ingredients,
+                                                  description: plate.description
+                                              },
+                                              isOpen: !modalManagement.isOpen
+                                          });
+                                      }}
+                                      restaurant={restaurant}
+                                      cart={cart}
+                                />
+
+                            );
+                        })
+                        : <div key="erreur">Erreur dans le chargement. Veuillez réessayer</div>
                 }
             </ol>
 

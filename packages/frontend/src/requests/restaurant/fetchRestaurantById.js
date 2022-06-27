@@ -23,5 +23,6 @@ const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant,
             }
         )
 };
+// TODO : Fermer cette route spécifique à l'application frontend, ne l'ouvrir seulement aux administrateurs
 
 export default fetchRestaurantById;

@@ -59,6 +59,11 @@ export class RestaurantController {
         return this.restaurantService.findTeamMembers(id);
     }
 
+    @Get(':id/:idTable')
+    findOneWithTable(@Param('id') id: string, @Param('idTable') idTable: string) {
+        return this.restaurantService.findOneWithTable(+id, +idTable);
+    }
+
     @UseGuards(JwtAuthGuard)
     @Patch(':id')
     update(

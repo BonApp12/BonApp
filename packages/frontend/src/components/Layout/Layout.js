@@ -7,7 +7,7 @@ const Layout = (props) => {
         <div>
             <h2 className="mt-5">Bienvenue chez {props?.restaurant?.name}</h2>
             <ButtonCart/>
-            <Sliding/>
+            <Sliding otherCart={props?.otherCart}/>
             {props.children}
         </div>
     )

@@ -3,7 +3,7 @@ import {RestaurantDto} from './dto/restaurant.dto';
 import {UpdateRestaurantDto} from './dto/update-restaurant.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Restaurant} from './entities/restaurant.entity';
-import {Repository} from 'typeorm';
+import {createQueryBuilder, Repository} from 'typeorm';
 import {Users} from "../users/entities/users.entity";
 import {UsersDto} from "../users/dto/users.dto";
 import {UserAdapter} from "../Adapter/UserAdapter";
@@ -17,6 +17,8 @@ export class RestaurantService {
         private restaurantRepository: Repository<Restaurant>,
         @InjectRepository(Users)
         private userRepository: Repository<Users>,
+        @InjectRepository(Tables)
+        private tablesRepository: Repository<Tables>,
         @InjectRepository(Tables)
         private tableRepository: Repository<Tables>,
         // private addressService: AddressService,
@@ -40,6 +42,18 @@ export class RestaurantService {
         return RestaurantAdapter.toDto(await this.restaurantRepository.findOne(id, {
             relations: ['address', 'plates', 'plates.ingredients'],
         }));
+    }
+
+    async findOneWithTable(id: number, idTable: number): Promise<RestaurantDto | boolean> {
+        return await this.tableRepository.findOne(idTable, {
+            where: {restaurant: id},
+            relations: ['restaurant', 'restaurant.address', 'restaurant.plates', 'restaurant.plates.ingredients'],
+        }).then(table => {
+            if (table !== undefined) return RestaurantAdapter.fromTableToRestaurantDto(table);
+            return false;
+        }).catch((err) => {
+            return err;
+        });
     }
 
     /**
