@@ -49,7 +49,7 @@ export class RestaurantService {
             where: {restaurant: id},
             relations: ['restaurant', 'restaurant.address', 'restaurant.plates', 'restaurant.plates.ingredients'],
         }).then(table => {
-            if (table !== undefined) return RestaurantAdapter.fromTableToDto(table);
+            if (table !== undefined) return RestaurantAdapter.fromTableToRestaurantDto(table);
             return false;
         }).catch((err) => {
             return err;

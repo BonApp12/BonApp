@@ -57,11 +57,11 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
         // Checking if user is already in an existing room (to avoid being in 2 different tables)
         if (this.users.has(roomId)) {
-            const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname); // Récupére un tableau des utilisateurs existants
+            const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname);
             if (userExists.length === 0) {
                 this.users.set(roomId, [...this.users.get(roomId), args.user]);
             }
-        } else this.users.set(roomId, [args.user]); // Faire en sorte que l'email soit la clé ?
+        } else this.users.set(roomId, [args.user]);
 
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
     }
@@ -89,10 +89,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             this.wss.to(rooms[1]).emit("itemCartUpdated", this.users.get(rooms[1]));
         }
     }
-
-    /* PERSISTER L'ID ET FAIRE EN SORTE DE POUVOIR LE RÉCUPÉRER, PEUT-ÊTRE VIA UN CUSTOM ID OU JSP
-     (CONCATENER L'EMAIL OU UTILISER L'EMAIL DE LA PERSONNE) (OU PROMPTER L'USER AU DEBUT DU CYCLE D'ACHAT)
-     METTRE TOUT ÇA EN CACHE (DOCS NESTJS CACHING) */
 
     @SubscribeMessage('removeOrder')
     remove(@MessageBody() id: number) {
