@@ -25,5 +25,5 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            docker login -u yassansplus -p ${{ secrets.DOCKERPW }} docker.io
-            cd BonApp && docker pull yassansplus/bonapp:latest
+            docker login -u yassansplus --password-stdin ${{ secrets.DOCKERPW }} docker.io
+            cd BonApp && docker pull yassansplus/frontendbonapp:latest
