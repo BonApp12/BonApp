@@ -24,14 +24,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd BonApp && sudo sh deploy.sh
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1.3
-        with:
-          envkey_DEBUG: false
-          envkey_SOME_API_KEY: "123456abcdef"
-          # envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          # some_other_variable: foobar
-          directory: BonApp
-          file_name: .env
-          fail_on_empty: false
+          script: cd BonApp && docker pull yassansplus/bonapp:latest
