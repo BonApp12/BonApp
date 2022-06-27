@@ -27,4 +27,6 @@ jobs:
           script: |
             docker system prune --networks -a -f
             docker login -u ${{ secrets.DOCKERUSER }} --password-stdin ${{ secrets.DOCKERPW }} docker.io
-            cd BonApp && docker pull yassansplus/frontendbonapp:latest
+            export DOCKER_CLIENT_TIMEOUT=120
+            export COMPOSE_HTTP_TIMEOUT=120
+            docker-compose up -d
