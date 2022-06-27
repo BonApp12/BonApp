@@ -25,5 +25,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
+            docker system prune --networks -a -f
             docker login -u ${{ secrets.DOCKERUSER }} --password-stdin ${{ secrets.DOCKERPW }} docker.io
             cd BonApp && docker pull yassansplus/frontendbonapp:latest
