@@ -16,7 +16,6 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1.3
         run: |
           cd packages/frontend/
           nano .env.local
