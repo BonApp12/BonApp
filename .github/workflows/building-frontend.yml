@@ -18,10 +18,9 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          envkey_SECRET_KEY: ${{ secrets.REACT_APP_GOOGLE_AUTH_CLIENT_ID }}
-          envkey_DEBUG: false
-          envkey_SOME_API_KEY: "123456abcdef"
-          test: marwane
+          envkey_REACT_APP_URL_BACKEND: ${{ secrets.REACT_APP_URL_BACKEND }}
+          envkey_REACT_APP_SOCKET_BACKEND: ${{ secrets.REACT_APP_SOCKET_BACKEND }}
+          envkey_REACT_APP_GOOGLE_AUTH_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_AUTH_CLIENT_ID }}
           directory: ./packages/frontend/
           file_name: .env
           fail_on_empty: false
