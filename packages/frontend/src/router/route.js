@@ -35,4 +35,8 @@ module.exports = Object.defineProperties({}, {
         value: process.env.REACT_APP_URL_BACKEND + '/orders/user/',
         writable: false
     },
+    generatePdf: {
+        value: process.env.REACT_APP_URL_BACKEND + '/pdf',
+        writable: false
+    }
 })

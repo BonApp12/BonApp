@@ -1,159 +1,199 @@
-import {useEffect, useState} from "react";
-import * as dayjs from 'dayjs'
-import 'dayjs/locale/fr'
+import React, {useEffect, useState} from "react";
+import * as dayjs from 'dayjs';
+import 'dayjs/locale/fr';
 
 import fetchFullOrder from "requests/fetchFullOrder";
 import updateOrder from "requests/updateOrder";
 import resetUserConnected from "../../helpers/resetUserConnected";
-import {useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import {useHistory} from "react-router-dom";
+import Modal from "../Modal/Modal";
 
 export default function CardTable() {
 
-  let checkStatus, formattedDate;
-  const [orders, setOrders] = useState([])
-  const TODO = 'to-do';
-  const setUserState = useSetRecoilState(userAtom);
-  const history = useHistory();
+    const [orders, setOrders] = useState([]);
+    const [modalInfo, setModalInfo] = useState(null);
 
-  checkStatus = (status) => {
-    return status === TODO;
-  }
+    let checkStatus, formattedDate;
+    const TODO = 'to-do';
+    const [userState, setUserState] = useRecoilState(userAtom);
+    const history = useHistory();
 
-  formattedDate = (date) => {
-    dayjs.locale('fr')
-    return dayjs(date).format('DD/MM/YYYY à HH:mm')
-  }
+    checkStatus = (status) => {
+        return status === TODO;
+    };
 
-  useEffect(() => {
-    fetchFullOrder(1, TODO)
-        .then(async resOrder => {
-          if(resOrder.status === 401) resetUserConnected(setUserState,history);
-          setOrders(await resOrder.json())
-        })
-    return function cleanup(){
-      setOrders([])
-    }
-  }, [])
+    formattedDate = (date) => {
+        dayjs.locale('fr');
+        return dayjs(date).format('DD/MM/YYYY à HH:mm');
+    };
 
+    useEffect(() => {
+        fetchFullOrder(userState?.restaurant.id, TODO)
+            .then(async resOrder => {
+                if (resOrder.status === 401) resetUserConnected(setUserState, history);
+                setOrders(await resOrder.json());
+            });
+        return function cleanup() {
+            setOrders([]);
+        };
+    }, []);
 
-  return (
-      <>
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
-          <div className="rounded-t mb-0 px-4 py-3 border-0">
-            <div className="flex flex-wrap items-center">
-              <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                <h3 className="font-semibold text-lg light text-blueGray-700">
-                  Commandes en cours
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div className="block w-full overflow-x-auto">
-          {/* Projects table */}
-          <table className="items-center w-full bg-transparent border-collapse">
-            <thead>
-              <tr className="text-center">
-                <th className=
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+    return (
+        <>
+            <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
+                <div className="rounded-t mb-0 px-4 py-3 border-0">
+                    <div className="flex flex-wrap items-center">
+                        <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+                            <h3 className="font-semibold text-lg light text-blueGray-700">
+                                Commandes en cours
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div className="block w-full overflow-x-auto">
+                    {/* Projects table */}
+                    <table className="items-center w-full bg-transparent border-collapse">
+                        <thead>
+                        <tr className="text-center">
+                            <th className=
+                                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                     whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                >
-                  N° de commande
-                </th>
-                <th
-                  className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                            >
+                                N° de commande
+                            </th>
+                            <th
+                                className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                    whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                >
-                  Nom
-                </th>
-                <th
-                  className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                            >
+                                Nom
+                            </th>
+                            <th
+                                className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                   whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                >
-                  Prénom
-                </th>
-                <th
-                  className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                            >
+                                Prénom
+                            </th>
+                            <th
+                                className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                   whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                >
-                  Date de commande
-                </th>
-                <th
-                    className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                            >
+                                Date de commande
+                            </th>
+                            <th
+                                className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                   whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                >
-                  Plat
-                </th>
-                <th
-                    className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                            >
+                                Plat
+                            </th>
+                            <th
+                                className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                   whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                >
-                  Statut
-                </th>
-                <th
-                    className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                            >
+                                Statut
+                            </th>
+                            <th
+                                className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                   whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-            {orders.map((order)  => (
-                <tr key={order.id} className="text-center">
-                  <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4
+                            >
+                                Total
+                            </th>
+                            <th
+                                className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                  whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                            >
+                                Action
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {orders.map((order) => (
+                            <tr key={order.id} className="text-center">
+                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4
                 text-left flex items-center">
-                    <img
-                        src="https://www.svgrepo.com/show/103223/fast-food.svg"
-                        className="h-12 w-12 bg-white rounded-full border"
-                        alt="..."
-                    />{" "}
-                    <span className="ml-3 font-bold text-blueGray-600">
+                                    <img
+                                        src="https://www.svgrepo.com/show/103223/fast-food.svg"
+                                        className="h-12 w-12 bg-white rounded-full border"
+                                        alt="..."
+                                    />{" "}
+                                    <span className="ml-3 font-bold text-blueGray-600">
                     {order.id}
                   </span>
-                </th>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {order.user.lastname}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {order.user.firstname}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {formattedDate(order.created_at)}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {order.plate.name}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  <i className=
-                         {checkStatus(order.status) ?
-                             'fas fa-circle text-orange-500 mr-2'
-                             :
-                             'fas fa-circle text-green-500 mr-2'}
-                  />
-                  {checkStatus(order.status) ?
-                      'En cours'
-                      :
-                      'Terminé'
-                  }
-                </td>
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {checkStatus(order.status) ? (
-                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-                                onClick={() => updateOrder(order.id)}>
-                          Valider
-                        </button>
-                    ) : (
-                        'Aucune action'
-                    )}
-                  </td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </>
-  );
+                                </th>
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                    {order.user.lastname}
+                                </td>
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                    {order.user.firstname}
+                                </td>
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                    {formattedDate(order.created_at)}
+                                </td>
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                    <a href="#my-modal-2" className={"btn btn-primary btn-xs mr-1"}
+                                       onClick={() => setModalInfo(order.orderPlates)}>Détails</a>
+                                </td>
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                    <i className=
+                                           {checkStatus(order.status) ?
+                                               'fas fa-circle text-orange-500 mr-2'
+                                               :
+                                               'fas fa-circle text-green-500 mr-2'}
+                                    />
+                                    {checkStatus(order.status) ?
+                                        'En cours'
+                                        :
+                                        'Terminé'
+                                    }
+                                </td>
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                    <p>
+                                        {
+                                            order.orderPlates.reduce((acc, curr) => {
+                                                return (acc.price * acc.quantity) + (curr.price * curr.quantity);
+                                            })
+                                        }
+                                        <span> €</span>
+                                    </p>
+                                </td>
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                    {checkStatus(order.status) ? (
+                                        <button
+                                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+                                            onClick={() => updateOrder(order.id)}>
+                                            Valider
+                                        </button>
+                                    ) : (
+                                        'Aucune action'
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <Modal buttonClass={"btn-primary"}>
+                <div className="modal-header">
+                    <h1 className="text-xl font-bold">Détails de la commande</h1>
+                    {
+                        modalInfo !== null && modalInfo.length > 0 ?
+                            modalInfo?.map((plate) => {
+                                return (
+                                    <div key={plate.id} className="mt-3">
+                                        <p>{plate.plate.name} <b>x{plate.quantity}</b> - <b>{plate.price * plate.quantity} €</b></p>
+                                    </div>
+                                );
+                            })
+                        :
+                            <p>Aucun plat</p>
+                    }
+                </div>
+                <div className=" modal-action">
+                    <a href="#" className="btn">Fermer</a>
+                </div>
+            </Modal>
+        </>
+    );
 }

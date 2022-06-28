@@ -1,10 +1,10 @@
 import {BaseEntity, Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
-import {Order} from "../../orders/entities/order.entity";
 import {Ratings} from "../../ratings/entities/ratings.entity";
 import {PlateRole} from "../PlateRole.enum";
 import {Restaurant} from "../../restaurant/entities/restaurant.entity";
 import {Ingredient} from "../../ingredients/entities/ingredient.entity";
 import {PlateCategory} from "../../plate-category/entities/plate-category.entity";
+import {OrderPlate} from "../../order-plate/entities/order-plate.entity";
 
 @Entity()
 export class Plate extends BaseEntity {
@@ -35,8 +35,8 @@ export class Plate extends BaseEntity {
     @OneToMany(() => Ingredient, (ingredient: Ingredient) => ingredient.plates, {nullable: true, cascade: true})
     ingredients: Ingredient[];
 
-    @OneToMany(() => Order, (order: Order) => order.plate, {nullable: true, cascade: true})
-    orders: Order[];
+    @OneToMany(() => OrderPlate, (orderPlate: OrderPlate) => orderPlate.plate)
+    orderPlates: OrderPlate[];
 
     @ManyToMany(() => PlateCategory,
         (category: PlateCategory) => category.plates,

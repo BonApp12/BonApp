@@ -43,15 +43,6 @@ const UserDropdown = () => {
               "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
           }
       >
-        <span
-            className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
-          Another action
-        </span>
-        <span
-            className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
-          Something else here
-        </span>
-        <div className="h-0 my-2 border border-solid border-blueGray-100"/>
           <Link to={"/admin/logout"} className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
               Déconnexion
           </Link>

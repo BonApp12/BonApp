@@ -11,9 +11,12 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import HeaderAccount from "../HeaderAccount/HeaderAccount";
 import LoadingPage from "../Loading/LoadingPage";
-import {AiOutlineCheck} from "react-icons/ai";
+import {AiOutlineCheck, AiOutlineDownload} from "react-icons/ai";
 import resetUserConnected from "../../helpers/resetUserConnected";
 import {useNavigate} from "react-router-dom";
+import {GrCircleInformation} from "react-icons/gr";
+import {Information} from "../overlay/information";
+import generatePdf from "../../requests/orders/generatePdf";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -23,6 +26,7 @@ export default function OrdersAccount(){
     const [filterOrder, setFilterOrder] = useState([]);
     const [loading, setLoading] = useState(false);
     const [userState, setUserState] = useRecoilState(userAtom);
+    const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -76,18 +80,24 @@ export default function OrdersAccount(){
                                 <div className={`relative ${filterOrder.length === 0 || !filterOrder.includes(order.status) && 'hidden'}`}>
                                     <div className="card mx-auto w-full bg-base-100 shadow-xl mb-6">
                                         <figure><img src={plateImg} alt="plate"/></figure>
+                                        <div className="information-wrapper">
+                                            <button onClick={() => setModalManagement({
+                                                data: {orderPlates: order.orderPlates},
+                                                isOpen: !modalManagement.isOpen
+                                            })}>
+                                                <GrCircleInformation/>
+                                            </button>
+                                        </div>
                                         <div className="card-body relative">
-                                            <div className={`absolute top-6 left-3`}>
-                                                <img src={order.plate.type === "ENTREE" ? starter : (order.plate.type === 'PLAT' ? dish : dessert)} alt="starter" className="w-10 h-10" />
-                                            </div>
                                             <h2 className="card-title font-bold">#order-{order.id}</h2>
-                                            <h3 className="mb-5">{order.plate.name}</h3>
                                             <div>
                                                 <p>Commandé le
                                                     : {dayjs.tz(order.created_at).format('DD/MM/YYYY')} à {dayjs.tz(order.created_at).format('HH:mm')}</p>
                                                 <p>Chez <span className="font-bold">{order.restaurant.name}</span></p>
                                             </div>
-                                            <p className="font-bold text-2xl mt-3">{order.plate.price.toFixed(2)} €</p>
+                                            {order.status !== 'to-do' && (
+                                                <button className="btn text-white bg-orange-500 border-orange-500 gap-x-2 mt-4" onClick={() => generatePdf(order.id)}><span className="text-white"><AiOutlineDownload size={20} /></span> Télécharger</button>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="absolute -top-2 -right-2">
@@ -101,6 +111,17 @@ export default function OrdersAccount(){
                         )
                     ) : <p>Vous n'avez pas encore commandé 😥</p>
                 }
+                <Information displayModal={modalManagement} setDisplayModal={setModalManagement}>
+                    <h3 className="font-bold pt-6 pb-4 text-left pl-3">Détails de votre commande</h3>
+                    <div className="modal-content px-5">
+                        {modalManagement.data?.orderPlates.map((plate) => (
+                            <div className="flex items-center hover:text-orange-600 ease-in duration-300 gap-x-2" key={plate.id}>
+                                <img src={plate.plate.type === "ENTREE" ? starter : (plate.plate.type === 'PLAT' ? dish : dessert)} alt="starter" className="w-8 h-8 inline-block"/>
+                                <p>{plate.plate.name} <b>x{plate.quantity}</b> - <b>{plate.price * plate.quantity} €</b></p>
+                            </div>
+                        ))}
+                    </div>
+                </Information>
             </div>
         );
     } else {

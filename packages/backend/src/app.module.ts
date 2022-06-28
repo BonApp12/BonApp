@@ -15,6 +15,8 @@ import {StripeModule} from './stripe/stripe.module';
 import {MailModule} from './mail/mail.module';
 import {GoogleModule} from './google/google.module';
 import {ServeStaticModule} from "@nestjs/serve-static";
+import {PdfModule} from "./pdf/pdf.module";
+import { OrderPlateModule } from './order-plate/order-plate.module';
 
 @Module({
     imports: [
@@ -41,6 +43,8 @@ import {ServeStaticModule} from "@nestjs/serve-static";
         StripeModule,
         GoogleModule,
         MailModule,
+        PdfModule,
+        OrderPlateModule
     ],
     controllers: [AppController],
 })
