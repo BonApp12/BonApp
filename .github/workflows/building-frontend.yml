@@ -18,7 +18,7 @@ jobs:
       - name: Make envfile
         run: |
           cd packages/frontend/
-          touch .env.local
+          ls
 
       - name: Build & Push Image of frontend
         run: |
