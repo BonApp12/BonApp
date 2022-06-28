@@ -29,4 +29,3 @@ jobs:
             docker login -u ${{ secrets.DOCKERUSER }} --password-stdin ${{ secrets.DOCKERPW }} docker.io
             export DOCKER_CLIENT_TIMEOUT=120
             export COMPOSE_HTTP_TIMEOUT=120
-            docker-compose up -d
