@@ -18,9 +18,9 @@ jobs:
       - name: Make envfile
         run: |
           cd packages/frontend/
-          ls
+          echo "Some line" > file1.txt
 
       - name: Build & Push Image of frontend
         run: |
           cd packages/frontend/
-          ls
+          cat file1.txt
