@@ -18,10 +18,7 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          react_app_url_backend: ${{ secrets.REACT_APP_URL_BACKEND }}
-          react_app_socket_backend: ${{ secrets.REACT_APP_SOCKET_BACKEND }}
-          react_app_google_auth_client_id: ${{ secrets.REACT_APP_GOOGLE_AUTH_CLIENT_ID }}
-          some_other_variable: foobar
+          envkey_SECRET_KEY: ${{ secrets.REACT_APP_GOOGLE_AUTH_CLIENT_ID }}
           directory: ./packages/frontend/
           file_name: .env
           fail_on_empty: false
