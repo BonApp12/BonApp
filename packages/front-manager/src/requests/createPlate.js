@@ -1,5 +1,5 @@
 const createPlate = (body) => {
-    let url = process.env.REACT_APP_URL_BACKEND + '/';
+    let url = process.env.REACT_APP_URL_BACKEND + '/plate';
     return fetch(url, {
         // crossDomain: true,
         method: 'POST',
