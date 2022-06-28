@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            docker system prune --networks -a -f
+            docker system prune --volumes -a -f
             docker login -u ${{ secrets.DOCKERUSER }} --password-stdin ${{ secrets.DOCKERPW }} docker.io
             export DOCKER_CLIENT_TIMEOUT=120
             export COMPOSE_HTTP_TIMEOUT=120

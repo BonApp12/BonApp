@@ -17,19 +17,11 @@ jobs:
 
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
-        with:
-          envkey_DEBUG: false
-          envkey_SOME_API_KEY: "123456abcdef"
-          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          some_other_variable: foobar
-          directory: packages/frontend/
-          file_name: .env
-          fail_on_empty: false
+        run: |
+          cd packages/frontend/
+          nano .env.local
 
       - name: Build & Push Image of frontend
         run: |
           cd packages/frontend/
-          echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
-          docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} --tag yassansplus/frontendbonapp:develop .
-          docker push yassansplus/frontendbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} 
-          docker push yassansplus/frontendbonapp:develop
+          ls
