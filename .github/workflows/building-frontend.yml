@@ -16,11 +16,17 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Make envfile
-        run: |
-          cd packages/frontend/
-          echo "Some line" > file1.txt
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_DEBUG: false
+          envkey_SOME_API_KEY: "123456abcdef"
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          some_other_variable: foobar
+          directory: ./packages/frontend/
+          file_name: .env
+          fail_on_empty: false
 
       - name: Build & Push Image of frontend
         run: |
           cd packages/frontend/
-          cat file1.txt
+          cat .env
