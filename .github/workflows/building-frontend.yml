@@ -18,7 +18,7 @@ jobs:
       - name: Make envfile
         run: |
           cd packages/frontend/
-          nano .env.local
+          touch .env.local
 
       - name: Build & Push Image of frontend
         run: |
