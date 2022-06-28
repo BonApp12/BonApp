@@ -23,9 +23,12 @@ jobs:
           envkey_REACT_APP_GOOGLE_AUTH_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_AUTH_CLIENT_ID }}
           directory: ./packages/frontend/
           file_name: .env
-          fail_on_empty: false
+          fail_on_empty: true
 
       - name: Build & Push Image of frontend
         run: |
           cd packages/frontend/
-          cat .env
+          echo "${{ secrets.DOCKERPW }}" | docker login -u "yassansplus" --password-stdin
+          docker image build -f Dockerfile.local --tag yassansplus/frontendbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} --tag yassansplus/frontendbonapp:develop .
+          docker push yassansplus/frontendbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} 
+          docker push yassansplus/frontendbonapp:env
