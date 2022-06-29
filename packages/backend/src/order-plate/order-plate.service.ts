@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrderPlateDto } from './dto/create-order-plate.dto';
-import { UpdateOrderPlateDto } from './dto/update-order-plate.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {OrderPlate} from "./entities/order-plate.entity";
@@ -10,10 +8,6 @@ export class OrderPlateService {
   constructor(
       @InjectRepository(OrderPlate)
       private orderPlateRepository: Repository<OrderPlate>) {}
-
-  create(createOrderPlateDto: CreateOrderPlateDto) {
-    return 'This action adds a new orderPlate';
-  }
 
   findAll() {
     return this.orderPlateRepository.find({relations: ['order', 'plate']});
@@ -30,13 +24,5 @@ export class OrderPlateService {
         order: orderId
       }
     });
-  }
-
-  update(id: number, updateOrderPlateDto: UpdateOrderPlateDto) {
-    return `This action updates a #${id} orderPlate`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} orderPlate`;
   }
 }

@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {CreateOrderDto} from './dto/create-order.dto';
 import {UpdateOrderDto} from './dto/update-order.dto';
 import {Repository} from 'typeorm';
 import {Order} from './entities/order.entity';
@@ -12,14 +11,6 @@ export class OrdersService {
         @InjectRepository(Order)
         private orderRepository: Repository<Order>,
     ) {
-    }
-
-    /**
-     * Pour créer un order, il faut qu'il y ait une jointure entre l'order et le plat
-     * @param createOrderDto
-     */
-    create(createOrderDto: CreateOrderDto) {
-        return 'This action adds a new order';
     }
 
     findAll() {

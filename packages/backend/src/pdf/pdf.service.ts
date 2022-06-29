@@ -2,19 +2,25 @@ import { Injectable } from '@nestjs/common';
 import * as fs from "fs";
 import {join} from "path";
 import {OrdersService} from "../orders/orders.service";
-import {orderVariable} from "./order.variable";
 import {HttpService} from "@nestjs/axios";
 import {OrderPlateService} from "../order-plate/order-plate.service";
+import {OrderAdapter} from "../Adapter/OrderAdapter";
+import {ConfigService} from "@nestjs/config";
 
 @Injectable()
 export class PdfService {
-    constructor(private orderService: OrdersService,private readonly httpService: HttpService, private orderPlateService: OrderPlateService) {}
+    constructor(
+        private orderService: OrdersService,
+        private readonly httpService: HttpService,
+        private orderPlateService: OrderPlateService,
+        private readonly configService: ConfigService,
+    ) {}
 
     async generatePDFToStream(template: string, orderId: number): Promise<any>{
         const order = await this.orderService.findOne(orderId);
         if(order.status === 'completed'){
             const html = this.createHtml(template, order);
-            const pdf = await this.httpService.axiosRef.post('http://192.168.0.45:8080',{"content":html,"options":{ "pageSize": "letter" }},{
+            const pdf = await this.httpService.axiosRef.post(this.configService.get("URL_IP_ADDRESS"),{"content":html,"options":{ "pageSize": "letter" }},{
                 "headers": {
                     "Content-Type": "application/json"
                 },
@@ -28,7 +34,7 @@ export class PdfService {
     }
 
     private createHtml(template: string, order) {
-        const getOrderFormated = orderVariable(order);
+        const getOrderFormated = OrderAdapter.toTransformForPdf(order);
         let html = fs.readFileSync(join(__dirname,'templates/'+template), 'utf8');
         let plates = '';
         let total = 0;

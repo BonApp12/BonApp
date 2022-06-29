@@ -17,12 +17,13 @@ import {useNavigate} from "react-router-dom";
 import {GrCircleInformation} from "react-icons/gr";
 import {Information} from "../overlay/information";
 import generatePdf from "../../requests/orders/generatePdf";
+import PlateType from "../../enum/PlateType";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function OrdersAccount(){
-    const [orders,setOrders] = useState([]);
+export default function OrdersAccount() {
+    const [orders, setOrders] = useState([]);
     const [filterOrder, setFilterOrder] = useState([]);
     const [loading, setLoading] = useState(false);
     const [userState, setUserState] = useRecoilState(userAtom);
@@ -31,53 +32,58 @@ export default function OrdersAccount(){
 
     useEffect(() => {
         userState === null && navigate('/');
-        if(userState !== null) {
+        if (userState !== null) {
             setLoading(true);
             orderByUser(userState.id)
                 .then(async (res) => {
                     if (res.status === 401) resetUserConnected(setUserState, navigate);
                     setLoading(false);
-                    setOrders(await res.json())
+                    setOrders(await res.json());
                 });
         }
 
-        return function cleanup(){
+        return function cleanup() {
             setLoading(false);
             setOrders([]);
             setFilterOrder([]);
-        }
-    },[]);
+        };
+    }, []);
 
-    const activeBtn = (event,statusOrder) => {
+    const activeBtn = (event, statusOrder) => {
         const isCheck = event.currentTarget.classList.contains('bg-white');
 
-        if(isCheck){
-            event.currentTarget.classList.replace('bg-white','bg-orange-500');
-            event.currentTarget.classList.replace('text-orange-500','text-white');
+        if (isCheck) {
+            event.currentTarget.classList.replace('bg-white', 'bg-orange-500');
+            event.currentTarget.classList.replace('text-orange-500', 'text-white');
             event.currentTarget.querySelector('span').classList.remove('hidden');
             filterOrder.push(statusOrder);
-        }else{
-            event.currentTarget.classList.replace('bg-orange-500','bg-white');
-            event.currentTarget.classList.replace('text-white','text-orange-500');
+        } else {
+            event.currentTarget.classList.replace('bg-orange-500', 'bg-white');
+            event.currentTarget.classList.replace('text-white', 'text-orange-500');
             event.currentTarget.querySelector('span').classList.add('hidden');
-            filterOrder.splice(filterOrder.indexOf(statusOrder),1);
+            filterOrder.splice(filterOrder.indexOf(statusOrder), 1);
         }
         setFilterOrder([...filterOrder]);
-    }
+    };
 
     if (!loading) {
         return (
             <div className="px-5">
                 <HeaderAccount url={'/profile'} title={'Mes dernières commandes'}/>
                 <div className="flex flex-row justify-center space-x-2 mb-5">
-                    <button className="btn text-orange-500 bg-white border-orange-500 gap-x-2" onClick={(e) => activeBtn(e,'to-do')}>En cours <span className="hidden text-white"><AiOutlineCheck size={20} /></span></button>
-                    <button className="btn text-orange-500 bg-white border-orange-500 gap-x-2" onClick={(e) => activeBtn(e,'completed')}>Passée <span className="hidden text-white"><AiOutlineCheck size={20} /></span></button>
+                    <button className="btn text-orange-500 bg-white border-orange-500 gap-x-2"
+                            onClick={(e) => activeBtn(e, 'to-do')}>En cours <span
+                        className="hidden text-white"><AiOutlineCheck size={20}/></span></button>
+                    <button className="btn text-orange-500 bg-white border-orange-500 gap-x-2"
+                            onClick={(e) => activeBtn(e, 'completed')}>Passée <span
+                        className="hidden text-white"><AiOutlineCheck size={20}/></span></button>
                 </div>
                 {
                     orders.length >= 1 ? orders.map((order, index) =>
                         (
                             <div key={index}>
-                                <div className={`relative ${filterOrder.length === 0 || !filterOrder.includes(order.status) && 'hidden'}`}>
+                                <div
+                                    className={`relative ${filterOrder.length === 0 || !filterOrder.includes(order.status) && 'hidden'}`}>
                                     <div className="card mx-auto w-full bg-base-100 shadow-xl mb-6">
                                         <figure><img src={plateImg} alt="plate"/></figure>
                                         <div className="information-wrapper">
@@ -96,7 +102,11 @@ export default function OrdersAccount(){
                                                 <p>Chez <span className="font-bold">{order.restaurant.name}</span></p>
                                             </div>
                                             {order.status !== 'to-do' && (
-                                                <button className="btn text-white bg-orange-500 border-orange-500 gap-x-2 mt-4" onClick={() => generatePdf(order.id)}><span className="text-white"><AiOutlineDownload size={20} /></span> Télécharger</button>
+                                                <button
+                                                    className="btn text-white bg-orange-500 border-orange-500 gap-x-2 mt-4"
+                                                    onClick={() => generatePdf(order.id)}><span
+                                                    className="text-white"><AiOutlineDownload
+                                                    size={20}/></span> Télécharger</button>
                                             )}
                                         </div>
                                     </div>
@@ -115,9 +125,13 @@ export default function OrdersAccount(){
                     <h3 className="font-bold pt-6 pb-4 text-left pl-3">Détails de votre commande</h3>
                     <div className="modal-content px-5">
                         {modalManagement.data?.orderPlates.map((plate) => (
-                            <div className="flex items-center hover:text-orange-600 ease-in duration-300 gap-x-2" key={plate.id}>
-                                <img src={plate.plate.type === "ENTREE" ? starter : (plate.plate.type === 'PLAT' ? dish : dessert)} alt="starter" className="w-8 h-8 inline-block"/>
-                                <p>{plate.plate.name} <b>x{plate.quantity}</b> - <b>{plate.price * plate.quantity} €</b></p>
+                            <div className="flex items-center hover:text-orange-600 ease-in duration-300 gap-x-2"
+                                 key={plate.id}>
+                                <img
+                                    src={plate.plate.type === PlateType.STARTER ? starter : (plate.plate.type === PlateType.DISH ? dish : dessert)}
+                                    alt="starter" className="w-8 h-8 inline-block"/>
+                                <p>{plate.plate.name} <span className="font-bold">x{plate.quantity}</span> - <span className="font-bold">{plate.price * plate.quantity} €</span>
+                                </p>
                             </div>
                         ))}
                     </div>
