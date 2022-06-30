@@ -5,7 +5,7 @@ import Card from "../Card/Card";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
 import Loading from "../Loading/Loading";
-import {useRecoilState, useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
@@ -13,7 +13,7 @@ import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
-import {uniqueNamesGenerator, adjectives, colors, animals} from 'unique-names-generator';
+import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
 
 
 const ProductsList = () => {
@@ -37,9 +37,6 @@ const ProductsList = () => {
     // Initializing socket
     const socket = useContext(SocketContext);
 
-    const navigate = useNavigate();
-    const setUser = useSetRecoilState(userAtom);
-
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
         if (!query && plates !== undefined) {
@@ -47,12 +44,12 @@ const ProductsList = () => {
                 return plates.map((item) => ({
                     ...item,
                     quantity: cart[cart.findIndex(plateInCart => plateInCart.id === item.id)]?.quantity || 1
-                }))
+                }));
             } else {
                 return plates.map((item) => ({
                     ...item,
                     quantity: 1,
-                }))
+                }));
             }
         } else if (query && plates !== undefined) {
             return plates.filter((plate) => {
@@ -69,6 +66,7 @@ const ProductsList = () => {
     const query = new URLSearchParams(search).get('s');
     const [searchQuery, setSearchQuery] = useState(query || '');
     const [filteredPlates, setFilteredPlates] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (userState === null) {
@@ -81,18 +79,16 @@ const ProductsList = () => {
     useEffect(() => {
         fetchRestaurantByIdTable(idRestaurant, idTable)
             .then(
-                (result) => {
-                    if(result.hasOwnProperty('statusCode') && result.statusCode === 401){
+                (restaurantResponse) => {
+                    if (restaurantResponse.hasOwnProperty('statusCode') && restaurantResponse.statusCode === 401) {
                         navigate('/');
-                    } else if (!result){
-                        console.log('error');
+                    } else if (!restaurantResponse) {
                         setError(true);
                         setIsLoaded(true);
                     } else {
-                        setRestaurant(result);
+                        setRestaurant(restaurantResponse);
                         setTableExists(true);
-                        console.log('here');
-                        setFilteredPlates(filterPlates(result.plates, searchQuery));
+                        setFilteredPlates(filterPlates(restaurantResponse.plates, searchQuery));
                         setIsLoaded(true);
                     }
                 },
@@ -110,26 +106,24 @@ const ProductsList = () => {
                 idRestaurant,
                 user: {
                     nickname: userState?.email ?? randomName,
+                    cart
                 },
-            })
-            socket.on('userJoinedRoom', (message) => {
-                // console.log('Liste des utilisateurs dans la room : ', message); TODO : Remplacer par des toasts
             });
-            socket.on('userLeftRoom', (currentRoom) => {
+            socket.on('userJoinedRoom', (carts) => {
+                updateUsersCart(carts);
+            });
+            socket.on('userLeftRoom', (carts) => {
                 toast.error(`Quelqu'un a quitté la table...`);
-                updateOtherCart(currentRoom);
-            })
+                updateUsersCart(carts);
+            });
         }
     }, [tableExists, idTable, idRestaurant]);
 
     /* itemCartUpdated/userCartUpdated socket listener / receiver & filteredPlates cart quantity updater */
     useEffect(() => {
-        socket.on('itemCartUpdated', (informations) => {
-            let currentNickname = "";
-            if (userState) currentNickname = userState.email; else currentNickname = randomName;
-            const otherCarts = informations.filter((user) => user.nickname !== currentNickname);
-            updateOtherCart(otherCarts);
-        })
+        socket.on('itemCartUpdated', (carts) => {
+            updateUsersCart(carts);
+        });
     }, [randomName, userState]);
     useEffect(() => {
         if (filteredPlates !== null) {
@@ -150,6 +144,14 @@ const ProductsList = () => {
             cartCopy[indexPlateExists].quantity++;
             updateCart(cartCopy);
         }
+    }
+
+    function updateUsersCart(carts) {
+        let currentNickname = "";
+        if (userState) currentNickname = userState.email; else currentNickname = randomName;
+        const otherCarts = carts.filter((user) => user.nickname !== currentNickname);
+        console.error(currentNickname, otherCarts);
+        updateOtherCart(otherCarts);
     }
 
     function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée

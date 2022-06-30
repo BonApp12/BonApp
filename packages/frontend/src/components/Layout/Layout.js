@@ -5,7 +5,7 @@ import {ButtonCart} from "../ButtonCart/ButtonCart";
 const Layout = (props) => {
     return (
         <div>
-            <h2 className="mt-5">Bienvenue chez {props?.restaurant?.name}</h2>
+            <h2 className="mt-5 pl-5 pr-5">Bienvenue chez {props?.restaurant?.name}</h2>
             <ButtonCart/>
             <Sliding otherCart={props?.otherCart}/>
             {props.children}

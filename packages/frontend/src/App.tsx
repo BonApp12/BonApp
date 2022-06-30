@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
-import { Outlet } from 'react-router';
+import {Outlet} from 'react-router';
 import {CookiesProvider} from "react-cookie";
 import SlidingProvider from "./context/sliding";
 import usePositionX from "./hooks/usePositionX";
+import BottomNav from "./components/Navigation/bottomNav";
+
 function App() {
   const positionX = usePositionX();
 
@@ -16,6 +18,7 @@ function App() {
                           <Outlet />
                       </SlidingProvider>
                   </CookiesProvider>
+                  <BottomNav/>
               </div>
           ) : (
               <div className="hidden sm:flex flex-col items-center h-screen w-screen px-5">
