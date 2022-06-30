@@ -61,7 +61,6 @@ export class RestaurantController {
 
     @Get(':id/:idTable')
     async findOneWithTable(@Param('id') id: string, @Param('idTable') idTable: string) {
-        console.log(await this.restaurantService.findOneWithTable(+id, +idTable));
         return this.restaurantService.findOneWithTable(+id, +idTable);
     }
 

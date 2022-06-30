@@ -67,8 +67,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             }
         } else this.users.set(roomId, [args.user]);
 
-        console.log('Nouvel utilisateur : ');
-        console.log(args.user);
 
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
     }
