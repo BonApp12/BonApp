@@ -43,10 +43,17 @@ const ProductsList = () => {
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
         if (!query && plates !== undefined) {
-            return plates.map((item) => ({
-                ...item,
-                quantity: 1,
-            }))
+            if (cart.length > 0) {
+                return plates.map((item) => ({
+                    ...item,
+                    quantity: cart[cart.findIndex(plateInCart => plateInCart.id === item.id)]?.quantity || 1
+                }))
+            } else {
+                return plates.map((item) => ({
+                    ...item,
+                    quantity: 1,
+                }))
+            }
         } else if (query && plates !== undefined) {
             return plates.filter((plate) => {
                 // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
@@ -61,12 +68,7 @@ const ProductsList = () => {
     const {search} = window.location;
     const query = new URLSearchParams(search).get('s');
     const [searchQuery, setSearchQuery] = useState(query || '');
-    const filteredPlates = filterPlates(restaurant.plates, searchQuery);
-
-    // Handling cart quantity system.
-    cart.map((item) => {
-        return filteredPlates[filteredPlates.findIndex(plate => plate.id === item.id)].quantity = item.quantity;
-    });
+    const [filteredPlates, setFilteredPlates] = useState(null);
 
     useEffect(() => {
         if (userState === null) {
@@ -77,8 +79,30 @@ const ProductsList = () => {
 
     // Gathering restaurant informations & setting up sockets events - joining table.
     useEffect(() => {
-        fetchRestaurantByIdTable(setRestaurant, setIsLoaded, setError, idRestaurant, idTable, setTableExists);
+        fetchRestaurantByIdTable(idRestaurant, idTable)
+            .then(
+                (result) => {
+                    if(result.hasOwnProperty('statusCode') && result.statusCode === 401){
+                        navigate('/');
+                    } else if (!result){
+                        console.log('error');
+                        setError(true);
+                        setIsLoaded(true);
+                    } else {
+                        setRestaurant(result);
+                        setTableExists(true);
+                        console.log('here');
+                        setFilteredPlates(filterPlates(result.plates, searchQuery));
+                        setIsLoaded(true);
+                    }
+                },
+                (error) => {
+                    setIsLoaded(true);
+                    setError(error);
+                }
+            );
     }, [idRestaurant, idTable, socket]);
+
     useEffect(() => {
         if (tableExists) {
             socket.emit('joinTable', {
@@ -98,7 +122,7 @@ const ProductsList = () => {
         }
     }, [tableExists, idTable, idRestaurant]);
 
-    /* itemCartUpdated/userCartUpdated socket listener / receiver */
+    /* itemCartUpdated/userCartUpdated socket listener / receiver & filteredPlates cart quantity updater */
     useEffect(() => {
         socket.on('itemCartUpdated', (informations) => {
             let currentNickname = "";
@@ -108,6 +132,13 @@ const ProductsList = () => {
         })
     }, [randomName, userState]);
     useEffect(() => {
+        if (filteredPlates !== null) {
+            let copyFilteredPlates = cloneDeep(filteredPlates);
+            cart.map((item) => {
+                return copyFilteredPlates[copyFilteredPlates.findIndex(plate => plate.id === item.id)].quantity = item.quantity;
+            });
+            setFilteredPlates(copyFilteredPlates);
+        }
         socket.emit('userCartUpdated', {cart, user: userState});
     }, [cart]);
 
@@ -149,7 +180,6 @@ const ProductsList = () => {
                     isLoaded && !error ?
                         filteredPlates.map(plate => {
                             return (
-
                                 <Card name={plate.name}
                                       key={plate.id}
                                       removeFromCart={() => removeFromCart(plate)}
