@@ -1,7 +1,11 @@
 import {
-    WebSocketGateway,
+    MessageBody,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
     SubscribeMessage,
-    MessageBody, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer,
+    WebSocketGateway,
+    WebSocketServer,
 } from '@nestjs/websockets';
 import {OrdersService} from './orders.service';
 import {Server, Socket} from 'socket.io';
@@ -65,7 +69,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
     }
-
 
     @SubscribeMessage('userCartUpdated')
     userCartUpdated(client: Socket, args: Record<string, any>) {

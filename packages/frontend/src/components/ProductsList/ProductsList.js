@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import {SocketContext} from "../../context/socket";
@@ -44,12 +44,12 @@ const ProductsList = () => {
                 return plates.map((item) => ({
                     ...item,
                     quantity: cart[cart.findIndex(plateInCart => plateInCart.id === item.id)]?.quantity || 1
-                }))
+                }));
             } else {
                 return plates.map((item) => ({
                     ...item,
                     quantity: 1,
-                }))
+                }));
             }
         } else if (query && plates !== undefined) {
             return plates.filter((plate) => {
@@ -66,6 +66,7 @@ const ProductsList = () => {
     const query = new URLSearchParams(search).get('s');
     const [searchQuery, setSearchQuery] = useState(query || '');
     const [filteredPlates, setFilteredPlates] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (userState === null) {
@@ -78,18 +79,16 @@ const ProductsList = () => {
     useEffect(() => {
         fetchRestaurantByIdTable(idRestaurant, idTable)
             .then(
-                (result) => {
-                    if(result.hasOwnProperty('statusCode') && result.statusCode === 401){
+                (restaurantResponse) => {
+                    if (restaurantResponse.hasOwnProperty('statusCode') && restaurantResponse.statusCode === 401) {
                         navigate('/');
-                    } else if (!result){
-                        console.log('error');
+                    } else if (!restaurantResponse) {
                         setError(true);
                         setIsLoaded(true);
                     } else {
-                        setRestaurant(result);
+                        setRestaurant(restaurantResponse);
                         setTableExists(true);
-                        console.log('here');
-                        setFilteredPlates(filterPlates(result.plates, searchQuery));
+                        setFilteredPlates(filterPlates(restaurantResponse.plates, searchQuery));
                         setIsLoaded(true);
                     }
                 },
@@ -109,8 +108,8 @@ const ProductsList = () => {
                     nickname: userState?.email ?? randomName,
                 },
             });
-            socket.on('userJoinedRoom', (message) => {
-                // console.log('Liste des utilisateurs dans la room : ', message); TODO : Remplacer par des toasts
+            socket.on('userJoinedRoom', (carts) => {
+                updateUsersCart(carts);
             });
             socket.on('userLeftRoom', (currentRoom) => {
                 toast.error(`Quelqu'un a quitté la table...`);
@@ -121,11 +120,8 @@ const ProductsList = () => {
 
     /* itemCartUpdated/userCartUpdated socket listener / receiver & filteredPlates cart quantity updater */
     useEffect(() => {
-        socket.on('itemCartUpdated', (informations) => {
-            let currentNickname = "";
-            if (userState) currentNickname = userState.email; else currentNickname = randomName;
-            const otherCarts = informations.filter((user) => user.nickname !== currentNickname);
-            updateOtherCart(otherCarts);
+        socket.on('itemCartUpdated', (carts) => {
+            updateUsersCart(carts);
         });
     }, [randomName, userState]);
     useEffect(() => {
@@ -147,6 +143,14 @@ const ProductsList = () => {
             cartCopy[indexPlateExists].quantity++;
             updateCart(cartCopy);
         }
+    }
+
+    function updateUsersCart(carts) {
+        let currentNickname = "";
+        if (userState) currentNickname = userState.email; else currentNickname = randomName;
+        const otherCarts = carts.filter((user) => user.nickname !== currentNickname);
+        console.error(currentNickname, otherCarts);
+        updateOtherCart(otherCarts);
     }
 
     function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
