@@ -67,6 +67,9 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             }
         } else this.users.set(roomId, [args.user]);
 
+        console.log('Nouvel utilisateur : ');
+        console.log(args.user);
+
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
     }
 
@@ -100,7 +103,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
     @SubscribeMessage('createOrder')
     create(@MessageBody() createOrderDto: CreateOrderDto) {
-        this.ordersService.create(createOrderDto);
+        // this.ordersService.create(createOrderDto);
     }
 
     @SubscribeMessage('findAllOrders')

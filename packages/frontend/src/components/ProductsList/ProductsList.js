@@ -106,14 +106,15 @@ const ProductsList = () => {
                 idRestaurant,
                 user: {
                     nickname: userState?.email ?? randomName,
+                    cart
                 },
             });
             socket.on('userJoinedRoom', (carts) => {
                 updateUsersCart(carts);
             });
-            socket.on('userLeftRoom', (currentRoom) => {
+            socket.on('userLeftRoom', (carts) => {
                 toast.error(`Quelqu'un a quitté la table...`);
-                updateOtherCart(currentRoom);
+                updateUsersCart(carts);
             });
         }
     }, [tableExists, idTable, idRestaurant]);
