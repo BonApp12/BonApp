@@ -1,5 +1,5 @@
 import {slide as Menu} from 'react-burger-menu';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {SlidingContext} from '../../context/sliding';
 import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
@@ -18,7 +18,11 @@ export const Sliding = (props) => {
     const [isCheckout, setIsCheckout] = useState(false);
     const [stripeOptions, setStripeOptions] = useState({});
     const totalAmount = cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0);
-    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+    const [stripePromise, setStripePromise] = useState(null);
+
+    useEffect(() => {
+        setStripePromise(loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY));
+    }, []);
 
     function formattedCart() {
         let typesArray = {};
