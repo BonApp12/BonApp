@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import {SocketContext} from "../../context/socket";
 import Layout from "../Layout/Layout";
 import Loading from "../Loading/Loading";
-import {useRecoilState, useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import {Information} from "../overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
@@ -13,7 +13,7 @@ import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
-import {uniqueNamesGenerator, adjectives, colors, animals} from 'unique-names-generator';
+import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
 
 
 const ProductsList = () => {
@@ -36,9 +36,6 @@ const ProductsList = () => {
 
     // Initializing socket
     const socket = useContext(SocketContext);
-
-    const navigate = useNavigate();
-    const setUser = useSetRecoilState(userAtom);
 
     // Filtering plates depending of query
     const filterPlates = (plates, query) => {
@@ -111,7 +108,7 @@ const ProductsList = () => {
                 user: {
                     nickname: userState?.email ?? randomName,
                 },
-            })
+            });
             socket.on('userJoinedRoom', (message) => {
                 // console.log('Liste des utilisateurs dans la room : ', message); TODO : Remplacer par des toasts
             });

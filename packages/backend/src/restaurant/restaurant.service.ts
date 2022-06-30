@@ -3,7 +3,7 @@ import {RestaurantDto} from './dto/restaurant.dto';
 import {UpdateRestaurantDto} from './dto/update-restaurant.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Restaurant} from './entities/restaurant.entity';
-import {createQueryBuilder, Repository} from 'typeorm';
+import {Repository} from 'typeorm';
 import {Users} from "../users/entities/users.entity";
 import {UsersDto} from "../users/dto/users.dto";
 import {UserAdapter} from "../Adapter/UserAdapter";
@@ -24,6 +24,7 @@ export class RestaurantService {
         // private addressService: AddressService,
     ) {
     }
+
     /**
      *
      * @param createRestaurantDto
@@ -49,6 +50,7 @@ export class RestaurantService {
             where: {restaurant: id},
             relations: ['restaurant', 'restaurant.address', 'restaurant.plates', 'restaurant.plates.ingredients'],
         }).then(table => {
+            console.log(table);
             if (table !== undefined) return RestaurantAdapter.fromTableToRestaurantDto(table);
             return false;
         }).catch((err) => {
@@ -77,6 +79,7 @@ export class RestaurantService {
     async remove(id: number): Promise<void> {
         await this.restaurantRepository.delete(id);
     }
+
     /**
      * @Deprecated
      * @param restaurant
@@ -90,7 +93,7 @@ export class RestaurantService {
      * @param restaurant
      */
     async handleUpdateForm(restaurant: UpdateRestaurantDto) {
-       return;
+        return;
     }
 
     async findTeamMembers(id: number): Promise<UsersDto[]> {

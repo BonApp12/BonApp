@@ -5,13 +5,17 @@ import '../../css/overlayInformaiton.css';
 
 const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModal}) => {
     return (
-        <div className="card card-bordered card-compact content-center m-5">
+        <div className="card card-bordered card-compact content-center m-5 shadow-on-plate">
             <figure>
-                <img src="https://picsum.photos/id/1005/400/250" alt="photo aléatoire"/>
+                <img
+                    src={plateProps?.photo ? `${process.env.REACT_APP_URL_BACKEND}/plate/uploads/${plateProps.photo}` : 'https://picsum.photos/id/1005/400/250'}
+                    alt="photo aléatoire"/>
             </figure>
             <div className="card-body">
-                <h2 className="card-title">{name}</h2>
-                <p>Description aléatoire</p>
+                <div>
+                    <h2 className="card-title">{name}</h2>
+                </div>
+
                 {cart?.some(plate => plate.id === plateProps.id) ?
                     <div className="place-content-center">
                         <button className="rounded-full rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg"
@@ -28,7 +32,7 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
                     </div> :
                     <div>
 
-                        <Button classStyle={' btn-primary animate__animated animate__bounce'}
+                        <Button classStyle={'add-to-cart'}
                                 onClick={addToCart}>
                             Commander
                         </Button>
