@@ -50,6 +50,14 @@ services:
     networks:
       - bp-network
 
+  html-to-pdf:
+    container_name: html-to-pdf
+    image: kurzdigital/html-to-pdf:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - bp-network
+
 #  caddy:
 #    image: abiosoft/caddy
 #    container_name: caddy

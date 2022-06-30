@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {CreateOrderDto} from './dto/create-order.dto';
 import {UpdateOrderDto} from './dto/update-order.dto';
 import {Repository} from 'typeorm';
 import {Order} from './entities/order.entity';
@@ -14,31 +13,27 @@ export class OrdersService {
     ) {
     }
 
-    create(createOrderDto: CreateOrderDto) {
-        return 'This action adds a new order';
-    }
-
     findAll() {
         /*TODO: il est placé ici pour des fin de test
         Quand wass aura intégrer les socket il devra placer cette méthodes dans la méthode associée
         Se référer à la documentation associée à la méthode pour savoir ce qu'elle attend.
          */
-        OrdersService.sendNotification(null);
+        OrdersService.sendNotification( null);
         /* Récupération de toutes les commandes avec les relations User et Restaurant */
-        return this.orderRepository.find({relations: ['user', 'restaurant', 'plate']});
+        return this.orderRepository.find({relations: ['user', 'restaurant', 'orderPlates', 'orderPlates.plate']});
     }
 
     findOne(id: number) {
         // TODO : Remplacer ce findOne spécifiquement pour ne récupérer que les informations pertinentes.
         //  Pour l'instant, il renvoie même le mot de passe de l'utilisateur lié.
         return this.orderRepository.findOne(id, {
-            relations: ['user', 'restaurant', 'plate'],
+            relations: ['user', 'restaurant', 'orderPlates', 'orderPlates.plate'],
         });
     }
 
     findOrderByUser(id: number) {
         return this.orderRepository.find({
-            relations: ['restaurant', 'plate'],
+            relations: ['restaurant', 'orderPlates', 'orderPlates.plate'],
             where: {'user': {id}},
             order: {
                 created_at: "DESC"
@@ -48,7 +43,7 @@ export class OrdersService {
 
     findByRestaurant(id: number) {
         return this.orderRepository.find({
-            relations: ['user', 'plate'],
+            relations: ['user', 'orderPlates', 'orderPlates.plate'],
             where: {
                 'restaurant': {id}
             }
@@ -57,7 +52,7 @@ export class OrdersService {
 
     findByStatus(status: string) {
         return this.orderRepository.find({
-            relations: ['user', 'plate'],
+            relations: ['user', 'orderPlates', 'orderPlates.plate'],
             where: {
                 'status': status,
             }
@@ -66,7 +61,7 @@ export class OrdersService {
 
     findByRestaurantByStatus(status: string, id: string) {
         return this.orderRepository.find({
-            relations: ['user', 'plate', 'restaurant'],
+            relations: ['user', 'orderPlates', 'orderPlates.plate', 'restaurant'],
             where: {
                 'status': status,
                 'restaurant': {id}
