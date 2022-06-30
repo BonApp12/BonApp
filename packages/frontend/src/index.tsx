@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import RegisterForm from './components/Register/RegisterForm';
 import ForgetPwd from "./components/ForgetPwd/ForgetPwd";
 import ChangePwd from "./components/ForgetPwd/ChangePwd";
-import BottomNav from "./components/Navigation/bottomNav";
+import ReadQRCode from "./components/QRCode/ReadQRCode";
 
 
 ReactDOM.render(
@@ -34,6 +34,7 @@ ReactDOM.render(
                                 <Route path=":idRestaurant/:idPlate" element={<ProductDetail/>}/>
                             </Route>
                             <Route path="login" element={<LoginForm/>}/>
+                            <Route path="scan" element={<ReadQRCode/>}/>
                             <Route path="register" element={<RegisterForm/>}/>
                             <Route path="profile">
                                 <Route path="" element={<Profile/>}/>
@@ -48,7 +49,6 @@ ReactDOM.render(
                     </Routes>
                 </RecoilRoot>
             </SocketContext.Provider>
-            <BottomNav/>
         </BrowserRouter>
         <Toast/>
     </div>,

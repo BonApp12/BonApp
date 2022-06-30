@@ -1,41 +1,45 @@
-import {AiOutlineHome, AiOutlineLogin, AiOutlineShoppingCart} from "react-icons/ai";
+import {AiOutlineHome, AiOutlineScan, AiOutlineShop} from "react-icons/ai";
 import React from "react";
 import {NavLink, useLocation} from "react-router-dom";
 
 
 export default function BottomNav() {
     const location = useLocation();
+    const currentPath = location.pathname.split('/')[1];
     return (
         <section className="navbar-bottom">
             <NavLink
-                to="/"
+                to="/profile"
             >
                 <div
-                    className={(location.pathname.split('/')[1] === '')
+                    className={(currentPath === 'profile')
                         ? 'navbar-item active' : 'navbar-item'}
                 >
                     <AiOutlineHome/>
                 </div>
             </NavLink>
+            <NavLink to={'scan'}>
+                <div
+                    className={(currentPath === 'scan')
+                        ? 'navbar-item active' : 'navbar-item'}
+                >
+                    <AiOutlineScan/>
+                </div>
+            </NavLink>
             {location.pathname.split('/')[1] !== '' &&
             <>
-                <div className={(location.pathname.split('/')[1] === 'restaurant')
-                    ? 'navbar-item active' : 'navbar-item'}
+                <NavLink
+                    to="/scan"
                 >
-                    <AiOutlineShoppingCart/>
-                </div>
-                <NavLink to={'profile'}>
-                    <div
-                        className={(window.location.pathname.split("/")[1] === 'profile')
-                            ? 'navbar-item active' : 'navbar-item'}
+                    <div className={(currentPath === 'restaurant')
+                        ? 'navbar-item active' : 'navbar-item disable'}
                     >
-                        <AiOutlineLogin/>
+                        <AiOutlineShop/>
                     </div>
                 </NavLink>
+
             </>
             }
-
-
         </section>
     );
 }

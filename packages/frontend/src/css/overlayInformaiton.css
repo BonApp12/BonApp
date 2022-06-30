@@ -51,7 +51,7 @@
 
 .add-to-cart, .place-content-center button {
     border: none;
-    border-radius: 12px;
+    border-radius: 6px;
     box-shadow: 0 8px 16px -5px rgb(255 165 0 / 86%);
     background-color: #ff5000;
     background-image: linear-gradient(#e98600, rgba(233, 134, 0, 0));
@@ -77,4 +77,24 @@
     box-shadow: 0 0 10px;
 }
 
+.btn-quantity {
+    background-color: #ff5000;
+    background-image: linear-gradient(#e98600, rgba(233, 134, 0, 0));
+}
 
+.btn-quantity-minus {
+    background-color: #e98600;
+    background-image: linear-gradient(#ff5000, rgba(233, 134, 0, 0));
+}
+
+.quantity {
+    width: 20px;
+}
+
+.btn-sm {
+    height: 2rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    min-height: 2rem;
+    font-size: .875rem;
+}

@@ -115,7 +115,7 @@ const ProductsList = () => {
             socket.on('userLeftRoom', (currentRoom) => {
                 toast.error(`Quelqu'un a quitté la table...`);
                 updateOtherCart(currentRoom);
-            })
+            });
         }
     }, [tableExists, idTable, idRestaurant]);
 
@@ -126,7 +126,7 @@ const ProductsList = () => {
             if (userState) currentNickname = userState.email; else currentNickname = randomName;
             const otherCarts = informations.filter((user) => user.nickname !== currentNickname);
             updateOtherCart(otherCarts);
-        })
+        });
     }, [randomName, userState]);
     useEffect(() => {
         if (filteredPlates !== null) {

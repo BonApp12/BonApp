@@ -17,22 +17,22 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
                 </div>
 
                 {cart?.some(plate => plate.id === plateProps.id) ?
-                    <div className="place-content-center">
-                        <button className="rounded-full rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg"
+                    <div className="items-center justifiy-center flex">
+                        <button className="rounded-full rounded-full btn-quantity-minus w-8 h-8 text-white mr-3 text-lg"
                                 onClick={removeFromCart}>
                             -
                         </button>
-                        <span className="text-lg">
+                        <span className="text-lg quantity">
                             {plateProps.quantity}
                         </span>
-                        <button className="rounded-full bg-orange-600 w-8 h-8 text-white ml-3 text-lg"
+                        <button className="rounded-full btn-quantity w-8 h-8 text-white ml-3 text-lg"
                                 onClick={addToCart}>
                             +
                         </button>
                     </div> :
                     <div>
 
-                        <Button classStyle={'add-to-cart'}
+                        <Button classStyle={'btn btn-xs add-to-cart'}
                                 onClick={addToCart}>
                             Commander
                         </Button>

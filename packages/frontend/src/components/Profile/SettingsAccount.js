@@ -12,7 +12,7 @@ import HeaderAccount from "../HeaderAccount/HeaderAccount";
 import {useNavigate} from "react-router-dom";
 import resetUserConnected from "../../helpers/resetUserConnected";
 
-export function SettingsAccount(){
+export function SettingsAccount() {
     const [userState, setUserState] = useRecoilState(userAtom);
     const {register, handleSubmit, formState: {errors}, setError, setValue} = useForm({
         defaultValues: {
@@ -27,48 +27,51 @@ export function SettingsAccount(){
 
     useEffect(() => {
         userState === null && navigate('/');
-        return function cleanup(){
+        return function cleanup() {
             setLoading(false);
-        }
-    },[userState]);
+        };
+    }, [userState]);
 
     const onSubmit = (user) => {
         //delete property thanks to condition
         Object.keys(user).map(data => {
-            if((data === 'firstname' || data === 'lastname') || (data === 'email' && userState.email === user.email) || (user[data] === '')) delete user[data];
+            if ((data === 'firstname' || data === 'lastname') || (data === 'email' && userState.email === user.email) || (user[data] === '')) delete user[data];
         });
         //set error if oldpassword is missing
-        if(!user.oldPassword && user.password) {
-            setError('oldPassword', {type: 'missing', message:"Veuillez renseigner l'ancien mot de passe"});
+        if (!user.oldPassword && user.password) {
+            setError('oldPassword', {type: 'missing', message: "Veuillez renseigner l'ancien mot de passe"});
             return 0;
         }
         //set error if password is missing and if oldpassword is populated
-        else if(user.oldPassword && !user.password){
-            setError('password', {type: 'missing', message:"Votre mot de passe est requis"});
+        else if (user.oldPassword && !user.password) {
+            setError('password', {type: 'missing', message: "Votre mot de passe est requis"});
             return 0;
         }
-        if(Object.keys(user).length !== 0){
+        if (Object.keys(user).length !== 0) {
+            setTimeout(() => {
+            }, 1000);
             setLoading(true);
             updateProfile(user)
                 .then(res => {
-                    if(res.status === 401){
+                    if (res.status === 401) {
                         resetUserConnected(setUserState, navigate);
-                    }else{
+                    } else {
                         return res.json();
                     }
                 })
                 .then(data => {
-                    setLoading(false);
-                    if(data !== undefined){
-                        if(data?.statusCode === 422 || data?.statusCode === 400) {
+
+                        setLoading(false);
+                    if (data !== undefined) {
+                        if (data?.statusCode === 422 || data?.statusCode === 400) {
                             let errorMsg = '';
-                            if (typeof data.message === "object") data.message.forEach(error => errorMsg += '*'+ error + '\n');
+                            if (typeof data.message === "object") data.message.forEach(error => errorMsg += '*' + error + '\n');
                             if (typeof data.message === "string") errorMsg = data.message;
                             toast.error(errorMsg, {autoClose: 6000});
-                        }else{
+                        } else {
                             delete data.password;
                             setUserState(data);
-                            Object.keys(profileFields).forEach(field => (field === 'oldPassword' || field === 'password' || field === 'confirmPassword') && setValue(field,''));
+                            Object.keys(profileFields).forEach(field => (field === 'oldPassword' || field === 'password' || field === 'confirmPassword') && setValue(field, ''));
                             toast.success('✅ Modification réussie !');
                         }
                     }
@@ -78,9 +81,9 @@ export function SettingsAccount(){
 
     return (
         <div className="px-5">
-            <HeaderAccount url={'/profile'} title={'Modifier mon compte'} />
+            <HeaderAccount url={'/profile'} title={'Modifier mon compte'}/>
             <form onSubmit={handleSubmit(onSubmit)} className="m-5">
-                {Object.keys(profileFields).map((field,index) => (
+                {Object.keys(profileFields).map((field, index) => (
                     <div key={index}>
                         {field === 'oldPassword' && (<h2 className="mt-5">Mot de passe</h2>)}
                         <Input
@@ -93,8 +96,11 @@ export function SettingsAccount(){
                         />
                     </div>
                 ))}
-                <button className={`btn ${loading && 'loading'} btn-primary mt-5 px-10 text-white border-none bg-orange-600 hover:bg-orange-500`} type="submit">{loading ? 'En cours...' : 'Modifier'}</button>
+                <div className="text-right">
+                    <button className={`btn-gradient mt-5`}
+                            type="submit">{loading ? 'En cours...' : 'Modifier'}</button>
+                </div>
             </form>
         </div>
-    )
+    );
 }
