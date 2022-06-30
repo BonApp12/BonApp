@@ -46,7 +46,7 @@ const ProductsList = () => {
             if (cart.length > 0) {
                 return plates.map((item) => ({
                     ...item,
-                    quantity: cart[cart.findIndex(plateInCart => plateInCart.id === item.id)] !== undefined ? cart[cart.findIndex(plateInCart => plateInCart.id === item.id)].quantity : 1
+                    quantity: cart[cart.findIndex(plateInCart => plateInCart.id === item.id)]?.quantity || 1
                 }))
             } else {
                 return plates.map((item) => ({
