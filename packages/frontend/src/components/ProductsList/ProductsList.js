@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import {SocketContext} from "../../context/socket";
@@ -14,6 +14,7 @@ import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantB
 import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
 import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
+import createOrder from "../../requests/orders/createOrder";
 
 
 const ProductsList = () => {
@@ -22,6 +23,7 @@ const ProductsList = () => {
     const idTable = params.idTable;
 
     // Setting up states
+    const [searchParams, setSearchParams] = useSearchParams();
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [tableExists, setTableExists] = useState(false);
@@ -30,6 +32,7 @@ const ProductsList = () => {
     const [cart, updateCart] = useRecoilState(cartAtom);
     const [userState, setUserState] = useRecoilState(userAtom);
     const [randomName, setRandomName] = useState(undefined);
+    const [order, setOrder] = useState(undefined);
 
     // Handling ingredients modal
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
@@ -135,6 +138,21 @@ const ProductsList = () => {
         }
         socket.emit('userCartUpdated', {cart, user: userState});
     }, [cart]);
+
+    /* Sending order if payment fullfilled */
+    useEffect(() => {
+        if (searchParams.get('redirect_status') === 'succeeded' && restaurant?.id !== undefined && tableExists !== false){
+            createOrder(cart, restaurant, idTable, userState ?? undefined)
+                .then((result) => result.json())
+                .then((res) => {
+                    socket.emit('createOrder', {...res})
+                    searchParams.delete('redirect_status');
+                    searchParams.delete('payment_intent_client_secret');
+                    searchParams.delete('payment_intent');
+                    setSearchParams(searchParams);
+                });
+        }
+    }, [searchParams, restaurant, tableExists]);
 
     function addToCart(plate) {
         let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);

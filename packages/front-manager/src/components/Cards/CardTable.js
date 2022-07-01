@@ -136,10 +136,10 @@ export default function CardTable() {
                   </span>
                                 </th>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                    {order.user.lastname}
+                                    {order.user?.lastname || "Anonyme"}
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                    {order.user.firstname}
+                                    {order.user?.firstname}
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                     {formattedDate(order.created_at)}

@@ -45,5 +45,7 @@ export class Plate extends BaseEntity {
 
     @OneToMany(() => Ratings, (rating: Ratings) => rating.plate)
     ratings: Ratings[];
+
+    quantity: number;
 }
 

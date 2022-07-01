@@ -12,6 +12,7 @@ import {Server, Socket} from 'socket.io';
 import {Logger} from "@nestjs/common";
 import {UpdateOrderDto} from "./dto/update-order.dto";
 import {CreateOrderDto} from "./dto/create-order.dto";
+import {Order} from "./entities/order.entity";
 
 @WebSocketGateway({cors: true})
 export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -100,8 +101,11 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('createOrder')
-    create(@MessageBody() createOrderDto: CreateOrderDto) {
-        // this.ordersService.create(createOrderDto);
+    create(client: Socket) {
+        console.log(client);
+        const rooms = Array.from(client.rooms);
+        console.log(rooms);
+
     }
 
     @SubscribeMessage('findAllOrders')

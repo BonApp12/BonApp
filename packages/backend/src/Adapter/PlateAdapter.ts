@@ -20,6 +20,7 @@ export class PlateAdapter {
         plateDto.categories = plate?.categories?[...plate.categories]: [];
         plateDto.type = setPlateRole(plate?.type);
         plateDto.photo = plate?.photo;
+        plateDto.quantity = plate?.quantity;
         return plateDto;
     }
 

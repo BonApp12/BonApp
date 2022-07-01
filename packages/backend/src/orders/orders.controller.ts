@@ -2,6 +2,9 @@ import {Body, Controller, Delete, Get, Param, Patch, UseGuards} from '@nestjs/co
 import {OrdersService} from './orders.service';
 import {UpdateOrderDto} from './dto/update-order.dto';
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {Plate} from "../plate/entities/plate.entity";
+import {Users} from "../users/entities/users.entity";
+import {Restaurant} from "../restaurant/entities/restaurant.entity";
 
 @Controller('orders')
 export class OrdersController {
@@ -54,6 +57,12 @@ export class OrdersController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.ordersService.remove(+id);
+    }
+
+    @Post('/create')
+    async create(@Body('cart') cart: Plate[], @Body('restaurant') restaurant: Restaurant,
+           @Body('user') user: Users | undefined) {
+        return await this.ordersService.create(cart, restaurant, user);
     }
 
 }
