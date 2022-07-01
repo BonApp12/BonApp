@@ -1,0 +1,4 @@
+127.0.0.1:443 {
+    proxy / frontend:3000
+    tls self_signed
+}

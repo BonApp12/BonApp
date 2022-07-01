@@ -2,14 +2,14 @@ version: "3.3"
 
 services:
   ui:
-    image: yassansplus/frontendbonapp
+    image: yassansplus/frontendbonapp:develop
     container_name: front_end_prod
     ports:
       - '3000:3000'
     networks:
       - bp-network
   backend-prod:
-    image: yassansplus/backendbonapp:0.3.1
+    image: yassansplus/backendbonapp:develop
     container_name: back_end_prod
     env_file: .env
     networks:
@@ -20,6 +20,19 @@ services:
       - bp-pg-db
     links:
       - bp-pg-db
+  front-manager:
+    image: yassansplus/front-managerbonapp:develop
+    container_name: front_manager_prod
+    env_file: .env
+    networks:
+      - bp-network
+    ports:
+      - '3001:3001'
+    depends_on:
+      - bp-pg-db
+    links:
+      - bp-pg-db
+
   bp-pg-db:
     image: postgres:12-alpine
     restart: always
@@ -33,6 +46,27 @@ services:
     networks:
       - bp-network
 
+  caddy:
+    image: abiosoft/caddy
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - backend-prod
+    volumes:
+      - "./Caddyfile:/etc/Caddyfile"
+      - "./caddy:/root/.caddy"
+    networks:
+      - bp-network
+
+  html-to-pdf:
+    container_name: html-to-pdf
+    image: kurzdigital/html-to-pdf:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - bp-network
 networks:
   bp-network:
     driver: bridge
