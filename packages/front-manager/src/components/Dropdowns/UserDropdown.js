@@ -1,12 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import {createPopper} from "@popperjs/core";
 import {Link} from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {userAtom} from "../../states/user";
 
 const UserDropdown = () => {
   // Props du dropdown (pour le popper)
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
+  const [user, setUser] = useRecoilState(userAtom);
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
       placement: "bottom-start",
@@ -28,6 +31,7 @@ const UserDropdown = () => {
         <div className="items-center flex">
           <span
               className="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+            { user?.lastname + ' ' + user?.firstname}
             <img
                 alt="..."
                 className="w-full rounded-full align-middle border-none shadow-lg"
