@@ -19,4 +19,8 @@ export default class StripeService {
       payment_method_types: ['card'],
     });
   }
+
+  public async update(paymentIntentId: string, amount: number) {
+    return this.stripe.paymentIntents.update(paymentIntentId, {amount: amount});
+  }
 }

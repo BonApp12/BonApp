@@ -10,6 +10,7 @@ import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
+import {Information} from "../overlay/information";
 
 // create a navigation component that wraps the burger menu
 export const Sliding = (props) => {
@@ -17,6 +18,8 @@ export const Sliding = (props) => {
     const [cart, updateCart] = useRecoilState(cartAtom);
     const [isCheckout, setIsCheckout] = useState(false);
     const [stripeOptions, setStripeOptions] = useState({});
+    const [paymentIntentId, setPaymentIntentId] = useState("");
+    const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
     const totalAmount = cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0);
     const [stripePromise, setStripePromise] = useState(null);
 
@@ -50,26 +53,52 @@ export const Sliding = (props) => {
     }
 
     function checkout() {
-        // Récupération du client_secret pour le paiement.
-        fetch(process.env.REACT_APP_URL_BACKEND + '/payment/pay', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                amount: totalAmount * 100, // En centimes, donc on multiplie par 100.
+        // Gathering client secret to send it to CheckoutForm
+        if (!isCheckout) {
+            fetch(process.env.REACT_APP_URL_BACKEND + '/payment/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: totalAmount * 100, // En centimes, donc on multiplie par 100.
+                })
             })
-        })
-            .then(response => response.json())
-            .then(data => {
-                setStripeOptions({
-                    clientSecret: data.client_secret,
-                    appearance: {
-                        'theme': 'flat'
-                    }
+                .then(response => response.json())
+                .then(data => {
+                    setStripeOptions({
+                        clientSecret: data.client_secret,
+                        appearance: {
+                            'theme': 'flat'
+                        }
+                    });
+                    setPaymentIntentId(data.paymentIntentId)
+                    setIsCheckout(true);
+                    setModalManagement({isOpen: true, data: null});
+                })
+                .catch((error) => {
+                    console.error(error);
                 });
-                setIsCheckout(true);
-            });
+        } else {
+             setModalManagement( {isOpen: false, data: null });
+            fetch(process.env.REACT_APP_URL_BACKEND + '/payment/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    paymentIntentId: paymentIntentId,
+                    amount: totalAmount * 100,
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setModalManagement({isOpen: true, data: null });
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+        }
     }
 
     function addToCart(plate) {
@@ -162,20 +191,26 @@ export const Sliding = (props) => {
                     }
                 })}
 
-                {formattedCart().length !== 0 && isCheckout !== true ?
-                    <Button classStyle={'mr-3 btn-success'}
-                            onClick={checkout}>
-                            <span
-                                className="mr-5">Payer {cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)}€ </span><MdOutlinePayment/>
-                    </Button> :
+                {formattedCart().length === 0 &&
                     <div>
                         Du coup vous êtes plutot 🍝 ou 🍕 ?
                     </div>
                 }
+
+                {totalAmount > 0 &&
+                    <Button classStyle={'mr-3 btn-success'}
+                            onClick={checkout}>
+                            <span
+                                className="mr-5">Payer {totalAmount}€ </span><MdOutlinePayment/>
+                    </Button>
+                }
                 {isCheckout === true ?
-                    <Elements stripe={stripePromise} options={stripeOptions}>
-                        <CheckoutForm clientSecret={stripeOptions.clientSecret}/>
-                    </Elements>
+                    <Information displayModal={modalManagement} setDisplayModal={setModalManagement}>
+                        <span className="mr-5">Montant : {totalAmount} €</span>
+                        <Elements stripe={stripePromise} options={stripeOptions}>
+                            <CheckoutForm clientSecret={stripeOptions.clientSecret}/>
+                        </Elements>
+                    </Information>
                     : ""}
                 <Button classStyle={'btn-outline btn-error'}
                         onClick={ctx.toggleMenu}>
