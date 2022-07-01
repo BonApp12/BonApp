@@ -7,9 +7,13 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
     return (
         <div className="card card-bordered card-compact content-center m-5 shadow-on-plate">
             <figure>
-                <img
+                { plateProps.photo? (
+                        <img className="max-h-[22rem] object-cover" src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + plateProps.photo} alt={plateProps.name}/>
+                    ):
+                    <img
                     src={plateProps?.photo ? `${process.env.REACT_APP_URL_BACKEND}/plate/uploads/${plateProps.photo}` : 'https://picsum.photos/id/1005/400/250'}
                     alt="photo aléatoire"/>
+                }
             </figure>
             <div className="card-body">
                 <div>

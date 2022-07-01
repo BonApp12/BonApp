@@ -39,6 +39,12 @@ const ProductDetail = () => {
     return (
         <Layout restaurant={props.restaurant}>
             <p onClick={handleGoBack}>Retour</p>
+            { plate.photo ? (
+                <img className="rounded w-20 h-20" src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + plate.photo} alt={plate.name}/>
+                ):
+                <img src="https://picsum.photos/id/1005/400/250" alt="aléatoire"/>
+            }
+
             <h3>{props.plateName}</h3>
             <h4>Liste des ingrédients : </h4>
             <ul>
