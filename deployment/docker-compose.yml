@@ -45,7 +45,6 @@ services:
       - "5432:5432"
     networks:
       - bp-network
-
   caddy:
     image: abiosoft/caddy
     container_name: caddy
