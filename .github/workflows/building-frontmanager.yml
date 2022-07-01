@@ -18,7 +18,7 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          envkey_REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+          envkey_REACT_APP_URL_BACKEND: ${{ secrets.REACT_APP_URL_BACKEND }}
           envkey_REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
           directory: ./packages/front-manager/
           file_name: .env
