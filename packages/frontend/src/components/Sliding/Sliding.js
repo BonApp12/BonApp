@@ -75,6 +75,9 @@ export const Sliding = (props) => {
                     setPaymentIntentId(data.paymentIntentId)
                     setIsCheckout(true);
                     setModalManagement({isOpen: true, data: null});
+                })
+                .catch((error) => {
+                    console.error(error);
                 });
         } else {
              setModalManagement( {isOpen: false, data: null });
@@ -91,6 +94,9 @@ export const Sliding = (props) => {
                 .then(response => response.json())
                 .then(data => {
                     setModalManagement({isOpen: true, data: null });
+                })
+                .catch((error) => {
+                    console.error(error);
                 })
         }
     }

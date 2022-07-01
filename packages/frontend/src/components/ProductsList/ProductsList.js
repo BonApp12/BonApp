@@ -150,7 +150,6 @@ const ProductsList = () => {
         let currentNickname = "";
         if (userState) currentNickname = userState.email; else currentNickname = randomName;
         const otherCarts = carts.filter((user) => user.nickname !== currentNickname);
-        console.error(currentNickname, otherCarts);
         updateOtherCart(otherCarts);
     }
 
