@@ -4,7 +4,7 @@ const countPlateByRestaurant = (restaurantId) => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        credentials: 'include',
+        //credentials: 'include',
     });
 };
 
