@@ -8,7 +8,7 @@ const checkToken = (token) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        credentials: 'include'
+        //
     })
 }
 export default checkToken;

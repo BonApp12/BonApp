@@ -8,7 +8,7 @@ const generatePdf = (orderId) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        credentials: 'include'
+        //
     })
         .then(res => res.blob())
         .then(data => {

@@ -4,7 +4,7 @@ const deleteUser = (idUser) => {
         crossDomain: true,
         method: 'DELETE',
         mode: 'cors',
-        credentials: 'include',
+        //,
     });
 };
 

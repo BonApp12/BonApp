@@ -6,7 +6,7 @@ const fetchFullOrder = (restaurantId, params) => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        credentials: 'include',
+        //,
     })
 }
 

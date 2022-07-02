@@ -3,7 +3,7 @@ const fetchFullPlate = (idPlate) => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        credentials: 'include',
+        //,
     });
 };
 

@@ -8,7 +8,7 @@ const createTable = (body) => {
             'Content-Type': 'application/json'
         },
         mode: 'cors',
-        credentials: 'include',
+        //,
     });
 };
 

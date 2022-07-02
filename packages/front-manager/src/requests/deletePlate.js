@@ -4,7 +4,7 @@ const deletePlateRequest = (idPlate) => {
         crossDomain: true,
         method: 'DELETE',
         mode: 'cors',
-        credentials: 'include',
+        //,
     });
 };
 

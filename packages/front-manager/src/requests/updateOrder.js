@@ -4,7 +4,7 @@ export default function updateOrder(idOrder) {
         crossDomain: true,
         method: 'PATCH',
         mode: 'cors',
-        credentials: 'include',
+        //,
     })
 
 }

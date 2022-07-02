@@ -9,7 +9,7 @@ const updateUser = (teamMember) => {
             'Content-Type': 'application/json'
         },
         mode: 'cors',
-        credentials: 'include',
+        //,
     });
 };
 

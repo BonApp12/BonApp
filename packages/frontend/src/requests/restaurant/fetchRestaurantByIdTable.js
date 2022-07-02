@@ -3,7 +3,7 @@ const fetchRestaurantByIdTable = (idRestaurant, idTable) => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        //credentials: 'include',
+        //,
     })
         .then(res => res.json());
 };

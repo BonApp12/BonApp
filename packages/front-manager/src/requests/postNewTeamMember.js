@@ -8,7 +8,7 @@ const postNewTeamMember = (data) => {
         },
         method: 'POST',
         mode: 'cors',
-        credentials: 'include',
+        //,
     });
 };
 
