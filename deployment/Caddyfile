@@ -1,4 +1,7 @@
-127.0.0.1:443 {
+51.68.45.99/:443 {
     proxy / frontend:3000
+    reverse_proxy / backend:80
+    }
+    `;
     tls self_signed
 }
