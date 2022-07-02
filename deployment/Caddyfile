@@ -10,7 +10,7 @@ api.bonapp.ninja:443 {
    }
 }
 resto.bonapp.ninja:443 {
-  reverse_proxy 51.68.45.99:4000  {
+  reverse_proxy 51.68.45.99:3001  {
     header_down Strict-Transport-Security max-age=31536000;
    }
 }
