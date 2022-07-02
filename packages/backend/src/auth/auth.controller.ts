@@ -2,7 +2,6 @@ import {
     Body,
     Controller,
     Get,
-    Headers,
     HttpCode,
     HttpException,
     HttpStatus,
@@ -46,17 +45,17 @@ export class AuthController {
     @HttpCode(200)
     @UseGuards(LocalAuthGuard)
     @Post('/login')
-    async login(@Req() req: RequestWithUser, @Headers() headers: any) {
+    async login(@Body() body, @Req() req: RequestWithUser) {
         const userDto = UserAdapter.toDto(req.user);
-        if (((headers.origin === this.configService.get("URL_FRONTMANAGER") && userDto.role !== UserRole.CLIENT)
-            || (headers.origin === this.configService.get("URL_FRONTEND") && userDto.role === UserRole.CLIENT)) || headers.origin === undefined) {
+        if (((body?.requestFrom !== UserRole.CLIENT && [UserRole.RESTAURANT_KITCHEN, UserRole.RESTAURANT_MANAGER, UserRole.RESTAURANT_SERVER].includes(userDto.role))
+            || (body?.requestFrom === UserRole.CLIENT && userDto.role === UserRole.CLIENT)) || (body?.requestFrom === UserRole.RESTAURANT_SERVER && userDto.role === UserRole.RESTAURANT_SERVER)) {
             return this.loginUser(req, userDto);
         }
         throw new HttpException(
             {
                 type: "role",
                 message: "Vous n'avez pas le droit d'accéder à cette ressource",
-                status: HttpStatus.UNAUTHORIZED
+                statusCode: HttpStatus.UNAUTHORIZED
             },
             HttpStatus.UNAUTHORIZED,
         );

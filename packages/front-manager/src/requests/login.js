@@ -4,7 +4,7 @@ const login = (user) => {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify(user),
+        body: JSON.stringify({...user, requestFrom: 'RESTAURANT'}),
         headers: {
             'Content-Type': 'application/json'
         },

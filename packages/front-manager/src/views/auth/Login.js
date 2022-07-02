@@ -14,7 +14,6 @@ export default function Login() {
     const {
         register,
         handleSubmit,
-        setError,
         formState: {errors}
     } = useForm({resolver: yupResolver(ValidationSchemaLogin())});
     const history = useHistory();
@@ -30,15 +29,18 @@ export default function Login() {
             .then(res => res.json())
             .then(responseLogin => {
                 setLoading(false);
-                if ([400, 401].includes(responseLogin.statusCode))
-                    return setError('auth', {type: 'error', message: responseLogin.message});
-                if (responseLogin.statusCode === 200) setUserState(responseLogin.user);
-                toast.success("Connexion réussi");
-                history.push('/admin');
+                if ([400, 401].includes(responseLogin.statusCode)){
+                    toast.error(responseLogin.message);
+                }
+                if (responseLogin.statusCode === 200) {
+                    setUserState(responseLogin.user);
+                    toast.success("Connexion réussi");
+                    history.push('/admin');
+                }
             })
             .catch(err => {
                 setLoading(false);
-                setError('auth', {type: 'error', message: err.response.data.message});
+                toast.error(err.response.data.message);
             });
     };
 
@@ -50,13 +52,6 @@ export default function Login() {
                         <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200
             border-0">
                             <div className="flex-auto px-4 lg:px-10 pb-10">
-                                {
-                                    errors?.auth?.message && (
-                                        <div className="mt-5 text-center">
-                                            <span className="text-sm text-red-500">{errors?.auth?.message}*</span>
-                                        </div>
-                                    )
-                                }
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <Input
                                         register={{...register('email')}}
