@@ -5,7 +5,7 @@ const loginWithCredentials = (form) => {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify(form),
+        body: JSON.stringify({...form, requestFrom: 'CLIENT'}),
         headers: {
             'Content-Type': 'application/json'
         },
