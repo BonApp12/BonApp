@@ -11,7 +11,7 @@ const googleAuth = (accessToken) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        //
+        credentials: 'include'
     });
 }
 

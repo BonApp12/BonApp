@@ -3,7 +3,7 @@ const fetchFullPlateById = (idPlate, setPlate, setIsLoaded, setError, navigate) 
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        //,
+        credentials: 'include',
     })
         .then(res => res.json())
         .then(
