@@ -9,7 +9,7 @@ const loginWithCredentials = (form) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        credentials: 'include'
+        //credentials: 'include'
     })
 }
 
