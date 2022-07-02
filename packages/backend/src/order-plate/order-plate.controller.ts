@@ -14,4 +14,9 @@ export class OrderPlateController {
   findOne(@Param('id') id: string) {
     return this.orderPlateService.findOne(+id);
   }
+
+  @Get('/restaurant/:id/best-plate/:type')
+  findBestPlate(@Param('id') id: string, @Param('type') type: string) {
+      return this.orderPlateService.findBestPlate(+id,type === 'many');
+  }
 }

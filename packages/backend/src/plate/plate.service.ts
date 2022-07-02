@@ -46,6 +46,16 @@ export class PlateService {
         })).map(plate => PlateAdapter.toDto(plate));
     }
 
+    countPlateByRestaurantCategorie(id: number) {
+        const query = this.plateRepository.createQueryBuilder("p")
+            .select("COUNT(*)", "count")
+            .addSelect("p.type", "type")
+            .innerJoin("p.restaurant", "r")
+            .groupBy("p.type")
+            .where("r.id = :id", {id})
+        return query.getRawMany();
+    }
+
     update(id: number, updatePlateDto: UpdatePlateDto) {
         return `This action updates a #${id} plate`;
     }
