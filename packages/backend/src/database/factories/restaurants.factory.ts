@@ -3,6 +3,7 @@ import {define, factory} from 'typeorm-seeding';
 import {Restaurant} from '../../restaurant/entities/restaurant.entity';
 import {Address} from '../../address/entities/address.entity';
 import {Plate} from "../../plate/entities/plate.entity";
+import {Tables} from "../../tables/entities/tables.entity";
 
 define(Restaurant, (faker: typeof Faker) => {
     const firstName = faker.name.firstName();
@@ -17,6 +18,7 @@ define(Restaurant, (faker: typeof Faker) => {
     restaurant.contact_phone = faker.phone.phoneNumber('06########');
     restaurant.address = factory(Address)() as any;
     restaurant.plates = factory(Plate)().createMany(30) as any;
+    restaurant.tables = factory(Tables)().createMany(10) as any;
     return restaurant;
 });
 
