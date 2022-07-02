@@ -38,7 +38,7 @@ export default function Dashboard() {
             });
 
         countBestPlateRequest(userState?.restaurant.id, 'many')
-            .then(async(res) => {
+            .then(async (res) => {
                 if (res.status === 401) resetUserConnected(setUserState, history);
                 setCountBestPlate(await res.json());
             })
@@ -48,7 +48,7 @@ export default function Dashboard() {
                 if (res.status === 401) resetUserConnected(setUserState, history);
                 setCountPlateType(await res.json())
             });
-    },[]);
+    }, [userState]);
 
     const dataBarOrderCount = {
         labels: Object.keys(monthState).map(month => month),
