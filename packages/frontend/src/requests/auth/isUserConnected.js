@@ -6,7 +6,7 @@ const isUserConnected = () => {
         headers: {
             'Content-Type': 'application/json'
         },
-        //credentials: 'include',
+        credentials: 'include',
     });
 }
 

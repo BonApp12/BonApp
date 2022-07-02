@@ -11,7 +11,7 @@ const updatePwd = (passwordObject) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        //credentials: 'include'
+        credentials: 'include'
     })
 }
 export default updatePwd;

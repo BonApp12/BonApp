@@ -9,7 +9,7 @@ const registerUser = (form) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        //credentials: 'include'
+        credentials: 'include'
     })
 }
 
