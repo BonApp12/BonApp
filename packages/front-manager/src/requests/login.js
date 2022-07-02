@@ -8,7 +8,7 @@ const login = (user) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        //
+        credentials: 'include'
     })
 }
 

@@ -3,7 +3,7 @@ const logout = () => {
         crossDomain: true,
         method: 'POST',
         mode: 'cors',
-        //,
+        credentials: 'include',
     })
 }
 export default logout;

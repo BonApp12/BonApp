@@ -3,7 +3,7 @@ const fetchAddressRestaurant = (id) => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        //,
+        credentials: 'include',
     });
 };
 

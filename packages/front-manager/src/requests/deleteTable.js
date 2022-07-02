@@ -4,7 +4,7 @@ const deleteTableRequest = (idTable) => {
         crossDomain: true,
         method: 'DELETE',
         mode: 'cors',
-        //,
+        credentials: 'include',
     });
 };
 

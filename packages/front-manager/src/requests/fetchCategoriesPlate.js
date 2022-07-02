@@ -3,7 +3,7 @@ const fetchCategoriesPlate = () => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        //,
+        credentials: 'include',
     });
 };
 

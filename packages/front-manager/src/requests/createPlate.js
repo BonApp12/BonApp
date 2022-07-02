@@ -5,7 +5,7 @@ const createPlate = (body) => {
         method: 'POST',
         body,
         mode: 'cors',
-        //,
+        credentials: 'include',
     });
 };
 
