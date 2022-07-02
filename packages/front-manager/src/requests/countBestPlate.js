@@ -4,7 +4,7 @@ const countBestPlateRequest = (restaurantId, type) => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        //credentials: 'include',
+        credentials: 'include',
     });
 };
 

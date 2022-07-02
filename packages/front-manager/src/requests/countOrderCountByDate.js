@@ -4,7 +4,7 @@ const countOrderCountByDate = (restaurantId,date) => {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',
-        //credentials: 'include',
+        credentials: 'include',
     });
 };
 
