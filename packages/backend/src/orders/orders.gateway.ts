@@ -39,6 +39,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             client.rooms.forEach((room) => {
                 // client.rooms contains two rooms : users personal (his id) and ordersRoomTable.
                 if (room !== client.id) {
+                    this.logger.log(`Client ${client.id} disconnected from room ${room}`);
                     // get every users except the one that disconnects and reassign
                     const userMap = this.users.get(room).filter((user) => user.socket !== client.id);
                     this.users.set(room, userMap);
@@ -72,6 +73,30 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
     }
 
+    @SubscribeMessage('joinRestaurantRoom')
+    joinRestaurantRoom(client: Socket, args: any) {
+        // Creating Restaurant Room and joining it
+        const roomId = `Restaurant:${args.user.restaurant.id}:Room`;
+        this.logger.log(`Client ${client.id} joined restaurant room ${roomId}`);
+        client.join(roomId);
+
+        // Creating an User object
+        const user = {
+            nickname: args.user.email,
+            role: args.user.role,
+            socket: client.id
+        };
+
+        if (this.users.has(roomId)) {
+            const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname);
+            if (userExists.length === 0) {
+                this.users.set(roomId, [...this.users.get(roomId), user]);
+            }
+        } else {
+            this.users.set(roomId, [user]);
+        }
+    }
+
     @SubscribeMessage('userCartUpdated')
     userCartUpdated(client: Socket, args: Record<string, any>) {
         // Getting Room
@@ -101,10 +126,15 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('createOrder')
-    create(client: Socket) {
-        console.log(client);
+    create(client: Socket, args: Record<string, any>) {
         const rooms = Array.from(client.rooms);
-        console.log(rooms);
+
+        if (this.users.get(rooms[1]) !== undefined) {
+            const idRestaurant = rooms[1].substring(rooms[1].indexOf('Table:') + 6, rooms[1].indexOf('Restaurant'));
+            const restaurantRoom = `Restaurant:${idRestaurant}:Room`;
+
+            this.wss.to(restaurantRoom).emit("orderCreated");
+        }
 
     }
 

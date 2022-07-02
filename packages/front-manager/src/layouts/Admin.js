@@ -19,6 +19,9 @@ import {useRecoilValue} from "recoil";
 import {userAtom} from "../states/user";
 import Tables from "../views/admin/Tables";
 
+// Contexts
+import {SocketContext, socket} from "../contexts/socket";
+
 export default function Admin() {
     const userState = useRecoilValue(userAtom);
     const history = useHistory();
@@ -41,7 +44,9 @@ export default function Admin() {
                         <Route path="/admin/settings" exact component={Settings}/>
                         <Route path="/admin/teams" exact component={Teams}/>
                         <Route path="/admin/tables" exact component={Tables}/>
-                        <Route path="/admin/orders" exact component={Orders}/>
+                        <SocketContext.Provider value={socket}>
+                            <Route path="/admin/orders" exact component={Orders}/>
+                        </SocketContext.Provider>
                         <Route path="/admin/logout" exact component={Logout}/>
                         <Redirect from="/admin" to="/admin/dashboard"/>
                     </Switch>

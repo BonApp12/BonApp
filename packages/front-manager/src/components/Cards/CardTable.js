@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as dayjs from 'dayjs';
 import 'dayjs/locale/fr';
 
@@ -9,16 +9,19 @@ import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import {useHistory} from "react-router-dom";
 import Modal from "../Modal/Modal";
+import {SocketContext} from "../../contexts/socket";
 
 export default function CardTable() {
 
     const [orders, setOrders] = useState([]);
     const [modalInfo, setModalInfo] = useState(null);
+    const [orderReceived, setOrderReceived] = useState(false);
 
     let checkStatus, formattedDate;
     const TODO = 'to-do';
     const [userState, setUserState] = useRecoilState(userAtom);
     const history = useHistory();
+    const socket = useContext(SocketContext);
 
     checkStatus = (status) => {
         return status === TODO;
@@ -30,11 +33,18 @@ export default function CardTable() {
     };
 
     useEffect(() => {
+        socket.on('orderCreated', () => {
+            setOrderReceived(true);
+        });
+    }, [])
+
+    useEffect(() => {
         fetchFullOrder(userState?.restaurant.id, TODO).then(res => {
             if (res.status === 401) return resetUserConnected(setUserState, history);
             return res.json();
         }).then(resOrder => {
             setOrders(resOrder);
+            setOrderReceived(false);
         });
         // .then( resOrder => {
         //     if (resOrder.status === 401) resetUserConnected(setUserState, history);
@@ -44,7 +54,11 @@ export default function CardTable() {
         return function cleanup() {
             setOrders([]);
         };
-    }, []);
+    }, [orderReceived]);
+
+    useEffect(() => {
+        socket.emit('joinRestaurantRoom', {user: userState});
+    }, [socket]);
 
     function computeTotal(orderPlates) {
         let total = 0;
