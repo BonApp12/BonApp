@@ -1,13 +1,16 @@
+
 bonapp.ninja:443 {
-    proxy / 51.68.45.99:3000;
-    tls self_signed
+  reverse_proxy 51.68.45.99:3000  {
+    header_down Strict-Transport-Security max-age=31536000;
+   }
 }
 api.bonapp.ninja:443 {
-    proxy / 51.68.45.99:4000;
-    tls self_signed
+  reverse_proxy 51.68.45.99:4000  {
+    header_down Strict-Transport-Security max-age=31536000;
+   }
 }
-
 resto.bonapp.ninja:443 {
-    proxy / 51.68.45.99:3001;
-    tls self_signed
+  reverse_proxy 51.68.45.99:4000  {
+    header_down Strict-Transport-Security max-age=31536000;
+   }
 }

@@ -45,17 +45,19 @@ services:
       - "5432:5432"
     networks:
       - bp-network
+    # Run the caddy server
   caddy:
-    image: abiosoft/caddy
-    container_name: caddy
+    image: caddy/caddy:2.2.1-alpine
+    container_name: caddy-service
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
-    links:
-      - backend-prod
     volumes:
-      - "./Caddyfile:/etc/Caddyfile"
-      - "./caddy:/root/.caddy"
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - bp-network
 
