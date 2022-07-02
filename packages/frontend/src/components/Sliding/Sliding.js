@@ -10,7 +10,6 @@ import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
-import {Information} from "../overlay/information";
 
 // create a navigation component that wraps the burger menu
 export const Sliding = (props) => {
@@ -73,7 +72,7 @@ export const Sliding = (props) => {
                             'theme': 'flat'
                         }
                     });
-                    setPaymentIntentId(data.paymentIntentId)
+                    setPaymentIntentId(data.paymentIntentId);
                     setIsCheckout(true);
                     setModalManagement({isOpen: true, data: null});
                 })
@@ -81,7 +80,7 @@ export const Sliding = (props) => {
                     console.error(error);
                 });
         } else {
-             setModalManagement( {isOpen: false, data: null });
+            setModalManagement({isOpen: false, data: null});
             fetch(process.env.REACT_APP_URL_BACKEND + '/payment/update', {
                 method: 'POST',
                 headers: {
@@ -93,12 +92,12 @@ export const Sliding = (props) => {
                 })
             })
                 .then(response => response.json())
-                .then(data => {
-                    setModalManagement({isOpen: true, data: null });
+                .then(() => {
+                    setModalManagement({isOpen: true, data: null});
                 })
                 .catch((error) => {
                     console.error(error);
-                })
+                });
         }
     }
 
@@ -235,6 +234,3 @@ export const Sliding = (props) => {
         </Menu>
     );
 };
-
-
-
