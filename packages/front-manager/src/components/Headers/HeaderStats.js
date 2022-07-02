@@ -7,11 +7,13 @@ import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import resetUserConnected from "../../helpers/resetUserConnected";
 import {useHistory} from "react-router-dom";
+import countBestPlateRequest from "../../requests/countBestPlate";
 
 export default function HeaderStats() {
     const [plates, setPlate] = useState([]);
     const [orders, setOrders] = useState([]);
     const [userState,setUserState] = useRecoilState(userAtom);
+    const [bestPlateState, setBestPlateState] = useState(null);
     const [teamMembers, setTeamMembers] = useState([]);
     const history = useHistory();
 
@@ -28,6 +30,11 @@ export default function HeaderStats() {
             fetchTeamMembers(userState?.restaurant.id).then(async resTeamMember => {
                 if(resTeamMember.status === 401) resetUserConnected(setUserState,history);
                 setTeamMembers(await resTeamMember.json())
+            });
+            countBestPlateRequest(userState?.restaurant.id,'only-one').then(async resBestPlate => {
+                if(resBestPlate.status === 401) resetUserConnected(setUserState,history);
+                const bestPlate = await resBestPlate.json();
+                setBestPlateState(bestPlate ? bestPlate : null);
             });
         }else {
             resetUserConnected(setUserState,history);
@@ -67,7 +74,7 @@ export default function HeaderStats() {
                             <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                                 <CardStats
                                     statTitle="Plat le plus commandé"
-                                    statValue="Grec"
+                                    statValue={`${bestPlateState ? `${bestPlateState?.plateName} (${bestPlateState?.count} fois)` : 'Aucun plat'}`}
                                     statIconName="fas fa-grin-hearts"
                                     statIconColor="bg-lightBlue-500"
                                 />

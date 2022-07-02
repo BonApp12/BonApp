@@ -71,6 +71,12 @@ export class PlateController {
         return this.plateService.findByRestaurant(+id);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('/restaurant/:id/count')
+    countPlateByRestaurantCategorie(@Param('id') id: string) {
+        return this.plateService.countPlateByRestaurantCategorie(+id);
+    }
+
     @Get("/uploads/:filename")
     async getFile(@Param("filename") filename: string, @Res() res: any) {
         res.sendFile(filename, {root: 'client/uploads/'});

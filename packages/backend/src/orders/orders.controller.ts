@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
+import {Controller, Get, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
@@ -37,6 +37,11 @@ export class OrdersController {
     @Get('/restaurant/:id')
     findByRestaurant(@Param('id') id: string) {
         return this.ordersService.findByRestaurant(+id);
+    }
+
+    @Get('/count/:date/restaurant/:id')
+    countByMonth(@Param('date') date: string, @Param('id') id: string) {
+        return this.ordersService.countOrderByMonth(+id,date);
     }
 
     @Patch(':id')

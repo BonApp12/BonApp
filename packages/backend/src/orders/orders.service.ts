@@ -9,7 +9,7 @@ import {Expo} from 'expo-server-sdk';
 export class OrdersService {
     constructor(
         @InjectRepository(Order)
-        private orderRepository: Repository<Order>,
+        private orderRepository: Repository<Order>
     ) {
     }
 
@@ -68,6 +68,20 @@ export class OrdersService {
             }
         })
     }
+
+    countOrderByMonth(id: number, date: string) {
+        const query = this.orderRepository.createQueryBuilder("o")
+            .select("EXTRACT(MONTH FROM o.created_at)", "month")
+            .addSelect("COUNT(*)", "count")
+            .innerJoin("o.restaurant", "r")
+            .where("EXTRACT(YEAR FROM o.created_at) = :date", {date: date})
+            .andWhere("r.id = :id", {id})
+            .groupBy("EXTRACT(MONTH FROM o.created_at)")
+            .orderBy("EXTRACT(MONTH FROM o.created_at)");
+        return query.getRawMany();
+    }
+
+
 
     async update(id: number, updateOrderDto: UpdateOrderDto) {
         return await this.orderRepository
