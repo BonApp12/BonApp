@@ -7,7 +7,6 @@ async function bootstrap() {
   app.enableCors({
     allowedHeaders: '*',
     origin: '*',
-    credentials: true,
   });
   app.use(cookieParser());
   await app.listen(4000);
