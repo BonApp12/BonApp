@@ -5,12 +5,11 @@ import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
 import '../../css/cart.css';
 import {Button} from "../Button/Button";
-import {MdOutlineClose, MdOutlinePayment} from "react-icons/md";
+import {MdArrowBackIos, MdOutlinePayment} from "react-icons/md";
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
-import {Information} from "../overlay/information";
 
 // create a navigation component that wraps the burger menu
 export const Sliding = (props) => {
@@ -35,7 +34,7 @@ export const Sliding = (props) => {
                 typesArray[item.type] = {
                     name: item.type,
                     items: []
-                }
+                };
             }
             if (!typesArray[item.type]['items'][item.id]) {
                 typesArray[item.type]['items'][item.id] = {
@@ -43,11 +42,12 @@ export const Sliding = (props) => {
                     name: item.name,
                     price: item.price,
                     quantity: item.quantity,
-                }
+                    photo: item?.photo || 'img.png'
+                };
             } else {
                 typesArray[item.type]['items'][item.id].quantity++;
             }
-        })
+        });
 
         return Object.values(typesArray);
     }
@@ -72,7 +72,7 @@ export const Sliding = (props) => {
                             'theme': 'flat'
                         }
                     });
-                    setPaymentIntentId(data.paymentIntentId)
+                    setPaymentIntentId(data.paymentIntentId);
                     setIsCheckout(true);
                     setModalManagement({isOpen: true, data: null});
                 })
@@ -80,7 +80,7 @@ export const Sliding = (props) => {
                     console.error(error);
                 });
         } else {
-             setModalManagement( {isOpen: false, data: null });
+            setModalManagement({isOpen: false, data: null});
             fetch(process.env.REACT_APP_URL_BACKEND + '/payment/update', {
                 method: 'POST',
                 headers: {
@@ -92,12 +92,12 @@ export const Sliding = (props) => {
                 })
             })
                 .then(response => response.json())
-                .then(data => {
-                    setModalManagement({isOpen: true, data: null });
+                .then(() => {
+                    setModalManagement({isOpen: true, data: null});
                 })
                 .catch((error) => {
                     console.error(error);
-                })
+                });
         }
     }
 
@@ -114,7 +114,7 @@ export const Sliding = (props) => {
         if (cart[indexPlateToRemove].quantity === 1) {
             let cartCopy = [...cart];
             cartCopy.splice(indexPlateToRemove, 1);
-            updateCart(cartCopy)
+            updateCart(cartCopy);
         } else {
             let cartCopy = cloneDeep(cart);
             cartCopy[indexPlateToRemove].quantity--;
@@ -131,37 +131,45 @@ export const Sliding = (props) => {
             onStateChange={(state) => ctx.stateChangeHandler(state)}
         >
             <>
-                <h1 className={"mb-5"}>Mes commandes</h1>
+                <section id="order-title">
+                    <button
+                        onClick={ctx.toggleMenu}>
+                        <MdArrowBackIos/>
+                    </button>
+                    <h1 className={"mb-5 text-center"}>Mes commandes</h1>
+                </section>
 
                 {formattedCart().map((type, idx) => {
                         return (
                             <div className={"mb-5"} key={idx}>
-                                <h2>{type.name}</h2>
-                                    {type.items.map((item, idx) => {
-                                        return (
-                                            <div className="grid grid-cols-12 mb-5" key={idx}>
-                                                <div className="col-span-3">
-                                                    <img src="https://picsum.photos/id/1005/400/250" alt="aléatoire"
-                                                         className="w-full"/>
-                                                </div>
-                                                <div className="col-span-3">{item.name}</div>
-                                                <div className="col-span-4 text-orange-600 font-bold">
-                                                    <button onClick={() => removeFromCart(item)}
-                                                            className="rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg">
-                                                        -
-                                                    </button>
-                                                    {item.quantity}
-                                                    <button onClick={() => addToCart(item)}
-                                                            className="rounded-full bg-orange-600 w-8 h-8 text-white mr-3 text-lg">
-                                                        +
-                                                    </button>
-                                                </div>
-                                                <div className="col-span-2">{item.price * item.quantity}</div>
+                                <h2 className="type-title">{type.name}</h2>
+                                {type.items.map((item) => {
+                                    return (
+                                        <div key={item.id} className="item-container">
+                                            <div className="item-image-wrapper"
+                                                 style={{
+                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}/plate/uploads/${item.photo})`
+                                                 }}>
                                             </div>
-                                        )
-                                    })}
+                                            <div className="item-card-info-wrapper">
+                                                <div className="item-info">
+                                                    <h3>{item.name}</h3>
+                                                    <p className="item-price">{item.price} €</p>
+                                                </div>
+                                                <div>
+                                                    <button className="handle-quantity" onClick={() => addToCart(item)}>+
+                                                    </button>
+                                                    <p className="item-quantity">{item.quantity}</p>
+                                                    <button className="handle-quantity"
+                                                            onClick={() => removeFromCart(item)}>-
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        )
+                        );
                     }
                 )}
 
@@ -171,55 +179,58 @@ export const Sliding = (props) => {
                         return (
                             <div className={"mb-5"} key={user.nickname}>
                                 <h2>{user.nickname}</h2>
-                                {user.cart.map((plate, idx) => {
+                                {user.cart.map((plate) => {
                                     return (
-                                        <div className="grid grid-cols-12 mb-5" key={idx}>
-                                            <div className="col-span-3">
-                                                <img src="https://picsum.photos/id/1005/400/250" alt="aléatoire"
-                                                     className="w-full"/>
+
+                                        <div key={plate.id} className="item-container">
+                                            <div className="item-image-wrapper"
+                                                 style={{
+                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}/plate/uploads/${plate.photo ?? 'img.png'})`
+                                                 }}>
                                             </div>
-                                            <div className="col-span-3">{plate.name}</div>
-                                            <div className="col-span-4 text-orange-600 font-bold">
-                                                {plate.quantity}
+                                            <div className="item-card-info-wrapper">
+                                                <div className="item-info">
+                                                    <h3>{plate.name}</h3>
+                                                    <p className="item-price">{plate.price} €</p>
+                                                </div>
+                                                <div>
+                                                    <p className="item-quantity">{plate.quantity}</p>
+                                                </div>
                                             </div>
-                                            <div className="col-span-2">{plate.price * plate.quantity}</div>
                                         </div>
-                                    )
+                                    );
                                 })}
                             </div>
-                        )
+                        );
                     }
                 })}
-
-                {formattedCart().length === 0 &&
-                    <div>
-                        Du coup vous êtes plutot 🍝 ou 🍕 ?
+                <div className="cart-footer">
+                    <div className="cart-footer-wrapper">
+                        {formattedCart().length !== 0 && isCheckout !== true ?
+                            <div className="cart-footer-wrapper-elements">
+                                <h2>
+                                    {cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)}<span>€</span>
+                                </h2>
+                                <div>
+                                    <Button classStyle={'mr-3 btn-payment'}
+                                            onClick={checkout}>
+                                        <MdOutlinePayment/>
+                                        <span className="ml-2">
+                                            Payer
+                                        </span>
+                                    </Button>
+                                </div>
+                            </div>
+                            : <></>
+                        }
+                        {isCheckout === true ?
+                            <Elements stripe={stripePromise} options={stripeOptions}>
+                                <CheckoutForm clientSecret={stripeOptions.clientSecret}/>
+                            </Elements>
+                            : ""}
                     </div>
-                }
-
-                {totalAmount > 0 &&
-                    <Button classStyle={'mr-3 btn-success'}
-                            onClick={checkout}>
-                            <span
-                                className="mr-5">Payer {totalAmount}€ </span><MdOutlinePayment/>
-                    </Button>
-                }
-                {isCheckout === true ?
-                    <Information displayModal={modalManagement} setDisplayModal={setModalManagement}>
-                        <span className="mr-5">Montant : {totalAmount} €</span>
-                        <Elements stripe={stripePromise} options={stripeOptions}>
-                            <CheckoutForm clientSecret={stripeOptions.clientSecret}/>
-                        </Elements>
-                    </Information>
-                    : ""}
-                <Button classStyle={'btn-outline btn-error'}
-                        onClick={ctx.toggleMenu}>
-                    <MdOutlineClose/>
-                </Button>
+                </div>
             </>
         </Menu>
     );
 };
-
-
-
