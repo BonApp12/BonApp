@@ -6,7 +6,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name : Run unit tests
-          run: |
-            cd .
-            ls -a
+          run: yarn run test ./packages/backend/src/
           continue-on-error: true
