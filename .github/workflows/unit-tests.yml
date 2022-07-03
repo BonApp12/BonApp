@@ -6,7 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-        - run: |
-            cd /packages/backend/src/
+        - name : Run unit tests
+          run: |
+            cd packages/backend/src/
             yarn run test
           continue-on-error: true
