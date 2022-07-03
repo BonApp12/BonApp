@@ -10,6 +10,7 @@ jobs:
       - name : Run unit tests
         run: |
           cd ${{ github.workspace }}/packages/backend/src/
-          yarn add jest
+          yarn run --version
+          yarn add jest@27.0.3
           yarn test
         continue-on-error: true
