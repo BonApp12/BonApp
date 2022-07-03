@@ -11,7 +11,7 @@ name: ESLint
 
 on:
   push:
-    branches: [ pipeline ]
+    branches: [ * ]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ develop, master ]
@@ -44,7 +44,7 @@ jobs:
           yarn run eslint ./packages/backend/src/ --config .eslintrc.js
         continue-on-error: true
 
-      - name: Run ESLint for front-end
+      - name: Run ESLint for frontend
         run: |
           yarn run eslint ./packages/frontend/src/ --config .eslintrc.js
         continue-on-error: true
