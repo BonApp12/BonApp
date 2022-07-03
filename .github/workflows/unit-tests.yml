@@ -7,6 +7,5 @@ jobs:
     steps:
         - name : Run unit tests
           run: |
-            yarn install
-            yarn run test
+            ls ${{ github.workspace }}/packages/backend/
           continue-on-error: false
