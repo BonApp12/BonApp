@@ -8,7 +8,7 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
         <div className="card card-bordered card-compact content-center m-5 shadow-on-plate">
             <figure>
                 <img
-                    src={`${process.env.REACT_APP_URL_BACKEND}/plate/uploads/${plateProps?.photo || 'img.png'}`}
+                    src={`${process.env.REACT_APP_URL_BACKEND}plate/uploads/${plateProps?.photo || 'img.png'}`}
                     alt={name}/>
             </figure>
             <div className="card-body">

@@ -1,7 +1,7 @@
 import resetUserConnected from "../../helpers/resetUserConnected";
 
 const fetchRestaurantById = (setRestaurant, setIsLoaded, setError, idRestaurant, navigate, setUser) => {
-    fetch(process.env.REACT_APP_URL_BACKEND + "/restaurant/" + idRestaurant, {
+    fetch(process.env.REACT_APP_URL_BACKEND + "restaurant/" + idRestaurant, {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',

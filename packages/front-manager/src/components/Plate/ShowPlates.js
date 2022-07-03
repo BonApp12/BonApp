@@ -84,11 +84,11 @@ export default function ShowPlates() {
                                             <div className="mask mask-squircle w-12 h-12">
                                                 {plate.photo ?
                                                     <img
-                                                        src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + plate.photo}
+                                                        src={process.env.REACT_APP_URL_BACKEND + 'plate/uploads/' + plate.photo}
                                                         alt={plate.name}/>
                                                     :
                                                     <img
-                                                        src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + 'img.png'}
+                                                        src={process.env.REACT_APP_URL_BACKEND + 'plate/uploads/' + 'img.png'}
                                                         alt={plate.name}/>}
                                             </div>
                                         </div>
@@ -164,11 +164,11 @@ export default function ShowPlates() {
                 <div className="mask mask-circle w-32 h-32 ml-auto mr-auto">
                         {modalInfo.photo ?
                             <img
-                                src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + modalInfo.photo}
+                                src={process.env.REACT_APP_URL_BACKEND + 'plate/uploads/' + modalInfo.photo}
                                 alt={modalInfo.name}/>
                             :
                             <img
-                                src={process.env.REACT_APP_URL_BACKEND + '/plate/uploads/' + 'img.png'}
+                                src={process.env.REACT_APP_URL_BACKEND + 'plate/uploads/' + 'img.png'}
                                 alt={modalInfo.name}/>}
                 </div>
                 <div className="flex mt-2 mb-5 px-5">
