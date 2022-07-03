@@ -9,6 +9,10 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - uses: actions/checkout@v1
       - name: Make envfile for frontend
         uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -31,6 +35,10 @@ jobs:
   front-manager:
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - uses: actions/checkout@v1
       - name: Make envfile for front-manager
         uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -50,6 +58,10 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - uses: actions/checkout@v1
       - name: Make envfile for backend
         uses: SpicyPizza/create-envfile@v1.3
         with:
