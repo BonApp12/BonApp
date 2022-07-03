@@ -6,3 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+        - run: |
+          cd ${{ github.workspace }}/packages/backend/src/
+          yarn run test
+          continue-on-error: true
