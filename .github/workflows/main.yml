@@ -7,6 +7,7 @@ on:
 jobs:
 
   frontend:
+    name: Build frontend
     runs-on: ubuntu-latest
     steps:
       - name: Get current date
@@ -33,6 +34,7 @@ jobs:
           docker push yassansplus/front-managerbonapp:develop
 
   front-manager:
+    name: Build front-manager
     runs-on: ubuntu-latest
     steps:
       - name: Get current date
@@ -56,6 +58,7 @@ jobs:
             docker push yassansplus/front-managerbonapp:develop
 
   backend:
+    name: Build backend
     runs-on: ubuntu-latest
     steps:
       - name: Get current date
@@ -96,6 +99,7 @@ jobs:
 
 
   deploy:
+    name: Deploy to production
     runs-on: ubuntu-latest
     needs: [ frontend, front-manager, backend ]
     steps:
