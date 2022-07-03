@@ -22,7 +22,7 @@ jobs:
           envkey_REACT_APP_SOCKET_BACKEND: ${{ secrets.REACT_APP_SOCKET_BACKEND }}
           envkey_REACT_APP_GOOGLE_AUTH_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_AUTH_CLIENT_ID }}
           envkey_REACT_APP_STRIPE_PUBLIC_KEY: ${{ secrets.REACT_APP_STRIPE_PUBLIC_KEY }}
-          envkey_HOST: ${{ secrets.FIX_REACT_FRONT }}
+          envkey_DANGEROUSLY_DISABLE_HOST_CHECK: true
           directory: ./packages/frontend/
           file_name: .env
           fail_on_empty: true
