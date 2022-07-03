@@ -5,6 +5,10 @@ jobs:
     name: Run unit tests
     runs-on: ubuntu-latest
     steps:
+        - name: Install ESLint
+          run: |
+            yarn install
+            yarn --version
         - name : Run unit tests
           run: yarn run test ./packages/backend/src/
-          continue-on-error: true
+          continue-on-error: false
