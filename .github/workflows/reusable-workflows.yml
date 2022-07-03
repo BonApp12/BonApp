@@ -4,17 +4,11 @@ on:
     branches: [ pipeline ]
 
 jobs:
-  reusable_workflow_job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Run reusable workflow
-        uses: ./.github/workflows/eslint.yml
 
   test:
-    needs: [ reusable_workflow_job ]
+    name: Test
     runs-on: ubuntu-latest
     environment: production
     steps:
+      - uses: ./.github/workflows/reusable-workflows.yml
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
