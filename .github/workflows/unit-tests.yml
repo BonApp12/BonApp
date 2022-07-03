@@ -6,5 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name : Run unit tests
-          run: yarn run test
+          run: |
+            yarn install
+            yarn run test
           continue-on-error: false
