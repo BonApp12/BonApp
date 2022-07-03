@@ -1,8 +1,6 @@
 name: build frontend
 
-on:
-  push:
-    branches: [ pipeline ]
+on: [pull_request]
 
 jobs:
   build:
