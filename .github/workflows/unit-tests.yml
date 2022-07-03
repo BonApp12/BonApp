@@ -2,9 +2,10 @@ name: Unit tests NestJS
 on: [ push ]
 jobs:
   unit-tests:
-    name: Run unit tests
     runs-on: ubuntu-latest
     steps:
+      - name: Run eslint scanning
+        uses: actions/checkout@v3
       - run: |
           cd ${{ github.workspace }}/packages/backend/src/
           yarn run test
