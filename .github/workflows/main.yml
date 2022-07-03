@@ -9,8 +9,8 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: SpicyPizza/create-envfile@v1.3
       - name: Make envfile for frontend
+        uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_REACT_APP_URL_BACKEND: ${{ secrets.REACT_APP_URL_BACKEND }}
           envkey_REACT_APP_SOCKET_BACKEND: ${{ secrets.REACT_APP_SOCKET_BACKEND }}
