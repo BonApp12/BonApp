@@ -17,6 +17,8 @@ async function bootstrap() {
             'http://localhost:3001',
             'http://localhost:8080',
             'http://localhost:8888',
+            'https://bonapp.ninja',
+            'https://resto.bonapp.ninja',
         ],
 
     });
