@@ -34,6 +34,7 @@ jobs:
           envkey_GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
           envkey_STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           envkey_STRIPE_CURRENCY: ${{ secrets.STRIPE_CURRENCY }}
+          envkey_URL_IP_ADDRESS: ${{ secrets.URL_IP_ADDRESS }}
           directory: ./packages/backend/
           file_name: .env
           fail_on_empty: true
