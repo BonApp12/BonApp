@@ -8,6 +8,5 @@ jobs:
         - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
         - name : Run unit tests
           run: |
-            cd packages/backend/src/
-            yarn run test
+            ls -a
           continue-on-error: true
