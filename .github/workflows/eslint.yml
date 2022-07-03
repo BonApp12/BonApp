@@ -1,10 +1,6 @@
-# ESLINT
-
 name: ESLint
 
 on: [ push ]
-  schedule:
-    - cron: '22 21 * * 3'
 
 jobs:
   eslint:
