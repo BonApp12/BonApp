@@ -90,6 +90,7 @@ const ProductsList = () => {
             if (currentRestaurant !== idRestaurant) {
                 setNickname(uniqueNamesGenerator({dictionaries: [adjectives, animals, colors]}));
                 setCurrentRestaurant(idRestaurant);
+                setOrder([]); // Resetting orders since we aren't in the same restaurant anymore
             }
         }
 
@@ -140,7 +141,6 @@ const ProductsList = () => {
                 let orderCopy = cloneDeep(order);
                 orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
                 setOrder(orderCopy);
-                // Mettre à jour le state des commandes avec la nouvelle (remplacer l'ancienne)
                 // Afficher une notification comme quoi sa commande a été mise à jour
                 // Bosser sur un "front" permettant de voir ses commandes en cours.
             })
