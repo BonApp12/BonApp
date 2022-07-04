@@ -1,5 +1,5 @@
 const updateUser = (teamMember) => {
-    let url = process.env.REACT_APP_URL_BACKEND + '/user/' + teamMember.id;
+    let url = process.env.REACT_APP_URL_BACKEND + 'user/' + teamMember.id;
 
     return fetch(url, {
         crossDomain: true,

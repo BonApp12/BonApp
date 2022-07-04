@@ -1,5 +1,5 @@
 const fetchFullPlateById = (idPlate, setPlate, setIsLoaded, setError, navigate) => {
-    fetch(process.env.REACT_APP_URL_BACKEND + '/plate/' + idPlate, {
+    fetch(process.env.REACT_APP_URL_BACKEND + 'plate/' + idPlate, {
         crossDomain: true,
         method: 'GET',
         mode: 'cors',

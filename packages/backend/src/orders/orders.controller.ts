@@ -1,11 +1,12 @@
-import {Controller, Get, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
-import { OrdersService } from './orders.service';
-import { UpdateOrderDto } from './dto/update-order.dto';
+import {Body, Controller, Delete, Get, Param, Patch, UseGuards} from '@nestjs/common';
+import {OrdersService} from './orders.service';
+import {UpdateOrderDto} from './dto/update-order.dto';
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('orders')
 export class OrdersController {
-    constructor(private readonly ordersService: OrdersService) {}
+    constructor(private readonly ordersService: OrdersService) {
+    }
 
     @Get()
     findAll() {
@@ -39,6 +40,7 @@ export class OrdersController {
         return this.ordersService.findByRestaurant(+id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('/count/:date/restaurant/:id')
     countByMonth(@Param('date') date: string, @Param('id') id: string) {
         return this.ordersService.countOrderByMonth(+id,date);

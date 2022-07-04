@@ -19,5 +19,3 @@ define(Restaurant, (faker: typeof Faker) => {
     restaurant.plates = factory(Plate)().createMany(30) as any;
     return restaurant;
 });
-
-

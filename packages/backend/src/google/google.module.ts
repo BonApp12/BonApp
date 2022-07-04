@@ -20,7 +20,7 @@ import {JwtModule} from "@nestjs/jwt";
         secret: configService.get('JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
           expiresIn: `${configService.get(
-              'JWT_ACCCESS_TOKEN_EXPIRATION_TIME',
+              'JWT_ACCCESS_TOKEN_EXPIRATION_TIME_WEB',
           )}s`,
         },
       }),

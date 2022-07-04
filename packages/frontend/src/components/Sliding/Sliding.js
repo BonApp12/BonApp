@@ -55,7 +55,7 @@ export const Sliding = (props) => {
     function checkout() {
         // Gathering client secret to send it to CheckoutForm
         if (!isCheckout) {
-            fetch(process.env.REACT_APP_URL_BACKEND + '/payment/create', {
+            fetch(process.env.REACT_APP_URL_BACKEND + 'payment/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ export const Sliding = (props) => {
                 });
         } else {
             setModalManagement({isOpen: false, data: null});
-            fetch(process.env.REACT_APP_URL_BACKEND + '/payment/update', {
+            fetch(process.env.REACT_APP_URL_BACKEND + 'payment/update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -148,7 +148,7 @@ export const Sliding = (props) => {
                                         <div key={item.id} className="item-container">
                                             <div className="item-image-wrapper"
                                                  style={{
-                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}/plate/uploads/${item.photo})`
+                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}plate/uploads/${item.photo})`
                                                  }}>
                                             </div>
                                             <div className="item-card-info-wrapper">
@@ -185,7 +185,7 @@ export const Sliding = (props) => {
                                         <div key={plate.id} className="item-container">
                                             <div className="item-image-wrapper"
                                                  style={{
-                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}/plate/uploads/${plate.photo ?? 'img.png'})`
+                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}plate/uploads/${plate.photo ?? 'img.png'})`
                                                  }}>
                                             </div>
                                             <div className="item-card-info-wrapper">

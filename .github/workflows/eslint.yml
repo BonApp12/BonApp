@@ -1,0 +1,34 @@
+name: ESLint
+
+on: [ push, pull_request ]
+
+jobs:
+  eslint:
+    name: Run eslint scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install ESLint
+        run: |
+          yarn add eslint eslint-plugin-react
+          yarn run eslint --version
+
+      - name: Run ESLint for front-manager
+        run: |
+          yarn run eslint ./packages/front-manager/src/ --config .eslintrc.js
+        continue-on-error: true
+
+      - name: Run ESLint for backend
+        run: |
+          yarn run eslint ./packages/backend/src/ --config .eslintrc.js
+        continue-on-error: true
+
+      - name: Run ESLint for frontend
+        run: |
+          yarn run eslint ./packages/frontend/src/ --config .eslintrc.js
+        continue-on-error: true

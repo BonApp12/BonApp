@@ -1,5 +1,5 @@
 const postNewTeamMember = (data) => {
-    let url = process.env.REACT_APP_URL_BACKEND + '/auth/register';
+    let url = process.env.REACT_APP_URL_BACKEND + 'auth/register';
     return fetch(url, {
         body: JSON.stringify(data),
         crossDomain: true,
