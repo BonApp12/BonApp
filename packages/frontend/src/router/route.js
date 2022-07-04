@@ -40,7 +40,7 @@ module.exports = Object.defineProperties({}, {
         writable: false
     },
     createOrder: {
-        value: process.env.REACT_APP_URL_BACKEND + '/orders/create',
+        value: process.env.REACT_APP_URL_BACKEND + 'orders/create',
         writable: false
     },
 })

@@ -168,10 +168,8 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         const clients = this.users.get(clientRoom);
 
         clients.map((c) => {
-            console.log(c);
             c.order.map((o) => {
                 if (o.id === args.order.id) {
-                    console.log('here', c.socket);
                     this.wss.to(c.socket).emit("orderUpdated", args.order);
                     return;
                 }
