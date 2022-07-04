@@ -1,7 +1,7 @@
 name: Deploy to production
 on:
   push:
-    branches: [ develop ]
+    branches: [ fix-url ]
   workflow_dispatch:
 
 jobs:
@@ -115,7 +115,7 @@ jobs:
           script: |
             cd BonApp
             sudo docker stop front_end_prod
-            sudo docker stop backend_prod
+            sudo docker stop back_end_prod
             sudo docker stop front_manager_prod
             sudo docker system prune -a -f
             sudo docker-compose up -d  --remove-orphans
