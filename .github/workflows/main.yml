@@ -46,16 +46,17 @@ jobs:
         with:
           envkey_REACT_APP_URL_BACKEND: ${{ secrets.REACT_APP_URL_BACKEND }}
           envkey_REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
-          directory: ./packages/front-manager/
+          directory: packages/front-manager/
           file_name: .env
           fail_on_empty: true
       - name: Build & Push Image for front-manager
         run: |
-            cd packages/front-manager/
-            echo "${{ secrets.DOCKERPW }}" | docker login -u ${{ secrets.DOCKERUSER }} --password-stdin
-            docker image build -f Dockerfile.local --tag yassansplus/front-managerbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} --tag yassansplus/front-managerbonapp:develop .
-            docker push yassansplus/front-managerbonapp:${{ steps.date.outputs.date }}.${{ github.actor }}
-            docker push yassansplus/front-managerbonapp:develop
+          cd packages/front-manager/
+          cat .env
+          echo "${{ secrets.DOCKERPW }}" | docker login -u ${{ secrets.DOCKERUSER }} --password-stdin
+          docker image build -f Dockerfile.local --tag yassansplus/front-managerbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} --tag yassansplus/front-managerbonapp:develop .
+          docker push yassansplus/front-managerbonapp:${{ steps.date.outputs.date }}.${{ github.actor }}
+          docker push yassansplus/front-managerbonapp:develop
 
   backend:
     name: Build backend
