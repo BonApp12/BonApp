@@ -46,7 +46,7 @@ jobs:
         with:
           envkey_REACT_APP_URL_BACKEND: ${{ secrets.REACT_APP_URL_BACKEND }}
           envkey_REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
-          directory: ${{ github.workspace }}/packages/front-manager/
+          directory: ./packages/front-manager/
           file_name: .env
           fail_on_empty: true
       - name: Build & Push Image for front-manager
