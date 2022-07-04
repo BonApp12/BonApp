@@ -18,7 +18,7 @@ export default function () {
     const [categories, setCategories] = useState('');
     const [description, setDescription] = useState('');
     const [type, setType] = useState('ENTREE');
-    const [userState,setUserState] = useRecoilState(userAtom);
+    const [userState, setUserState] = useRecoilState(userAtom);
     const history = useHistory();
 
 
@@ -35,9 +35,9 @@ export default function () {
         const formData = toFormData(newPlate);
         createPlate(formData)
             .then(res => {
-                if(res.status === 401){
-                    resetUserConnected(setUserState,history);
-                }else{
+                if (res.status === 401) {
+                    resetUserConnected(setUserState, history);
+                } else {
                     return res.json();
                 }
             })
@@ -52,7 +52,7 @@ export default function () {
             })
             .catch(() => {
                 toast.error('Une erreur est survenue, veuillez réessayer plus tard 😕');
-            })
+            });
 
     };
 
@@ -147,7 +147,7 @@ export default function () {
                                     Catégorie du plat
                                 </label>
                                 <select
-                                    value={'ENTREE'}
+                                    value={type}
                                     onChange={addType}
                                     className="border-0 mb-3 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded
                     text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
