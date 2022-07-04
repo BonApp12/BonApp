@@ -30,15 +30,29 @@ export default function CardTable() {
     };
 
     useEffect(() => {
-        fetchFullOrder(userState?.restaurant.id, TODO)
-            .then(async resOrder => {
-                if (resOrder.status === 401) resetUserConnected(setUserState, history);
-                setOrders(await resOrder.json());
-            });
+        fetchFullOrder(userState?.restaurant.id, TODO).then(res => {
+            if (res.status === 401) return resetUserConnected(setUserState, history);
+            return res.json();
+        }).then(resOrder => {
+            setOrders(resOrder);
+        });
+        // .then( resOrder => {
+        //     if (resOrder.status === 401) resetUserConnected(setUserState, history);
+        //     setOrders(await resOrder.json());
+        //
+        // });
         return function cleanup() {
             setOrders([]);
         };
     }, []);
+
+    function computeTotal(orderPlates) {
+        let total = 0;
+        orderPlates.forEach(plate => {
+            total += (plate.price * plate.quantity);
+        });
+        return total;
+    }
 
     return (
         <>
@@ -132,7 +146,9 @@ export default function CardTable() {
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                     <a href="#my-modal-2" className={"btn btn-primary btn-xs mr-1"}
-                                       onClick={() => setModalInfo(order.orderPlates)}>Détails</a>
+                                       onClick={() => {
+                                           setModalInfo(order.orderPlates);
+                                       }}>Détails</a>
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                     <i className=
@@ -149,11 +165,7 @@ export default function CardTable() {
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                     <p>
-                                        {
-                                            order.orderPlates.reduce((acc, curr) => {
-                                                return (acc.price * acc.quantity) + (curr.price * curr.quantity);
-                                            })
-                                        }
+                                        {computeTotal(order.orderPlates)}
                                         <span> €</span>
                                     </p>
                                 </td>
@@ -182,11 +194,12 @@ export default function CardTable() {
                             modalInfo?.map((plate) => {
                                 return (
                                     <div key={plate.id} className="mt-3">
-                                        <p>{plate.plate.name} <b>x{plate.quantity}</b> - <b>{plate.price * plate.quantity} €</b></p>
+                                        <p>{plate.plate.name}
+                                            <b>x{plate.quantity}</b> - <b>{plate.price * plate.quantity} €</b></p>
                                     </div>
                                 );
                             })
-                        :
+                            :
                             <p>Aucun plat</p>
                     }
                 </div>

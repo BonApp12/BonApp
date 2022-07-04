@@ -5,13 +5,13 @@ import {toast} from "react-toastify";
 import roleEnum from "../Enum/RoleEnum";
 import resetUserConnected from "../../helpers/resetUserConnected";
 import {useHistory} from "react-router-dom";
-import {useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 
 export default function () {
     const {register: registerTeamMember, handleSubmit, reset, formState: {errors}} = useForm();
     const history = useHistory();
-    const setUserState = useSetRecoilState(userAtom);
+    const [userState, setUserState] = useRecoilState(userAtom);
 
     const onSubmit = newUser => {
         postNewTeamMember(newUser).then(res => {
@@ -113,7 +113,7 @@ export default function () {
                     </div>
                     <input type="hidden"
                            {...registerTeamMember("restaurant")}
-                           value="1"/>
+                           value={userState.restaurant.id}/>
                     <div className="w-full lg:w-6/12 px-4">
                         <div className="relative w-full mb-3">
                             <button disabled={Object.keys(errors).length}

@@ -17,9 +17,9 @@ export class OrderPlateController {
     return this.orderPlateService.findOne(+id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('/restaurant/:id/best-plate/:type')
-  findBestPlate(@Param('id') id: string, @Param('type') type: string) {
-    return this.orderPlateService.findBestPlate(+id,type === 'many');
-  }
+    @Get('/restaurant/:id/best-plate/:type')
+    async findBestPlate(@Param('id') id: string, @Param('type') type: string) {
+        const bestPlateCount = await this.orderPlateService.findBestPlate(+id, type === 'many');
+        return await bestPlateCount === undefined ? {bestPlate: null} : bestPlateCount;
+    }
 }
