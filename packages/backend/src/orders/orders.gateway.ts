@@ -71,6 +71,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
 
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
+        this.wss.to(client.id).emit("getSocketId", client.id);
     }
 
     @SubscribeMessage('joinRestaurantRoom')
@@ -108,7 +109,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
             this.logger.log(`Client ${client.id} (${user[0].nickname}) updated something from his cart`);
 
-            // Adding cart inside user
+            // Adding cart inside userm
             user[0].cart = args.cart;
 
             // Getting every other users except this one and deleting him to add him back again with his new cart.
@@ -133,6 +134,17 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             const idRestaurant = rooms[1].substring(rooms[1].indexOf('Table:') + 6, rooms[1].indexOf('Restaurant'));
             const restaurantRoom = `Restaurant:${idRestaurant}:Room`;
 
+            // Link order and current user in this.users array
+            const currentUser = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
+            const userMap = this.users.get(rooms[1]).filter((user) => client.id !== user.socket);
+
+            currentUser[0].order = args;
+            userMap.push(currentUser[0]);
+            this.users.set(rooms[1], userMap);
+
+            console.log(this.users);
+
+            this.logger.log(`Client ${client.id} submitted an order and paid for it`);
             this.wss.to(restaurantRoom).emit("orderCreated");
         }
 
@@ -151,7 +163,19 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('updateOrder')
-    update(@MessageBody() updateOrderDto: UpdateOrderDto) {
-        return this.ordersService.update(updateOrderDto.id, updateOrderDto);
+    update(client: Socket, args: Record<string, any>) {
+        const clientRoom = `ordersRoomTable:${args.order.tableId}Restaurant:${args.order.restaurantId}`;
+        const clients = this.users.get(clientRoom);
+
+        clients.map((c) => {
+            console.log(c);
+            c.order.map((o) => {
+                if (o.id === args.order.id) {
+                    console.log('here', c.socket);
+                    this.wss.to(c.socket).emit("orderUpdated", args.order);
+                    return;
+                }
+            })
+        });
     }
 }

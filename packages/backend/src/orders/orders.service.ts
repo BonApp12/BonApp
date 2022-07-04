@@ -99,6 +99,7 @@ export class OrdersService {
             .update(Order)
             .set({status: "completed"})
             .where("id = :id", {id: id})
+            .returning("*")
             .execute();
     }
 

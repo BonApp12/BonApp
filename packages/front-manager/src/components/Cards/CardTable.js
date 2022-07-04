@@ -60,6 +60,13 @@ export default function CardTable() {
         socket.emit('joinRestaurantRoom', {user: userState});
     }, [socket]);
 
+    const updateOrderStatus = (idOrder) => {
+        updateOrder(idOrder).then((res) => res.json())
+            .then((result) => {
+                socket.emit('updateOrder', {order: result.raw[0]});
+            })
+    }
+
     function computeTotal(orderPlates) {
         let total = 0;
         orderPlates.forEach(plate => {
@@ -187,7 +194,7 @@ export default function CardTable() {
                                     {checkStatus(order.status) ? (
                                         <button
                                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-                                            onClick={() => updateOrder(order.id)}>
+                                            onClick={() => updateOrderStatus(order.id)}>
                                             Valider
                                         </button>
                                     ) : (
