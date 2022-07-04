@@ -114,9 +114,21 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd BonApp
-            sudo docker-compose down
-            sudo docker system prune -a -f
-            sudo docker volume prune -f
+            sudo docker stop front_end_prod
+            sudo docker rm front_end_prod
+            sudo docker rmi yassansplus/frontendbonapp:develop
+            sudo docker stop backend_prod
+            sudo docker rm backend_prod
+            sudo docker rmi yassansplus/backendbonapp:develop
+            sudo docker stop front_manager_prod
+            sudo docker rm front_manager_prod
+            sudo docker rmi yassansplus/front-managerbonapp:develop
+            sudo docker stop bp-pg-db
+            sudo docker rm bp-pg-db
+            sudo docker rmi postgres:12-alpine
+            sudo docker stop html-to-pdf
+            sudo docker rm html-to-pdf
+            sudo docker rmi kurzdigital/html-to-pdf:latest
             sudo docker-compose up -d  --remove-orphans
   
   
