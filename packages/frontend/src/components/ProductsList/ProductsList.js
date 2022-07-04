@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import Card from "../Card/Card";
 import {SocketContext} from "../../context/socket";
@@ -13,15 +13,20 @@ import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
+import {nicknameAtom} from "../../states/nickname";
+import {restaurantAtom} from "../../states/restaurant";
+import {orderAtom} from "../../states/order";
 import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
+import createOrder from "../../requests/orders/createOrder";
 
 
 const ProductsList = () => {
     let params = useParams();
-    const idRestaurant = params.idRestaurant;
-    const idTable = params.idTable;
+    const idRestaurant = parseInt(params.idRestaurant);
+    const idTable = parseInt(params.idTable);
 
     // Setting up states
+    const [searchParams, setSearchParams] = useSearchParams();
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [tableExists, setTableExists] = useState(false);
@@ -29,7 +34,9 @@ const ProductsList = () => {
     const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
     const [cart, updateCart] = useRecoilState(cartAtom);
     const [userState, setUserState] = useRecoilState(userAtom);
-    const [randomName, setRandomName] = useState(undefined);
+    const [nickname, setNickname] = useRecoilState(nicknameAtom)
+    const [currentRestaurant, setCurrentRestaurant] = useRecoilState(restaurantAtom);
+    const [order, setOrder] = useRecoilState(orderAtom);
 
     // Handling ingredients modal
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
@@ -68,13 +75,26 @@ const ProductsList = () => {
     const [filteredPlates, setFilteredPlates] = useState(null);
     const navigate = useNavigate();
 
+    // Setting nickname (randomly generated / user's email) and restaurant ID
     useEffect(() => {
-        if (userState === null) {
-            let randomGeneratedName = uniqueNamesGenerator({dictionaries: [adjectives, colors, animals]});
-            setRandomName(randomGeneratedName);
+        if (!nickname) {
+            if (userState?.email !== undefined) {
+                setNickname(userState.email);
+            } else {
+                setNickname(uniqueNamesGenerator({dictionaries: [adjectives, animals, colors]}));
+            }
         }
-    }, []);
+        if (!currentRestaurant) {
+            setCurrentRestaurant(idRestaurant);
+        } else {
+            if (currentRestaurant !== idRestaurant) {
+                setNickname(uniqueNamesGenerator({dictionaries: [adjectives, animals, colors]}));
+                setCurrentRestaurant(idRestaurant);
+                setOrder([]); // Resetting orders since we aren't in the same restaurant anymore
+            }
+        }
 
+    }, []);
     // Gathering restaurant informations & setting up sockets events - joining table.
     useEffect(() => {
         fetchRestaurantByIdTable(idRestaurant, idTable)
@@ -98,15 +118,15 @@ const ProductsList = () => {
                 }
             );
     }, [idRestaurant, idTable, socket]);
-
     useEffect(() => {
         if (tableExists) {
             socket.emit('joinTable', {
                 idTable,
                 idRestaurant,
                 user: {
-                    nickname: userState?.email ?? randomName,
-                    cart
+                    nickname: userState?.email ?? nickname,
+                    cart,
+                    order
                 },
             });
             socket.on('userJoinedRoom', (carts) => {
@@ -116,6 +136,14 @@ const ProductsList = () => {
                 toast.error(`Quelqu'un a quitté la table...`);
                 updateUsersCart(carts);
             });
+            socket.on('orderUpdated', (newOrder) => {
+                toast.success('La commande a été mise à jour', {position: "top-right"});
+                let orderCopy = cloneDeep(order);
+                orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
+                setOrder(orderCopy);
+                // Afficher une notification comme quoi sa commande a été mise à jour
+                // Bosser sur un "front" permettant de voir ses commandes en cours.
+            })
         }
     }, [tableExists, idTable, idRestaurant]);
 
@@ -124,7 +152,7 @@ const ProductsList = () => {
         socket.on('itemCartUpdated', (carts) => {
             updateUsersCart(carts);
         });
-    }, [randomName, userState]);
+    }, [nickname, userState]);
     useEffect(() => {
         if (filteredPlates !== null) {
             let copyFilteredPlates = cloneDeep(filteredPlates);
@@ -135,6 +163,24 @@ const ProductsList = () => {
         }
         socket.emit('userCartUpdated', {cart, user: userState});
     }, [cart]);
+
+    /* Sending order if payment fullfilled */
+    useEffect(() => {
+        if (searchParams.get('redirect_status') === 'succeeded' && restaurant?.id !== undefined && tableExists !== false){
+            createOrder(cart, restaurant, idTable, userState ?? undefined)
+                .then((result) => result.json())
+                .then((res) => {
+                    socket.emit('createOrder', {...res})
+                    setOrder([...order, res]);
+                    updateCart([]);
+
+                    searchParams.delete('redirect_status');
+                    searchParams.delete('payment_intent_client_secret');
+                    searchParams.delete('payment_intent');
+                    setSearchParams(searchParams);
+                });
+        }
+    }, [searchParams, restaurant, tableExists]);
 
     function addToCart(plate) {
         let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
@@ -147,9 +193,7 @@ const ProductsList = () => {
     }
 
     function updateUsersCart(carts) {
-        let currentNickname = "";
-        if (userState) currentNickname = userState.email; else currentNickname = randomName;
-        const otherCarts = carts.filter((user) => user.nickname !== currentNickname);
+        const otherCarts = carts.filter((user) => user.nickname !== nickname);
         updateOtherCart(otherCarts);
     }
 

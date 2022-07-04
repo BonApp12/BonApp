@@ -1,6 +1,6 @@
 import {PartialType} from '@nestjs/mapped-types';
-import {TableDto} from './TableDto';
+import {TablesDto} from './TablesDto';
 
-export class UpdateTablesDto extends PartialType(TableDto) {
+export class UpdateTablesDto extends PartialType(TablesDto) {
     id: number;
 }

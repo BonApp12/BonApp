@@ -20,7 +20,7 @@ export class Order extends BaseEntity {
     @Column('varchar', {length: 10, default: 'to-do'})
     status: string;
 
-    @ManyToOne(() => Users, (user: Users) => user.orders)
+    @ManyToOne(() => Users, (user: Users) => user.orders, {nullable: true})
     user: Users;
 
     @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.orders, {onDelete: 'CASCADE'})
@@ -33,7 +33,7 @@ export class Order extends BaseEntity {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
-    table: Order;
+    table: Tables;
 
     @CreateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)"})
     public created_at: Date;

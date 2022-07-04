@@ -25,4 +25,6 @@ export class PlateDto {
     type: PlateRole;
 
     photo: string;
+
+    quantity: undefined | number;
 }

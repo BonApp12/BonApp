@@ -12,6 +12,7 @@ import {Server, Socket} from 'socket.io';
 import {Logger} from "@nestjs/common";
 import {UpdateOrderDto} from "./dto/update-order.dto";
 import {CreateOrderDto} from "./dto/create-order.dto";
+import {Order} from "./entities/order.entity";
 
 @WebSocketGateway({cors: true})
 export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -38,6 +39,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             client.rooms.forEach((room) => {
                 // client.rooms contains two rooms : users personal (his id) and ordersRoomTable.
                 if (room !== client.id) {
+                    this.logger.log(`Client ${client.id} disconnected from room ${room}`);
                     // get every users except the one that disconnects and reassign
                     const userMap = this.users.get(room).filter((user) => user.socket !== client.id);
                     this.users.set(room, userMap);
@@ -69,6 +71,31 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
 
         this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
+        this.wss.to(client.id).emit("getSocketId", client.id);
+    }
+
+    @SubscribeMessage('joinRestaurantRoom')
+    joinRestaurantRoom(client: Socket, args: any) {
+        // Creating Restaurant Room and joining it
+        const roomId = `Restaurant:${args.user.restaurant.id}:Room`;
+        this.logger.log(`Client ${client.id} joined restaurant room ${roomId}`);
+        client.join(roomId);
+
+        // Creating an User object
+        const user = {
+            nickname: args.user.email,
+            role: args.user.role,
+            socket: client.id
+        };
+
+        if (this.users.has(roomId)) {
+            const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname);
+            if (userExists.length === 0) {
+                this.users.set(roomId, [...this.users.get(roomId), user]);
+            }
+        } else {
+            this.users.set(roomId, [user]);
+        }
     }
 
     @SubscribeMessage('userCartUpdated')
@@ -82,7 +109,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
             this.logger.log(`Client ${client.id} (${user[0].nickname}) updated something from his cart`);
 
-            // Adding cart inside user
+            // Adding cart inside userm
             user[0].cart = args.cart;
 
             // Getting every other users except this one and deleting him to add him back again with his new cart.
@@ -100,8 +127,27 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('createOrder')
-    create(@MessageBody() createOrderDto: CreateOrderDto) {
-        // this.ordersService.create(createOrderDto);
+    create(client: Socket, args: Record<string, any>) {
+        const rooms = Array.from(client.rooms);
+
+        if (this.users.get(rooms[1]) !== undefined) {
+            const idRestaurant = rooms[1].substring(rooms[1].indexOf('Table:') + 6, rooms[1].indexOf('Restaurant'));
+            const restaurantRoom = `Restaurant:${idRestaurant}:Room`;
+
+            // Link order and current user in this.users array
+            const currentUser = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
+            const userMap = this.users.get(rooms[1]).filter((user) => client.id !== user.socket);
+
+            currentUser[0].order = args;
+            userMap.push(currentUser[0]);
+            this.users.set(rooms[1], userMap);
+
+            console.log(this.users);
+
+            this.logger.log(`Client ${client.id} submitted an order and paid for it`);
+            this.wss.to(restaurantRoom).emit("orderCreated");
+        }
+
     }
 
     @SubscribeMessage('findAllOrders')
@@ -117,7 +163,17 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('updateOrder')
-    update(@MessageBody() updateOrderDto: UpdateOrderDto) {
-        return this.ordersService.update(updateOrderDto.id, updateOrderDto);
+    update(client: Socket, args: Record<string, any>) {
+        const clientRoom = `ordersRoomTable:${args.order.tableId}Restaurant:${args.order.restaurantId}`;
+        const clients = this.users.get(clientRoom);
+
+        clients.map((c) => {
+            c.order.map((o) => {
+                if (o.id === args.order.id) {
+                    this.wss.to(c.socket).emit("orderUpdated", args.order);
+                    return;
+                }
+            })
+        });
     }
 }

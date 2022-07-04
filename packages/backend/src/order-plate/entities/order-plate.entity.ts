@@ -1,6 +1,7 @@
 import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn} from "typeorm";
 import {Order} from "../../orders/entities/order.entity";
 import {Plate} from "../../plate/entities/plate.entity";
+import {PlateDto} from "../../plate/dto/plate.dto";
 
 @Entity("order_plate")
 export class OrderPlate extends BaseEntity {
@@ -19,5 +20,5 @@ export class OrderPlate extends BaseEntity {
 
     @JoinColumn({name: "plate_id"})
     @ManyToOne(() => Plate, plate => plate.orderPlates)
-    plate: Plate;
+    plate: Plate | PlateDto;
 }

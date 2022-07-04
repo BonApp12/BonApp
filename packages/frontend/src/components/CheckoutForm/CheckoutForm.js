@@ -39,18 +39,21 @@ const CheckoutForm = (opt) => {
         if (!stripe || !elements) {
             return;
         }
-        const {error} = await stripe.confirmPayment({
+
+        await stripe.confirmPayment({
             elements,
             confirmParams: {
                 return_url: window.location.href, // Redirection obligatoire
             },
-        });
-
-        if (error.type === PAYMENTENUM.ERROR.TYPE.CARD ||
-            error.type === PAYMENTENUM.ERROR.TYPE.VALIDATION) toast.error(error.message);
-        toast.error(PAYMENTENUM.ERROR.TYPE.GENERAL);
-        setIsLoading(false);
-    };
+        })
+            .then((result) => {
+                if (result.error) {
+                    toast.error(result.error.message);
+                    toast.error(PAYMENTENUM.ERROR.TYPE.GENERAL);
+                    setIsLoading(false);
+                }
+            });
+    }
 
     return (
         <form className="m-5">

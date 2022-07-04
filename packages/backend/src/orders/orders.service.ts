@@ -4,12 +4,22 @@ import {Repository} from 'typeorm';
 import {Order} from './entities/order.entity';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Expo} from 'expo-server-sdk';
+import {OrderPlate} from "../order-plate/entities/order-plate.entity";
+import {PlateAdapter} from "../Adapter/PlateAdapter";
+import {Plate} from "../plate/entities/plate.entity";
+import {Restaurant} from "../restaurant/entities/restaurant.entity";
+import {Tables} from "../tables/entities/tables.entity";
+import {Users} from "../users/entities/users.entity";
+import {OrderAdapter} from "../Adapter/OrderAdapter";
+import {TableAdapter} from "../Adapter/TableAdapter";
 
 @Injectable()
 export class OrdersService {
     constructor(
         @InjectRepository(Order)
-        private orderRepository: Repository<Order>
+        private orderRepository: Repository<Order>,
+        @InjectRepository(OrderPlate)
+        private orderPlateRepository: Repository<OrderPlate>,
     ) {
     }
 
@@ -89,11 +99,42 @@ export class OrdersService {
             .update(Order)
             .set({status: "completed"})
             .where("id = :id", {id: id})
+            .returning("*")
             .execute();
     }
 
     remove(id: number) {
         return `This action removes a #${id} order`;
+    }
+
+    async create(cart: Plate[], restaurant: Restaurant, user: Users | undefined) {
+        const plates = PlateAdapter.toDtoList(cart);
+        const table = TableAdapter.toModel(restaurant.tables);
+
+        // Création de l'Order
+        const createOrder = new Order();
+        createOrder.restaurant = restaurant;
+        createOrder.table = table;
+        createOrder.user = user;
+
+        return await this.orderRepository.save(createOrder)
+            .then((result) => {
+                if (result.id !== undefined) {
+                    plates.forEach(plate => {
+                        const orderPlate = new OrderPlate();
+                        orderPlate.order = createOrder;
+                        orderPlate.plate = plate;
+                        orderPlate.quantity = plate.quantity;
+                        orderPlate.price = plate.price;
+                        this.orderPlateRepository.save(orderPlate);
+                    });
+                    return result;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                return error;
+            });
     }
 
 
@@ -111,10 +152,10 @@ export class OrdersService {
         const tokens = ["ExponentPushToken[yXejFVPZOwh_c45bQmSYih]"];
 // Create a new Expo SDK client
 // optionally providing an access token if you have enabled push security
-        let expo = new Expo({accessToken: process.env.EXPO_ACCESS_TOKEN});
+        const expo = new Expo({accessToken: process.env.EXPO_ACCESS_TOKEN});
 
 // Create the messages that you want to send to clients
-        let messages = [];
+        const messages = [];
         tokens.forEach(pushToken => {
             // Check that all your push tokens appear to be valid Expo push tokens
             if (!Expo.isExpoPushToken(pushToken)) {
@@ -131,15 +172,15 @@ export class OrdersService {
         });
 
 
-        let chunks = expo.chunkPushNotifications(messages);
-        let tickets = [];
+        const chunks = expo.chunkPushNotifications(messages);
+        const tickets = [];
         (async () => {
             // Send the chunks to the Expo push notification service. There are
             // different strategies you could use. A simple one is to send one chunk at a
             // time, which nicely spreads the load out over time:
-            for (let chunk of chunks) {
+            for (const chunk of chunks) {
                 try {
-                    let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+                    const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
                     tickets.push(...ticketChunk);
                     // NOTE: If a ticket contains an error code in ticket.details.error, you
                     // must handle it appropriately. The error codes are listed in the Expo

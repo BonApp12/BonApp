@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as dayjs from 'dayjs';
 import 'dayjs/locale/fr';
 
@@ -9,16 +9,19 @@ import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import {useHistory} from "react-router-dom";
 import Modal from "../Modal/Modal";
+import {SocketContext} from "../../contexts/socket";
 
 export default function CardTable() {
 
     const [orders, setOrders] = useState([]);
     const [modalInfo, setModalInfo] = useState(null);
+    const [orderReceived, setOrderReceived] = useState(false);
 
     let checkStatus, formattedDate;
     const TODO = 'to-do';
     const [userState, setUserState] = useRecoilState(userAtom);
     const history = useHistory();
+    const socket = useContext(SocketContext);
 
     checkStatus = (status) => {
         return status === TODO;
@@ -30,11 +33,18 @@ export default function CardTable() {
     };
 
     useEffect(() => {
+        socket.on('orderCreated', () => {
+            setOrderReceived(true);
+        });
+    }, [])
+
+    useEffect(() => {
         fetchFullOrder(userState?.restaurant.id, TODO).then(res => {
             if (res.status === 401) return resetUserConnected(setUserState, history);
             return res.json();
         }).then(resOrder => {
             setOrders(resOrder);
+            setOrderReceived(false);
         });
         // .then( resOrder => {
         //     if (resOrder.status === 401) resetUserConnected(setUserState, history);
@@ -44,7 +54,18 @@ export default function CardTable() {
         return function cleanup() {
             setOrders([]);
         };
-    }, []);
+    }, [orderReceived]);
+
+    useEffect(() => {
+        socket.emit('joinRestaurantRoom', {user: userState});
+    }, [socket]);
+
+    const updateOrderStatus = (idOrder) => {
+        updateOrder(idOrder).then((res) => res.json())
+            .then((result) => {
+                socket.emit('updateOrder', {order: result.raw[0]});
+            })
+    }
 
     function computeTotal(orderPlates) {
         let total = 0;
@@ -136,10 +157,10 @@ export default function CardTable() {
                   </span>
                                 </th>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                    {order.user.lastname}
+                                    {order.user?.lastname || "Anonyme"}
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                    {order.user.firstname}
+                                    {order.user?.firstname}
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                     {formattedDate(order.created_at)}
@@ -173,7 +194,7 @@ export default function CardTable() {
                                     {checkStatus(order.status) ? (
                                         <button
                                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-                                            onClick={() => updateOrder(order.id)}>
+                                            onClick={() => updateOrderStatus(order.id)}>
                                             Valider
                                         </button>
                                     ) : (

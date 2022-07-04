@@ -38,5 +38,9 @@ module.exports = Object.defineProperties({}, {
     generatePdf: {
         value: process.env.REACT_APP_URL_BACKEND + 'pdf',
         writable: false
-    }
+    },
+    createOrder: {
+        value: process.env.REACT_APP_URL_BACKEND + 'orders/create',
+        writable: false
+    },
 })
