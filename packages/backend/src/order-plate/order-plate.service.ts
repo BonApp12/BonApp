@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {OrderPlate} from "./entities/order-plate.entity";
@@ -13,32 +13,32 @@ export class OrderPlateService {
     return this.orderPlateRepository.find({relations: ['order', 'plate']});
   }
 
-  findBestPlate(restaurantId: number, manyPlate = false){
-    const query = this.orderPlateRepository.createQueryBuilder("op")
-        .select("p.name", "plateName")
-        .addSelect("SUM(op.quantity)", "count")
-        .innerJoin("op.order", "o")
-        .innerJoin("o.restaurant", "r")
-        .innerJoin("op.plate", "p")
-        .where("r.id = :restaurant", {restaurant: restaurantId})
-        .groupBy("p.name")
-        .orderBy("count", "DESC");
-    if(manyPlate){
-      return query.getRawMany();
+    async findBestPlate(restaurantId: number, manyPlate = false) {
+        const query = this.orderPlateRepository.createQueryBuilder("op")
+            .select("p.name", "plateName")
+            .addSelect("SUM(op.quantity)", "count")
+            .innerJoin("op.order", "o")
+            .innerJoin("o.restaurant", "r")
+            .innerJoin("op.plate", "p")
+            .where("r.id = :restaurant", {restaurant: restaurantId})
+            .groupBy("p.name")
+            .orderBy("count", "DESC");
+        if (manyPlate) {
+            return await query.getRawMany();
+        }
+        return await query.getRawOne();
     }
-    return query.getRawOne();
-  }
 
-  findOne(id: number) {
-    return this.orderPlateRepository.findOne(id,{relations: ['order', 'plate']});
-  }
+    findOne(id: number) {
+        return this.orderPlateRepository.findOne(id, {relations: ['order', 'plate']});
+    }
 
-  findByOrder(orderId: number) {
-    return this.orderPlateRepository.find({
-      relations: ['order', 'plate'],
-      where: {
-        order: orderId
-      }
-    });
-  }
+    findByOrder(orderId: number) {
+        return this.orderPlateRepository.find({
+            relations: ['order', 'plate'],
+            where: {
+                order: orderId
+            }
+        });
+    }
 }
