@@ -10,9 +10,6 @@ import {
 import {OrdersService} from './orders.service';
 import {Server, Socket} from 'socket.io';
 import {Logger} from "@nestjs/common";
-import {UpdateOrderDto} from "./dto/update-order.dto";
-import {CreateOrderDto} from "./dto/create-order.dto";
-import {Order} from "./entities/order.entity";
 import {UsersService} from "../users/users.service";
 import {IsNull, Not} from "typeorm";
 import {NotificationMessageEnum} from "./enum/NotificationMessageEnum";
@@ -148,7 +145,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             userMap.push(currentUser[0]);
             this.users.set(rooms[1], userMap);
 
-            console.log(this.users);
 
             this.logger.log(`Client ${client.id} submitted an order and paid for it`);
             this.wss.to(restaurantRoom).emit("orderCreated");
@@ -173,21 +169,33 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         const clientRoom = `ordersRoomTable:${args.order.tableId}Restaurant:${args.order.restaurantId}`;
         const clients = this.users.get(clientRoom);
 
-        clients.map((c) => {
-            c.order.map((o) => {
-                if (o.id === args.order.id) {
-                    this.wss.to(c.socket).emit("orderUpdated", args.order);
-                    return;
-                }
-            })
-        });
+        if (args.order.status === "ready") {
+            const notificationMessage = `La commande N°${args.order.id} est prête !`;
+            this.sendNotificationToWaiters(args.order.restaurantId, args.order.tableId, notificationMessage);
+        }
+
+        if (clients !== undefined) {
+            clients.map((c) => {
+                c.order.map((o) => {
+                    if (o.id === args.order.id) {
+                        this.wss.to(c.socket).emit("orderUpdated", args.order);
+                        return;
+                    }
+                })
+            });
+        }
     }
 
     @SubscribeMessage('needSomething')
     needSomething(client: Socket, args: Record<string, any>){
+        this.sendNotificationToWaiters(args.idRestaurant, args.idTable, args.thing);
+    }
+
+    private sendNotificationToWaiters(idRestaurant: number, idTable: number, message: string) {
+        // TODO : Retrouver l'intitulé de la table
         this.usersService.findMultipleBy({
             role: 'R_SERVER',
-            restaurant: args.idRestaurant,
+            restaurant: idRestaurant,
             where: {
                 expoToken: Not(IsNull())
             }
@@ -196,7 +204,8 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             users.forEach((user) => {
                 expoTokens.push(user.expoToken);
             })
-            this.ordersService.sendNotification(expoTokens, NotificationMessageEnum[args.thing]); // Également envoyer l'ID de la table ainsi que le "thing".
+            const notificationMessage = `Table ${idTable} : ${message}`;
+            this.ordersService.sendNotification(expoTokens, notificationMessage); // Également envoyer l'ID de la table ainsi que le "thing".
         });
     }
 }

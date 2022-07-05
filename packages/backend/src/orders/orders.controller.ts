@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, UseGuards, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, UseGuards, Post, Req} from '@nestjs/common';
 import {OrdersService} from './orders.service';
 import {UpdateOrderDto} from './dto/update-order.dto';
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
@@ -50,8 +50,8 @@ export class OrdersController {
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-        return this.ordersService.update(+id, updateOrderDto);
+    update(@Param('id') id: string, @Body('status') status: string) {
+        return this.ordersService.update(+id, status);
     }
 
     @Delete(':id')

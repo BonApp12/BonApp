@@ -93,11 +93,12 @@ export class OrdersService {
 
 
 
-    async update(id: number, updateOrderDto: UpdateOrderDto) {
+    async update(id: number, status: string) {
+        console.log(status);
         return await this.orderRepository
             .createQueryBuilder()
             .update(Order)
-            .set({status: "completed"})
+            .set({status: status})
             .where("id = :id", {id: id})
             .returning("*")
             .execute();
