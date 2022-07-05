@@ -28,7 +28,7 @@ export class OrdersService {
         Quand wass aura intégrer les socket il devra placer cette méthodes dans la méthode associée
         Se référer à la documentation associée à la méthode pour savoir ce qu'elle attend.
          */
-        OrdersService.sendNotification( null);
+        this.sendNotification( null, null);
         /* Récupération de toutes les commandes avec les relations User et Restaurant */
         return this.orderRepository.find({relations: ['user', 'restaurant', 'orderPlates', 'orderPlates.plate']});
     }
@@ -138,25 +138,19 @@ export class OrdersService {
     }
 
 
-    /**
-     *
-     * @param order
-     * @private
-     * Cette méthode attend d'avoir les tokens des serveurs pour envoyer les notifications
-     */
-    private static sendNotification(order: Order) {
+    public sendNotification(expoTokens: string[], message: string) {
         /* TODO: ici on fera la requête en fonction de l'order et des serveurs qui doivent recupérer la notification
         Typiquement order.restaurant.users.filter(user => user.role === UserRole.RESTAURANT_SERVER)
         On peut aussi s'en servir pour tout tant que l'on a bien un expoToken en bdd
          */
-        const tokens = ["ExponentPushToken[yXejFVPZOwh_c45bQmSYih]"];
+        //const tokens = ["ExponentPushToken[GFKetONHkXVwJ3MJpYrnVF]"];
 // Create a new Expo SDK client
 // optionally providing an access token if you have enabled push security
         const expo = new Expo({accessToken: process.env.EXPO_ACCESS_TOKEN});
 
 // Create the messages that you want to send to clients
         const messages = [];
-        tokens.forEach(pushToken => {
+        expoTokens.forEach(pushToken => {
             // Check that all your push tokens appear to be valid Expo push tokens
             if (!Expo.isExpoPushToken(pushToken)) {
                 console.error(`Push token ${pushToken} is not a valid Expo push token`);
@@ -166,7 +160,7 @@ export class OrdersService {
             messages.push({
                 to: pushToken,
                 sound: 'default',
-                body: 'Une nouvelle commande est prête !',
+                body: message,
                 data: {withSome: 'data'},
             });
         });

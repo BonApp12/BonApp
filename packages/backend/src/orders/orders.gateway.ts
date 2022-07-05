@@ -13,10 +13,15 @@ import {Logger} from "@nestjs/common";
 import {UpdateOrderDto} from "./dto/update-order.dto";
 import {CreateOrderDto} from "./dto/create-order.dto";
 import {Order} from "./entities/order.entity";
+import {UsersService} from "../users/users.service";
+import {IsNull, Not} from "typeorm";
+import {NotificationMessageEnum} from "./enum/NotificationMessageEnum";
 
 @WebSocketGateway({cors: true})
 export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    constructor(private readonly ordersService: OrdersService) {
+    constructor(
+        private readonly ordersService: OrdersService,
+        private readonly usersService: UsersService) {
     }
 
     @WebSocketServer() wss: Server;
@@ -174,6 +179,23 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
                     return;
                 }
             })
+        });
+    }
+
+    @SubscribeMessage('needSomething')
+    needSomething(client: Socket, args: Record<string, any>){
+        this.usersService.findMultipleBy({
+            role: 'R_SERVER',
+            restaurant: args.idRestaurant,
+            where: {
+                expoToken: Not(IsNull())
+            }
+        }).then((users) => {
+            const expoTokens = [];
+            users.forEach((user) => {
+                expoTokens.push(user.expoToken);
+            })
+            this.ordersService.sendNotification(expoTokens, NotificationMessageEnum[args.thing]); // Également envoyer l'ID de la table ainsi que le "thing".
         });
     }
 }

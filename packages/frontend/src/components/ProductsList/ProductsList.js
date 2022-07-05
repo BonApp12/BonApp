@@ -18,6 +18,7 @@ import {restaurantAtom} from "../../states/restaurant";
 import {orderAtom} from "../../states/order";
 import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import createOrder from "../../requests/orders/createOrder";
+import {Asker} from "../Asker/Asker";
 
 
 const ProductsList = () => {
@@ -212,6 +213,10 @@ const ProductsList = () => {
         socket.emit('removeFromCart', {idTable, idRestaurant, plate});
     }
 
+    function needSomething(thing) {
+        socket.emit("needSomething", {idTable, idRestaurant, thing});
+        // TODO : Mettre un timeOut
+    }
 
     if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
     if (!isLoaded) return <div><Loading/></div>;
@@ -219,11 +224,12 @@ const ProductsList = () => {
     return (
         <div className="sidebar-cart">
             <Layout restaurant={restaurant} otherCart={otherCart}/>
+            <Asker needSomething={needSomething}/>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
             <ol>
                 {
                     isLoaded && !error ?
-                        filteredPlates.map(plate => {
+                        filteredPlates?.map(plate => {
                             return (
                                 <Card name={plate.name}
                                       key={plate.id}

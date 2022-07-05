@@ -30,6 +30,12 @@ export class UsersService {
         throw new HttpException('User with this params does not exist !', HttpStatus.NOT_FOUND);
     }
 
+    async findMultipleBy(...args): Promise<Users[]> {
+        const user = await this.usersRepository.find(...args);
+        if (user) return user;
+        throw new HttpException('User with this params does not exist !', HttpStatus.NOT_FOUND);
+    }
+
     async findAll(): Promise<Users[]> {
         return this.usersRepository.find({relations: ['restaurant']});
     }
