@@ -30,6 +30,10 @@ export class UsersService {
         throw new HttpException('User with this params does not exist !', HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Contient des paramètres (champs de l'entité) pour filtrer les utilisateurs
+     * @param args
+     */
     async findMultipleBy(...args): Promise<Users[]> {
         const user = await this.usersRepository.find(...args);
         if (user) return user;

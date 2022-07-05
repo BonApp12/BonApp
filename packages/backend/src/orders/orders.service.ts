@@ -140,16 +140,11 @@ export class OrdersService {
 
 
     public sendNotification(expoTokens: string[], message: string) {
-        /* TODO: ici on fera la requête en fonction de l'order et des serveurs qui doivent recupérer la notification
-        Typiquement order.restaurant.users.filter(user => user.role === UserRole.RESTAURANT_SERVER)
-        On peut aussi s'en servir pour tout tant que l'on a bien un expoToken en bdd
-         */
-        //const tokens = ["ExponentPushToken[GFKetONHkXVwJ3MJpYrnVF]"];
-// Create a new Expo SDK client
-// optionally providing an access token if you have enabled push security
+    // Create a new Expo SDK client
+    // optionally providing an access token if you have enabled push security
         const expo = new Expo({accessToken: process.env.EXPO_ACCESS_TOKEN});
 
-// Create the messages that you want to send to clients
+    // Create the messages that you want to send to clients
         const messages = [];
         expoTokens.forEach(pushToken => {
             // Check that all your push tokens appear to be valid Expo push tokens

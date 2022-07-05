@@ -11,6 +11,7 @@ import {useHistory} from "react-router-dom";
 import Modal from "../Modal/Modal";
 import {SocketContext} from "../../contexts/socket";
 import {toast} from "react-toastify";
+import OrderStatusEnum from "../Enum/OrderStatusEnum";
 
 export default function CardTable() {
 
@@ -20,15 +21,12 @@ export default function CardTable() {
 
     let checkStatus, formattedDate;
 
-    const TODO = 'to-do';
-    const READY = 'ready';
-
     const [userState, setUserState] = useRecoilState(userAtom);
     const history = useHistory();
     const socket = useContext(SocketContext);
 
     checkStatus = (status) => {
-        return status === TODO || status === READY;
+        return status === OrderStatusEnum.TODO || status === OrderStatusEnum.READY;
     };
 
     formattedDate = (date) => {
@@ -44,7 +42,7 @@ export default function CardTable() {
     }, [])
 
     useEffect(() => {
-        fetchFullOrder(userState?.restaurant.id, [TODO, READY]).then(res => {
+        fetchFullOrder(userState?.restaurant.id, [OrderStatusEnum.TODO, OrderStatusEnum.READY]).then(res => {
             if (res.status === 401) return resetUserConnected(setUserState, history);
             return res.json();
         }).then(resOrder => {
@@ -61,7 +59,7 @@ export default function CardTable() {
     }, [socket]);
 
     const updateOrderStatus = (idOrder, status) => {
-        status === TODO ? status = READY : status = COMPLETED;
+        status === OrderStatusEnum.TODO ? status = OrderStatusEnum.READY : status = OrderStatusEnum.COMPLETED;
         updateOrder(idOrder, status).then((res) => res.json())
             .then((result) => {
                 socket.emit('updateOrder', {order: result.raw[0]});
@@ -175,12 +173,12 @@ export default function CardTable() {
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                     <i className=
-                                           {order.status === TODO ?
+                                           {order.status === OrderStatusEnum.TODO ?
                                                'fas fa-circle text-orange-500 mr-2'
                                                :
                                                'fas fa-circle text-green-500 mr-2'}
                                     />
-                                    {order.status === TODO ?
+                                    {order.status === OrderStatusEnum.TODO ?
                                         'En cours'
                                         :
                                         'Prête !'
