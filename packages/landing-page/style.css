@@ -1,8 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i,900,900i&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
 html {
 	font-family: 'Overpass', 'Lato', 'Montserrat', sans-serif;
+	background: url('images/Fond-landing copie.png') no-repeat center center fixed;
+	min-height: 100%;
+	min-width: 1024px;
+	width: 100%;
+	height: auto;
+	top: 0;
+	left: 0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 }
 
 * {
@@ -68,7 +80,7 @@ nav li {
 
 #section1 {
 	height: 580px;
-	background-image: url('images/bonapp-img-hero.png');
+
 	background-repeat: no-repeat;
 	background-position: bottom right;
 	background-size: auto 85%;
@@ -79,7 +91,7 @@ nav li {
 #section1 h1 {
 	font-size: 3rem;
 	font-weight: 900;
-	margin-top: 8rem;
+	margin-top: 12rem;
 	margin-bottom: 3rem;
 	min-width: 350px;
 	max-width: 800px;
@@ -117,12 +129,14 @@ nav li {
 	transform: translateY(-50%);
 }
 
-#section3{
+
+#section4 {
+	margin-top: 2rem;
 	margin-left: 6rem;
 	margin-right: 6rem;
 }
 
-.features {
+.who {
 	justify-content: center;
 	align-items: center;
 	width: 280px;
@@ -132,17 +146,17 @@ nav li {
 	text-align: center;
 }
 
-.features img {
+.who img {
 	width: 60%;
 }
 
-.features h1 {
+.who h1 {
 	font-size: 1.3rem;
 	margin-bottom: 0.5em;
 	line-height: 1.5em;
 }
 
-.features h2 {
+.who h2 {
 	font-size: 1rem;
 	font-weight: 400;
 	width: 60%;
@@ -171,7 +185,7 @@ nav li {
 	margin-bottom: 3rem;
 }
 
-.img-features {
+.img-who {
 	background-color: rgb(240, 240, 240);
 	width: 180px;
 	height: 180px;
@@ -282,8 +296,15 @@ body>footer * {
 	text-align: right;
 }
 
+#section5{
+	margin-top: 4rem;
+	margin-left: 16rem;
+	margin-right: 16rem;
+}
 
-input[type=text], textarea, input[type=email] {
+input[type=text],
+textarea,
+input[type=email] {
 	width: 100%;
 	padding: 12px;
 	border: 1px solid #ccc;
@@ -294,7 +315,10 @@ input[type=text], textarea, input[type=email] {
 	margin-right: 0px;
 	margin-left: 0px;
 	resize: vertical;
-  }
-  label{margin-right: 0px;
+}
+
+label {
+	margin-right: 0px;
 	margin-left: 0px;
-	width: 100%;}
+	width: 100%;
+}

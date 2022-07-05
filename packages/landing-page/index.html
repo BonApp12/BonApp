@@ -2,10 +2,20 @@
 <html>
 
 <head>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-Y15TJDEV1R');
+	</script>
+	
 	<title>BonApp</title>
 	<meta charset="utf-8">
 	<meta name="description" content="BonApp, bon appetit, point.">
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y15TJDEV1R"></script>
 </head>
 
 <body>
@@ -25,23 +35,30 @@
 			</nav>
 		</div>
 	</header>
+
 	<main>
 		<!-- Section 1 banière du site -->
-		<section id="section1">
-			<div class="container clearfix">
-				<div class="vertically-centered">
+
+		<div class="container clearfix">
+			<section id="section1">
+				<div>
+					<img src="images/menu-rond.png" style="width: 700px; position: absolute; right: 0; z-index: -1 " />
 					<h1 class="">Bon Appetit, point.</h1>
+
 					<h2>Scannez, Commandez et payer directement depuis votre téléphone !</h2>
 					<a href="#" class="cta-button">Contactez-nous!</a>
+
 				</div>
-			</div>
-		</section>
+
+			</section>
+		</div>
 
 		<!-- Section 2 description de BonApp -->
-		<div class="container clearfix" style="margin-left: auto; margin-right: auto; margin-top: 5rem;">
+		<div class="container clearfix" style="margin-left: auto; margin-right: auto; margin-top: 3rem;">
 			<div id="section2" style="display: flex; flex-wrap: wrap;">
 				<div style="width: 500px; margin-left: auto; margin-right: auto;">
-					<img style="min-width: 250px; max-width: 500px; border-radius: 40px;" src="images/woman-scan-table.jpg" />
+					<img style="min-width: 250px; max-width: 500px; border-radius: 40px;"
+						src="images/woman-scan-table.jpg" />
 				</div>
 				<div style="max-width: 500px; min-width: 200px; margin-left: auto; margin-right: auto;">
 					<h1 style="">Service de commande en table.</h1>
@@ -52,28 +69,76 @@
 			</div>
 		</div>
 
-		<!-- Section 3 features de BonApp -->
+		<!-- Section pipline -->
 		<div class="container clearfix">
 			<section id="section3">
-				<h1>Pourquoi passer par BonApp ?</h1>
+				<h1>Fonctionnement simple</h1>
+				<div style="display: flex;">
+					<div class="who">
+						<div class="">
+							<img src="images/qr-code.png" style="width: 90px;" />
+						</div>
+						<h1>Scannez</h1>
+					</div>
+					<div class="who">
+						<div class="">
+							<img src="images/shopping-online.png" style="width: 90px;" />
+						</div>
+						<h1>Commandez</h1>
+					</div>
+					<div class="who">
+						<div class="">
+							<img src="images/debit-card.png" style="width: 90px;" />
+						</div>
+						<h1>Payez</h1>
+					</div>
+				</div>
+				<div class="progressbar">
+
+				</div>
+			</section>
+		</div>
+
+
+		<!-- Section 3 features de BonApp -->
+		<div class="container clearfix">
+			<section id="section4">
+				<h1>L'équipe de BonApp</h1>
 				<div style="display: flex; flex-wrap: wrap;">
-					<div class="features">
-						<div class="img-features">
+					<div class="who">
+						<div class="img-who">
+							<img src="images/Marwane.jpeg" style="border-radius: 100px; width: 180px;" />
 						</div>
-						<h1>Simple d'utilisation.</h1>
-						<h2>Scannez simplement un QR Code</h2>
+						<h1>Marwane Bouabdellah</h1>
+						<h2>Développeur chez</h2>
 					</div>
-					<div class="features">
-						<div class="img-features">
+					<div class="who">
+						<div class="img-who">
+							<img src="images/Yassine.jpeg" style="border-radius: 100px; width: 180px;" />
 						</div>
-						<h1>Accélérer l'arrivé de votre commande</h1>
-						<h2>Posez-vous à une table, et commandez. Plus aucune queues en vue.</h2>
+						<h1>Yassine Boussaidi</h1>
+						<h2>Développeur chez</h2>
 					</div>
-					<div class="features">
-						<div class="img-features">
+					<div class="who">
+						<div class="img-who">
+							<img src="images/Khalil.jpeg" style="border-radius: 100px; width: 180px;" />
 						</div>
-						<h1>Moyens de paiement</h1>
-						<h2>Payez par carte bancaire, carte restaurant (type swile) ou encore paypal.</h2>
+						<h1>Khalil Sekhri</h1>
+						<h2>Développeur chez Relax-Massage</h2>
+					</div>
+					<div class="who">
+						<div class="img-who">
+							<img src="images/Youcef.jpeg" style="border-radius: 100px; width: 180px;" />
+						</div>
+						<h1>Youcef Jallali</h1>
+						<h2>Développeur chez Relax-Massage</h2>
+					</div>
+					<div class="who">
+						<div class="img-who">
+							<img src="images/Wassim.jpeg" style="border-radius: 100px; width: 180px;" />
+						</div>
+						<h1>Wassim Dahman</h1>
+						<h2>Développeur chez</h2>
 					</div>
 				</div>
 			</section>
@@ -81,7 +146,7 @@
 
 		<!-- Section 4 contact form -->
 		<div class="container clearfix" style="margin-top: 3rem;">
-			<section id="section3">
+			<section id="section5">
 				<h1>Nous contacter</h1>
 				<form action="/action_page.php">
 					<label for="fname">Nom & prénom</label>
@@ -120,5 +185,9 @@
 		</div>
 	</footer>
 </body>
+
+<script>
+
+</script>
 
 </html>
