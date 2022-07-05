@@ -46,6 +46,7 @@ jobs:
         with:
           envkey_REACT_APP_URL_BACKEND: ${{ secrets.REACT_APP_URL_BACKEND }}
           envkey_REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
+          envkey_REACT_APP_SOCKET_BACKEND: ${{ secrets.REACT_APP_SOCKET_BACKEND }}
           directory: packages/front-manager/
           file_name: .env
           fail_on_empty: true
@@ -115,7 +116,7 @@ jobs:
           script: |
             cd BonApp
             sudo docker stop front_end_prod
-            sudo docker stop backend_prod
+            sudo docker stop back_end_prod
             sudo docker stop front_manager_prod
             sudo docker system prune -a -f
             sudo docker-compose up -d  --remove-orphans
