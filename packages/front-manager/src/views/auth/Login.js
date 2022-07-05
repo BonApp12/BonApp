@@ -20,7 +20,7 @@ export default function Login() {
     const [userState, setUserState] = useRecoilState(userAtom);
 
     useEffect(() => {
-        userState !== null && history.push('/admin');
+        userState !== null && history.push('/admin/dashboard');
     }, [userState, history]);
 
     const onSubmit = (user) => {
@@ -29,13 +29,13 @@ export default function Login() {
             .then(res => res.json())
             .then(responseLogin => {
                 setLoading(false);
-                if ([400, 401].includes(responseLogin.statusCode)){
+                if ([400, 401].includes(responseLogin.statusCode)) {
                     toast.error(responseLogin.message);
                 }
                 if (responseLogin.statusCode === 200) {
                     setUserState(responseLogin.user);
                     toast.success("Connexion réussi");
-                    history.push('/admin');
+                    history.push('/admin/dashboard');
                 }
             })
             .catch(err => {

@@ -18,17 +18,17 @@ export default function HeaderStats() {
     const history = useHistory();
 
     useEffect(() => {
-        if (userState.length !== 0) {
+        if (userState?.length !== 0) {
             fetchFullPlate(userState?.restaurant.id).then(async resPlate => {
-                if (resPlate.status === 401) resetUserConnected(setUserState, history);
+                if (resPlate.status === 401) return resetUserConnected(setUserState, history);
                 setPlate(await resPlate.json());
             });
             fetchFullOrder(userState?.restaurant.id, 'only-orders').then(async resOrder => {
-                if (resOrder.status === 401) resetUserConnected(setUserState, history);
+                if (resOrder.status === 401) return resetUserConnected(setUserState, history);
                 setOrders(await resOrder.json());
             });
             fetchTeamMembers(userState?.restaurant.id).then(async resTeamMember => {
-                if (resTeamMember.status === 401) resetUserConnected(setUserState, history);
+                if (resTeamMember.status === 401) return resetUserConnected(setUserState, history);
                 setTeamMembers(await resTeamMember.json());
             });
             countBestPlateRequest(userState?.restaurant.id, 'only-one').then(res => {

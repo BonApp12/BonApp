@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Redirect, Route, Switch, useHistory} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 
 // Components
 import AdminNavbar from "components/Navbars/Navbar.js";
@@ -14,21 +14,20 @@ import Teams from "../views/admin/Teams";
 import Plates from "../views/admin/Plates";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import Logout from "../components/Logout/Logout";
 import {useRecoilValue} from "recoil";
 import {userAtom} from "../states/user";
 import Tables from "../views/admin/Tables";
 
 // Contexts
-import {SocketContext, socket} from "../contexts/socket";
+import {socket, SocketContext} from "../contexts/socket";
 
 export default function Admin() {
     const userState = useRecoilValue(userAtom);
     const history = useHistory();
 
     useEffect(() => {
-        userState === null && history.push('/');
-    },[userState,history]);
+        userState === null && history.push('/auth/login');
+    }, [userState, history]);
 
     return (
         <>
@@ -47,8 +46,7 @@ export default function Admin() {
                         <SocketContext.Provider value={socket}>
                             <Route path="/admin/orders" exact component={Orders}/>
                         </SocketContext.Provider>
-                        <Route path="/admin/logout" exact component={Logout}/>
-                        <Redirect from="/admin" to="/admin/dashboard"/>
+                        {/*<Route path="/admin/logout" exact component={Logout}/>*/}
                     </Switch>
                     <ToastContainer/>
                 </div>
