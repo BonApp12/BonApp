@@ -136,7 +136,8 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         const rooms = Array.from(client.rooms);
 
         if (this.users.get(rooms[1]) !== undefined) {
-            const idRestaurant = rooms[1].substring(rooms[1].indexOf('Table:') + 6, rooms[1].indexOf('Restaurant'));
+            const idRestaurant = rooms[1].substring(rooms[1].indexOf('Restaurant:') + 11);
+            console.log(idRestaurant);
             const restaurantRoom = `Restaurant:${idRestaurant}:Room`;
 
             // Link order and current user in this.users array
