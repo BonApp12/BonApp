@@ -2,7 +2,7 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": [{ "include": "mail/templates/**/*", "outDir": "dist/src" }],
+    "assets": [{ "include": "mail/templates/**/*", "outDir": "dist/src" },{ "include": "pdf/templates/**/*", "outDir": "dist/src" }],
     "watchAssets": true
   }
 }
