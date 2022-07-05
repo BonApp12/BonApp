@@ -1,4 +1,4 @@
 export default function resetUserConnected(setUserRecoil, history){
     setUserRecoil(null);
-    history.push('/');
+    history.push('/auth/login');
 }

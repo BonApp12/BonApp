@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 import {createPopper} from "@popperjs/core";
-import {Link} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
+import logout from "../../requests/logout";
+import {toast} from "react-toastify";
 
 const UserDropdown = () => {
     // Props du dropdown (pour le popper)
@@ -10,6 +12,7 @@ const UserDropdown = () => {
     const btnDropdownRef = React.createRef();
     const popoverDropdownRef = React.createRef();
     const [user, setUser] = useRecoilState(userAtom);
+    const history = useHistory();
     const openDropdownPopover = () => {
         createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
             placement: "bottom-start",
@@ -19,6 +22,20 @@ const UserDropdown = () => {
     const closeDropdownPopover = () => {
         setDropdownPopoverShow(false);
     };
+
+
+    function logoutCTA() {
+
+        logout()
+            .then(() => {
+                console.log('logout');
+                setUser(null);
+                history.push('/auth/login');
+                toast.success('Déconnexion réussie');
+                return false;
+            });
+    }
+
     return (
         <>
       <span
@@ -47,10 +64,10 @@ const UserDropdown = () => {
                     "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
                 }
             >
-                <Link to={"/admin/logout"}
+                <span onClick={logoutCTA}
                       className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
                     Déconnexion
-                </Link>
+                </span>
             </div>
         </>
     );

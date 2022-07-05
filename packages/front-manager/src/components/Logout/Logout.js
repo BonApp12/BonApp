@@ -10,12 +10,13 @@ const Logout = () => {
 
     logout()
         .then(() => {
+            console.log('logout');
             setUserState(null);
             history.push('/');
             toast.success('Déconnexion réussie');
             return false;
         });
-    return (<></>)
-}
+    return (<></>);
+};
 
 export default Logout;
