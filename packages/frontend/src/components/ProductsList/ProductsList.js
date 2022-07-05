@@ -18,6 +18,8 @@ import {restaurantAtom} from "../../states/restaurant";
 import {orderAtom} from "../../states/order";
 import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import createOrder from "../../requests/orders/createOrder";
+import {Asker} from "../Asker/Asker";
+import {tableAtom} from "../../states/table";
 
 
 const ProductsList = () => {
@@ -36,6 +38,7 @@ const ProductsList = () => {
     const [userState, setUserState] = useRecoilState(userAtom);
     const [nickname, setNickname] = useRecoilState(nicknameAtom)
     const [currentRestaurant, setCurrentRestaurant] = useRecoilState(restaurantAtom);
+    const [currentTable, setCurrentTable] = useRecoilState(tableAtom);
     const [order, setOrder] = useRecoilState(orderAtom);
 
     // Handling ingredients modal
@@ -77,6 +80,7 @@ const ProductsList = () => {
 
     // Setting nickname (randomly generated / user's email) and restaurant ID
     useEffect(() => {
+
         if (!nickname) {
             if (userState?.email !== undefined) {
                 setNickname(userState.email);
@@ -84,13 +88,19 @@ const ProductsList = () => {
                 setNickname(uniqueNamesGenerator({dictionaries: [adjectives, animals, colors]}));
             }
         }
-        if (!currentRestaurant) {
+        if (!currentRestaurant || !currentTable) {
             setCurrentRestaurant(idRestaurant);
+            setCurrentTable(idTable);
         } else {
             if (currentRestaurant !== idRestaurant) {
                 setNickname(uniqueNamesGenerator({dictionaries: [adjectives, animals, colors]}));
                 setCurrentRestaurant(idRestaurant);
+                setCurrentTable(idTable);
                 setOrder([]); // Resetting orders since we aren't in the same restaurant anymore
+            }
+            if (currentRestaurant === idRestaurant && currentTable !== idTable) {
+                setCurrentTable(idTable);
+                setOrder([]); // Resetting orders since we aren't in the same table anymore
             }
         }
 
@@ -141,8 +151,6 @@ const ProductsList = () => {
                 let orderCopy = cloneDeep(order);
                 orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
                 setOrder(orderCopy);
-                // Afficher une notification comme quoi sa commande a été mise à jour
-                // Bosser sur un "front" permettant de voir ses commandes en cours.
             })
         }
     }, [tableExists, idTable, idRestaurant]);
@@ -212,6 +220,10 @@ const ProductsList = () => {
         socket.emit('removeFromCart', {idTable, idRestaurant, plate});
     }
 
+    function needSomething(thing) {
+        socket.emit("needSomething", {idTable, idRestaurant, thing});
+        // TODO : Mettre un timeOut
+    }
 
     if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
     if (!isLoaded) return <div><Loading/></div>;
@@ -219,11 +231,12 @@ const ProductsList = () => {
     return (
         <div className="sidebar-cart">
             <Layout restaurant={restaurant} otherCart={otherCart}/>
+            <Asker needSomething={needSomething}/>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
             <ol>
                 {
                     isLoaded && !error ?
-                        filteredPlates.map(plate => {
+                        filteredPlates?.map(plate => {
                             return (
                                 <Card name={plate.name}
                                       key={plate.id}

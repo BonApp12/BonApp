@@ -10,6 +10,8 @@ import {userAtom} from "../../states/user";
 import {useHistory} from "react-router-dom";
 import Modal from "../Modal/Modal";
 import {SocketContext} from "../../contexts/socket";
+import {toast} from "react-toastify";
+import OrderStatusEnum from "../Enum/OrderStatusEnum";
 
 export default function CardTable() {
 
@@ -18,13 +20,13 @@ export default function CardTable() {
     const [orderReceived, setOrderReceived] = useState(false);
 
     let checkStatus, formattedDate;
-    const TODO = 'to-do';
+
     const [userState, setUserState] = useRecoilState(userAtom);
     const history = useHistory();
     const socket = useContext(SocketContext);
 
     checkStatus = (status) => {
-        return status === TODO;
+        return status === OrderStatusEnum.TODO || status === OrderStatusEnum.READY;
     };
 
     formattedDate = (date) => {
@@ -35,22 +37,18 @@ export default function CardTable() {
     useEffect(() => {
         socket.on('orderCreated', () => {
             setOrderReceived(true);
+            toast.success('Une nouvelle commande a été créée !');
         });
     }, [])
 
     useEffect(() => {
-        fetchFullOrder(userState?.restaurant.id, TODO).then(res => {
+        fetchFullOrder(userState?.restaurant.id, [OrderStatusEnum.TODO, OrderStatusEnum.READY]).then(res => {
             if (res.status === 401) return resetUserConnected(setUserState, history);
             return res.json();
         }).then(resOrder => {
             setOrders(resOrder);
             setOrderReceived(false);
         });
-        // .then( resOrder => {
-        //     if (resOrder.status === 401) resetUserConnected(setUserState, history);
-        //     setOrders(await resOrder.json());
-        //
-        // });
         return function cleanup() {
             setOrders([]);
         };
@@ -60,10 +58,12 @@ export default function CardTable() {
         socket.emit('joinRestaurantRoom', {user: userState});
     }, [socket]);
 
-    const updateOrderStatus = (idOrder) => {
-        updateOrder(idOrder).then((res) => res.json())
+    const updateOrderStatus = (idOrder, status) => {
+        status === OrderStatusEnum.TODO ? status = OrderStatusEnum.READY : status = OrderStatusEnum.COMPLETED;
+        updateOrder(idOrder, status).then((res) => res.json())
             .then((result) => {
                 socket.emit('updateOrder', {order: result.raw[0]});
+                setOrderReceived(true);
             })
     }
 
@@ -173,15 +173,15 @@ export default function CardTable() {
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                     <i className=
-                                           {checkStatus(order.status) ?
+                                           {order.status === OrderStatusEnum.TODO ?
                                                'fas fa-circle text-orange-500 mr-2'
                                                :
                                                'fas fa-circle text-green-500 mr-2'}
                                     />
-                                    {checkStatus(order.status) ?
+                                    {order.status === OrderStatusEnum.TODO ?
                                         'En cours'
                                         :
-                                        'Terminé'
+                                        'Prête !'
                                     }
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
@@ -194,7 +194,7 @@ export default function CardTable() {
                                     {checkStatus(order.status) ? (
                                         <button
                                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-                                            onClick={() => updateOrderStatus(order.id)}>
+                                            onClick={() => updateOrderStatus(order.id, order.status)}>
                                             Valider
                                         </button>
                                     ) : (

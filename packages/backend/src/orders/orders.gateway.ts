@@ -10,13 +10,17 @@ import {
 import {OrdersService} from './orders.service';
 import {Server, Socket} from 'socket.io';
 import {Logger} from "@nestjs/common";
-import {UpdateOrderDto} from "./dto/update-order.dto";
-import {CreateOrderDto} from "./dto/create-order.dto";
-import {Order} from "./entities/order.entity";
+import {UsersService} from "../users/users.service";
+import {TablesService} from "../tables/tables.service";
+import {IsNull, Not} from "typeorm";
+import {NotificationMessageEnum} from "./enum/NotificationMessageEnum";
 
 @WebSocketGateway({cors: true})
 export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    constructor(private readonly ordersService: OrdersService) {
+    constructor(
+        private readonly ordersService: OrdersService,
+        private readonly usersService: UsersService,
+        private readonly tableService: TablesService,) {
     }
 
     @WebSocketServer() wss: Server;
@@ -131,7 +135,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         const rooms = Array.from(client.rooms);
 
         if (this.users.get(rooms[1]) !== undefined) {
-            const idRestaurant = rooms[1].substring(rooms[1].indexOf('Table:') + 6, rooms[1].indexOf('Restaurant'));
+            const idRestaurant = rooms[1].substring(rooms[1].indexOf('Restaurant:') + 11);
             const restaurantRoom = `Restaurant:${idRestaurant}:Room`;
 
             // Link order and current user in this.users array
@@ -142,7 +146,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             userMap.push(currentUser[0]);
             this.users.set(rooms[1], userMap);
 
-            console.log(this.users);
 
             this.logger.log(`Client ${client.id} submitted an order and paid for it`);
             this.wss.to(restaurantRoom).emit("orderCreated");
@@ -163,17 +166,47 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('updateOrder')
-    update(client: Socket, args: Record<string, any>) {
-        const clientRoom = `ordersRoomTable:${args.order.tableId}Restaurant:${args.order.restaurantId}`;
+    update(client: Socket, newOrder: Record<string, any>) {
+        const clientRoom = `ordersRoomTable:${newOrder.order.tableId}Restaurant:${newOrder.order.restaurantId}`;
         const clients = this.users.get(clientRoom);
 
-        clients.map((c) => {
-            c.order.map((o) => {
-                if (o.id === args.order.id) {
-                    this.wss.to(c.socket).emit("orderUpdated", args.order);
-                    return;
-                }
-            })
+        if (newOrder.order.status === "ready") {
+            const notificationMessage = `La commande N°${newOrder.order.id} est prête !`;
+            this.sendNotificationToWaiters(newOrder.order.restaurantId, newOrder.order.tableId, notificationMessage);
+        }
+
+        if (clients !== undefined) {
+            clients.forEach((client) => {
+                client.order.forEach((order) => {
+                    if (order.id === newOrder.order.id) {
+                        console.log('dispatching message');
+                        this.wss.to(client.socket).emit("orderUpdated", newOrder.order);
+                    }
+                });
+            });
+        }
+    }
+
+    @SubscribeMessage('needSomething')
+    async needSomething(client: Socket, args: Record<string, any>){
+        const message = NotificationMessageEnum[args.thing];
+        await this.sendNotificationToWaiters(args.idRestaurant, args.idTable, message);
+    }
+
+    private async sendNotificationToWaiters(idRestaurant: number, idTable: number, message: string) {
+        const expoTokens = [];
+        const waiters = await this.usersService.findMultipleBy({
+            role: 'R_SERVER',
+            restaurant: idRestaurant,
+            where: {
+                expoToken: Not(IsNull())
+            }
         });
+        const table = await this.tableService.findOne(idTable);
+        waiters.forEach((waiter) => {
+            expoTokens.push(waiter.expoToken);
+        });
+        const notificationMessage = `Table ${table.libelle} : ${message}`;
+        this.ordersService.sendNotification(expoTokens, notificationMessage);
     }
 }
