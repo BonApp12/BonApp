@@ -10,6 +10,7 @@ import {userAtom} from "../../states/user";
 import {useHistory} from "react-router-dom";
 import Modal from "../Modal/Modal";
 import {SocketContext} from "../../contexts/socket";
+import {toast} from "react-toastify";
 
 export default function CardTable() {
 
@@ -38,6 +39,7 @@ export default function CardTable() {
     useEffect(() => {
         socket.on('orderCreated', () => {
             setOrderReceived(true);
+            toast.success('Une nouvelle commande a été créée !');
         });
     }, [])
 
