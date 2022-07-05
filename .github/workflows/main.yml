@@ -1,7 +1,7 @@
 name: Deploy to production
 on:
   push:
-    branches: [ fix-url ]
+    branches: [ develop ]
   workflow_dispatch:
 
 jobs:
@@ -46,6 +46,7 @@ jobs:
         with:
           envkey_REACT_APP_URL_BACKEND: ${{ secrets.REACT_APP_URL_BACKEND }}
           envkey_REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
+          envkey_REACT_APP_SOCKET_BACKEND: ${{ secrets.REACT_APP_SOCKET_BACKEND }}
           directory: packages/front-manager/
           file_name: .env
           fail_on_empty: true
