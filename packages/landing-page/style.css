@@ -1,0 +1,331 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i,900,900i&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+html {
+	font-family: 'Overpass', 'Lato', 'Montserrat', sans-serif;
+	background: url('images/Fond-landing.png') no-repeat center center fixed;
+	min-height: 100%;
+	min-width: 1024px;
+	width: 100%;
+	height: auto;
+	top: 0;
+	left: 0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+header nav {
+	float: right;
+	color: black;
+}
+
+header {
+	background-color: white;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	color: black;
+	min-width: 670px;
+
+}
+
+.clearfix::after {
+	content: '';
+	clear: both;
+	display: table;
+}
+
+body {
+	margin: 0;
+}
+
+main {
+	max-width: 1180px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+nav a {
+	/*background-color: yellow;*/
+	padding: 1.5em 1em;
+	display: block;
+	text-decoration: none;
+	/*color: currentColor;*/
+	color: black;
+}
+
+nav a[href]:hover {
+	color: orange;
+}
+
+nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+nav li {
+	/*display: inline-block;*/
+	float: left;
+}
+
+.container {
+	padding: 0 15px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#section1 {
+	height: 580px;
+
+	background-repeat: no-repeat;
+	background-position: bottom right;
+	background-size: auto 85%;
+	margin-left: 50px;
+	margin-right: 50px;
+}
+
+#section1 h1 {
+	font-size: 3rem;
+	font-weight: 900;
+	margin-top: 12rem;
+	margin-bottom: 3rem;
+	min-width: 350px;
+	max-width: 800px;
+}
+
+#section1 h2 {
+	font-size: 1.8rem;
+	font-weight: 500;
+	margin-bottom: 5rem;
+	max-width: 700px;
+}
+
+.clearfix::before {
+	content: '';
+	display: table;
+}
+
+#section1 small {
+	position: absolute;
+	left: 15px;
+	/*Equivalent au padding du container*/
+	bottom: 0;
+	max-width: 50%;
+	font-size: 0.8rem;
+}
+
+#section1 .container {
+	height: 100%;
+	position: relative;
+}
+
+.vertically-centered {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+
+#section4 {
+	margin-top: 2rem;
+	margin-left: 6rem;
+	margin-right: 6rem;
+}
+
+.who {
+	justify-content: center;
+	align-items: center;
+	width: 280px;
+	/*background-color: red;*/
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.who img {
+	width: 60%;
+}
+
+.who h1 {
+	font-size: 1.3rem;
+	margin-bottom: 0.5em;
+	line-height: 1.5em;
+}
+
+.who h2 {
+	font-size: 1rem;
+	font-weight: 400;
+	width: 60%;
+	margin: auto;
+}
+
+
+.container>h1 {
+	text-align: center;
+	font-size: 3rem;
+	font-weight: 900;
+}
+
+.container>h1.small {
+	text-align: center;
+	font-size: 2.3rem;
+	font-weight: 900;
+	margin-bottom: 0;
+}
+
+.container>h2 {
+	text-align: center;
+	font-size: 1rem;
+	font-weight: 400;
+	margin-top: 0.5em;
+	margin-bottom: 3rem;
+}
+
+.img-who {
+	background-color: rgb(240, 240, 240);
+	width: 180px;
+	height: 180px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1rem;
+	border-radius: 100%;
+}
+
+footer nav+div {
+	right: 15px;
+	/*Equivalent au padding du container*/
+}
+
+footer nav+div a {
+	display: block;
+}
+
+
+.cta-button {
+	background: linear-gradient(rgb(240, 206, 105), orange);
+	color: white;
+	text-transform: uppercase;
+	text-decoration: none;
+	padding: 1em 3em;
+	display: inline-block;
+	border-radius: 900px;
+	letter-spacing: 0.15em;
+	font-size: 0.9rem;
+	font-weight: 700;
+	transition: background-color 0.3s 0.1s, transform 0.3s;
+	transform-origin: center center;
+	border: none;
+
+}
+
+.cta-button:hover {
+	background-color: rgb(215, 166, 30);
+	transform: scale(1.1);
+}
+
+.cta-button--full {
+	width: 100%;
+	text-align: center;
+}
+
+.cta-button--white {
+	color: #1DB954;
+	background-color: white;
+	border: solid 1px #1DB954;
+}
+
+/*Animation du CTA de la section 1*/
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0%);
+	}
+}
+
+#section1 .cta-button {
+	animation: fadeIn 1s;
+}
+
+
+main>section {
+	padding: 35px 0;
+}
+
+body>footer {
+	background-color: black;
+	margin-top: 5rem;
+}
+
+body>footer .container {
+	padding: 3rem 0 1rem;
+}
+
+body>footer * {
+	font-size: 0.75rem;
+	color: #919496;
+}
+
+.country-france {
+	text-decoration: none;
+	margin-bottom: 1rem;
+}
+
+.country-france::after {
+	content: '';
+	height: 1.2em;
+	width: 1.2em;
+	background-image: url('images/fr_flag.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	margin-left: 1em;
+	display: inline-block;
+}
+
+.align-right {
+	text-align: right;
+}
+
+#section5{
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 4rem;
+	max-width: 450px;
+}
+
+input[type=text],
+textarea,
+input[type=email] {
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	box-sizing: border-box;
+	margin-top: 6px;
+	margin-bottom: 16px;
+	margin-right: 0px;
+	margin-left: 0px;
+	resize: vertical;
+}
+
+label {
+	margin-right: 0px;
+	margin-left: 0px;
+	width: 100%;
+}
