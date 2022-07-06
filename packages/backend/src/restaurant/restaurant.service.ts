@@ -45,7 +45,7 @@ export class RestaurantService {
         }));
     }
 
-    async findOneWithTable(id: number, idTable: number): Promise<RestaurantDto | boolean> {
+    async findOneWithTable(id: string, idTable: string): Promise<RestaurantDto | boolean> {
         return await this.tableRepository.findOne(idTable, {
             where: {restaurant: id},
             relations: ['restaurant', 'restaurant.address', 'restaurant.plates', 'restaurant.plates.ingredients'],
@@ -105,11 +105,11 @@ export class RestaurantService {
 
     }
 
-    findAllTables(number: number) {
-        return this.tableRepository.find({where: {restaurant: number}});
+    findAllTables(uuid: string) {
+        return this.tableRepository.find({where: {restaurant: uuid}});
     }
 
-    deleteTable(id: number) {
+    deleteTable(id: string) {
         return this.tableRepository.delete(id);
     }
 }

@@ -24,8 +24,8 @@ import {tableAtom} from "../../states/table";
 
 const ProductsList = () => {
     let params = useParams();
-    const idRestaurant = parseInt(params.idRestaurant);
-    const idTable = parseInt(params.idTable);
+    const idRestaurant = params.idRestaurant;
+    const idTable = params.idTable;
 
     // Setting up states
     const [searchParams, setSearchParams] = useSearchParams();
@@ -35,8 +35,8 @@ const ProductsList = () => {
     const [restaurant, setRestaurant] = useState([]);
     const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
     const [cart, updateCart] = useRecoilState(cartAtom);
-    const [userState, setUserState] = useRecoilState(userAtom);
-    const [nickname, setNickname] = useRecoilState(nicknameAtom)
+    const [userState] = useRecoilState(userAtom);
+    const [nickname, setNickname] = useRecoilState(nicknameAtom);
     const [currentRestaurant, setCurrentRestaurant] = useRecoilState(restaurantAtom);
     const [currentTable, setCurrentTable] = useRecoilState(tableAtom);
     const [order, setOrder] = useRecoilState(orderAtom);
@@ -151,7 +151,7 @@ const ProductsList = () => {
                 let orderCopy = cloneDeep(order);
                 orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
                 setOrder(orderCopy);
-            })
+            });
         }
     }, [tableExists, idTable, idRestaurant]);
 
@@ -174,11 +174,11 @@ const ProductsList = () => {
 
     /* Sending order if payment fullfilled */
     useEffect(() => {
-        if (searchParams.get('redirect_status') === 'succeeded' && restaurant?.id !== undefined && tableExists !== false){
+        if (searchParams.get('redirect_status') === 'succeeded' && restaurant?.id !== undefined && tableExists !== false) {
             createOrder(cart, restaurant, idTable, userState ?? undefined)
                 .then((result) => result.json())
                 .then((res) => {
-                    socket.emit('createOrder', {...res})
+                    socket.emit('createOrder', {...res});
                     setOrder([...order, res]);
                     updateCart([]);
 

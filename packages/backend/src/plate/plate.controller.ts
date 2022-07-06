@@ -1,19 +1,6 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Patch,
-    Post,
-    Res,
-    UploadedFile,
-    UseGuards,
-    UseInterceptors
-} from '@nestjs/common';
+import {Body, Controller, Get, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
 import {PlateService} from './plate.service';
 import {PlateDto} from './dto/plate.dto';
-import {UpdatePlateDto} from './dto/update-plate.dto';
 import {FileInterceptor} from "@nestjs/platform-express";
 import {diskStorage} from "multer";
 import {v4 as uuidv4} from 'uuid';
@@ -67,14 +54,14 @@ export class PlateController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/restaurant/:id')
-    findByRestaurant(@Param('id') id: string): Promise<PlateDto[]> {
-        return this.plateService.findByRestaurant(+id);
+    findByRestaurant(@Param('id') uuid: string): Promise<PlateDto[]> {
+        return this.plateService.findByRestaurant(uuid);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/restaurant/:id/count')
-    countPlateByRestaurantCategorie(@Param('id') id: string) {
-        return this.plateService.countPlateByRestaurantCategorie(+id);
+    countPlateByRestaurantCategorie(@Param('id') uuid: string) {
+        return this.plateService.countPlateByRestaurantCategorie(uuid);
     }
 
     @Get("/uploads/:filename")
@@ -82,13 +69,10 @@ export class PlateController {
         res.sendFile(filename, {root: 'client/uploads/'});
     }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updatePlateDto: UpdatePlateDto) {
-        return this.plateService.update(+id, updatePlateDto);
+    @Patch('/:id')
+    remove(@Param('id') id) {
+        return this.plateService.update(id);
     }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.plateService.remove(+id);
-    }
+
 }

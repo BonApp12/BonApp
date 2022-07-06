@@ -8,11 +8,11 @@ export default function MainTab({libelleFirstTab, libelleSecondtab, firstContent
             <div
                 className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
                 <div className="tabs">
-                    <a className={`tab tab-bordered ${showtab === 1 ? "tab-active bg-white rounded-tl-lg text-black font-semibold" : ""}`}
+                    <a className={`tab text-black tab-bordered ${showtab === 1 ? "tab-active bg-primary text-white rounded-tl-lg text-black font-semibold" : ""}`}
                        onClick={() => setShowtab(1)}>
                         {libelleFirstTab}
                     </a>
-                    <a className={`tab tab-bordered ${showtab === 2 ? "tab-active bg-white rounded-tr-lg text-black font-semibold" : ""}`}
+                    <a className={`tab text-black tab-bordered ${showtab === 2 ? "tab-active bg-primary text-white rounded-tr-lg text-black font-semibold" : ""}`}
                        onClick={() => setShowtab(2)}>
                         {libelleSecondtab}
                     </a>

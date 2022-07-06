@@ -4,8 +4,8 @@ import {Restaurant} from "../../restaurant/entities/restaurant.entity";
 
 @Entity()
 export class Tables extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column('varchar', {length: 10})
     libelle: string;

@@ -13,7 +13,7 @@ export class OrderPlateService {
     return this.orderPlateRepository.find({relations: ['order', 'plate']});
   }
 
-    async findBestPlate(restaurantId: number, manyPlate = false) {
+    async findBestPlate(restaurantId: string, manyPlate = false) {
         const query = this.orderPlateRepository.createQueryBuilder("op")
             .select("p.name", "plateName")
             .addSelect("SUM(op.quantity)", "count")

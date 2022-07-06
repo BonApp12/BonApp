@@ -28,7 +28,6 @@ const UserDropdown = () => {
 
         logout()
             .then(() => {
-                console.log('logout');
                 setUser(null);
                 history.push('/auth/login');
                 toast.success('Déconnexion réussie');

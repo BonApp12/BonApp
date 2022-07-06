@@ -26,7 +26,7 @@ export default function Dashboard() {
                 const orderCount = await res.json();
                 const months = getMonthsBeforeCurrentMonth();
                 Object.keys(months).forEach((month) => {
-                    orderCount.forEach(order => {
+                    orderCount?.forEach(order => {
                         dayjs.locale("fr");
                         const monthOrder = dayjs().month(order.month - 1).format('MMMM');
                         if(monthOrder === month) {
@@ -38,10 +38,10 @@ export default function Dashboard() {
             });
 
         countBestPlateRequest(userState?.restaurant.id, 'many')
-            .then(async(res) => {
+            .then(async (res) => {
                 if (res.status === 401) resetUserConnected(setUserState, history);
                 setCountBestPlate(await res.json());
-            })
+            });
 
         countPlateByRestaurant(userState?.restaurant.id)
             .then(async (res) => {
@@ -57,12 +57,12 @@ export default function Dashboard() {
                 label: new Date().getFullYear(),
                 backgroundColor: "#fb923c",
                 borderColor: "#fb923c",
-                data: Object.keys(monthState).map(index=> monthState[index]),
+                data: Object.keys(monthState).map(index => monthState[index]),
                 fill: false,
                 barThickness: 8,
             }
         ],
-    }
+    };
 
     const dataDoughnutBestPlate = {
         labels: countBestPlate.map(plate => plate?.plateName),
@@ -73,7 +73,7 @@ export default function Dashboard() {
             borderColor: "#fb923c",
             hoverOffset: 4
         }]
-    }
+    };
 
     const dataBarPlateCount = {
         labels: countPlateType.map(plate => plate?.type),
@@ -87,7 +87,7 @@ export default function Dashboard() {
             ],
             hoverOffset: 4
         }]
-    }
+    };
 
     return (
         <>

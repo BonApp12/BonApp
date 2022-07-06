@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {UpdateOrderDto} from './dto/update-order.dto';
 import {Repository} from 'typeorm';
 import {Order} from './entities/order.entity';
 import {InjectRepository} from '@nestjs/typeorm';
@@ -8,9 +7,7 @@ import {OrderPlate} from "../order-plate/entities/order-plate.entity";
 import {PlateAdapter} from "../Adapter/PlateAdapter";
 import {Plate} from "../plate/entities/plate.entity";
 import {Restaurant} from "../restaurant/entities/restaurant.entity";
-import {Tables} from "../tables/entities/tables.entity";
 import {Users} from "../users/entities/users.entity";
-import {OrderAdapter} from "../Adapter/OrderAdapter";
 import {TableAdapter} from "../Adapter/TableAdapter";
 
 @Injectable()
@@ -28,7 +25,7 @@ export class OrdersService {
         Quand wass aura intégrer les socket il devra placer cette méthodes dans la méthode associée
         Se référer à la documentation associée à la méthode pour savoir ce qu'elle attend.
          */
-        this.sendNotification( null, null);
+        this.sendNotification(null, null);
         /* Récupération de toutes les commandes avec les relations User et Restaurant */
         return this.orderRepository.find({relations: ['user', 'restaurant', 'orderPlates', 'orderPlates.plate']});
     }
@@ -51,7 +48,7 @@ export class OrdersService {
         });
     }
 
-    findByRestaurant(id: number) {
+    findByRestaurant(id: string) {
         return this.orderRepository.find({
             relations: ['user', 'orderPlates', 'orderPlates.plate'],
             where: {
@@ -79,22 +76,20 @@ export class OrdersService {
         })
     }
 
-    countOrderByMonth(id: number, date: string) {
+    countOrderByMonth(uuid, date: string) {
         const query = this.orderRepository.createQueryBuilder("o")
             .select("EXTRACT(MONTH FROM o.created_at)", "month")
             .addSelect("COUNT(*)", "count")
             .innerJoin("o.restaurant", "r")
             .where("EXTRACT(YEAR FROM o.created_at) = :date", {date: date})
-            .andWhere("r.id = :id", {id})
+            .andWhere("r.id = :uuid", {uuid})
             .groupBy("EXTRACT(MONTH FROM o.created_at)")
             .orderBy("EXTRACT(MONTH FROM o.created_at)");
         return query.getRawMany();
     }
 
 
-
     async update(id: number, status: string) {
-        console.log(status);
         return await this.orderRepository
             .createQueryBuilder()
             .update(Order)
@@ -140,11 +135,11 @@ export class OrdersService {
 
 
     public sendNotification(expoTokens: string[], message: string) {
-    // Create a new Expo SDK client
-    // optionally providing an access token if you have enabled push security
+        // Create a new Expo SDK client
+        // optionally providing an access token if you have enabled push security
         const expo = new Expo({accessToken: process.env.EXPO_ACCESS_TOKEN});
 
-    // Create the messages that you want to send to clients
+        // Create the messages that you want to send to clients
         const messages = [];
         expoTokens.forEach(pushToken => {
             // Check that all your push tokens appear to be valid Expo push tokens

@@ -26,10 +26,10 @@ const CheckoutForm = (opt) => {
         }, 2000);
 
         stripe.retrievePaymentIntent(clientSecret).then(({paymentIntent}) => {
-            if (paymentIntent.status === PAYMENTENUM.STATUS.SUCCEEDED) return toast.success(PAYMENTENUM.PAYMENT_SUCCESS);
-            if (paymentIntent.status === PAYMENTENUM.STATUS.PROCESSING) return toast.info(PAYMENTENUM.PAYMENT_PROCESSING);
-            if (paymentIntent.status === PAYMENTENUM.STATUS.REQUIRES_PAYMENT_METHOD) return toast.info(PAYMENTENUM.PAYMENT_REQUIRES_PAYMENT_METHOD);
-            return toast.error(PAYMENTENUM.ERROR.TYPE.PAYMENT);
+            if (paymentIntent.status === PAYMENTENUM.STATUS.SUCCEEDED) return toast.success(PAYMENTENUM.PAYMENT_SUCCESS, {position: toast.POSITION.TOP_CENTER});
+            if (paymentIntent.status === PAYMENTENUM.STATUS.PROCESSING) return toast.info(PAYMENTENUM.PAYMENT_PROCESSING, {position: toast.POSITION.TOP_CENTER});
+            if (paymentIntent.status === PAYMENTENUM.STATUS.REQUIRES_PAYMENT_METHOD) return;
+            return toast.error(PAYMENTENUM.ERROR.TYPE.PAYMENT, {position: toast.POSITION.TOP_CENTER});
         });
     }, [stripe]);
 
@@ -53,7 +53,7 @@ const CheckoutForm = (opt) => {
                     setIsLoading(false);
                 }
             });
-    }
+    };
 
     return (
         <form className="m-5">

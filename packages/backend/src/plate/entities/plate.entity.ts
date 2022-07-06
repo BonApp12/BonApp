@@ -1,4 +1,13 @@
-import {BaseEntity, Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import {Ratings} from "../../ratings/entities/ratings.entity";
 import {PlateRole} from "../PlateRole.enum";
 import {Restaurant} from "../../restaurant/entities/restaurant.entity";
@@ -14,8 +23,14 @@ export class Plate extends BaseEntity {
     @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.plates, {nullable: true, cascade: true})
     restaurant: Restaurant;
 
+    @CreateDateColumn()
+    created_at: string;
+
     @Column('varchar', {length: 200})
     name: string;
+
+    @Column('boolean', {default: true})
+    display: boolean;
 
     @Column('varchar', {length: 200, nullable: true})
     photo: string;

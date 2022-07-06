@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, UseGuards, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
 import {OrdersService} from './orders.service';
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {Plate} from "../plate/entities/plate.entity";
@@ -38,14 +38,14 @@ export class OrdersController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/restaurant/:id')
-    findByRestaurant(@Param('id') id: string) {
-        return this.ordersService.findByRestaurant(+id);
+    findByRestaurant(@Param('id') uuid: string) {
+        return this.ordersService.findByRestaurant(uuid);
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/count/:date/restaurant/:id')
-    countByMonth(@Param('date') date: string, @Param('id') id: string) {
-        return this.ordersService.countOrderByMonth(+id,date);
+    @Get('/count/:date/restaurant/:uuid')
+    countByMonth(@Param('date') date: string, @Param('uuid') uuid: string) {
+        return this.ordersService.countOrderByMonth(uuid, date);
     }
 
     @Patch(':id')
@@ -60,7 +60,7 @@ export class OrdersController {
 
     @Post('/create')
     async create(@Body('cart') cart: Plate[], @Body('restaurant') restaurant: Restaurant,
-           @Body('user') user: Users | undefined) {
+                 @Body('user') user: Users | undefined) {
         return await this.ordersService.create(cart, restaurant, user);
     }
 

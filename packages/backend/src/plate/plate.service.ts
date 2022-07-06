@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {UpdatePlateDto} from './dto/update-plate.dto';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Plate} from './entities/plate.entity';
 import {DeleteResult, Repository} from 'typeorm';
@@ -37,30 +36,31 @@ export class PlateService {
         });
     }
 
-    async findByRestaurant(id: number): Promise<PlateDto[]> {
+    async findByRestaurant(id: string): Promise<PlateDto[]> {
         return (await this.plateRepository.find({
             relations: ['restaurant', 'ingredients', "categories"],
             where: {
-                'restaurant': {id}
+                'restaurant': {id},
+                'display': true
+            },
+            order: {
+                created_at: "DESC"
             }
         })).map(plate => PlateAdapter.toDto(plate));
     }
 
-    countPlateByRestaurantCategorie(id: number) {
+    countPlateByRestaurantCategorie(id: string) {
         const query = this.plateRepository.createQueryBuilder("p")
             .select("COUNT(*)", "count")
             .addSelect("p.type", "type")
             .innerJoin("p.restaurant", "r")
             .groupBy("p.type")
-            .where("r.id = :id", {id})
+            .where("r.id = :id", {id});
         return query.getRawMany();
     }
 
-    update(id: number, updatePlateDto: UpdatePlateDto) {
-        return `This action updates a #${id} plate`;
-    }
 
-    remove(id: number): Promise<DeleteResult> {
-        return this.plateRepository.delete(id);
+    update(id: number): Promise<DeleteResult> {
+        return this.plateRepository.update(id, {display: false});
     }
 }
