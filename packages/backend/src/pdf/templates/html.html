@@ -34,6 +34,7 @@
                     <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Type</strong></td>
                     <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Qte</strong></td>
                     <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Prix unitaire</strong></td>
+                    <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Prix unitaire HT</strong></td>
                     <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Sous total</strong></td>
 
                 </tr>
@@ -44,6 +45,14 @@
                     <td style='font-size:12px;width:50%;'></td>
                     <td>
                         <table width='100%' cellspacing='0' cellpadding='2' border='0' style="margin-top:10px">
+                            <tr>
+                                <td align='right' style='font-size:12px;'><b>Sous total </b></td>
+                                <td align='right' style='font-size:12px;'><b>{{totalHT}} €</b></td>
+                            </tr>
+                            <tr>
+                                <td align='right' style='font-size:12px;'><b>Tva</b></td>
+                                <td align='right' style='font-size:12px;'><b>{{totalTVA}} € (20%)</b></td>
+                            </tr>
                             <tr>
                                 <td align='right' style='font-size:12px;'><b>Total</b></td>
                                 <td align='right' style='font-size:12px;'><b>{{total}} €</b></td>

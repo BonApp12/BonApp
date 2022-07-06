@@ -38,6 +38,7 @@ export class PdfService {
         let html = fs.readFileSync(join(__dirname,'templates/'+template), 'utf8');
         let plates = '';
         let total = 0;
+        let totalHT = 0;
         Object.keys(getOrderFormated).forEach(key => {
             if(key === 'plates'){
                 getOrderFormated[key].forEach(plate => {
@@ -47,15 +48,19 @@ export class PdfService {
                             <td valign='top' style='font-size:12px;'>${(plate.type.toLowerCase()).charAt(0).toUpperCase() + (plate.type.toLowerCase()).slice(1)}</td>
                             <td valign='top' style='font-size:12px;'>${plate.quantity}</td>
                             <td valign='top' style='font-size:12px;'>${plate.price.toFixed(2)}</td>
-                            <td valign='top' style='font-size:12px;'>${(plate.price * plate.quantity).toFixed(2)}</td>
+                            <td valign='top' style='font-size:12px;'>${(plate.price / 1.2).toFixed(2)}</td>
+                            <td valign='top' style='font-size:12px;'>${((plate.price * plate.quantity) / 1.2).toFixed(2)}</td>
                         </tr>`;
                     total += plate.price * plate.quantity;
+                    totalHT += (plate.price * plate.quantity) / 1.2;
                 });
                 getOrderFormated[key] = plates;
             }
             html = html.replace(`{{${key}}}`, getOrderFormated[key]);
         });
         html = html.replace(`{{total}}`, total.toFixed(2));
+        html = html.replace(`{{totalHT}}`, totalHT.toFixed(2));
+        html = html.replace(`{{totalTVA}}`, (total - totalHT).toFixed(2));
         return html;
     }
 }
