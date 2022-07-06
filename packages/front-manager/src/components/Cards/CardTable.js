@@ -39,7 +39,7 @@ export default function CardTable() {
             setOrderReceived(true);
             toast.success('Une nouvelle commande a été créée !');
         });
-    }, [])
+    }, []);
 
     useEffect(() => {
         fetchFullOrder(userState?.restaurant.id, [OrderStatusEnum.TODO, OrderStatusEnum.READY]).then(res => {
@@ -64,8 +64,8 @@ export default function CardTable() {
             .then((result) => {
                 socket.emit('updateOrder', {order: result.raw[0]});
                 setOrderReceived(true);
-            })
-    }
+            });
+    };
 
     function computeTotal(orderPlates) {
         let total = 0;

@@ -10,6 +10,10 @@ import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
+import {orderAtom} from "../../states/order";
+import {useLocation} from "react-router-dom";
+import dayjs from "dayjs";
+import {BsFillCircleFill} from "react-icons/bs";
 
 // create a navigation component that wraps the burger menu
 export const Sliding = (props) => {
@@ -21,7 +25,13 @@ export const Sliding = (props) => {
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
     const totalAmount = cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0);
     const [stripePromise, setStripePromise] = useState(null);
-
+    const [tabToDisplay, setTabToDisplay] = useState("cart");
+    const [orderStatus] = useRecoilState(orderAtom);
+    const location = useLocation();
+    const restaurantInformation = {
+        idRestaurant: location.pathname.split('/')[2],
+        idTable: location.pathname.split('/')[3]
+    };
     useEffect(() => {
         setStripePromise(loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY));
     }, []);
@@ -138,72 +148,112 @@ export const Sliding = (props) => {
                     </button>
                     <h1 className={"mb-5 text-center"}>Mes commandes</h1>
                 </section>
+                <div className="tabs">
+                    <a className={"tab tab-lifted " + (tabToDisplay === 'cart' && 'tab-active')}
+                       onClick={() => (setTabToDisplay('cart'))}>Mon panier</a>
+                    <a className={"tab tab-lifted " + (tabToDisplay === 'order' && 'tab-active')}
+                       onClick={() => setTabToDisplay('order')}>Mes commandes</a>
+                </div>
+                {tabToDisplay === 'cart' &&
+                <section>
+                    {formattedCart().map((type, idx) => {
+                            return (
+                                <div className={"mb-5"} key={idx}>
+                                    <h2 className="type-title">{type.name}</h2>
+                                    {type.items.map((item) => {
+                                        return (
+                                            <div key={item.id} className="item-container">
+                                                <div className="item-image-wrapper"
+                                                     style={{
+                                                         backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}plate/uploads/${item.photo})`
+                                                     }}>
+                                                </div>
+                                                <div className="item-card-info-wrapper">
+                                                    <div className="item-info">
+                                                        <h3>{item.name}</h3>
+                                                        <p className="item-price">{item.price} €</p>
+                                                    </div>
+                                                    <div>
+                                                        <button className="handle-quantity"
+                                                                onClick={() => addToCart(item)}>+
+                                                        </button>
+                                                        <p className="item-quantity">{item.quantity}</p>
+                                                        <button className="handle-quantity"
+                                                                onClick={() => removeFromCart(item)}>-
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        }
+                    )}
 
-                {formattedCart().map((type, idx) => {
-                        return (
-                            <div className={"mb-5"} key={idx}>
-                                <h2 className="type-title">{type.name}</h2>
-                                {type.items.map((item) => {
-                                    return (
-                                        <div key={item.id} className="item-container">
-                                            <div className="item-image-wrapper"
-                                                 style={{
-                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}plate/uploads/${item.photo})`
-                                                 }}>
-                                            </div>
-                                            <div className="item-card-info-wrapper">
-                                                <div className="item-info">
-                                                    <h3>{item.name}</h3>
-                                                    <p className="item-price">{item.price} €</p>
+                    {props.otherCart?.lenght && <h2>Autres commandes à votre table : </h2>}
+                    {props.otherCart.map((user) => {
+                        if (user.cart !== undefined && user.cart.length > 0) {
+                            return (
+                                <div className={"mb-5"} key={user.nickname}>
+                                    <h2>{user.nickname}</h2>
+                                    {user.cart.map((plate) => {
+                                        return (
+
+                                            <div key={plate.id} className="item-container">
+                                                <div className="item-image-wrapper"
+                                                     style={{
+                                                         backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}plate/uploads/${plate.photo ?? 'img.png'})`
+                                                     }}>
                                                 </div>
-                                                <div>
-                                                    <button className="handle-quantity" onClick={() => addToCart(item)}>+
-                                                    </button>
-                                                    <p className="item-quantity">{item.quantity}</p>
-                                                    <button className="handle-quantity"
-                                                            onClick={() => removeFromCart(item)}>-
-                                                    </button>
+                                                <div className="item-card-info-wrapper">
+                                                    <div className="item-info">
+                                                        <h3>{plate.name}</h3>
+                                                        <p className="item-price">{plate.price} €</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="item-quantity">{plate.quantity}</p>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        }
+                    })}
+                </section>
+                }
+                {tabToDisplay === 'order' &&
+                <section className="mt-5">
+                    {orderStatus
+                        .filter(order => {
+                            return (order.restaurant?.id ?? order?.restaurantId) === parseInt(restaurantInformation?.idRestaurant)
+                                && (order?.table?.id ?? order?.tableId) === parseInt(restaurantInformation.idTable)
+                                && order.status !== 'completed';
+                        })
+                        .map((order) => {
+                            return (
+                                <div key={order.id} className="item-container">
+                                    <div className="item-card-info-wrapper">
+                                        <div className="item-info">
+                                            <h3>Commande n° {order.id} </h3>
+                                            <p className="item-price">{dayjs(order.created_at).format('DD/MM/YYYY hh:mm')}</p>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        );
-                    }
-                )}
+                                        <div className="flex items-center">
+                                            <BsFillCircleFill
+                                                className={'mr-3 ' + (order.status === 'to-do' ? 'text-orange-500' : 'text-green-500')}/>
+                                            {order.status === 'to-do' ? 'En cours' : 'Prête'}
 
-                <h2>Autres commandes à votre table : </h2>
-                {props.otherCart.map((user) => {
-                    if (user.cart !== undefined && user.cart.length > 0) {
-                        return (
-                            <div className={"mb-5"} key={user.nickname}>
-                                <h2>{user.nickname}</h2>
-                                {user.cart.map((plate) => {
-                                    return (
-
-                                        <div key={plate.id} className="item-container">
-                                            <div className="item-image-wrapper"
-                                                 style={{
-                                                     backgroundImage: `url(${process.env.REACT_APP_URL_BACKEND}plate/uploads/${plate.photo ?? 'img.png'})`
-                                                 }}>
-                                            </div>
-                                            <div className="item-card-info-wrapper">
-                                                <div className="item-info">
-                                                    <h3>{plate.name}</h3>
-                                                    <p className="item-price">{plate.price} €</p>
-                                                </div>
-                                                <div>
-                                                    <p className="item-quantity">{plate.quantity}</p>
-                                                </div>
-                                            </div>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        );
-                    }
-                })}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                </section>
+
+
+                }
                 <div className="cart-footer">
                     <div className="cart-footer-wrapper">
                         {formattedCart().length !== 0 && isCheckout !== true ?
