@@ -2,23 +2,28 @@
 <html>
 
 <head>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
-
-		gtag('config', 'G-Y15TJDEV1R');
-	</script>
-	
 	<title>BonApp</title>
 	<meta charset="utf-8">
 	<meta name="description" content="BonApp, bon appetit, point.">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y15TJDEV1R"></script>
+
+	<!-- Google Tag Manager -->
+	<script>(function (w, d, s, l, i) {
+			w[l] = w[l] || []; w[l].push({
+				'gtm.start':
+					new Date().getTime(), event: 'gtm.js'
+			}); var f = d.getElementsByTagName(s)[0],
+				j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+					'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+		})(window, document, 'script', 'dataLayer', 'GTM-WWRM56N');</script>
+	<!-- End Google Tag Manager -->
 </head>
 
 <body>
+	<!-- Google Tag Manager (noscript) -->
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WWRM56N" height="0" width="0"
+			style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
 	<header>
 		<!-- Navbar -->
 		<div class="container clearfix">
@@ -54,7 +59,7 @@
 		</div>
 
 		<!-- Section 2 description de BonApp -->
-		<div class="container clearfix" style="margin-left: auto; margin-right: auto; margin-top: 3rem;">
+		<div class="container clearfix" style="margin-left: auto; margin-right: auto; margin-top: 1rem;">
 			<div id="section2" style="display: flex; flex-wrap: wrap;">
 				<div style="width: 500px; margin-left: auto; margin-right: auto;">
 					<img style="min-width: 250px; max-width: 500px; border-radius: 40px;"
@@ -64,15 +69,17 @@
 					<h1 style="">Service de commande en table.</h1>
 					<p>ipsum dolor sit amet consectetur adipisicing elit. Aperiam iusto nulla, autem dolorem perferendis
 						id excepturi earum placeat omnis</p>
-					<img src="images/app-img.png" style="max-height: 300px; margin-left:5rem; border-radius: 20px;" />
+					<img src="images/apple-iphone-5.png"
+						style="max-height: 350px; margin-left:8rem" />
 				</div>
 			</div>
 		</div>
 
 		<!-- Section pipline -->
-		<div class="container clearfix">
+		<div class="container clearfix" style="margin-top: 4rem;">
+			<h1>Fonctionnement simple</h1>
 			<section id="section3">
-				<h1>Fonctionnement simple</h1>
+
 				<div style="display: flex;">
 					<div class="who">
 						<div class="">
@@ -92,7 +99,9 @@
 						</div>
 						<h1>Payez</h1>
 					</div>
+					
 				</div>
+				<hr style="width: 70%; margin-top: -110px; position: absolute; z-index: -2; margin-left:15%; border: 3px solid orange; ">
 				<div class="progressbar">
 
 				</div>
@@ -101,7 +110,7 @@
 
 
 		<!-- Section 3 features de BonApp -->
-		<div class="container clearfix">
+		<div class="container clearfix" style="margin-top: 4rem;">
 			<section id="section4">
 				<h1>L'équipe de BonApp</h1>
 				<div style="display: flex; flex-wrap: wrap;">
@@ -110,14 +119,14 @@
 							<img src="images/Marwane.jpeg" style="border-radius: 100px; width: 180px;" />
 						</div>
 						<h1>Marwane Bouabdellah</h1>
-						<h2>Développeur chez</h2>
+						<h2>Développeur chez Ampli Mutuelle</h2>
 					</div>
 					<div class="who">
 						<div class="img-who">
 							<img src="images/Yassine.jpeg" style="border-radius: 100px; width: 180px;" />
 						</div>
-						<h1>Yassine Boussaidi</h1>
-						<h2>Développeur chez</h2>
+						<h1>Yassine Bousaidi</h1>
+						<h2>Développeur chez Société Générale</h2>
 					</div>
 					<div class="who">
 						<div class="img-who">
@@ -137,8 +146,8 @@
 						<div class="img-who">
 							<img src="images/Wassim.jpeg" style="border-radius: 100px; width: 180px;" />
 						</div>
-						<h1>Wassim Dahman</h1>
-						<h2>Développeur chez</h2>
+						<h1>Wassim Dahmane</h1>
+						<h2>Développeur chez Teksial</h2>
 					</div>
 				</div>
 			</section>
@@ -148,19 +157,18 @@
 		<div class="container clearfix" style="margin-top: 3rem;">
 			<section id="section5">
 				<h1>Nous contacter</h1>
-				<form action="/action_page.php">
-					<label for="fname">Nom & prénom</label>
-					<input type="text" id="fname" name="firstname" placeholder="Votre nom et prénom">
+				<form action="https://formsubmit.co/lilka94@hotmail.fr" method="POST">
 
 					<label for="sujet">Sujet</label>
-					<input type="text" id="sujet" name="sujet" placeholder="L'objet de votre message">
+					<input type="text" id="sujet" name="_subject" placeholder="L'objet de votre message">
 
 					<label for="emailAddress">Email</label>
-					<input id="emailAddress" type="email" name="email" placeholder="Votre email">
+					<input id="emailAddress" type="email" name="email" placeholder="Votre email" required>
 
+					<input type="hidden" name="_next" value="thank-you.html" />
 
 					<label for="subject">Message</label>
-					<textarea id="subject" name="subject" placeholder="Votre message" style="height:200px"></textarea>
+					<textarea id="subject" name="message" placeholder="Votre message" style="height:200px"></textarea>
 
 					<button class="cta-button" type="submit" value="Envoyer">Envoyer</button>
 				</form>
@@ -180,7 +188,7 @@
 			</nav>
 			<div class="vertically-centered align-right">
 				<a href="#" class="country-france">France</a>
-				<small>© 2022 BONAPP</small>
+				<small>© 2022 BONAP</small>
 			</div>
 		</div>
 	</footer>
