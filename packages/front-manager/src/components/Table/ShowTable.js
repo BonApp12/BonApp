@@ -40,7 +40,7 @@ export default function ShowTable() {
     }, []);
 
     function generateTable() {
-        const newTable = {libelle: 'tables ' + tables.length, restaurant: userState.restaurant.id};
+        const newTable = {libelle: 'tables ' + (tables.length+1), restaurant: userState.restaurant.id};
         setTables([...tables]);
         createTable(newTable).then(res => res.json()).then(resTables => {
             if (resTables.id) {

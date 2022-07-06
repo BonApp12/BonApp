@@ -34,12 +34,12 @@ export class RestaurantController {
 
     @Get('/:id/tables')
     getTables(@Param('id') id: string) {
-        return this.restaurantService.findAllTables(+id);
+        return this.restaurantService.findAllTables(id);
     }
 
     @Delete('/table/:id')
     deleteTable(@Param('id') id: string) {
-        return this.restaurantService.deleteTable(+id);
+        return this.restaurantService.deleteTable(id);
     }
 
     @Get()
@@ -61,7 +61,7 @@ export class RestaurantController {
 
     @Get(':id/:idTable')
     async findOneWithTable(@Param('id') id: string, @Param('idTable') idTable: string) {
-        return this.restaurantService.findOneWithTable(+id, +idTable);
+        return this.restaurantService.findOneWithTable(id, idTable);
     }
 
     @UseGuards(JwtAuthGuard)

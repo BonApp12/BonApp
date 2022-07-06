@@ -7,7 +7,7 @@ import {Tables} from "../../tables/entities/tables.entity";
 
 @Entity()
 export class Restaurant extends BaseEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Column('varchar', {length: 100})

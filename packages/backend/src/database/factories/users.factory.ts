@@ -13,7 +13,7 @@ define(Users, (faker: typeof Faker) => {
     user.firstname = `${firstName}`;
     user.lastname = `${lastName}`;
     user.email = (`${firstName}.${lastName}@gmail.com`).toLowerCase();
-    user.password = '123';
+    user.password = 'b0n4pp3SG1&';
     user.role = UserRole[Object.keys(UserRole)[Math.floor(Math.random() * Object.keys(UserRole).length)]];
     if (user.role === UserRole.RESTAURANT_MANAGER) {
         user.restaurant = factory(Restaurant)() as any;

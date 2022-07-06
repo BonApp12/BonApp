@@ -73,6 +73,7 @@ export class PlateAdapter {
         plateDto.id = plate?.id;
         plateDto.name = plate?.name;
         plateDto.price = plate?.price;
+        plateDto.display = plate?.display ?? true;
         plateDto.description = plate?.description;
         plateDto.ingredients = plate?.ingredients.map(ingredient => IngredientAdapter.toDto(ingredient));
         plateDto.categories = [...plate?.categories];

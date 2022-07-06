@@ -1,11 +1,10 @@
 import {Injectable} from '@nestjs/common';
-import {Ingredient} from "../ingredients/entities/ingredient.entity";
 import {PlateCategory} from "../plate-category/entities/plate-category.entity";
 
 @Injectable()
 export class CategoryAdapter {
 
-    static toModel(category: PlateCategory): Ingredient {
+    static toModel(category: PlateCategory) {
         const CategoryModel = new PlateCategory();
         CategoryModel.id = category?.id;
         CategoryModel.name = category.name;

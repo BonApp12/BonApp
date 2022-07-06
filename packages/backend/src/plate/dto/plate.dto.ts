@@ -27,4 +27,6 @@ export class PlateDto {
     photo: string;
 
     quantity: undefined | number;
+
+    display: boolean;
 }

@@ -1,6 +1,5 @@
-import {Controller, Get, Param, UseGuards} from '@nestjs/common';
+import {Controller, Get, Param} from '@nestjs/common';
 import {OrderPlateService} from './order-plate.service';
-import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('order-plate')
 export class OrderPlateController {
@@ -18,8 +17,8 @@ export class OrderPlateController {
   }
 
     @Get('/restaurant/:id/best-plate/:type')
-    async findBestPlate(@Param('id') id: string, @Param('type') type: string) {
-        const bestPlateCount = await this.orderPlateService.findBestPlate(+id, type === 'many');
+    async findBestPlate(@Param('id') uuid: string, @Param('type') type: string) {
+        const bestPlateCount = await this.orderPlateService.findBestPlate(uuid, type === 'many');
         return await bestPlateCount === undefined ? {bestPlate: null} : bestPlateCount;
     }
 }
