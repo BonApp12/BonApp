@@ -1,7 +1,7 @@
 import {ScrollView, StyleSheet} from "react-native";
-import {Divider, Layout, Text} from "@ui-kitten/components";
+import {Text} from "@ui-kitten/components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import SafeAreaView from "react-native/Libraries/Components/SafeAreaView/SafeAreaView";
 import ListItem from "../../components/listItem";
 import {useFocusEffect} from "@react-navigation/native";
@@ -9,12 +9,12 @@ import {useFocusEffect} from "@react-navigation/native";
 export function Help() {
     const [helps, setHelps] = useState([]);
     const handleDismiss = (help) => {
-         AsyncStorage.getItem('helpNeeded').then((helps) => {
+        AsyncStorage.getItem('helpNeeded').then((helps) => {
             let helpToRemove = JSON.parse(helps);
-            helpToRemove = helpToRemove.filter(help => help.libelleTable !== helps.libelleTable)
+            helpToRemove = helpToRemove.filter(help => help.libelleTable !== helps.libelleTable);
             AsyncStorage.setItem('helpNeeded', JSON.stringify(helpToRemove));
-         });
-    }
+        });
+    };
     useFocusEffect(
         useCallback(() => {
             AsyncStorage.getItem('helpNeeded').then((helpNeeded) => {
@@ -32,12 +32,12 @@ export function Help() {
         <SafeAreaView style={{flex: 1}}>
             <Text style={styles.title}>Demandes client</Text>
             <ScrollView>
-                {helps.map(help =>
+                {helps.map((help, index) =>
                     <ListItem
-                        key={help.idTable}
+                        key={index}
                         task={help}
                         onDismiss={() => handleDismiss(help)}
-                        openModel={null}
+                        openModal={() => alert(`Le client à la table ${help.libelleTable} a demandé de l'aide`)}
                         title={'Table ' + help.libelleTable + ' - ' + help.message}
                     />
                 )}
