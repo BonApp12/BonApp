@@ -20,6 +20,7 @@ import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-ge
 import createOrder from "../../requests/orders/createOrder";
 import {Asker} from "../Asker/Asker";
 import {tableAtom} from "../../states/table";
+import safeHtml from "safe-html";
 
 
 const ProductsList = () => {
@@ -210,7 +211,7 @@ const ProductsList = () => {
         let orderCopy = cloneDeep(order);
         orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
         setOrder(orderCopy);
-    }
+    };
 
     function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
         const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
@@ -282,8 +283,9 @@ const ProductsList = () => {
                     </div>
                     <h3 className="font-bold pt-6 pb-4 text-left pl-3">Description</h3>
                     <div className="plate-description"
-                         dangerouslySetInnerHTML={{__html: modalManagement.data?.description}}>
+                         dangerouslySetInnerHTML={{__html: safeHtml(modalManagement.data?.description || '')}}>
                     </div>
+
                 </div>
             </Information>
 

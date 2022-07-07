@@ -205,7 +205,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
         if (clients !== undefined) {
             clients.forEach((client) => {
-                client.order.forEach((order) => {
+                client?.order?.forEach((order) => {
                     if (order.id === newOrder.order.id) {
                         this.wss.to(client.socket).emit("orderUpdated", newOrder.order);
                     }
