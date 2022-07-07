@@ -1,201 +1,555 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html class="no-js" lang="en">
 
 <head>
-	<title>BonApp</title>
-	<meta charset="utf-8">
-	<meta name="description" content="BonApp, bon appetit, point.">
-	<link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8">
 
-	<!-- Google Tag Manager -->
-	<script>(function (w, d, s, l, i) {
-			w[l] = w[l] || []; w[l].push({
-				'gtm.start':
-					new Date().getTime(), event: 'gtm.js'
-			}); var f = d.getElementsByTagName(s)[0],
-				j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-					'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-		})(window, document, 'script', 'dataLayer', 'GTM-WWRM56N');</script>
-	<!-- End Google Tag Manager -->
+    <!--====== Title ======-->
+    <title>Plain - Multipurpose TailwindCSS Template</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+
+    <!--====== Animate CSS ======-->
+    <link rel="stylesheet" href="assets/css/animate.css">
+
+    <!--====== Slick CSS ======-->
+    <link rel="stylesheet" href="assets/css/tiny-slider.css">
+
+    <!--====== Line Icons CSS ======-->
+    <link rel="stylesheet" href="assets/fonts/lineicons/font-css/LineIcons.css">
+
+    <!--====== Tailwind CSS ======-->
+    <link rel="stylesheet" href="assets/css/tailwindcss.css">
+
+    <!--====== Tailwind CSS ======-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 
 <body>
-	<!-- Google Tag Manager (noscript) -->
-	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WWRM56N" height="0" width="0"
-			style="display:none;visibility:hidden"></iframe></noscript>
-	<!-- End Google Tag Manager (noscript) -->
-	<header>
-		<!-- Navbar -->
-		<div class="container clearfix">
-			<a href="#" style="font-size: 52px; color: orange; font-weight: bolder; text-decoration: none;"
-				class="logo">BonApp</a>
-			<nav>
-				<ul>
-					<li><a href="#">Accueil</a></li>
-					<li><a href="#">Contact</a></li>
-					<li><a>|</a></li>
-					<li><a href="#">S'inscrire</a></li>
-					<li><a href="#">Se connecter</a></li>
-				</ul>
-			</nav>
-		</div>
-	</header>
-
-	<main>
-		<!-- Section 1 banière du site -->
-
-		<div class="container clearfix">
-			<section id="section1">
-				<div>
-					<img src="images/menu-rond.png" style="width: 700px; position: absolute; right: 0; z-index: -1 " />
-					<h1 class="">Bon Appetit, point.</h1>
-
-					<h2>Scannez, Commandez et payer directement depuis votre téléphone !</h2>
-					<a href="#" class="cta-button">Contactez-nous!</a>
-
-				</div>
-
-			</section>
-		</div>
-
-		<!-- Section 2 description de BonApp -->
-		<div class="container clearfix" style="margin-left: auto; margin-right: auto; margin-top: 1rem;">
-			<div id="section2" style="display: flex; flex-wrap: wrap;">
-				<div style="width: 500px; margin-left: auto; margin-right: auto;">
-					<img style="min-width: 250px; max-width: 500px; border-radius: 40px;"
-						src="images/woman-scan-table.jpg" />
-				</div>
-				<div style="max-width: 500px; min-width: 200px; margin-left: auto; margin-right: auto;">
-					<h1 style="">Service de commande en table.</h1>
-					<p>ipsum dolor sit amet consectetur adipisicing elit. Aperiam iusto nulla, autem dolorem perferendis
-						id excepturi earum placeat omnis</p>
-					<img src="images/apple-iphone-5.png"
-						style="max-height: 350px; margin-left:8rem" />
-				</div>
-			</div>
-		</div>
-
-		<!-- Section pipline -->
-		<div class="container clearfix" style="margin-top: 4rem;">
-			<h1>Fonctionnement simple</h1>
-			<section id="section3">
-
-				<div style="display: flex;">
-					<div class="who">
-						<div class="">
-							<img src="images/qr-code.png" style="width: 90px;" />
-						</div>
-						<h1>Scannez</h1>
-					</div>
-					<div class="who">
-						<div class="">
-							<img src="images/shopping-online.png" style="width: 90px;" />
-						</div>
-						<h1>Commandez</h1>
-					</div>
-					<div class="who">
-						<div class="">
-							<img src="images/debit-card.png" style="width: 90px;" />
-						</div>
-						<h1>Payez</h1>
-					</div>
-					
-				</div>
-				<hr style="width: 70%; margin-top: -110px; position: absolute; z-index: -2; margin-left:15%; border: 3px solid orange; ">
-				<div class="progressbar">
-
-				</div>
-			</section>
-		</div>
+    <!--[if IE]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
 
 
-		<!-- Section 3 features de BonApp -->
-		<div class="container clearfix" style="margin-top: 4rem;">
-			<section id="section4">
-				<h1>L'équipe de BonApp</h1>
-				<div style="display: flex; flex-wrap: wrap;">
-					<div class="who">
-						<div class="img-who">
-							<img src="images/Marwane.jpeg" style="border-radius: 100px; width: 180px;" />
-						</div>
-						<h1>Marwane Bouabdellah</h1>
-						<h2>Développeur chez Ampli Mutuelle</h2>
-					</div>
-					<div class="who">
-						<div class="img-who">
-							<img src="images/Yassine.jpeg" style="border-radius: 100px; width: 180px;" />
-						</div>
-						<h1>Yassine Bousaidi</h1>
-						<h2>Développeur chez Société Générale</h2>
-					</div>
-					<div class="who">
-						<div class="img-who">
-							<img src="images/Khalil.jpeg" style="border-radius: 100px; width: 180px;" />
-						</div>
-						<h1>Khalil Sekhri</h1>
-						<h2>Développeur chez Relax-Massage</h2>
-					</div>
-					<div class="who">
-						<div class="img-who">
-							<img src="images/Youcef.jpeg" style="border-radius: 100px; width: 180px;" />
-						</div>
-						<h1>Youcef Jallali</h1>
-						<h2>Développeur chez Relax-Massage</h2>
-					</div>
-					<div class="who">
-						<div class="img-who">
-							<img src="images/Wassim.jpeg" style="border-radius: 100px; width: 180px;" />
-						</div>
-						<h1>Wassim Dahmane</h1>
-						<h2>Développeur chez Teksial</h2>
-					</div>
-				</div>
-			</section>
-		</div>
+    <!--====== PRELOADER PART START ======-->
 
-		<!-- Section 4 contact form -->
-		<div class="container clearfix" style="margin-top: 3rem;">
-			<section id="section5">
-				<h1>Nous contacter</h1>
-				<form action="https://formsubmit.co/lilka94@hotmail.fr" method="POST">
+    <div class="preloader">
+        <div class="loader">
+            <div class="ytp-spinner">
+                <div class="ytp-spinner-container">
+                    <div class="ytp-spinner-rotator">
+                        <div class="ytp-spinner-left">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                        <div class="ytp-spinner-right">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-					<label for="sujet">Sujet</label>
-					<input type="text" id="sujet" name="_subject" placeholder="L'objet de votre message">
+    <!--====== PRELOADER PART ENDS ======-->
 
-					<label for="emailAddress">Email</label>
-					<input id="emailAddress" type="email" name="email" placeholder="Votre email" required>
+    <!--====== HEADER PART START ======-->
 
-					<input type="hidden" name="_next" value="thank-you.html" />
+    <section class="header_area">
+        <div class="navbar-area bg-white">
+            <div class="container relative">
+                <div class="row items-center">
+                    <div class="w-full">
+                        <nav class="flex items-center justify-between py-4 navbar navbar-expand-lg">
+                            <a class="navbar-brand mr-5" href="index.html">
+                                <img src="assets/images/profile.png" alt="Logo">
+                            </a>
+                            <button class="block navbar-toggler focus:outline-none lg:hidden" type="button"
+                                data-toggle="collapse" data-target="#navbarOne" aria-controls="navbarOne"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                            </button>
 
-					<label for="subject">Message</label>
-					<textarea id="subject" name="message" placeholder="Votre message" style="height:200px"></textarea>
+                            <div class="absolute left-0 z-20 hidden w-full px-5 py-3 duration-300 bg-white lg:w-auto collapse navbar-collapse lg:block top-full mt-full lg:static lg:bg-transparent shadow lg:shadow-none"
+                                id="navbarOne">
+                                <ul id="nav"
+                                    class="items-center content-start mr-auto lg:justify-end navbar-nav lg:flex">
+                                    <li class="nav-item ml-5 lg:ml-11">
+                                        <a class="page-scroll active" href="#home">Accueil</a>
+                                    </li>
+                                    <li class="nav-item ml-5 lg:ml-11">
+                                        <a class="page-scroll" href="#features">Fonctionnement</a>
+                                    </li>
+                                    <li class="nav-item ml-5 lg:ml-11">
+                                        <a class="page-scroll" href="#concept">Le concept</a>
+                                    </li>
+                                    <li class="nav-item ml-5 lg:ml-11">
+                                        <a class="page-scroll" href="#team">Qui sommes-nous ?</a>
+                                    </li>
+                                    <li class="nav-item ml-5 lg:ml-11">
+                                        <a class="page-scroll" href="#contact">Contact</a>
+                                    </li>
+                                </ul>
+                            </div> <!-- navbar collapse -->
+                        </nav> <!-- navbar -->
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- container -->
+        </div> <!-- header navbar -->
 
-					<button class="cta-button" type="submit" value="Envoyer">Envoyer</button>
-				</form>
-			</section>
-		</div>
-	</main>
+        <div id="home" class="header_hero bg-gray relative z-10 overflow-hidden lg:flex items-center">
+            <div class="hero_shape shape_1">
+                <img src="assets/images/shape/shape-1.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_2">
+                <img src="assets/images/shape/shape-2.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_3">
+                <img src="assets/images/shape/shape-3.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_4">
+                <img src="assets/images/shape/shape-4.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_6">
+                <img src="assets/images/shape/shape-1.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_7">
+                <img src="assets/images/shape/shape-4.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_8">
+                <img src="assets/images/shape/shape-3.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_9">
+                <img src="assets/images/shape/shape-2.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_10">
+                <img src="assets/images/shape/shape-4.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_11">
+                <img src="assets/images/shape/shape-1.svg" alt="shape">
+            </div><!-- hero shape -->
+            <div class="hero_shape shape_12">
+                <img src="assets/images/shape/shape-2.svg" alt="shape">
+            </div><!-- hero shape -->
 
-	<!-- Footer-->
-	<footer>
-		<div class="container clearfix">
-			<nav>
-				<ul>
-					<li><a href="#">Légal</a></li>
-					<li><a href="#">Cookies</a></li>
-					<li><a href="#">A propos des pubs</a></li>
-				</ul>
-			</nav>
-			<div class="vertically-centered align-right">
-				<a href="#" class="country-france">France</a>
-				<small>© 2022 BONAP</small>
-			</div>
-		</div>
-	</footer>
+            <div class="container">
+                <div class="row">
+                    <div class="w-full lg:w-1/2">
+                        <div class="header_hero_content pt-150 lg:pt-0">
+                            <h2
+                                class="hero_title text-2xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold">
+                                BonApp<span class="text-theme-color" style="font-size: 26px;">etit</span></h2>
+                            <p class="mt-8 lg:mr-8">Scannez, Commandez et payer directement depuis votre téléphone !</p>
+                            <div class="hero_btn mt-10">
+                                <a class="main-btn" href="#contact">Prendre Contact</a>
+                            </div>
+                        </div> <!-- header hero content -->
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- container -->
+            <div class="header_shape hidden lg:block"></div>
+
+            <div class="header_image flex items-center">
+                <div class="image 2xl:pl-25">
+                    <img src="assets/images/toast.png" alt="Header Image">
+                </div>
+            </div> <!-- header image -->
+        </div> <!-- header hero -->
+    </section>
+
+    <!--====== HEADER PART ENDS ======-->
+
+    <!--====== SERVICES PART START ======-->
+
+    <section class="services_area pt-120" id="features">
+        <div class="container">
+            <div class="row justify-center">
+                <div class="w-full lg:w-1/2">
+                    <div class="section_title text-center pb-6">
+                        <h5 class="sub_title">Fonctionnement</h5>
+                        <h4 class="main_title">Commandez en moins d'une minute</h4>
+                    </div> <!-- section title -->
+                </div>
+            </div> <!-- row -->
+            <div class="row justify-center">
+                <div class="w-full sm:w-10/12 md:w-6/12 lg:w-4/12">
+                    <div class="single_services text-center mt-8 mx-3">
+                        <div class="services_icon">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="94" height="92" viewBox="0 0 94 92">
+                                <path class="services_shape" id="Polygon_12" data-name="Polygon 12"
+                                    d="M42.212,2.315a11,11,0,0,1,9.576,0l28.138,13.6a11,11,0,0,1,5.938,7.465L92.83,54.018A11,11,0,0,1,90.717,63.3L71.22,87.842A11,11,0,0,1,62.607,92H31.393a11,11,0,0,1-8.613-4.158L3.283,63.3A11,11,0,0,1,1.17,54.018L8.136,23.383a11,11,0,0,1,5.938-7.465Z" />
+                            </svg>
+                        </div>
+                        <div class="services_content mt-5">
+                            <h3 class="services_title text-black font-semibold text-xl md:text-3xl">Scannez</h3>
+                            
+                        </div>
+                    </div> <!-- single services -->
+                </div>
+                <div class="w-full sm:w-10/12 md:w-6/12 lg:w-4/12">
+                    <div class="single_services text-center mt-8 mx-3">
+                        <div class="services_icon">
+                            <i class="fa-solid fa-bars"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="94" height="92" viewBox="0 0 94 92">
+                                <path class="services_shape" id="Polygon_12" data-name="Polygon 12"
+                                    d="M42.212,2.315a11,11,0,0,1,9.576,0l28.138,13.6a11,11,0,0,1,5.938,7.465L92.83,54.018A11,11,0,0,1,90.717,63.3L71.22,87.842A11,11,0,0,1,62.607,92H31.393a11,11,0,0,1-8.613-4.158L3.283,63.3A11,11,0,0,1,1.17,54.018L8.136,23.383a11,11,0,0,1,5.938-7.465Z" />
+                            </svg>
+                        </div>
+                        <div class="services_content mt-5">
+                            <h3 class="services_title text-black font-semibold text-xl md:text-3xl">Commandez</h3>
+                        </div>
+                    </div> <!-- single services -->
+                </div>
+                <div class="w-full sm:w-10/12 md:w-6/12 lg:w-4/12">
+                    <div class="single_services text-center mt-8 mx-3">
+                        <div class="services_icon">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="94" height="92" viewBox="0 0 94 92">
+                                <path class="services_shape" id="Polygon_12" data-name="Polygon 12"
+                                    d="M42.212,2.315a11,11,0,0,1,9.576,0l28.138,13.6a11,11,0,0,1,5.938,7.465L92.83,54.018A11,11,0,0,1,90.717,63.3L71.22,87.842A11,11,0,0,1,62.607,92H31.393a11,11,0,0,1-8.613-4.158L3.283,63.3A11,11,0,0,1,1.17,54.018L8.136,23.383a11,11,0,0,1,5.938-7.465Z" />
+                            </svg>
+                        </div>
+                        <div class="services_content mt-5">
+                            <h3 class="services_title text-black font-semibold text-xl md:text-3xl">Payez</h3>
+                        </div>
+                    </div> <!-- single services -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </section>
+
+    <!--====== SERVICES PART ENDS ======-->
+
+    <!--====== ABOUT PART START ======-->
+
+    <section id="concept" class="about_area pt-120 relative">
+        <div class="about_image flex items-end justify-end">
+            <div class="image lg:pr-13">
+                <img src="assets/images/table-manger.png" alt="about">
+            </div>
+        </div> <!-- about image -->
+        <div class="container">
+            <div class="row justify-end">
+                <div class="w-full lg:w-1/2">
+                    <div class="about_content mx-4 pt-11 lg:pt-15 lg:pb-15">
+                        <div class="section_title pb-9">
+                            <h5 class="sub_title">Le Concept</h5>
+                            <h4 class="main_title">A partir d'un QR code, mangez librement</h4>
+                        </div> <!-- section title -->
+                        <p>BonApp est une application qui permet de prendre commande dans un réstaurant de manière efficace par le biais d'un QR Code. 
+                            <br>En tant que restaurateur vous pourez :
+                        </p>
+                        <ul class="about_list pt-3">
+                            <li class="flex mt-5">
+                                <div class="about_check">
+                                    <i class="lni lni-checkmark-circle"></i>
+                                </div>
+                                <div class="about_list_content pl-5 pr-2">
+                                    <p>Gérer vos plats, avec ses images, ses ingrédients ou encore ses catégories de plat</p>
+                                </div>
+                            </li>
+                            <li class="flex mt-5">
+                                <div class="about_check">
+                                    <i class="lni lni-checkmark-circle"></i>
+                                </div>
+                                <div class="about_list_content pl-5 pr-2">
+                                    <p>Gérer votre équipe, en y ajoutant des serveur ou des cuisinier.</p>
+                                </div>
+                            </li>
+                            <li class="flex mt-5">
+                                <div class="about_check">
+                                    <i class="lni lni-checkmark-circle"></i>
+                                </div>
+                                <div class="about_list_content pl-5 pr-2">
+                                    <p>Voir les statistic de vente de votre restaurant.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div> <!-- about content -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </section>
+
+    <!--====== ABOUT PART ENDS ======-->
+
+
+    <!--====== TEAM PART START ======-->
+
+    <section id="team" class="team_area bg-gray pt-120 pb-120">
+        <div class="container">
+            <div class="row justify-center">
+                <div class="w-full lg:w-1/2">
+                    <div class="section_title text-center pb-6">
+                        <h5 class="sub_title">Qui sommes-nous ?</h5>
+                        <h4 class="main_title">L'equipe</h4>
+                    </div> <!-- section title -->
+                </div>
+            </div> <!-- row -->
+            <div class="team-wrapper relative">
+                <div class="row team_active">
+                    <div class="w-full lg:w-4/12">
+                        <div class="single_team_item mx-auto">
+                            <div class="single_team mx-3">
+                                <div class="team_image relative">
+                                    <img src="assets/images/Marwane.jpeg" alt="team" class="w-full">
+                                    <ul class="social absolute top-4 right-8">
+                                        <li><a href="https://twitter.com/mblh92"><i class="lni lni-twitter-filled"></i></a></li>
+                                        <li><a href="https://www.linkedin.com/in/marwane-bouabdellah-35211b181/?originalSubdomain=fr"><i class="lni lni-linkedin-original"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="team_content py-5 px-8 relative">
+                                    <h4 class="team_name text-xl md:text-2xl"><a href="#"
+                                            class="text-black group-hover:text-white">Marwane Bouabdellah</a></h4>
+                                    <p class="mt-2 transition-all duration-300 group-hover:text-white">Développeur chez Ampli Mutuelle</p>
+                                </div>
+                            </div> <!-- single team -->
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-4/12">
+                        <div class="single_team_item mx-auto">
+                            <div class="single_team mx-3">
+                                <div class="team_image relative">
+                                    <img src="assets/images/Yassine.jpeg" alt="team" class="w-full">
+                                    <ul class="social absolute top-4 right-8">
+                                        <li><a href="https://twitter.com/cestpasyass"><i class="lni lni-twitter-filled"></i></a></li>
+                                        <li><a href="https://www.linkedin.com/in/yassine-bousaidi-912327116/"><i class="lni lni-linkedin-original"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="team_content py-5 px-8 relative">
+                                    <h4 class="team_name text-xl md:text-2xl"><a href="#"
+                                            class="text-black group-hover:text-white">Yassine Bousaidi</a></h4>
+                                    <p class="mt-2 transition-all duration-300 group-hover:text-white">Développeur chez Société Générale</p>
+                                </div>
+                            </div> <!-- single team -->
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-4/12">
+                        <div class="single_team_item mx-auto">
+                            <div class="single_team mx-3">
+                                <div class="team_image relative">
+                                    <img src="assets/images/Khalil.jpeg" alt="team" class="w-full">
+                                    <ul class="social absolute top-4 right-8">
+                                        <li><a href="https://twitter.com/MilkArtsite"><i class="lni lni-twitter-filled text-black"></i></a></li>
+                                        <li><a href="https://www.linkedin.com/in/khalilsekhri/"><i class="lni lni-linkedin-original text-black"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="team_content py-5 px-8 relative">
+                                    <h4 class="team_name text-xl md:text-2xl"><a href="#"
+                                            class="text-black group-hover:text-white">Khalil Sekhri</a></h4>
+                                    <p class="mt-2 transition-all duration-300 group-hover:text-white">Développeur chez Relax-Massage</p>
+                                </div>
+                            </div> <!-- single team -->
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-4/12">
+                        <div class="single_team_item mx-auto">
+                            <div class="single_team mx-3">
+                                <div class="team_image relative">
+                                    <img src="assets/images/Wassim.jpeg" alt="team" class="w-full">
+                                    <ul class="social absolute top-4 right-8">
+                                        <li><a href="https://twitter.com/OuaisWass"><i class="lni lni-twitter-filled"></i></a></li>
+                                        <li><a href="https://www.linkedin.com/in/wassimdahmane/"><i class="lni lni-linkedin-original"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="team_content py-5 px-8 relative">
+                                    <h4 class="team_name text-xl md:text-2xl"><a href="#"
+                                            class="text-black group-hover:text-white">Wassim Dahmane</a></h4>
+                                    <p class="mt-2 transition-all duration-300 group-hover:text-white">Développeur chez Teksial</p>
+                                </div>
+                            </div> <!-- single team -->
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-4/12">
+                        <div class="single_team_item mx-auto">
+                            <div class="single_team mx-3">
+                                <div class="team_image relative">
+                                    <img src="assets/images/Youcef.jpeg" alt="team" class="w-full">
+                                    <ul class="social absolute top-4 right-8">
+                                        <li><a href="https://www.linkedin.com/in/youcef-jallali-373709188/"><i class="lni lni-linkedin-original"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="team_content py-5 px-8 relative">
+                                    <h4 class="team_name text-xl md:text-2xl"><a href="#"
+                                            class="text-black group-hover:text-white">Youcef Jallali</a></h4>
+                                    <p class="mt-2 transition-all duration-300 group-hover:text-white">Développeur chez
+                                        Relax-Massage</p>
+                                </div>
+                            </div> <!-- single team -->
+                        </div>
+                    </div>
+                </div> <!-- row -->
+            </div>
+        </div> <!-- container -->
+    </section>
+
+    <!--====== TEAM PART ENDS ======-->
+
+    <!--====== CONTACT PART START ======-->
+
+    <section id="contact" class="contact_area relative pt-18 pb-120">
+        <div class="contact_image flex items-center justify-end">
+            <div class="image lg:pr-13">
+                <img src="assets/images/contact.svg" alt="about">
+            </div>
+        </div> <!-- about image -->
+
+        <div class="container">
+            <div class="row justify-end">
+                <div class="w-full lg:w-1/2">
+                    <div class="contact_wrapper mt-11">
+                        <div class="section_title pb-4">
+                            <h5 class="sub_title">Contact</h5>
+                            <h4 class="main_title">Vous souhaitez installer BonApp dans votre Restaurant ?</h4>
+                            <p>Contactez-nous via le formulaire de contact ci-dessous avec un maximum d'information sur votre restaurant afin que nos equipe puissent vous inscrire.</p>
+                        </div> <!-- section title -->
+
+                        <div class="contact_form">
+                            <form id="contact-form" action="assets/php/contact.php" method="POST">
+                                <div class="row">
+                                    <div class="w-full md:w-1/2">
+                                        <div class="mx-3">
+                                            <div class="single_form mt-8">
+                                                <input name="name" id="name" type="text" placeholder="Nom"
+                                                    class="w-full rounded-md py-4 px-6 border border-solid border-body-color">
+                                            </div> <!-- single form -->
+                                        </div>
+                                    </div>
+                                    <div class="w-full md:w-1/2">
+                                        <div class="mx-3">
+                                            <div class="single_form mt-8">
+                                                <input name="email" id="email" type="email" placeholder="Email"
+                                                    class="w-full rounded-md py-4 px-6 border border-solid border-body-color">
+                                            </div> <!-- single form -->
+                                        </div>
+                                    </div>
+                                    <div class="w-full">
+                                        <div class="mx-3">
+                                            <div class="single_form mt-8">
+                                                <textarea name="message" id="message" placeholder="Message" rows="5"
+                                                    class="w-full rounded-md py-4 px-6 border border-solid border-body-color resize-none"></textarea>
+                                            </div> <!-- single form -->
+                                        </div>
+                                    </div>
+                                    <p class="form-message mx-3"></p>
+                                    <div class="w-full">
+                                        <div class="mx-3">
+                                            <div class="single_form mt-8">
+                                                <button type="submit" class="main-btn contact-btn">Envoyer</button>
+                                            </div> <!-- single form -->
+                                        </div>
+                                    </div>
+                                </div> <!-- row -->
+                            </form>
+                        </div> <!-- contact form -->
+                    </div> <!-- contact wrapper -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </section>
+
+    <!--====== CONTACT PART ENDS ======-->
+
+    <!--====== FOOTER PART START ======-->
+
+    <footer id="footer" class="footer_area bg-black relative z-10">
+        <div class="shape absolute left-0 top-0 opacity-5 h-full overflow-hidden w-1/3">
+            <img src="assets/images/footer-shape-left.png" alt="">
+        </div>
+        <div class="shape absolute right-0 top-0 opacity-5 h-full overflow-hidden w-1/3">
+            <img src="assets/images/footer-shape-right.png" alt="">
+        </div>
+        <div class="container">
+            <div class="footer_widget pt-18 pb-120">
+                <div class="row justify-center">
+                    <div class="w-full md:w-1/2 lg:w-3/12">
+                        <div class="footer_about mt-13 mx-3">
+                            <div class="footer_logo">
+                                <a href="#"><img src="assets/images/default.png" alt=""></a>
+                            </div>
+                        </div> <!-- footer about -->
+                    </div>
+                    <div class="w-full md:w-1/2 lg:w-5/12">
+                        <div class="footer_link_wrapper flex flex-wrap mx-3">
+                            <div class="footer_link w-1/2 md:pl-13 mt-13">
+                                <h2 class="footer_title text-xl font-semibold text-white">Je suis un client</h2>
+                                <ul class="link pt-4">
+                                    <li><a href="#home" class="text-white mt-4 hover:text-theme-color">Accueil</a></li>
+                                    <li><a href="#features" class="text-white mt-4 hover:text-theme-color">Fonctionnement</a></li>
+                                    <li><a href="#team" class="text-white mt-4 hover:text-theme-color">L'equipe</a></li>
+                                </ul>
+                            </div> <!-- footer link -->
+                            <div class="footer_link w-1/2 md:pl-13 mt-13">
+                                <h2 class="footer_title text-xl font-semibold text-white">Je suis un restaurant</h2>
+                                <ul class="link pt-4">
+                                    <li><a href="#concept" class="text-white mt-4 hover:text-theme-color">Le concept</a></li>
+                                    <li><a href="#contact" class="text-white mt-4 hover:text-theme-color">Contact</a></li>
+                                </ul>
+                            </div> <!-- footer link -->
+                        </div> <!-- footer link wrapper -->
+                    </div>
+                    <div class="w-full md:w-2/3 lg:w-4/12">
+                        <div class="footer_subscribe mt-13 mx-3">
+                            <h2 class="footer_title text-xl font-semibold text-white">Newsletter</h2>
+                            <div class="subscribe_form text-right mt-9 relative">
+                                <form action="#">
+                                    <input type="text" placeholder="Entrez votre email"
+                                        class="w-full py-5 px-6 bg-white text-black rounded-full border-none">
+                                    <button class="main-btn subscribe-btn">S'inscrir</button>
+                                </form>
+                            </div>
+                        </div> <!-- footer subscribe -->
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- footer widget -->
+        </div> <!-- container -->
+    </footer>
+
+    <!--====== FOOTER PART ENDS ======-->
+
+    <!--====== BACK TOP TOP PART START ======-->
+
+    <a href="#" class="scroll-top"><i class="lni lni-chevron-up"></i></a>
+
+    <!--====== BACK TOP TOP PART ENDS ======-->
+
+    <!--====== PART START ======-->
+
+    <!--
+    <section class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+-->
+
+    <!--====== PART ENDS ======-->
+
+
+
+
+    <!--====== Tiny Slider js ======-->
+    <script src="assets/js/tiny-slider.js"></script>
+
+    <!--====== Wow js ======-->
+    <script src="assets/js/wow.min.js"></script>
+
+    <!--====== Main js ======-->
+    <script src="assets/js/main.js"></script>
+
 </body>
-
-<script>
-
-</script>
 
 </html>
