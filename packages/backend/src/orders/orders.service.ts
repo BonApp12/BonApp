@@ -68,7 +68,7 @@ export class OrdersService {
 
     findByRestaurantByStatus(status: string, id: string) {
         return this.orderRepository.find({
-            relations: ['user', 'orderPlates', 'orderPlates.plate', 'restaurant'],
+            relations: ['user', 'orderPlates', 'orderPlates.plate', 'table'],
             where: {
                 'status': status,
                 'restaurant': {id}

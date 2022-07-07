@@ -5,7 +5,7 @@ export default function updateOrder(idOrder, status) {
         mode: 'cors',
         credentials: 'include',
         body: JSON.stringify({
-            status: status
+            status
         }),
         headers: {
             'Content-Type': 'application/json'

@@ -1,5 +1,5 @@
 export enum NotificationMessageEnum {
-    BREAD = 'Un client veux du pain',
-    WATER = 'Un client veux de l\'eau',
-    HELP = 'Un client veux de l\'aide',
+    BREAD = 'Un client veut du pain',
+    WATER = 'Un client veut de l\'eau',
+    HELP = 'Un client veut de l\'aide',
 }

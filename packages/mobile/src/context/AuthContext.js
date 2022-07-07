@@ -3,6 +3,8 @@ import loginRequest from "../request/loginRequest";
 import toast from "../utils/toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import logoutRequest from "../request/logoutRequest";
+import {socket, SocketContext} from './socket';
+import {useContext} from "react";
 
 const authReducer = (state, action) => {
     switch (action.type) {
@@ -30,6 +32,7 @@ const login = dispatch => {
                             type: 'login',
                             payload: {user: data.user},
                         });
+                        socket.emit('joinWaiterRoom', data.user);
                         toast('success', 'Connexion réussie', 'Vous êtes désormais connecté 🎉');
                     }
                 } else if (data.statusCode === 400) {

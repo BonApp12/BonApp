@@ -14,7 +14,7 @@ const LIST_ITEM_HEIGHT = 70;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const TRANSLATE_X_THRESHOLD = SCREEN_WIDTH * 0.3;
-const ListItem = ({task, onDismiss, openModal}) => {
+const ListItem = ({task, onDismiss, openModal, title}) => {
     const translateX = useSharedValue(0);
     const itemHeight = useSharedValue(LIST_ITEM_HEIGHT);
     const marginVertical = useSharedValue(10);
@@ -80,7 +80,7 @@ const ListItem = ({task, onDismiss, openModal}) => {
             </Animated.View>
             <PanGestureHandler onGestureEvent={panGesture}>
                 <Animated.View style={[styles.task, rStyle]}>
-                    <Text style={styles.taskTitle}>{task.title}</Text>
+                    <Text style={styles.taskTitle}>{title}</Text>
                 </Animated.View>
             </PanGestureHandler>
         </Animated.View>
