@@ -6,6 +6,7 @@ import {AuthService} from "../auth/auth.service";
 import {AuthModule} from "../auth/auth.module";
 import {UsersModule} from "../users/users.module";
 import {JwtModule} from "@nestjs/jwt";
+import {HttpModule} from "@nestjs/axios";
 
 @Module({
   controllers: [GoogleController],
@@ -13,6 +14,7 @@ import {JwtModule} from "@nestjs/jwt";
   imports: [
     AuthModule,
     UsersModule,
+    HttpModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

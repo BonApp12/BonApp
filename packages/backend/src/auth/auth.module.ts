@@ -11,6 +11,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Users } from '../users/entities/users.entity'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from "../mail/mail.module";
+import {HttpModule} from "@nestjs/axios";
 
 @Module({
   providers: [AuthService, LocalStrategy, JwtStrategy, UsersService],
@@ -33,6 +34,7 @@ import { MailModule } from "../mail/mail.module";
       }),
     }),
     ConfigModule,
+    HttpModule
   ],
   exports: [AuthService],
   controllers: [AuthController],

@@ -100,7 +100,7 @@ export class AuthController {
 
     @Post('/forget-password')
     @HttpCode(200)
-    async forgetPassword(@Body(SETTINGS.VALIDATION_PIPE_USER) usersDto: UsersDto) {
+    async forgetPassword(@Body(SETTINGS.VALIDATION_PIPE_USER) usersDto: UsersDto): Promise<any> {
         return this.authService.forgetPassword(usersDto);
     }
 
