@@ -4,17 +4,18 @@ import {Users} from './entities/users.entity';
 import {DeleteResult, Repository} from 'typeorm';
 import {UserRole} from './UserRole.enum';
 import {UsersDto} from "./dto/users.dto";
-import {MailService} from "../mail/mail.service";
+import {ConfigService} from '@nestjs/config';
 import {UTILS} from "../app.utils";
 import {UserAdapter} from "../Adapter/UserAdapter";
 import {generate} from "generate-password";
+import fetch from "node-fetch";
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(Users)
         private usersRepository: Repository<Users>,
-        private readonly mailerService: MailService
+        private configService: ConfigService,
     ) {
     }
 
@@ -53,9 +54,36 @@ export class UsersService {
                     uppercase: true,
                     symbols: '#?!@$%^&*-.'
                 });
-                await this.mailerService.sendMail(userData.email, 'create_user', 'Hop, bientot au boulot 😊 ✔', {
-                    ...userData
+
+                const restaurant = await this.usersRepository.findOne({
+                    relations: ['restaurant'],
+                    where: {
+                        restaurant: userData.restaurant,
+                    }
                 });
+
+                console.log(restaurant.restaurant.name);
+                const options =  {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'api-key': this.configService.get('SENDINBLUE_API_KEY'),
+                    },
+                    body: JSON.stringify({
+                        sender: {email: this.configService.get('MAIL_FROM')},
+                        to: [{email: userData.email}],
+                        replyTo: {email: this.configService.get('MAIL_USER')},
+                        params: {
+                            role: userData.role === 'R_SERVER' ? 'serveur' : 'cuisinier',
+                            password: userData.password,
+                            email: userData.email,
+                            restaurant: restaurant.restaurant.name,
+                        },
+                        templateId: 3
+                    })
+                };
+                await fetch(this.configService.get('SENDINBLUE_URL_API'), options);
             }
             const newUser = this.usersRepository.create(userData);
             await this.usersRepository.save(newUser);

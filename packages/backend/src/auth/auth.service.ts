@@ -5,18 +5,19 @@ import {CreateUsersDto} from '../users/dto/create-users.dto';
 import {ConfigService} from '@nestjs/config';
 import {UTILS} from "../app.utils";
 import {UsersDto} from "../users/dto/users.dto";
-import {MailService} from "../mail/mail.service";
 import {v4 as uuidv4} from 'uuid';
 import {UserRole} from "../users/UserRole.enum";
 import {UserAdapter} from "../Adapter/UserAdapter";
+import {HttpService} from "@nestjs/axios";
+import fetch from "node-fetch";
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService,
+        private readonly httpService: HttpService,
         private readonly configService: ConfigService,
-        private mailerService: MailService
     ) {
     }
 
@@ -37,6 +38,25 @@ export class AuthService {
     try {
       if(!registrationData.password && registrationData.role === UserRole.CLIENT) {
         throw new HttpException("Mot de passe requis", HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      if (registrationData.role === UserRole.CLIENT) {
+        const options = {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'api-key': this.configService.get('SENDINBLUE_API_KEY'),
+          },
+          body: JSON.stringify({
+            sender: {email: this.configService.get('MAIL_FROM')},
+            to: [{email: registrationData.email}],
+            replyTo: {email: this.configService.get('MAIL_USER')},
+            params: {firstname: registrationData.firstname},
+            templateId: 2
+          })
+        };
+        const mail = () => fetch(this.configService.get('SENDINBLUE_URL_API'), options);
+        await mail();
       }
       return await this.usersService.create({
         ...registrationData,
@@ -75,14 +95,29 @@ export class AuthService {
     }
   }
 
-  public async forgetPassword(usersDto: UsersDto = null) {
+  public async forgetPassword(usersDto: UsersDto = null): Promise<any> {
     try {
       const token = uuidv4();
       usersDto.token = token;
       const url = `${this.configService.get('URL_FRONTEND')}/update-password?token=${token}`;
       const user = UserAdapter.toDtoUpdatePassword(await this.usersService.getByEmail(usersDto.email));
+      const options = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'api-key': this.configService.get('SENDINBLUE_API_KEY'),
+        },
+        body: JSON.stringify({
+          sender: {email: this.configService.get('MAIL_FROM')},
+          to: [{email: user.email}],
+          replyTo: {email: this.configService.get('MAIL_USER')},
+          params: {firstname: user.firstname, url: url},
+          templateId: 1
+        })
+      };
       await this.usersService.updateUser(usersDto, user);
-      return this.mailerService.sendMail(user.email,'forget_password','Mot de passe oublié',{name:user.firstname,url});
+      return fetch(this.configService.get('SENDINBLUE_URL_API'), options)
     }catch (e) {
       throw new HttpException(e.message,e.status);
     }
