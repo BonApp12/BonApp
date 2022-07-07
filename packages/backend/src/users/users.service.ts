@@ -54,6 +54,15 @@ export class UsersService {
                     uppercase: true,
                     symbols: '#?!@$%^&*-.'
                 });
+
+                const restaurant = await this.usersRepository.findOne({
+                    relations: ['restaurant'],
+                    where: {
+                        restaurant: userData.restaurant,
+                    }
+                });
+
+                console.log(restaurant.restaurant.name);
                 const options =  {
                     method: 'POST',
                     headers: {
@@ -66,9 +75,10 @@ export class UsersService {
                         to: [{email: userData.email}],
                         replyTo: {email: this.configService.get('MAIL_USER')},
                         params: {
-                            role: userData.role === 'R_SERVER' ? 'SERVEUR' : 'CUISINE',
+                            role: userData.role === 'R_SERVER' ? 'serveur' : 'cuisinier',
                             password: userData.password,
-                            email: userData.email
+                            email: userData.email,
+                            restaurant: restaurant.restaurant.name,
                         },
                         templateId: 3
                     })
