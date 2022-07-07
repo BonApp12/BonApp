@@ -2,7 +2,7 @@ import React, {forwardRef, useCallback, useImperativeHandle, useMemo, useRef} fr
 import {StyleSheet, Text, View} from 'react-native';
 import {BottomSheetModal, BottomSheetModalProvider,} from '@gorhom/bottom-sheet';
 
-const ModalBottom = forwardRef(({taskToDisplay}, ref) => {
+const ModalBottom = forwardRef(({taskToDisplay, children}, ref) => {
     // ref
     const bottomSheetModalRef = useRef(null);
 
@@ -31,7 +31,7 @@ const ModalBottom = forwardRef(({taskToDisplay}, ref) => {
                     onChange={handleSheetChanges}
                 >
                     <View>
-                        <Text>{taskToDisplay.title} Awesome 🎉</Text>
+                        {children}
                     </View>
                 </BottomSheetModal>
             </View>

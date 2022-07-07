@@ -143,14 +143,15 @@ const ProductsList = () => {
                 updateUsersCart(carts);
             });
             socket.on('userLeftRoom', (carts) => {
-                toast.error(`Quelqu'un a quitté la table...`);
                 updateUsersCart(carts);
             });
             socket.on('orderUpdated', (newOrder) => {
                 toast.success('La commande a été mise à jour', {position: "top-right"});
-                let orderCopy = cloneDeep(order);
-                orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
-                setOrder(orderCopy);
+                updateOrderSocket(newOrder);
+            });
+            socket.on('orderCompleted', (newOrder) => {
+                toast.success('La commande a été remise !', {position: "top-right"});
+                updateOrderSocket(newOrder);
             });
         }
     }, [tableExists, idTable, idRestaurant]);
@@ -205,6 +206,12 @@ const ProductsList = () => {
         updateOtherCart(otherCarts);
     }
 
+    const updateOrderSocket = (newOrder) => {
+        let orderCopy = cloneDeep(order);
+        orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
+        setOrder(orderCopy);
+    }
+
     function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
         const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
         // If plates quantity is at 1, remove it from cart
@@ -222,7 +229,6 @@ const ProductsList = () => {
 
     function needSomething(thing) {
         socket.emit("needSomething", {idTable, idRestaurant, thing});
-        // TODO : Mettre un timeOut
     }
 
     if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;

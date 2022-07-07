@@ -14,6 +14,7 @@ import {UsersService} from "../users/users.service";
 import {TablesService} from "../tables/tables.service";
 import {IsNull, Not} from "typeorm";
 import {NotificationMessageEnum} from "./enum/NotificationMessageEnum";
+import {Tables} from "../tables/entities/tables.entity";
 
 @WebSocketGateway({cors: true})
 export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -102,6 +103,28 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         }
     }
 
+    @SubscribeMessage('joinWaiterRoom')
+    joinWaiterRoom(client: Socket, user: Record<string, any>) {
+        const roomId = `Waiter:${user.restaurant.id}:Room`;
+        this.logger.log(`Client ${client.id} joined waiter room ${roomId}`);
+        client.join(roomId);
+
+        const currentUser = {
+            nickname: user.email,
+            role: user.role,
+            socket: client.id
+        };
+
+        if (this.users.has(roomId)) {
+            const userExists = this.users.get(roomId).filter((user) => user.nickname === currentUser.nickname);
+            if (userExists.length === 0) {
+                this.users.set(roomId, [...this.users.get(roomId), currentUser]);
+            }
+        } else {
+            this.users.set(roomId, [currentUser])
+        }
+    }
+
     @SubscribeMessage('userCartUpdated')
     userCartUpdated(client: Socket, args: Record<string, any>) {
         // Getting Room
@@ -166,21 +189,41 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('updateOrder')
-    update(client: Socket, newOrder: Record<string, any>) {
+    async update(client: Socket, newOrder: Record<string, any>) {
         const clientRoom = `ordersRoomTable:${newOrder.order.tableId}Restaurant:${newOrder.order.restaurantId}`;
         const clients = this.users.get(clientRoom);
 
         if (newOrder.order.status === "ready") {
             const notificationMessage = `La commande N°${newOrder.order.id} est prête !`;
-            this.sendNotificationToWaiters(newOrder.order.restaurantId, newOrder.order.tableId, notificationMessage);
+            const table = await this.tableService.findOne(newOrder.order.tableId);
+            this.sendNotificationToWaiters(newOrder.order.restaurantId, table, notificationMessage)
+                .then(() => {
+                    const waiterRoom = `Waiter:${newOrder.order.restaurantId}:Room`;
+                    this.wss.to(waiterRoom).emit("orderStatusUpdated", newOrder.order);
+                });
         }
 
         if (clients !== undefined) {
             clients.forEach((client) => {
                 client.order.forEach((order) => {
                     if (order.id === newOrder.order.id) {
-                        console.log('dispatching message');
                         this.wss.to(client.socket).emit("orderUpdated", newOrder.order);
+                    }
+                });
+            });
+        }
+    }
+
+    @SubscribeMessage('orderCompleted')
+    orderCompleted(client: Socket, completedOrder: Record<string, any>) {
+        const clientRoom = `ordersRoomTable:${completedOrder.tableId}Restaurant:${completedOrder.restaurantId}`;
+        const clients = this.users.get(clientRoom);
+
+        if (clients !== undefined) {
+            clients.forEach((client) => {
+                client.order.forEach((order) => {
+                    if (order.id === completedOrder.id) {
+                        this.wss.to(client.socket).emit("orderCompleted", completedOrder);
                     }
                 });
             });
@@ -190,10 +233,15 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     @SubscribeMessage('needSomething')
     async needSomething(client: Socket, args: Record<string, any>){
         const message = NotificationMessageEnum[args.thing];
-        await this.sendNotificationToWaiters(args.idRestaurant, args.idTable, message);
+        const table = await this.tableService.findOne(args.idTable);
+        const waiterRoom = `Waiter:${args.idRestaurant}:Room`;
+        const socketMessage = {libelleTable: table.libelle, idTable: table.id, message};
+
+        this.wss.to(waiterRoom).emit("needSomething", socketMessage);
+        await this.sendNotificationToWaiters(args.idRestaurant, table, message);
     }
 
-    private async sendNotificationToWaiters(idRestaurant: number, idTable: number, message: string) {
+    private async sendNotificationToWaiters(idRestaurant: number, table: Tables, message: string) {
         const expoTokens = [];
         const waiters = await this.usersService.findMultipleBy({
             role: 'R_SERVER',
@@ -202,7 +250,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
                 expoToken: Not(IsNull())
             }
         });
-        const table = await this.tableService.findOne(idTable);
         waiters.forEach((waiter) => {
             expoTokens.push(waiter.expoToken);
         });
