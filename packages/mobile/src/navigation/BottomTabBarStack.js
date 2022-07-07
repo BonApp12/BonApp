@@ -1,6 +1,5 @@
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {Home} from "../screens/Home/Home";
-import {Details} from "../screens/Details/Details";
 import {Help} from "../screens/Help/Help";
 import {Settings} from "../screens/Settings/Settings";
 import BottomTabBar from "./BottomTabBar";
@@ -14,12 +13,14 @@ const tabs = [
         name: 'Prête',
         component: Home
     },
-    {
-        id: 1,
-        icon: 'flip-outline',
-        name: 'En préparation',
-        component: Details
-    },
+    /*    {
+            id: 1,
+            icon: 'flip-outline',
+            name: 'En préparation',
+            component: Details
+        },
+
+     */
     {
         id: 2,
         icon: 'message-circle-outline',
