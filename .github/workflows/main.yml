@@ -1,7 +1,7 @@
 name: Deploy to production
 on:
   push:
-    branches: [ pipeline-admin ]
+    branches: [ develop ]
   workflow_dispatch:
 
 jobs:
@@ -124,3 +124,24 @@ jobs:
           docker image build -f Dockerfile.local --tag yassansplus/adminbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} --tag yassansplus/adminbonapp:develop .
           docker push yassansplus/adminbonapp:${{ steps.date.outputs.date }}.${{ github.actor }}
           docker push yassansplus/adminbonapp:develop
+
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    needs: [ frontend, front-manager, backend ]
+    environment: production
+    steps:
+      - name: Log to the server and pull the images from docker hub & run the app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd BonApp
+            sudo docker stop front_end_prod
+            sudo docker stop front_manager_prod
+            sudo docker stop admin_prod
+            sudo docker system prune -a -f
+            sudo docker-compose up -d  --remove-orphans
