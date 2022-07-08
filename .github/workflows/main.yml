@@ -128,7 +128,7 @@ jobs:
   deploy:
     name: Deploy to production
     runs-on: ubuntu-latest
-    needs: [ frontend, front-manager, backend ]
+    needs: [ frontend, front-manager, backend, admin ]
     environment: production
     steps:
       - name: Log to the server and pull the images from docker hub & run the app
