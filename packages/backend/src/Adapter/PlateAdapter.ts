@@ -17,8 +17,9 @@ export class PlateAdapter {
         plateDto.restaurant = RestaurantAdapter.toDto(plate?.restaurant);
         plateDto.description = plate?.description;
         plateDto.ingredients = plate?.ingredients.map(ingredient => IngredientAdapter.toDto(ingredient));
-        plateDto.categories = plate?.categories?[...plate.categories]: [];
+        plateDto.categories = plate?.categories ? [...plate.categories] : [];
         plateDto.type = setPlateRole(plate?.type);
+        plateDto.display = plate?.display ?? true;
         plateDto.photo = plate?.photo;
         plateDto.quantity = plate?.quantity;
         return plateDto;

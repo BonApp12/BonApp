@@ -243,7 +243,7 @@ const ProductsList = () => {
             <ol>
                 {
                     isLoaded && !error ?
-                        filteredPlates?.map(plate => {
+                        filteredPlates?.filter(plate => plate.display).map(plate => {
                             return (
                                 <Card name={plate.name}
                                       key={plate.id}
