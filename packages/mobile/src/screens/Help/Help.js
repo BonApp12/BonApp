@@ -1,36 +1,22 @@
 import {ScrollView, StyleSheet} from "react-native";
 import {Text} from "@ui-kitten/components";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useCallback, useState} from "react";
 import SafeAreaView from "react-native/Libraries/Components/SafeAreaView/SafeAreaView";
 import ListItem from "../../components/listItem";
-import {useFocusEffect} from "@react-navigation/native";
+import {useDispatch, useSelector} from "react-redux";
+import {removeHelp} from "../../redux/reducer";
 
 export function Help() {
-    const [helps, setHelps] = useState([]);
+    const helps = useSelector(state => state.helpNeededs);
+    const dispatch = useDispatch();
     const handleDismiss = (help) => {
-        AsyncStorage.getItem('helpNeeded').then((helps) => {
-            let helpToRemove = JSON.parse(helps);
-            helpToRemove = helpToRemove.filter(help => help.libelleTable !== helps.libelleTable);
-            AsyncStorage.setItem('helpNeeded', JSON.stringify(helpToRemove));
-        });
+        dispatch(removeHelp(help));
     };
-    useFocusEffect(
-        useCallback(() => {
-            AsyncStorage.getItem('helpNeeded').then((helpNeeded) => {
-                if (helpNeeded) {
-                    setHelps(JSON.parse(helpNeeded));
-                }
-            });
-            return () => {
-                //AsyncStorage.clear();
-            };
-        }, [])
-    );
 
     return (
         <SafeAreaView style={{flex: 1}}>
-            <Text style={styles.title}>Demandes client</Text>
+            <Text style={styles.title}>
+                Demandes client
+            </Text>
             <ScrollView>
                 {helps.map((help, index) =>
                     <ListItem

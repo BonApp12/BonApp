@@ -13,14 +13,13 @@ const tabs = [
         name: 'Prête',
         component: Home
     },
-    /*    {
-            id: 1,
-            icon: 'flip-outline',
-            name: 'En préparation',
-            component: Details
-        },
+    // {
+    //     id: 1,
+    //     icon: 'flip-outline',
+    //     name: 'En préparation',
+    //     component: Details
+    // },
 
-     */
     {
         id: 2,
         icon: 'message-circle-outline',

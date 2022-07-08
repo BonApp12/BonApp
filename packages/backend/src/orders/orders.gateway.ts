@@ -221,7 +221,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
         if (clients !== undefined) {
             clients.forEach((client) => {
-                client.order.forEach((order) => {
+                client?.order?.forEach((order) => {
                     if (order.id === completedOrder.id) {
                         this.wss.to(client.socket).emit("orderCompleted", completedOrder);
                     }
@@ -231,7 +231,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     @SubscribeMessage('needSomething')
-    async needSomething(client: Socket, args: Record<string, any>){
+    async needSomething(client: Socket, args: Record<string, any>) {
         const message = NotificationMessageEnum[args.thing];
         const table = await this.tableService.findOne(args.idTable);
         const waiterRoom = `Waiter:${args.idRestaurant}:Room`;
