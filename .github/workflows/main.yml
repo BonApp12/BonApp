@@ -121,6 +121,6 @@ jobs:
         run: |
           cd packages/admin/
           echo "${{ secrets.DOCKERPW }}" | docker login -u ${{ secrets.DOCKERUSER }} --password-stdin
-          docker image build -f Dockerfile.local --tag yassansplus/:${{ steps.date.outputs.date }}.${{ github.actor }} --tag yassansplus/adminbonapp:develop .
+          docker image build -f Dockerfile.local --tag yassansplus/adminbonapp:${{ steps.date.outputs.date }}.${{ github.actor }} --tag yassansplus/adminbonapp:develop .
           docker push yassansplus/adminbonapp:${{ steps.date.outputs.date }}.${{ github.actor }}
           docker push yassansplus/adminbonapp:develop
