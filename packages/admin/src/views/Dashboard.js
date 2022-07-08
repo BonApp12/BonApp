@@ -3,14 +3,22 @@ import findAllUserRestaurant from "../requests/findAllUserRestaurant";
 import RoleEnum from "../enum/RoleEnum";
 import ReactPaginate from "react-paginate";
 import resetUserConnected from "../helpers/resetUserConnected";
-import {useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {userAtom} from "../states/user";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 export default function Dashboard(){
     const [usersRestaurant,setUsersRestaurant] = useState([]);
-    const setUserRecoil = useSetRecoilState(userAtom);
+    const [userRecoil, setUserRecoil] = useRecoilState(userAtom);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(userRecoil === null){
+            navigate('/login');
+            toast.error('Vous devez être connecté pour accéder à cette page');
+        }
+    }, [userRecoil, navigate]);
 
     //paginate
     const [currentItems, setCurrentItems] = useState(null);

@@ -93,17 +93,20 @@ export class UsersService {
     }
 
     async createRestaurant(userDto: UsersDto) {
-        userDto.password = generate({
+        const password = generate({
             length: 12,
             numbers: true,
             uppercase: true,
             symbols: '#?!@$%^&*-.'
         });
+        userDto.password = password;
         userDto.role = UserRole.RESTAURANT_MANAGER;
         try {
             const newUser = this.usersRepository.create(userDto);
             await this.usersRepository.save(newUser);
-            return UserAdapter.toDto(newUser);
+            const userAdapterDto = UserAdapter.toDto(newUser);
+            userAdapterDto.password = password;
+            return userAdapterDto;
         }catch(e){
             throw new HttpException("L'adresse email existe déjà", HttpStatus.BAD_REQUEST);
         }

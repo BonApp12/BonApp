@@ -5,10 +5,11 @@ import {DeleteResult, UpdateResult} from "typeorm";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {SETTINGS} from "../app.utils";
 import RequestWithUser from "../auth/interfaces/requestWithUser.interface";
+import {MailService} from "../mail/mail.service";
 
 @Controller('user')
 export class UsersController {
-    constructor(private readonly userService: UsersService) {
+    constructor(private readonly userService: UsersService, private mailService: MailService) {
     }
 
     @UseGuards(JwtAuthGuard)
@@ -25,8 +26,15 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/restaurant')
-    createUserRestaurant(@Body() usersDto: UsersDto) {
-        return this.userService.createRestaurant(usersDto);
+    async createUserRestaurant(@Body() usersDto: UsersDto) {
+        //Create user
+        const userCreate = await this.userService.createRestaurant(usersDto);
+        //Send mail
+        await this.mailService.sendMailWithSendInBlue(5, userCreate.email, {
+            firstname: userCreate.firstname,
+            email: userCreate.email,
+            password: userCreate.password
+        })
     }
 
     @UseGuards(JwtAuthGuard)

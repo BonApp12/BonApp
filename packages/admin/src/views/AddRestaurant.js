@@ -21,7 +21,10 @@ export default function AddRestaurant(){
     const [userState, setUserState] = useRecoilState(userAtom);
 
     useEffect(() => {
-        userState === null && navigate('/login');
+        if(userState === null){
+            navigate('/login');
+            toast.error('Vous devez être connecté pour accéder à cette page');
+        }
     }, [userState, navigate]);
 
     const onSubmit = (userRestaurant) => {

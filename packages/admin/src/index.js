@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import {RecoilRoot} from "recoil";
 import Toast from "../src/components/Toast/Toast";
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,6 +20,10 @@ ReactDOM.render(
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/add/restaurant" element={<AddRestaurant/>}/>
+                        <Route
+                            path="*"
+                            element={<Navigate to="/login" replace />}
+                        />
                     </Route>
                 </Routes>
             </RecoilRoot>
