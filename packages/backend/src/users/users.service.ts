@@ -42,7 +42,7 @@ export class UsersService {
     }
 
     async findAll(): Promise<Users[]> {
-        return this.usersRepository.find({relations: ['restaurant']});
+        return this.usersRepository.find({relations: ['restaurant'], where: {role: UserRole.RESTAURANT_MANAGER}, order: {id: 'DESC'}});
     }
 
     async create(userData: UsersDto): Promise<UsersDto> {
@@ -89,6 +89,23 @@ export class UsersService {
             return UserAdapter.toDto(newUser);
         } catch (e) {
             throw new HttpException(e.message, e.status);
+        }
+    }
+
+    async createRestaurant(userDto: UsersDto) {
+        userDto.password = generate({
+            length: 12,
+            numbers: true,
+            uppercase: true,
+            symbols: '#?!@$%^&*-.'
+        });
+        userDto.role = UserRole.RESTAURANT_MANAGER;
+        try {
+            const newUser = this.usersRepository.create(userDto);
+            await this.usersRepository.save(newUser);
+            return UserAdapter.toDto(newUser);
+        }catch(e){
+            throw new HttpException("L'adresse email existe déjà", HttpStatus.BAD_REQUEST);
         }
     }
 

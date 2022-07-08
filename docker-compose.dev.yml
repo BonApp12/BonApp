@@ -50,6 +50,22 @@ services:
     networks:
       - bp-network
 
+  admin:
+    container_name: admin
+    build:
+      context: ./packages/admin
+      dockerfile: Dockerfile.local
+    restart: always
+    env_file: .env
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "${ADMIN_PORT}:3003"
+    volumes:
+      - "./packages/admin/:/app/"
+    networks:
+      - bp-network
+
   html-to-pdf:
     container_name: html-to-pdf
     image: kurzdigital/html-to-pdf:latest

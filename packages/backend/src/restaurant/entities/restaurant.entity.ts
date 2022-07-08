@@ -13,7 +13,7 @@ export class Restaurant extends BaseEntity {
     @Column('varchar', {length: 100})
     name: string;
 
-    @Column('char', {length: 13})
+    @Column('char', {length: 13, nullable: true})
     siren: string;
 
     /* Spécifique au formulaire de contact, pas systématique donc nullable. */

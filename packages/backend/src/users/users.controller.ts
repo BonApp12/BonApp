@@ -11,9 +11,9 @@ export class UsersController {
     constructor(private readonly userService: UsersService) {
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     findAll() {
-        /** Renvoyer une erreur, trop dangereux. */
         return this.userService.findAll();
     }
 
@@ -21,6 +21,12 @@ export class UsersController {
     findOneByFirstname(@Param('email') email: string) {
         /** Changer par l'id de l'utilisateur */
         return this.userService.findOne(email);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/restaurant')
+    createUserRestaurant(@Body() usersDto: UsersDto) {
+        return this.userService.createRestaurant(usersDto);
     }
 
     @UseGuards(JwtAuthGuard)

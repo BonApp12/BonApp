@@ -48,7 +48,8 @@ export class AuthController {
     async login(@Body() body, @Req() req: RequestWithUser) {
         const userDto = UserAdapter.toDto(req.user);
         if (((body?.requestFrom !== UserRole.CLIENT && [UserRole.RESTAURANT_KITCHEN, UserRole.RESTAURANT_MANAGER, UserRole.RESTAURANT_SERVER].includes(userDto.role))
-            || (body?.requestFrom === UserRole.CLIENT && userDto.role === UserRole.CLIENT)) || (body?.requestFrom === UserRole.RESTAURANT_SERVER && userDto.role === UserRole.RESTAURANT_SERVER)) {
+            || (body?.requestFrom === UserRole.CLIENT && userDto.role === UserRole.CLIENT)) || (body?.requestFrom === UserRole.RESTAURANT_SERVER && userDto.role === UserRole.RESTAURANT_SERVER) ||
+            (body?.requestFrom === UserRole.ADMINISTRATOR && userDto.role === UserRole.ADMINISTRATOR)) {
             return this.loginUser(req, userDto);
         }
         throw new HttpException(
