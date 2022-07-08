@@ -77,7 +77,7 @@ export default function CardSettings() {
                                         type="text"
                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded
                     text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                        defaultValue={user.email}
+                                        defaultValue={user?.email}
                                     />
                                 </div>
                             </div>
@@ -95,7 +95,7 @@ export default function CardSettings() {
                                         type="text"
                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded
                     text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                        defaultValue={user.firstname}
+                                        defaultValue={user?.firstname}
                                     />
                                 </div>
                             </div>
@@ -112,7 +112,7 @@ export default function CardSettings() {
                                         type="text"
                                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded
                     text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                        defaultValue={user.lastname}
+                                        defaultValue={user?.lastname}
                                     />
                                 </div>
                             </div>

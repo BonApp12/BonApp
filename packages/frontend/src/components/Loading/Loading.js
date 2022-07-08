@@ -12,10 +12,11 @@ const Loading = () => {
 export function LoadingPayment() {
     return (
         <div>
-            <img id="loader-img" src={Loader} alt="chargement"/>;
+            <img id="loader-img" src={Loader} alt="chargement"/>
         </div>
 
     )
         ;
 }
+
 export default Loading;
