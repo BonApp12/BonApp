@@ -20,7 +20,7 @@ export default function ShowPlates() {
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 4;
+    const itemsPerPage = 7;
 
 
     const handlePageClick = (event) => {

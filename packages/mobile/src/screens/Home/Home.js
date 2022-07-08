@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, Text} from 'react-native';
 import SafeAreaView from "react-native/Libraries/Components/SafeAreaView/SafeAreaView";
 import ListItem from "../../components/listItem";
@@ -9,6 +9,7 @@ import setOrderToCompleted from "../../request/setOrderToCompleted";
 import {OrderSummary} from "../../components/OrderSummary";
 import {socket} from "../../context/socket";
 import toast from "../../utils/toast";
+import {addOrder} from "../../redux/reducer";
 
 
 export const Home = () => {
@@ -24,10 +25,10 @@ export const Home = () => {
                 socket.emit('orderCompleted', resOrder.data.raw[0]);
             })
             .catch((err) => {
-            console.log('Une erreur est survenue');
-        });
+                console.log('Une erreur est survenue');
+            });
         setReadyOrders(readyOrders.filter(ord => ord.id !== order.id));
-    }
+    };
     const [userState, setUserState] = useState({});
     const [readyOrders, setReadyOrders] = useState([]);
     const [orderReceived, setOrderReceived] = useState(false);
@@ -44,16 +45,22 @@ export const Home = () => {
             }
         });
 
-        socket.on('orderStatusUpdated', (order) => {
+        /**
+         * Prend en paramêtre order mais on ne l'utilise pas ici.
+         */
+        socket.on('orderStatusUpdated', () => {
+
             toast('success', 'Commande prête', 'Une nouvelle commande est prête 🎉');
             setOrderReceived(true);
-        })
+        });
     }, []);
 
     useEffect(() => {
         if (orderReceived === true) {
             getReadyOrders(userState.restaurant.id).then((resOrders) => {
+                console.log(resOrders.data);
                 setReadyOrders(resOrders.data);
+                dispatch(addOrder(resOrders.data));
             });
             setOrderReceived(false);
         }
