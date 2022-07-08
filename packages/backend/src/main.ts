@@ -15,12 +15,14 @@ async function bootstrap() {
             'http://51.68.45.99:8081',
             'http://localhost:3000',
             'http://localhost:3001',
+            'http://localhost:3003',
             'http://localhost:8080',
             'http://localhost:8888',
             'https://bonapp.ninja',
             'https://resto.bonapp.ninja',
             'https://restov2.bonapp.ninja',
             'https://client.bonapp.ninja',
+            'https://admin.bonapp.ninja',
         ],
 
     });
