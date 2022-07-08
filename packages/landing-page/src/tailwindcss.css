@@ -1,0 +1,375 @@
+
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap');
+
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  @apply text-body-color;
+}
+*:focus, button:focus {
+  @apply outline-none shadow-none;
+  outline-offset: none;
+  outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  @apply font-bold m-0 text-black;
+}
+
+h1 {
+  font-size: 45px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 25px;
+}
+h4 {
+  font-size: 20px;
+}
+h5 {
+  font-size: 18px;
+}
+h6 {
+  font-size: 16px;
+}
+a, button {
+  @apply transition-all duration-300;
+}
+.container {
+  @apply px-4;
+}
+.row {
+  @apply flex flex-wrap;
+}
+.main-btn {
+  @apply inline-block font-medium text-base text-center rounded-full text-white cursor-pointer z-10 transition-all duration-300 bg-black overflow-hidden relative px-10 py-4 hover:bg-opacity-80 hover:text-white;
+  border-top-right-radius: 0px;
+}
+
+
+.btn-hover {
+  @apply relative overflow-hidden;
+}
+
+.border-btn {
+  @apply border-2 border-theme-color text-theme-color bg-transparent border-solid;
+}
+.border-btn:hover {
+  @apply text-theme-color relative;
+}
+
+.btn-hover::after {
+  @apply absolute w-0 h-0 rounded-full top-1/2 left-1/2 transition-all duration-500 transform-gpu scale-0 -translate-x-1/2 -translate-y-1/2;
+  padding: 50%;
+  content: '';
+  background: rgba(0, 0, 0, .05);
+}
+
+.btn-hover:hover::after {
+  @apply scale-150;
+}
+
+.scroll-top {
+  @apply w-11 h-11 bg-theme-color flex justify-center items-center text-white fixed bottom-8 right-8 rounded-md text-lg transition-all duration-300 z-20;
+}
+.scroll-top:hover {
+  @apply text-white;
+}
+
+.section_title .sub_title {
+  @apply text-base md:text-xl font-semibold text-theme-color;
+}
+.section_title .main_title {
+  @apply text-2xl md:text-4xl font-bold mt-4;
+}
+.section_title p {
+  @apply mt-5;
+}
+
+/* ============ navbar =========== */
+
+.navbar-area {
+  @apply fixed top-0 left-0 w-full z-20 transition-all duration-300;
+}
+.sticky {
+  @apply fixed bg-white shadow-md; 
+}
+.collapse.show {
+  @apply block;
+}
+.toggler-icon {
+  @apply relative block duration-300 bg-black;
+  height: 2px;
+  width: 30px;
+  margin: 6px 0;
+}
+.sticky .toggler-icon {
+  @apply bg-black;
+}
+.active>.toggler-icon:nth-child(1) {
+  @apply transform rotate-45;
+  top: 7px;
+}
+.active>.toggler-icon:nth-child(2) {
+  @apply opacity-0;
+}
+.active>.toggler-icon:nth-child(3) {
+  top: -8px;
+  transform: rotate(135deg);
+}
+.navbar-nav .nav-item a {
+  @apply inline-block text-base font-normal text-body-color relative z-10 py-2 lg:py-1 hover:text-theme-color;
+}
+.navbar-nav .nav-item a.active {
+  @apply text-theme-color;
+}
+
+/* =========== hero =========== */
+.header_hero {
+  height: 900px;
+}
+@media (max-width: 1400px) {
+  .header_hero {
+    height: 800px;
+  }
+}
+.hero_shape {
+  @apply absolute opacity-40 -z-10;
+}
+.shape_1 {
+  @apply top-150;
+  left: 10%;
+}
+.shape_2{
+  @apply top-150;
+  left: 30%;
+}
+.shape_3{
+  @apply top-200;
+  left: 40%;
+}
+.shape_4{
+  @apply top-120;
+  left: 50%;
+}
+.shape_5{
+  top: 40%;
+  left: 14%;
+}
+.shape_6{
+  top: 34%;
+  left: 48%;
+}
+.shape_7{
+  top: 60%;
+  left: 80px;
+}
+.shape_8{
+  top: 55%;
+  left: 38%;
+}
+.shape_9{
+  @apply bottom-25;
+  left: 13%;
+}
+.shape_10{
+  @apply bottom-200 left-1/4;
+}
+.shape_11{
+  @apply bottom-20;
+  left: 35%;
+}
+.shape_12{
+  @apply bottom-1/4;
+  left: 42%;
+}
+.header_shape {
+  @apply absolute top-0 right-0 h-full w-1/2;
+}
+.header_shape::before {
+  content: '';
+  background-color: #F5F5FC;
+  transform: skewX(-15deg);
+  width: 200%;
+  @apply absolute top-0 left-0 h-full;
+}
+.header_image {
+  @apply lg:absolute top-0 right-0 w-full lg:w-1/2 h-auto lg:h-full mx-auto mt-13 lg:mt-0 px-5 lg:px-0;
+}
+.header_image img {
+  @apply max-w-full lg:w-auto xl:max-w-screen-md;
+}
+
+/* =========== service =========== */
+
+.single_services {
+  @apply border-2 border-dashed border-border-color rounded-xl py-13 px-6 sm:py-6 sm:px-4 md:py-13 md:px-6 transition-all duration-300  hover:border-theme-color hover:shadow;
+}
+.services_icon {
+  @apply relative inline-block;
+}
+.services_icon i {
+  @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl text-black transition-all duration-300;
+}
+.services_shape {
+  fill: #fff1f1;
+  @apply transition-all duration-300;
+}
+.single_services:hover .services_icon i {
+  @apply text-white;
+}
+.single_services:hover .services_shape {
+  @apply fill-current text-theme-color;
+}
+
+/* ========== about ========== */
+.about_image {
+  @apply lg:absolute top-0 left-0 w-full lg:w-1/2 h-auto lg:h-full mx-auto mt-13 lg:mt-0 px-5 lg:px-0; 
+}
+.about_image img {
+  @apply max-w-full lg:w-auto lg:max-w-screen-md;
+}
+.about_check i {
+  @apply w-7 h-7 flex items-center justify-center text-white bg-theme-color rounded-full text-base mt-1;
+}
+
+/* ======= work ======== */
+.single_item {
+  max-width: 370px;
+}
+.single_work {
+  @apply rounded-xl overflow-hidden my-8 bg-white shadow;
+}
+.work_content {
+  @apply p-7 relative;
+}
+.work_content .arrow {
+  @apply w-11 h-11 flex items-center justify-center rounded-full text-lg text-black absolute -top-5 right-7 bg-white transition-all duration-300 shadow hover:bg-theme-color hover:text-white;
+}
+.work_title a {
+  @apply text-black hover:text-theme-color;
+}
+
+/* ======== team ======= */
+.tns-nav {
+  @apply absolute -bottom-5 left-0 w-full flex items-center justify-center z-10;
+}
+.tns-nav button {
+  @apply w-3 h-3 rounded-full border-none bg-theme-color bg-opacity-30 mx-2 hover:bg-opacity-100;
+}
+.tns-nav button.tns-nav-active {
+  @apply bg-opacity-100;
+}
+.single_team_item {
+  max-width: 405px;
+}
+.single_team {
+  @apply shadow rounded-xl my-8 overflow-hidden bg-white transition-all duration-300 group hover:bg-theme-color;
+}
+.team_image .social li {
+  @apply mt-4 opacity-0 invisible transform translate-x-full;
+}
+.team_image .social li a {
+  @apply w-9 h-9 flex items-center justify-center rounded-full border-2 border-solid border-white text-white bg-transparent hover:bg-theme-color hover:border-theme-color;
+}
+.single_team:hover .social li {
+  @apply opacity-100 transition-all duration-300 visible translate-x-0;
+}
+.single_team:hover .social li:nth-child(1) {
+  @apply delay-100;
+}
+.single_team:hover .social li:nth-child(2) {
+  @apply delay-200;
+}
+.single_team:hover .social li:nth-child(3) {
+  @apply delay-300;
+}
+.single_team:hover .social li:nth-child(4) {
+  @apply delay-400;
+}
+
+/* =========== pricing ============= */
+.pricing_menu .active {
+  @apply bg-theme-color text-white;
+}
+.pricing_content .tab-pane {
+  display: none;
+}
+.pricing_content .tab-pane.active {
+  display: block;
+}
+
+.single_pricing {
+  @apply border-2 border-dashed border-border-color rounded-xl p-6 md:p-10 transition-all duration-300 group hover:border-theme-color hover:shadow;
+}
+.single_pricing.active {
+  @apply border-theme-color shadow;
+}
+.pricing_title .title {
+  @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-semibold text-xl text-black transition-all duration-300;
+}
+.single_pricing.active .pricing_title .title {
+  @apply text-white;
+}
+.single_pricing.active .services_shape,
+.single_pricing:hover .services_shape {
+  @apply fill-current text-theme-color;
+}
+.pricing_btn {
+  @apply py-3 px-6 text-body-color mt-8 rounded-md;
+  background-color: #fff1f1;
+}
+.single_pricing:hover .pricing_btn,
+.single_pricing.active .pricing_btn {
+  @apply bg-theme-color text-white;
+}
+
+/* ========== blog ========= */
+.blog_title a {
+  @apply block text-black font-semibold mt-5 hover:text-theme-color text-xl sm:text-2xl;
+}
+.more_btn {
+  @apply inline-block text-black font-semibold mt-6 hover:text-theme-color;
+}
+/* ========== contact ========= */
+
+.contact_image {
+  @apply lg:absolute top-0 left-0 w-full lg:w-1/2 h-auto lg:h-full mx-auto mt-13 lg:mt-0 px-5 lg:px-0; 
+}
+.contact_image img {
+  @apply max-w-full lg:max-w-screen-md lg:w-auto;
+  max-width: 770px;
+}
+.contact-btn {
+  @apply bg-theme-color text-white py-4 px-10 rounded-md hover:bg-opacity-80;
+}
+
+
+/* =========== footer ========== */
+.subscribe-btn {
+  @apply mt-3 md:mt-0 md:absolute top-1 right-1 py-4 bg-theme-color rounded-full hover:bg-opacity-80;
+}
+.footer_social li a {
+  @apply w-8 h-8 rounded-full bg-white bg-opacity-10 text-white flex items-center justify-center hover:text-theme-color hover:bg-opacity-100;
+}
