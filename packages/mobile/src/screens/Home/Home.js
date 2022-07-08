@@ -70,7 +70,7 @@ export const Home = () => {
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
             <Text style={styles.title}>Commande prête</Text>
             <ScrollView>
-                {readyOrders.map(order =>
+                {readyOrders?.map(order =>
                     <ListItem
                         key={order.id}
                         task={order}

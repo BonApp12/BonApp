@@ -13,7 +13,6 @@ import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import {orderAtom} from "../../states/order";
 import {useLocation} from "react-router-dom";
 import dayjs from "dayjs";
-import {BsFillCircleFill} from "react-icons/bs";
 
 // create a navigation component that wraps the burger menu
 export const Sliding = (props) => {
@@ -191,7 +190,7 @@ export const Sliding = (props) => {
                         }
                     )}
 
-                    {props.otherCart?.lenght && <h2>Autres commandes à votre table : </h2>}
+                    {props.otherCart?.length && <h2>Autres commandes à votre table : </h2>}
                     {props.otherCart.map((user) => {
                         if (user.cart !== undefined && user.cart.length > 0) {
                             return (
@@ -228,8 +227,8 @@ export const Sliding = (props) => {
                 <section className="mt-5">
                     {orderStatus
                         .filter(order => {
-                            return (order.restaurant?.id ?? order?.restaurantId) === parseInt(restaurantInformation?.idRestaurant)
-                                && (order?.table?.id ?? order?.tableId) === parseInt(restaurantInformation.idTable)
+                            return (order.restaurant?.id ?? order?.restaurantId) === restaurantInformation?.idRestaurant
+                                && (order?.table?.id ?? order?.tableId) === restaurantInformation.idTable
                                 && order.status !== 'completed';
                         })
                         .map((order) => {
@@ -239,12 +238,6 @@ export const Sliding = (props) => {
                                         <div className="item-info">
                                             <h3>Commande n° {order.id} </h3>
                                             <p className="item-price">{dayjs(order.created_at).format('DD/MM/YYYY hh:mm')}</p>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <BsFillCircleFill
-                                                className={'mr-3 ' + (order.status === 'to-do' ? 'text-orange-500' : 'text-green-500')}/>
-                                            {order.status === 'to-do' ? 'En cours' : 'Prête'}
-
                                         </div>
                                     </div>
                                 </div>
