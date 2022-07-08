@@ -8,7 +8,7 @@ import {ConfigService} from '@nestjs/config';
 import {UTILS} from "../app.utils";
 import {UserAdapter} from "../Adapter/UserAdapter";
 import {generate} from "generate-password";
-import fetch from "node-fetch";
+import {fetch} from "node-fetch";
 
 @Injectable()
 export class UsersService {
@@ -62,7 +62,6 @@ export class UsersService {
                     }
                 });
 
-                console.log(restaurant.restaurant.name);
                 const options =  {
                     method: 'POST',
                     headers: {
