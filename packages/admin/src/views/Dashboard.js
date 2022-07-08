@@ -7,6 +7,7 @@ import {useRecoilState} from "recoil";
 import {userAtom} from "../states/user";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import logoutRequest from "../requests/logoutRequest";
 
 export default function Dashboard(){
     const [usersRestaurant,setUsersRestaurant] = useState([]);
@@ -15,8 +16,13 @@ export default function Dashboard(){
 
     useEffect(() => {
         if(userRecoil === null){
-            navigate('/login');
-            toast.error('Vous devez être connecté pour accéder à cette page');
+            logoutRequest()
+                .then(res => {
+                    if(res.status === 200){
+                        resetUserConnected(setUserRecoil, navigate);
+                        toast.error('Vous devez être connecté pour accéder à cette page');
+                    }
+                });
         }
     }, [userRecoil, navigate]);
 

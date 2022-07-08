@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 import addRestaurant from "../requests/addRestaurant";
 import ValidationSchemaAddRestaurant from "../validations/ValidationSchemaAddRestaurant";
 import resetUserConnected from "../helpers/resetUserConnected";
+import logoutRequest from "../requests/logoutRequest";
 
 export default function AddRestaurant(){
     const [loading, setLoading] = useState(false);
@@ -22,8 +23,13 @@ export default function AddRestaurant(){
 
     useEffect(() => {
         if(userState === null){
-            navigate('/login');
-            toast.error('Vous devez être connecté pour accéder à cette page');
+            logoutRequest()
+                .then(res => {
+                    if(res.status === 200){
+                        resetUserConnected(userState, navigate);
+                        toast.error('Vous devez être connecté pour accéder à cette page');
+                    }
+                });
         }
     }, [userState, navigate]);
 
@@ -38,7 +44,7 @@ export default function AddRestaurant(){
                     toast.success("Restaurant ajouté");
                     navigate('/dashboard');
                 }else if(res.status === 400){
-                    toast.error("Ce restaurant existe déjà");
+                    toast.error("L'utilisateur renseigné possède déjà un restaurant");
                 }else if(res.status === 401){
                     resetUserConnected(setUserState, navigate);
                 }
@@ -87,7 +93,7 @@ export default function AddRestaurant(){
                 />
 
                 <button type="submit"
-                        className={`btn ${loading && 'loading'} border-none block w-full px-5 py-3 text-sm font-medium text-white bg-orange-600 rounded-lg`}>
+                        className={`border-none block w-full px-5 py-3 text-sm font-medium text-white bg-orange-600 rounded-lg`}>
                     {loading ? 'En cours...' : 'Créer'}
                 </button>
             </form>
