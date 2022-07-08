@@ -3,7 +3,7 @@ import React from "react";
 export default function Input({label, type, name, error, placeHolder, register}){
     return (
         <div className="relative mt-1">
-            <label htmlFor="email" className="text-sm font-medium">{label}</label>
+            <label htmlFor={name} className="text-sm font-medium">{label}</label>
             <div className="mt-2">
                 <input
                     {...register}
