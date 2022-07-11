@@ -9,13 +9,13 @@ import dessert from '../../img/foodCategory/dessert.png';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import HeaderAccount from "../HeaderAccount/HeaderAccount";
-import LoadingPage from "../Loading/LoadingPage";
+import HeaderAccount from "../../components/HeaderAccount/HeaderAccount";
+import LoadingPage from "../../components/Loading/LoadingPage";
 import {AiOutlineCheck, AiOutlineDownload} from "react-icons/ai";
 import resetUserConnected from "../../helpers/resetUserConnected";
 import {useNavigate} from "react-router-dom";
 import {GrCircleInformation} from "react-icons/gr";
-import {Information} from "../overlay/information";
+import {Information} from "../../components/overlay/information";
 import generatePdf from "../../requests/orders/generatePdf";
 import PlateType from "../../enum/PlateType";
 

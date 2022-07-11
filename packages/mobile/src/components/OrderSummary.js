@@ -4,13 +4,14 @@ import {FlatList, Image, StyleSheet, Text, View} from "react-native";
 export const OrderSummary = (order) => {
     const currentOrder = order.order;
     const Item = (plate) => {
-        console.log(`${process.env.BACKEND_URL}plate/uploads/${plate?.photo || 'img.png'}`);
+        console.log(plate);
+        console.log(plate.plate?.plate?.photo);
         return (
             <View style={styles.imageContainer}>
                 <Image
                     style={styles.image}
                     source={{
-                        uri: `${process.env.BACKEND_URL}plate/uploads/${plate?.photo || 'img.png'}`,
+                        uri: `${process.env.BACKEND_URL}plate/uploads/${plate.plate?.plate?.photo || 'img.png'}`,
                         width: 80,
                         height: 80
                     }}/>

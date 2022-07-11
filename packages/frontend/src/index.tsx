@@ -4,21 +4,21 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import ProductsList from './components/ProductsList/ProductsList';
-import LoginForm from "./components/LoginForm/LoginForm";
-import Profile from "./components/Profile/Profile";
-import OrdersAccount from "./components/Profile/OrdersAccount";
-import {SettingsAccount} from "./components/Profile/SettingsAccount";
+import ProductsList from './views/ProductsList/ProductsList';
+import LoginForm from "./views/LoginForm/LoginForm";
+import Profile from "./views/Profile/Profile";
+import OrdersAccount from "./views/Profile/OrdersAccount";
+import {SettingsAccount} from "./views/Profile/SettingsAccount";
 import Disconnect from "./components/Disconnect/Disconnect";
-import ProductDetail from "./components/ProductDetail/ProductDetail";
+import ProductDetail from "./views/ProductDetail/ProductDetail";
 import {socket, SocketContext} from "./context/socket";
 import {RecoilRoot} from "recoil";
 import Toast from "../src/components/Toast/Toast";
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterForm from './components/Register/RegisterForm';
-import ForgetPwd from "./components/ForgetPwd/ForgetPwd";
-import ChangePwd from "./components/ForgetPwd/ChangePwd";
-import ReadQRCode from "./components/QRCode/ReadQRCode";
+import ForgetPwd from "./views/ForgetPwd/ForgetPwd";
+import ChangePwd from "./views/ForgetPwd/ChangePwd";
+import ReadQRCode from "./views/QRCode/ReadQRCode";
 
 
 ReactDOM.render(

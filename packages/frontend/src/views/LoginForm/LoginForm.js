@@ -6,9 +6,9 @@ import {Link, useNavigate} from "react-router-dom";
 import ValidationSchemaLogin from "../../validations/ValidationSchemaLogin";
 import {useRecoilState} from 'recoil';
 import {userAtom} from '../../states/user';
-import Input from '../Input/Input';
+import Input from '../../components/Input/Input';
 import {toast} from "react-toastify";
-import GoogleButton from "../GoogleButton/GoogleButton";
+import GoogleButton from "../../components/GoogleButton/GoogleButton";
 import {AiOutlineLoading3Quarters} from "react-icons/ai";
 
 function LoginForm() {

@@ -9,10 +9,11 @@ import {MdArrowBackIos, MdOutlinePayment} from "react-icons/md";
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
-import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import {orderAtom} from "../../states/order";
 import {useLocation} from "react-router-dom";
 import dayjs from "dayjs";
+import {addItemToCart, removeItemFromCart} from "../../helpers/cart";
+import {createPayment} from "../../requests/payments/create";
 
 // create a navigation component that wraps the burger menu
 export const Sliding = (props) => {
@@ -21,7 +22,7 @@ export const Sliding = (props) => {
     const [isCheckout, setIsCheckout] = useState(false);
     const [stripeOptions, setStripeOptions] = useState({});
     const [paymentIntentId, setPaymentIntentId] = useState("");
-    const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
+    const [setModalManagement] = useState({isOpen: false, data: null});
     const totalAmount = cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0);
     const [stripePromise, setStripePromise] = useState(null);
     const [tabToDisplay, setTabToDisplay] = useState("cart");
@@ -64,15 +65,7 @@ export const Sliding = (props) => {
     function checkout() {
         // Gathering client secret to send it to CheckoutForm
         if (!isCheckout) {
-            fetch(process.env.REACT_APP_URL_BACKEND + 'payment/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    amount: totalAmount * 100, // En centimes, donc on multiplie par 100.
-                })
-            })
+            createPayment(totalAmount)
                 .then(response => response.json())
                 .then(data => {
                     setStripeOptions({
@@ -111,24 +104,11 @@ export const Sliding = (props) => {
     }
 
     function addToCart(plate) {
-        // No need to care about new adding. If quantity is at 0, we must add it from ProductsList screen.
-        let indexPlate = cart.findIndex(plateInCart => plateInCart.id === plate.id);
-        let cartCopy = cloneDeep(cart);
-        cartCopy[indexPlate].quantity++;
-        updateCart(cartCopy);
+        updateCart(addItemToCart(cart, plate));
     }
 
-    function removeFromCart(plate) { // TODO : Externaliser la fonction
-        const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
-        if (cart[indexPlateToRemove].quantity === 1) {
-            let cartCopy = [...cart];
-            cartCopy.splice(indexPlateToRemove, 1);
-            updateCart(cartCopy);
-        } else {
-            let cartCopy = cloneDeep(cart);
-            cartCopy[indexPlateToRemove].quantity--;
-            updateCart(cartCopy);
-        }
+    function removeFromCart(plate) {
+        updateCart(removeItemFromCart(cart, plate));
     }
 
     return (
@@ -190,7 +170,7 @@ export const Sliding = (props) => {
                         }
                     )}
 
-                    {props.otherCart?.length && <h2>Autres commandes à votre table : </h2>}
+                    {props.otherCart?.length > 0 && <h2>Autres commandes à votre table : </h2>}
                     {props.otherCart.map((user) => {
                         if (user.cart !== undefined && user.cart.length > 0) {
                             return (
@@ -252,7 +232,7 @@ export const Sliding = (props) => {
                         {formattedCart().length !== 0 && isCheckout !== true ?
                             <div className="cart-footer-wrapper-elements">
                                 <h2>
-                                    {cart.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)}<span>€</span>
+                                    {totalAmount} €
                                 </h2>
                                 <div>
                                     <Button classStyle={'mr-3 btn-payment'}
@@ -270,7 +250,7 @@ export const Sliding = (props) => {
                             <Elements stripe={stripePromise} options={stripeOptions}>
                                 <CheckoutForm clientSecret={stripeOptions.clientSecret}/>
                             </Elements>
-                            : ""}
+                            : <></>}
                     </div>
                 </div>
             </>

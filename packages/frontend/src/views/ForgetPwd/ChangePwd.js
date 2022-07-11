@@ -1,5 +1,5 @@
-import {useSearchParams, useNavigate} from "react-router-dom";
-import Input from "../Input/Input";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import Input from "../../components/Input/Input";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
@@ -24,7 +24,7 @@ export default function ChangePwd(){
                 navigate('/');
             }
         });
-    },[])
+    },[]);
 
     const onSubmit = (data) => {
         setLoading(true);
@@ -32,7 +32,7 @@ export default function ChangePwd(){
         data.token = token;
         updatePwd(data)
             .then(res => {
-                if(res.status === 204){
+                if (res.status === 204) {
                     setLoading(false);
                     toast.success("Mot de passe changé avec succès");
                     navigate('/');
@@ -41,9 +41,9 @@ export default function ChangePwd(){
             .catch(err => {
                 setLoading(false);
                 console.log(err);
-            })
+            });
 
-    }
+    };
 
     return (
         <div className="px-5">

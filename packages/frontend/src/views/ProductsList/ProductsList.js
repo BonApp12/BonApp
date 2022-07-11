@@ -1,13 +1,13 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
-import SearchBar from "../SearchBar/SearchBar";
-import Card from "../Card/Card";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import Card from "../../components/Card/Card";
 import {SocketContext} from "../../context/socket";
-import Layout from "../Layout/Layout";
-import Loading from "../Loading/Loading";
+import Layout from "../../components/Layout/Layout";
+import Loading from "../../components/Loading/Loading";
 import {useRecoilState} from "recoil";
 import {cartAtom} from "../../states/cart";
-import {Information} from "../overlay/information";
+import {Information} from "../../components/overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
 import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
@@ -18,20 +18,21 @@ import {restaurantAtom} from "../../states/restaurant";
 import {orderAtom} from "../../states/order";
 import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import createOrder from "../../requests/orders/createOrder";
-import {Asker} from "../Asker/Asker";
+import {Asker} from "../../components/Asker/Asker";
 import {tableAtom} from "../../states/table";
 import safeHtml from "safe-html";
+import {addItemToCart, initializeCart, removeItemFromCart} from "../../helpers/cart";
 
 
 const ProductsList = () => {
-    let params = useParams();
-    const idRestaurant = params.idRestaurant;
-    const idTable = params.idTable;
+
 
     // Setting up states
     const [searchParams, setSearchParams] = useSearchParams();
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [params] = useState(useParams());
+    const idRestaurant = useMemo(() => params.idRestaurant, []);
+    const idTable = useMemo(() => params.idTable, []);
+    const [loader, setLoader] = useState({isLoaded: false, error: null});
     const [tableExists, setTableExists] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
     const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
@@ -48,29 +49,6 @@ const ProductsList = () => {
     // Initializing socket
     const socket = useContext(SocketContext);
 
-    // Filtering plates depending of query
-    const filterPlates = (plates, query) => {
-        if (!query && plates !== undefined) {
-            if (cart.length > 0) {
-                return plates.map((item) => ({
-                    ...item,
-                    quantity: cart[cart.findIndex(plateInCart => plateInCart.id === item.id)]?.quantity || 1
-                }));
-            } else {
-                return plates.map((item) => ({
-                    ...item,
-                    quantity: 1,
-                }));
-            }
-        } else if (query && plates !== undefined) {
-            return plates.filter((plate) => {
-                // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
-                const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                const finalQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                return plateName.includes(finalQuery.toLowerCase());
-            });
-        }
-    };
 
     // Searching query
     const {search} = window.location;
@@ -78,6 +56,18 @@ const ProductsList = () => {
     const [searchQuery, setSearchQuery] = useState(query || '');
     const [filteredPlates, setFilteredPlates] = useState(null);
     const navigate = useNavigate();
+
+
+    // Searching plates
+    useEffect(() => {
+        const searchedPlate = searchQuery.length ? restaurant.plates.filter((plate) => {
+            // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
+            const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const finalQuery = searchQuery.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            return plateName.includes(finalQuery.toLowerCase());
+        }) : restaurant.plates;
+        setFilteredPlates(searchedPlate);
+    }, [restaurant, searchQuery]);
 
     // Setting nickname (randomly generated / user's email) and restaurant ID
     useEffect(() => {
@@ -114,21 +104,21 @@ const ProductsList = () => {
                     if (restaurantResponse.hasOwnProperty('statusCode') && restaurantResponse.statusCode === 401) {
                         navigate('/');
                     } else if (!restaurantResponse) {
-                        setError(true);
-                        setIsLoaded(true);
+                        setLoader({isLoaded: true, error: true});
                     } else {
                         setRestaurant(restaurantResponse);
                         setTableExists(true);
-                        setFilteredPlates(filterPlates(restaurantResponse.plates, searchQuery));
-                        setIsLoaded(true);
+                        setFilteredPlates(initializeCart(cart, restaurantResponse.plates));
+                        setLoader({isLoaded: true, error: false});
                     }
                 },
                 (error) => {
-                    setIsLoaded(true);
-                    setError(error);
+                    setLoader({isLoaded: true, error: error});
+
                 }
             );
-    }, [idRestaurant, idTable, socket]);
+    }, [idRestaurant, idTable, socket, params]);
+
     useEffect(() => {
         if (tableExists) {
             socket.emit('joinTable', {
@@ -162,7 +152,8 @@ const ProductsList = () => {
         socket.on('itemCartUpdated', (carts) => {
             updateUsersCart(carts);
         });
-    }, [nickname, userState]);
+    }, [nickname, userState, cart]);
+
     useEffect(() => {
         if (filteredPlates !== null) {
             let copyFilteredPlates = cloneDeep(filteredPlates);
@@ -183,7 +174,6 @@ const ProductsList = () => {
                     socket.emit('createOrder', {...res});
                     setOrder([...order, res]);
                     updateCart([]);
-
                     searchParams.delete('redirect_status');
                     searchParams.delete('payment_intent_client_secret');
                     searchParams.delete('payment_intent');
@@ -192,15 +182,6 @@ const ProductsList = () => {
         }
     }, [searchParams, restaurant, tableExists]);
 
-    function addToCart(plate) {
-        let indexPlateExists = cart.findIndex(plateInCart => plateInCart.id === plate.id);
-        if (indexPlateExists === -1) updateCart([...cart, plate]);
-        else {
-            let cartCopy = cloneDeep(cart);
-            cartCopy[indexPlateExists].quantity++;
-            updateCart(cartCopy);
-        }
-    }
 
     function updateUsersCart(carts) {
         const otherCarts = carts.filter((user) => user.nickname !== nickname);
@@ -213,42 +194,32 @@ const ProductsList = () => {
         setOrder(orderCopy);
     };
 
-    function removeFromCart(plate) { // TODO : Externaliser la fonction car dupliquée
-        const indexPlateToRemove = cart.findIndex(plateElement => plateElement.id === plate.id);
-        // If plates quantity is at 1, remove it from cart
-        if (cart[indexPlateToRemove].quantity === 1) {
-            let cartCopy = [...cart];
-            cartCopy.splice(indexPlateToRemove, 1);
-            updateCart(cartCopy);
-        } else {
-            let cartCopy = cloneDeep(cart);
-            cartCopy[indexPlateToRemove].quantity--;
-            updateCart(cartCopy);
-        }
+    function removeFromCart(plate) {
+        updateCart(removeItemFromCart(cart, plate));
         socket.emit('removeFromCart', {idTable, idRestaurant, plate});
     }
 
-    function needSomething(thing) {
+    const needSomething = useCallback(function needSomething(thing) {
         socket.emit("needSomething", {idTable, idRestaurant, thing});
-    }
+    }, []);
 
-    if (error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
-    if (!isLoaded) return <div><Loading/></div>;
+    if (loader.error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;
+    if (!loader.isLoaded) return <div><Loading/></div>;
 
     return (
         <div className="sidebar-cart">
             <Layout restaurant={restaurant} otherCart={otherCart}/>
-            <Asker needSomething={needSomething}/>
+            <Asker needSomething={(needSomething)}/>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
             <ol>
                 {
-                    isLoaded && !error ?
+                    loader.isLoaded && !loader.error ?
                         filteredPlates?.filter(plate => plate.display).map(plate => {
                             return (
                                 <Card name={plate.name}
                                       key={plate.id}
                                       removeFromCart={() => removeFromCart(plate)}
-                                      addToCart={() => addToCart(plate)}
+                                      addToCart={() => updateCart(addItemToCart(cart, plate))}
                                       plateProps={plate}
                                       setDisplayModal={() => {
                                           setModalManagement({

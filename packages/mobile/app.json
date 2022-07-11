@@ -40,7 +40,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Burger.png",
+        "foregroundImage": "./assets/local/Burger.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.yassansplus.mobile"
