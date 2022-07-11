@@ -10,18 +10,19 @@ import {cartAtom} from "../../states/cart";
 import {Information} from "../../components/overlay/information";
 import {MdOutlineFastfood} from "react-icons/md";
 import {cloneDeep} from "tailwindcss/lib/util/cloneDeep";
-import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
 import {toast} from "react-toastify";
 import {userAtom} from "../../states/user";
 import {nicknameAtom} from "../../states/nickname";
 import {restaurantAtom} from "../../states/restaurant";
 import {orderAtom} from "../../states/order";
-import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import createOrder from "../../requests/orders/createOrder";
 import {Asker} from "../../components/Asker/Asker";
 import {tableAtom} from "../../states/table";
 import safeHtml from "safe-html";
-import {addItemToCart, initializeCart, removeItemFromCart} from "../../helpers/cart";
+import {addItemToCart, initializeCart, removeItemFromCart, updateUsersCart} from "../../helpers/cart";
+import {generateNickName, hasChangedTable} from "../../helpers/user";
+import fetchRestaurantByIdTable from "../../requests/restaurant/fetchRestaurantByIdTable";
+import {searchByPlateName} from "../../helpers/restaurant";
 
 
 const ProductsList = () => {
@@ -30,18 +31,19 @@ const ProductsList = () => {
     // Setting up states
     const [searchParams, setSearchParams] = useSearchParams();
     const [params] = useState(useParams());
-    const idRestaurant = useMemo(() => params.idRestaurant, []);
-    const idTable = useMemo(() => params.idTable, []);
+    const idRestaurantParams = useMemo(() => params.idRestaurant, []);
+    const idTableParams = useMemo(() => params.idTable, []);
     const [loader, setLoader] = useState({isLoaded: false, error: null});
     const [tableExists, setTableExists] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
     const [otherCart, updateOtherCart] = useState([]); // Fill this variables with the sockets and the connection.
     const [cart, updateCart] = useRecoilState(cartAtom);
     const [userState] = useRecoilState(userAtom);
+    const [currentRestaurantId, setCurrentRestaurantId] = useRecoilState(restaurantAtom);
     const [nickname, setNickname] = useRecoilState(nicknameAtom);
-    const [currentRestaurant, setCurrentRestaurant] = useRecoilState(restaurantAtom);
-    const [currentTable, setCurrentTable] = useRecoilState(tableAtom);
+    const [currentTableId, setCurrentTableId] = useRecoilState(tableAtom);
     const [order, setOrder] = useRecoilState(orderAtom);
+
 
     // Handling ingredients modal
     const [modalManagement, setModalManagement] = useState({isOpen: false, data: null});
@@ -51,54 +53,29 @@ const ProductsList = () => {
 
 
     // Searching query
-    const {search} = window.location;
-    const query = new URLSearchParams(search).get('s');
-    const [searchQuery, setSearchQuery] = useState(query || '');
+    const [searchQuery, setSearchQuery] = useState('');
     const [filteredPlates, setFilteredPlates] = useState(null);
     const navigate = useNavigate();
 
 
     // Searching plates
     useEffect(() => {
-        const searchedPlate = searchQuery.length ? restaurant.plates.filter((plate) => {
-            // Récupération des noms des plats, retrait des accents et mise en minuscule pour comparaison.
-            const plateName = plate.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            const finalQuery = searchQuery.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            return plateName.includes(finalQuery.toLowerCase());
-        }) : restaurant.plates;
-        setFilteredPlates(searchedPlate);
+        setFilteredPlates(searchByPlateName(restaurant.plates, searchQuery));
     }, [restaurant, searchQuery]);
 
     // Setting nickname (randomly generated / user's email) and restaurant ID
     useEffect(() => {
-
-        if (!nickname) {
-            if (userState?.email !== undefined) {
-                setNickname(userState.email);
-            } else {
-                setNickname(uniqueNamesGenerator({dictionaries: [adjectives, animals, colors]}));
-            }
-        }
-        if (!currentRestaurant || !currentTable) {
-            setCurrentRestaurant(idRestaurant);
-            setCurrentTable(idTable);
-        } else {
-            if (currentRestaurant !== idRestaurant) {
-                setNickname(uniqueNamesGenerator({dictionaries: [adjectives, animals, colors]}));
-                setCurrentRestaurant(idRestaurant);
-                setCurrentTable(idTable);
-                setOrder([]); // Resetting orders since we aren't in the same restaurant anymore
-            }
-            if (currentRestaurant === idRestaurant && currentTable !== idTable) {
-                setCurrentTable(idTable);
-                setOrder([]); // Resetting orders since we aren't in the same table anymore
-            }
-        }
-
+        setNickname(generateNickName(nickname, userState, currentRestaurantId, currentTableId));
+        const hasChanged = hasChangedTable(currentRestaurantId, currentTableId, idRestaurantParams, idTableParams, order);
+        setCurrentRestaurantId(hasChanged.idRestaurantParams);
+        setCurrentTableId(hasChanged.idTableParams);
+        setOrder(hasChanged.order);
     }, []);
+
     // Gathering restaurant informations & setting up sockets events - joining table.
     useEffect(() => {
-        fetchRestaurantByIdTable(idRestaurant, idTable)
+        // console.log(restaurantFetch, loading, error);
+        fetchRestaurantByIdTable(idRestaurantParams, idTableParams)
             .then(
                 (restaurantResponse) => {
                     if (restaurantResponse.hasOwnProperty('statusCode') && restaurantResponse.statusCode === 401) {
@@ -117,40 +94,41 @@ const ProductsList = () => {
 
                 }
             );
-    }, [idRestaurant, idTable, socket, params]);
+
+    }, [idRestaurantParams, idTableParams, socket, params]);
 
     useEffect(() => {
         if (tableExists) {
             socket.emit('joinTable', {
-                idTable,
-                idRestaurant,
-                user: {
-                    nickname: userState?.email ?? nickname,
-                    cart,
-                    order
-                },
+                idTable: idTableParams,
+                idRestaurant: idRestaurantParams,
+                user: {nickname, cart, order},
             });
+
             socket.on('userJoinedRoom', (carts) => {
-                updateUsersCart(carts);
+                updateOtherCart(updateUsersCart(carts));
             });
+
             socket.on('userLeftRoom', (carts) => {
-                updateUsersCart(carts);
+                updateOtherCart(updateUsersCart(carts));
             });
+
             socket.on('orderUpdated', (newOrder) => {
                 toast.success('La commande a été mise à jour', {position: "top-right"});
                 updateOrderSocket(newOrder);
             });
+
             socket.on('orderCompleted', (newOrder) => {
                 toast.success('La commande a été remise !', {position: "top-right"});
                 updateOrderSocket(newOrder);
             });
         }
-    }, [tableExists, idTable, idRestaurant]);
+    }, [tableExists, idTableParams, idRestaurantParams, nickname]);
 
     /* itemCartUpdated/userCartUpdated socket listener / receiver & filteredPlates cart quantity updater */
     useEffect(() => {
         socket.on('itemCartUpdated', (carts) => {
-            updateUsersCart(carts);
+            updateOtherCart(updateUsersCart(carts));
         });
     }, [nickname, userState, cart]);
 
@@ -168,7 +146,7 @@ const ProductsList = () => {
     /* Sending order if payment fullfilled */
     useEffect(() => {
         if (searchParams.get('redirect_status') === 'succeeded' && restaurant?.id !== undefined && tableExists !== false) {
-            createOrder(cart, restaurant, idTable, userState ?? undefined)
+            createOrder(cart, restaurant, idTableParams, userState ?? undefined)
                 .then((result) => result.json())
                 .then((res) => {
                     socket.emit('createOrder', {...res});
@@ -182,12 +160,6 @@ const ProductsList = () => {
         }
     }, [searchParams, restaurant, tableExists]);
 
-
-    function updateUsersCart(carts) {
-        const otherCarts = carts.filter((user) => user.nickname !== nickname);
-        updateOtherCart(otherCarts);
-    }
-
     const updateOrderSocket = (newOrder) => {
         let orderCopy = cloneDeep(order);
         orderCopy[orderCopy.findIndex(orderItem => orderItem.id === newOrder.id)] = newOrder;
@@ -196,11 +168,11 @@ const ProductsList = () => {
 
     function removeFromCart(plate) {
         updateCart(removeItemFromCart(cart, plate));
-        socket.emit('removeFromCart', {idTable, idRestaurant, plate});
+        socket.emit('removeFromCart', {idTable: idTableParams, idRestaurant: idRestaurantParams, plate});
     }
 
     const needSomething = useCallback(function needSomething(thing) {
-        socket.emit("needSomething", {idTable, idRestaurant, thing});
+        socket.emit("needSomething", {idTable: idTableParams, idRestaurant: idRestaurantParams, thing});
     }, []);
 
     if (loader.error) return <div>Erreur dans le chargement. Veuillez réessayer</div>;

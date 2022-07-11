@@ -33,3 +33,7 @@ export function initializeCart(cart, plates) {
         }));
     }
 }
+
+export function updateUsersCart(carts, user, nickname) {
+    return carts.filter((user) => user?.nickname !== nickname);
+}
