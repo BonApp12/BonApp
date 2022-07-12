@@ -1,11 +1,11 @@
 import {Button} from "../Button/Button";
-import React from "react";
+import React, {useMemo} from "react";
 import {GrCircleInformation} from "react-icons/gr";
 import '../../css/overlayInformaiton.css';
 
 const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModal}) => {
-    return (
-        <div className="card card-bordered card-compact content-center m-5 shadow-on-plate">
+    return useMemo(() => {
+        return (<div className="card card-bordered card-compact content-center m-5 shadow-on-plate">
             <figure>
                 <img
                     src={`${process.env.REACT_APP_URL_BACKEND}plate/uploads/${plateProps?.photo || 'img.png'}`}
@@ -31,7 +31,6 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
                         </button>
                     </div> :
                     <div>
-
                         <Button classStyle={'btn btn-xs add-to-cart'}
                                 onClick={addToCart}>
                             Commander
@@ -44,8 +43,8 @@ const Card = ({name, cart, plateProps, removeFromCart, addToCart, setDisplayModa
                     </button>
                 </div>
             </div>
-        </div>
-    );
+        </div>);
+    }, [name, plateProps, cart, removeFromCart, addToCart, setDisplayModal]);
 };
 
 export default Card;

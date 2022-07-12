@@ -1,4 +1,4 @@
-import Input from "../Input/Input";
+import Input from "../../components/Input/Input";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
@@ -8,7 +8,7 @@ import {userAtom} from "../../states/user";
 import updateProfile from "../../requests/users/updateProfile";
 import {toast} from "react-toastify";
 import profileFields from "../../fields/profileFields";
-import HeaderAccount from "../HeaderAccount/HeaderAccount";
+import HeaderAccount from "../../components/HeaderAccount/HeaderAccount";
 import {useNavigate} from "react-router-dom";
 import resetUserConnected from "../../helpers/resetUserConnected";
 

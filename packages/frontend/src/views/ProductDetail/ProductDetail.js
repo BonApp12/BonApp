@@ -1,8 +1,8 @@
-import Layout from "../Layout/Layout";
+import Layout from "../../components/Layout/Layout";
 import React, {useEffect, useState} from "react";
-import {useNavigate, useLocation, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import fetchFullPlateById from "../../requests/plates/fetchFullPlate";
-import LoadingPage from "../Loading/LoadingPage";
+import LoadingPage from "../../components/Loading/LoadingPage";
 
 /**
  * Ce composant doit avoir à sa disposition tous les détails du restaurant qui devront

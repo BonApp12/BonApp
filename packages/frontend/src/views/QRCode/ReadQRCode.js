@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Html5Qrcode} from "html5-qrcode";
-import Loading from "../Loading/Loading";
+import Loading from "../../components/Loading/Loading";
 
 export default function ReadQRCode() {
     const navigate = useNavigate();
