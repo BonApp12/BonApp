@@ -103,10 +103,6 @@ export const Sliding = (props) => {
         }
     }
 
-    function addToCart(plate) {
-        updateCart(addItemToCart(cart, plate));
-    }
-
     function removeFromCart(plate) {
         updateCart(removeItemFromCart(cart, plate));
     }
@@ -154,7 +150,7 @@ export const Sliding = (props) => {
                                                     </div>
                                                     <div>
                                                         <button className="handle-quantity"
-                                                                onClick={() => addToCart(item)}>+
+                                                                onClick={() => updateCart(addItemToCart(cart, item))}>+
                                                         </button>
                                                         <p className="item-quantity">{item.quantity}</p>
                                                         <button className="handle-quantity"
