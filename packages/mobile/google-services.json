@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "112835588439",
+    "project_id": "bonapp-354223",
+    "storage_bucket": "bonapp-354223.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112835588439:android:3b6581349f8ffa13850e12",
+        "android_client_info": {
+          "package_name": "com.yassansplus.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112835588439-u9fdrgcnvv403rmbbfjm8g822elh0nnl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yassansplus.mobile",
+            "certificate_hash": "6ac2f71bfc281e5bfc2c7e7302e6e2a5d75702dc"
+          }
+        },
+        {
+          "client_id": "112835588439-kbkbai14dtm26beea1dqro1la9jsm0b1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvDg8hTWWRhmjC0p3duO082jJJ4yE_3F8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112835588439-kbkbai14dtm26beea1dqro1la9jsm0b1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
