@@ -39,6 +39,7 @@
       "bundleIdentifier": "com.yassansplus.mobile"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/local/Burger.png",
         "backgroundColor": "#FFFFFF"
