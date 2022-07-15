@@ -29,6 +29,7 @@ export default function Main() {
 
     return (
         <>
+
             <Provider store={store}>
                 <SocketInitializer/>
                 <IconRegistry icons={EvaIconsPack}/>
