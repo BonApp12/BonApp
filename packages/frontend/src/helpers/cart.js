@@ -11,12 +11,14 @@ export function removeItemFromCart(cart, plateToRemove) {
 }
 
 export function addItemToCart(cart, plateToAdd) {
+    console.log(cart);
     const newCart = cloneDeep(cart);
-    const index = newCart.findIndex(plate => plate.id === plateToAdd.id);
-    if (index === -1) {
+    const indexOfPlateInCart = newCart.findIndex(plate => plate.id === plateToAdd.id);
+    // Si le plat n'existe pas dans le panier on l'ajoute
+    if (indexOfPlateInCart === -1) {
         return [...newCart, plateToAdd];
     }
-    newCart[index].quantity++;
+    newCart[indexOfPlateInCart].quantity++;
     return newCart;
 }
 
@@ -34,6 +36,6 @@ export function initializeCart(cart, plates) {
     }
 }
 
-export function updateUsersCart(carts, user, nickname) {
-    return carts.filter((user) => user?.nickname !== nickname);
+export function updateUsersCart(users, nickname) {
+    return users.filter((user) => user?.nickname !== nickname);
 }

@@ -55,7 +55,7 @@ export default function CardTable() {
     }, [orderReceived]);
 
     useEffect(() => {
-        socket.emit('joinRestaurantRoom', {user: userState});
+        socket.emit('StaffJoinRestaurantRoom', {user: userState});
     }, [socket]);
 
     const updateOrderStatus = (idOrder, status) => {

@@ -56,33 +56,42 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         });
     }
 
-    @SubscribeMessage('joinTable')
-    joinTable(client: Socket, args: any) {
+    /**
+     *
+     * @param client
+     * @param joiningTable
+     * joiningTable has : idRestaurant, idTable, user as object Entries
+     * the client user is joining the table
+     */
+    @SubscribeMessage('userJoinTable')
+    joinTable(client: Socket, joiningTable: any) {
         // Creating room id and joining it
-        const roomId = `ordersRoomTable:${args.idTable}Restaurant:${args.idRestaurant}`;
-        this.logger.log(`Client ${client.id} joined table ${args.idTable} of restaurant ${args.idRestaurant}`);
+        const roomId = `ordersRoomTable:${joiningTable.idTable}Restaurant:${joiningTable.idRestaurant}`;
+        this.logger.log(`Client ${client.id} joined table ${joiningTable.idTable} of restaurant ${joiningTable.idRestaurant}`);
         client.join(roomId);
 
+
         // Adding Client socket ID to User for retrieving it easily
-        args.user["socket"] = client.id;
+        joiningTable.user["socket"] = client.id;
+
 
         // Checking if user is already in an existing room (to avoid being in 2 different tables)
         if (this.users.has(roomId)) {
-            const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname);
+            const userExists = this.users.get(roomId).filter((user) => joiningTable.user.nickname === user.nickname);
             if (userExists.length === 0) {
-                this.users.set(roomId, [...this.users.get(roomId), args.user]);
+                this.users.set(roomId, [...this.users.get(roomId), joiningTable.user]);
             }
-        } else this.users.set(roomId, [args.user]);
+        } else this.users.set(roomId, [joiningTable.user]);
 
-
-        this.wss.to(roomId).emit("userJoinedRoom", this.users.get(roomId));
+        this.wss.to(roomId).emit("userJoinedTable", this.users.get(roomId));
         this.wss.to(client.id).emit("getSocketId", client.id);
     }
 
-    @SubscribeMessage('joinRestaurantRoom')
+    // this is used in restaurant Back office to watch orders
+    @SubscribeMessage('StaffJoinRestaurantRoom')
     joinRestaurantRoom(client: Socket, args: any) {
         // Creating Restaurant Room and joining it
-        const roomId = `Restaurant:${args.user.restaurant.id}:Room`;
+        const roomId = `Restaurant:${args.user.resorderUpdatedtaurant.id}:Room`;
         this.logger.log(`Client ${client.id} joined restaurant room ${roomId}`);
         client.join(roomId);
 
@@ -93,6 +102,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             socket: client.id
         };
 
+        // Duplicate of line 79
         if (this.users.has(roomId)) {
             const userExists = this.users.get(roomId).filter((user) => args.user.nickname === user.nickname);
             if (userExists.length === 0) {
@@ -114,7 +124,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             role: user.role,
             socket: client.id
         };
-
+        // Duplicate of line 79
         if (this.users.has(roomId)) {
             const userExists = this.users.get(roomId).filter((user) => user.nickname === currentUser.nickname);
             if (userExists.length === 0) {
@@ -129,7 +139,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     userCartUpdated(client: Socket, args: Record<string, any>) {
         // Getting Room
         const rooms = Array.from(client.rooms);
-
+        // console.log(rooms);
         if (this.users.get(rooms[1]) !== undefined) {
             // Getting users informations we already have.
             const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
@@ -153,10 +163,16 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         return this.ordersService.remove(id);
     }
 
+    /**
+     *
+     * @param client
+     * @param args
+     * This is triggered when an order is created successfully
+     * Why is there a lot of rooms ?
+     */
     @SubscribeMessage('createOrder')
     create(client: Socket, args: Record<string, any>) {
         const rooms = Array.from(client.rooms);
-
         if (this.users.get(rooms[1]) !== undefined) {
             const idRestaurant = rooms[1].substring(rooms[1].indexOf('Restaurant:') + 11);
             const restaurantRoom = `Restaurant:${idRestaurant}:Room`;

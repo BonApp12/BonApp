@@ -99,18 +99,19 @@ const ProductsList = () => {
 
     useEffect(() => {
         if (tableExists) {
-            socket.emit('joinTable', {
+            socket.emit('userJoinTable', {
                 idTable: idTableParams,
                 idRestaurant: idRestaurantParams,
                 user: {nickname, cart, order},
             });
 
-            socket.on('userJoinedRoom', (carts) => {
-                updateOtherCart(updateUsersCart(carts));
+            socket.on('userJoinedTable', (users) => {
+                console.log(users);
+                updateOtherCart(updateUsersCart(users, nickname));
             });
 
-            socket.on('userLeftRoom', (carts) => {
-                updateOtherCart(updateUsersCart(carts));
+            socket.on('userLeftRoom', (users) => {
+                updateOtherCart(updateUsersCart(users, nickname));
             });
 
             socket.on('orderUpdated', (newOrder) => {
@@ -127,12 +128,13 @@ const ProductsList = () => {
 
     /* itemCartUpdated/userCartUpdated socket listener / receiver & filteredPlates cart quantity updater */
     useEffect(() => {
-        socket.on('itemCartUpdated', (carts) => {
-            updateOtherCart(updateUsersCart(carts));
+        socket.on('itemCartUpdated', (users) => {
+            updateOtherCart(updateUsersCart(users, nickname));
         });
     }, [nickname, userState, cart]);
 
     useEffect(() => {
+        //On initialise les plats avec une quantité pour pouvoir l'afficher coté front.
         if (filteredPlates !== null) {
             let copyFilteredPlates = cloneDeep(filteredPlates);
             cart.map((item) => {
@@ -148,9 +150,9 @@ const ProductsList = () => {
         if (searchParams.get('redirect_status') === 'succeeded' && restaurant?.id !== undefined && tableExists !== false) {
             createOrder(cart, restaurant, idTableParams, userState ?? undefined)
                 .then((result) => result.json())
-                .then((res) => {
-                    socket.emit('createOrder', {...res});
-                    setOrder([...order, res]);
+                .then((orderSuccess) => {
+                    socket.emit('createOrder', {...orderSuccess});
+                    setOrder([...order, orderSuccess]);
                     updateCart([]);
                     searchParams.delete('redirect_status');
                     searchParams.delete('payment_intent_client_secret');
