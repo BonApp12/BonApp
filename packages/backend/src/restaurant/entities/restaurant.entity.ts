@@ -4,6 +4,7 @@ import {Users} from '../../users/entities/users.entity';
 import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {Order} from "../../orders/entities/order.entity";
 import {Tables} from "../../tables/entities/tables.entity";
+import {PlateCategory} from "../../plate-category/entities/plate-category.entity";
 
 @Entity()
 export class Restaurant extends BaseEntity {
@@ -47,4 +48,7 @@ export class Restaurant extends BaseEntity {
 
     @OneToMany(() => Tables, (table: Tables) => table.restaurant, {onDelete: 'CASCADE'})
     tables: Tables[];
+
+    @OneToMany(() => PlateCategory, (category: PlateCategory) => category.restaurant, {onDelete: 'CASCADE'})
+    categories: PlateCategory[];
 }

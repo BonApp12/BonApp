@@ -1,0 +1,29 @@
+.icon-select {
+  background: white;
+  padding: 8px;
+  display: inline-block;
+  font-size: 27px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px;
+  cursor: pointer;
+
+  &.selected {
+    border: 2px solid #00a0e9;
+  }
+}
+
+.icon-images {
+  width: 40px;
+}
+
+.icon-select-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+
+  .icon-select-wrapper {
+    flex: 20%;
+  }
+
+}

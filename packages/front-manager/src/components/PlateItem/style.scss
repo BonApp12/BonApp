@@ -1,0 +1,34 @@
+.plate-item {
+  margin-bottom: 20px;
+
+  .plate-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    margin: 10px;
+
+    .plate-img {
+      flex: 13% 1;
+      margin-right: 10px;
+
+      img {
+        border-radius: 20px;
+      }
+    }
+
+    .plate-name {
+      background-color: #fff;
+      display: flex;
+      flex: 72% 1;
+      align-items: center;
+      border-radius: 16px;
+      padding-left: 20px;
+      box-shadow: 0 0 10px;
+      font-weight: bold;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #2a303c;
+    }
+  }
+}

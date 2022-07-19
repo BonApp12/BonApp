@@ -50,6 +50,7 @@
     "cookie-parser": "^1.4.6",
     "dayjs": "^1.11.3",
     "expo-server-sdk": "^3.6.0",
+    "express-zip": "^3.0.0",
     "generate-password": "^1.7.0",
     "googleapis": "^100.0.0",
     "handlebars": "^4.7.7",

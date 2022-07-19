@@ -20,6 +20,7 @@ import Tables from "../views/admin/Tables";
 
 // Contexts
 import {socket, SocketContext} from "../contexts/socket";
+import Categories from "../views/admin/Categories";
 
 export default function Admin() {
     const userState = useRecoilValue(userAtom);
@@ -43,6 +44,7 @@ export default function Admin() {
                         <Route path="/admin/settings" exact component={Settings}/>
                         <Route path="/admin/teams" exact component={Teams}/>
                         <Route path="/admin/tables" exact component={Tables}/>
+                        <Route path="/admin/categories" exact component={Categories}/>
                         <SocketContext.Provider value={socket}>
                             <Route path="/admin/orders" exact component={Orders}/>
                         </SocketContext.Provider>

@@ -7,9 +7,9 @@ import 'react-quill/dist/quill.snow.css';
 import {useRecoilState} from "recoil";
 import {userAtom} from "../../states/user";
 import Ingredients from "../Utils/Ingredients";
-import {AddCategory} from "../Utils/PlateCategories";
 import resetUserConnected from "../../helpers/resetUserConnected";
 import {useHistory} from "react-router-dom";
+import {InputCategories} from "../categories/inputCategories";
 
 export default function () {
     const {register: registerTeamMember, handleSubmit, reset, formState: {errors}} = useForm();
@@ -144,7 +144,7 @@ export default function () {
                                     className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                     htmlFor="grid-password"
                                 >
-                                    Catégorie du plat
+                                    Type de plat
                                 </label>
                                 <select
                                     value={type}
@@ -178,17 +178,20 @@ export default function () {
                     <div className="w-full lg:w-full px-4">
                         <div className="flex">
                             <div className="inline-block w-full mb-3">
-                                <label
-                                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password"
-                                >
-                                    Ajouter des catégories aux plats
-                                </label>
-                                <AddCategory
-                                    confirmCategories={(categoriesAdded) => {
-                                        setCategories(categoriesAdded);
-                                    }}
-                                />
+                                {/*<label*/}
+                                {/*    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"*/}
+                                {/*    htmlFor="grid-password"*/}
+                                {/*>*/}
+                                {/*    Ajouter des catégories aux plats*/}
+                                {/*</label>*/}
+                                {/*<AddCategory*/}
+                                confirmCategories={(categoriesAdded) => {
+                                setCategories(categoriesAdded);
+                            }}
+                                {/*/>*/}
+                                <InputCategories confirmCategories={(categoriesAdded) => {
+                                    setCategories(categoriesAdded);
+                                }}/>
 
                             </div>
                             <div className="relative w-full mb-3 tooltip"

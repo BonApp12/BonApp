@@ -1,0 +1,40 @@
+.columns-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  &.plates-selector {
+    height: 100%;
+
+    .column-wrapper {
+      width: 80%;
+      background: #2a303c;
+
+      .title-category {
+        color: white;
+      }
+    }
+  }
+
+  .column-wrapper {
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 0 10px;
+    margin: 10px;
+
+    .title-category {
+      text-align: center;
+      color: black;
+      font-weight: bold;
+      text-transform: uppercase;
+
+      h5 {
+        padding: 10px;
+      }
+    }
+
+    .category-drop {
+      min-height: 100px;
+    }
+  }
+}
