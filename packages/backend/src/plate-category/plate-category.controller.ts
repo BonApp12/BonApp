@@ -19,6 +19,11 @@ export class PlateCategoryController {
         return this.plateCategoryService.findAll();
     }
 
+
+    @Get("restaurant/:id")
+    findByRestaurant(@Param('id') id: string) {
+        return this.plateCategoryService.findByRestaurant(id);
+    }
     @Get('icones')
     getIcones(@Res() res: any) {
         const icons = fs.readdirSync('./client/icone').map(file => file);

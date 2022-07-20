@@ -10,6 +10,9 @@ export class PlateCategory extends BaseEntity {
     @Column('varchar', {length: 100})
     name: string;
 
+    @Column('varchar', {length: 100, default: 'lettuce.png'})
+    icone: string;
+
     @ManyToMany(() => Plate, (plate: Plate) => plate.categories)
     @JoinTable()
     plates: Plate[];

@@ -1,6 +1,7 @@
 import {BiCategoryAlt} from "react-icons/bi";
 import './style.scss';
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
+import {ImgIcon} from "../imgIcon/ImgIcon";
 
 export const IconPicker = ({setCategory}) => {
     const [icons, setIcons] = useState([]);
@@ -63,15 +64,4 @@ export const IconPicker = ({setCategory}) => {
             </div>
         </div>
     );
-};
-
-const ImgIcon = ({icon}) => {
-    return useMemo(() => {
-
-        return (
-            <img className={'icon-images'}
-                 src={`${process.env.REACT_APP_URL_BACKEND}plate-category/icones/${icon}`}
-                 alt=""/>
-        );
-    }, [icon]);
 };

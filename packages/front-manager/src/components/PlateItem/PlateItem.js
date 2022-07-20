@@ -1,15 +1,15 @@
 import './style.scss';
 
-export const PlateItem = () => {
+export const PlateItem = ({plate}) => {
     return (
         <section className="plate-item">
             <div className="plate-wrapper">
                 <div className="plate-img">
-                    <img src={"https://via.placeholder.com/150x150"} alt=""/>
+                    <img src={`${process.env.REACT_APP_URL_BACKEND}plate/uploads/${plate.photo ?? 'img.png'}`} alt=""/>
                 </div>
                 <div className="plate-name">
                     <h5>
-                        Nom du plat
+                        {plate.name}
                     </h5>
                 </div>
             </div>

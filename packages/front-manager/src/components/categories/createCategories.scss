@@ -9,6 +9,8 @@
     .column-wrapper {
       width: 80%;
       background: #2a303c;
+      max-height: 800px;
+      overflow-y: scroll;
 
       .title-category {
         color: white;
@@ -17,6 +19,7 @@
   }
 
   .column-wrapper {
+    flex: 30%;
     border-radius: 16px;
     background: white;
     box-shadow: 0 0 10px;
