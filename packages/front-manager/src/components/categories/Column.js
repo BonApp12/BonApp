@@ -1,8 +1,9 @@
 import {PlateItem} from "../PlateItem/PlateItem";
 import {ImgIcon} from "../imgIcon/ImgIcon";
 import {Draggable, Droppable} from "react-beautiful-dnd";
+import {AiOutlineDelete} from "react-icons/ai";
 
-export const Column = ({titleColumn, columnId, plates, icon}) => {
+export const Column = ({titleColumn, columnId, plates, icon, deletePlateFromCategorie}) => {
     return (
 
         <Droppable droppableId={"" + columnId + ""}>
@@ -34,7 +35,14 @@ export const Column = ({titleColumn, columnId, plates, icon}) => {
                                                     <PlateItem plate={plate}/>
                                                 </div>
                                             )}
-                                        </Draggable> : <PlateItem key={index} plate={plate}/>
+                                        </Draggable> :
+                                        <div key={index} onClick={() => deletePlateFromCategorie(columnId, plate)}>
+                                            <PlateItem plate={plate}>
+                                                <span className="trash-icon">
+                                                    <AiOutlineDelete size={24}/>
+                                                </span>
+                                            </PlateItem>
+                                        </div>
                                 );
                             })}
                         </section>

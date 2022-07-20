@@ -12,3 +12,9 @@ export function dropIntoAnotherCategory(destination, source, categories, plates,
     !isAlreadyInCategory && categories[destinationCategoryIndex].plates.push(sourcePlate);
     return categories;
 }
+
+export function deletePlateFromCategory(columnId, plate, categories) {
+    const indexColumnCategory = categories.findIndex(currentCategory => currentCategory.id === parseInt(columnId));
+    categories[indexColumnCategory].plates = categories[indexColumnCategory].plates.filter(currentPlate => currentPlate.id !== plate.id);
+    return categories;
+}

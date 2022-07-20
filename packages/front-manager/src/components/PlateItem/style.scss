@@ -1,5 +1,7 @@
 .plate-item {
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: all linear 2s;
 
   .plate-wrapper {
     display: flex;
@@ -17,6 +19,12 @@
       }
     }
 
+    &:hover {
+      .trash-icon {
+        color: #ff0000;
+      }
+    }
+
     .plate-name {
       background-color: #fff;
       display: flex;
@@ -29,6 +37,15 @@
       font-size: 14px;
       text-transform: uppercase;
       color: #2a303c;
+
+      h5 {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding-right: 43px;
+
+
+      }
     }
   }
 }

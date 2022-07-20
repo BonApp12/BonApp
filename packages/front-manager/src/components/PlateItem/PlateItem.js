@@ -1,6 +1,6 @@
 import './style.scss';
 
-export const PlateItem = ({plate}) => {
+export const PlateItem = ({plate, children}) => {
     return (
         <section className="plate-item">
             <div className="plate-wrapper">
@@ -10,6 +10,7 @@ export const PlateItem = ({plate}) => {
                 <div className="plate-name">
                     <h5>
                         {plate.name}
+                        {children}
                     </h5>
                 </div>
             </div>
