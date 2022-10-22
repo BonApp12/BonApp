@@ -60,8 +60,8 @@ export class OrdersController {
 
     @Post('/create')
     async create(@Body('cart') cart: Plate[], @Body('restaurant') restaurant: Restaurant,
-                 @Body('user') user: Users | undefined) {
-        return await this.ordersService.create(cart, restaurant, user);
+                 @Body('user') user: Users | undefined, @Body('nickname') nickname: string | undefined) {
+        return await this.ordersService.create(cart, restaurant, user, nickname);
     }
 
 }

@@ -34,7 +34,7 @@ export default function Login() {
                 }
                 if (responseLogin.statusCode === 200) {
                     setUserState(responseLogin.user);
-                    toast.success("Connexion réussi");
+                    toast.success("Connexion réussie");
                     history.push('/admin/dashboard');
                 }
             })

@@ -80,6 +80,19 @@
     -moz-text-fill-color: transparent;
 }
 
+.item-total-price {
+    font-size: 11px;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #ff5000;
+    background-image: linear-gradient(45deg, #ff5000, #e98600);
+    background-size: 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
+
 .handle-quantity {
     background-color: #ff5000;
     background-image: linear-gradient(#e98600, rgba(233, 134, 0, 0));

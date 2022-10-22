@@ -103,7 +103,7 @@ export class OrdersService {
         return `This action removes a #${id} order`;
     }
 
-    async create(cart: Plate[], restaurant: Restaurant, user: Users | undefined) {
+    async create(cart: Plate[], restaurant: Restaurant, user: Users | undefined, nickname: string | undefined) {
         const plates = PlateAdapter.toDtoList(cart);
         const table = TableAdapter.toModel(restaurant.tables);
 
@@ -112,6 +112,9 @@ export class OrdersService {
         createOrder.restaurant = restaurant;
         createOrder.table = table;
         createOrder.user = user;
+        createOrder.nickname = nickname;
+
+        console.log(createOrder.nickname, nickname);
 
         return await this.orderRepository.save(createOrder)
             .then((result) => {

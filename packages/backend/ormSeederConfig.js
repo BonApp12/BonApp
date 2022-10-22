@@ -1,6 +1,6 @@
 module.exports = {
     type: 'postgres',
-    host: 'bp-pg-db',
+    host: 'bp-pg-db', // Changer en localhost dans un environnement local.
     port: 5432,
     username: 'postgres',
     password: 'root',

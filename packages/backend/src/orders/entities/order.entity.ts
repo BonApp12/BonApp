@@ -23,6 +23,9 @@ export class Order extends BaseEntity {
     @ManyToOne(() => Users, (user: Users) => user.orders, {nullable: true})
     user: Users;
 
+    @Column('varchar', {length: 250, nullable: true})
+    nickname: string;
+
     @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.orders, {onDelete: 'CASCADE'})
     restaurant: Restaurant;
 

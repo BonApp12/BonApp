@@ -15,6 +15,7 @@ import {TablesService} from "../tables/tables.service";
 import {IsNull, Not} from "typeorm";
 import {NotificationMessageEnum} from "./enum/NotificationMessageEnum";
 import {Tables} from "../tables/entities/tables.entity";
+import cookieParser from 'cookie-parser';
 
 @WebSocketGateway({cors: true})
 export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -91,7 +92,7 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     @SubscribeMessage('StaffJoinRestaurantRoom')
     joinRestaurantRoom(client: Socket, args: any) {
         // Creating Restaurant Room and joining it
-        const roomId = `Restaurant:${args.user.resorderUpdatedtaurant.id}:Room`;
+        const roomId = `Restaurant:${args.user.restaurant.id}:Room`;
         this.logger.log(`Client ${client.id} joined restaurant room ${roomId}`);
         client.join(roomId);
 
@@ -220,13 +221,32 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         }
 
         if (clients !== undefined) {
-            clients.forEach((client) => {
-                client?.order?.forEach((order) => {
-                    if (order.id === newOrder.order.id) {
-                        this.wss.to(client.socket).emit("orderUpdated", newOrder.order);
+            if (clients.length > 1 ) {
+                clients.forEach((client) => {
+                    if (client.nickname === newOrder.order.nickname) {
+                        console.log(client.order.id);
+                        if (client.order.length > 1) {
+                            Object.keys(client?.order).forEach((orderId) => {
+                                let intOrder = parseInt(orderId);
+                                if (intOrder === newOrder.order.id) {
+                                    this.wss.to(client.socket).emit("orderUpdated", newOrder.order);
+                                }
+                            })
+                        } else if (client.order.length === 1) {
+                            if (client.order.id === newOrder.order.id) {
+                                this.wss.to(client.socket).emit("orderUpdated", newOrder.order);
+                            }
+                        }
                     }
                 });
-            });
+            } else if (clients.length === 1) {
+                console.log(clients[0]);
+                if (clients[0].nickname === newOrder.order.nickname) {
+                    if (clients[0].order.id === newOrder.order.id) {
+                        this.wss.to(clients[0].socket).emit("orderUpdated", newOrder.order);
+                    }
+                }
+            }
         }
     }
 

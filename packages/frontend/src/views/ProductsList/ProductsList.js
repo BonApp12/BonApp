@@ -106,7 +106,6 @@ const ProductsList = () => {
             });
 
             socket.on('userJoinedTable', (users) => {
-                console.log(users);
                 updateOtherCart(updateUsersCart(users, nickname));
             });
 
@@ -116,6 +115,7 @@ const ProductsList = () => {
 
             socket.on('orderUpdated', (newOrder) => {
                 toast.success('La commande a été mise à jour', {position: "top-right"});
+                console.log('Commande mise à jour');
                 updateOrderSocket(newOrder);
             });
 
@@ -148,7 +148,7 @@ const ProductsList = () => {
     /* Sending order if payment fullfilled */
     useEffect(() => {
         if (searchParams.get('redirect_status') === 'succeeded' && restaurant?.id !== undefined && tableExists !== false) {
-            createOrder(cart, restaurant, idTableParams, userState ?? undefined)
+            createOrder(cart, restaurant, idTableParams, userState ?? undefined, nickname ?? undefined)
                 .then((result) => result.json())
                 .then((orderSuccess) => {
                     socket.emit('createOrder', {...orderSuccess});
@@ -217,12 +217,11 @@ const ProductsList = () => {
             <Information displayModal={modalManagement} setDisplayModal={setModalManagement}>
                 <h3 className="font-bold pt-6 pb-4 text-left pl-3">Ingrédients & informations</h3>
                 <div className="modal-content">
-                    <div className="grid grid-cols-2 place-content-center ">
+                    <div className="grid-cols-2 place-content-center ">
                         {modalManagement.data?.ingredients.map((ingredient) => (
                             <div className="text-left ml-16 hover:text-orange-600 ease-in duration-300"
                                  key={ingredient.id}>
-                                <MdOutlineFastfood className="inline-block"/>
-                                {ingredient.name}
+                                <MdOutlineFastfood className="inline-block"/> {ingredient.name}
                             </div>
                         ))}
                     </div>

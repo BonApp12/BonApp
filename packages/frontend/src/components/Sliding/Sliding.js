@@ -147,6 +147,7 @@ export const Sliding = (props) => {
                                                     <div className="item-info">
                                                         <h3>{item.name}</h3>
                                                         <p className="item-price">{item.price} €</p>
+                                                        <p className="item-total-price">(Total : {item.price * item.quantity} €)</p>
                                                     </div>
                                                     <div>
                                                         <button className="handle-quantity"

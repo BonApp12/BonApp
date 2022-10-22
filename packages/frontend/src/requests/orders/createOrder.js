@@ -1,6 +1,6 @@
 import route from "../../router/route";
 
-const createOrder = (cart, restaurant, idTable, user = undefined) => {
+const createOrder = (cart, restaurant, idTable, user = undefined, nickname = undefined) => {
     return fetch(route.createOrder, {
         crossDomain: true,
         method: 'POST',
@@ -9,7 +9,8 @@ const createOrder = (cart, restaurant, idTable, user = undefined) => {
         body: JSON.stringify({
             cart,
             restaurant,
-            user
+            user,
+            nickname
         }),
         headers: {
             'Content-Type': 'application/json'
