@@ -92,8 +92,7 @@ export default function CardTable() {
                     <table className="items-center w-full bg-transparent border-collapse">
                         <thead>
                         <tr className="text-center">
-                            <th className=
-                                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
+                            <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0
                     whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                             >
                                 N° de commande
