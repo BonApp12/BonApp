@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {Repository} from 'typeorm';
+import {Repository, Not} from 'typeorm';
 import {Order} from './entities/order.entity';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Expo} from 'expo-server-sdk';
@@ -67,10 +67,13 @@ export class OrdersService {
     }
 
     findByRestaurantByStatus(status: string, id: string) {
+        let notCompleted; 
+        if (status === 'not-completed') notCompleted = Not('completed');
+        console.log(status, notCompleted, notCompleted ?? status);
         return this.orderRepository.find({
             relations: ['user', 'orderPlates', 'orderPlates.plate', 'table'],
             where: {
-                'status': status,
+                'status': notCompleted ?? status,
                 'restaurant': {id}
             }
         })
