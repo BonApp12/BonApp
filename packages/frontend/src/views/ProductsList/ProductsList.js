@@ -51,7 +51,6 @@ const ProductsList = () => {
     // Initializing socket
     const socket = useContext(SocketContext);
 
-
     // Searching query
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredPlates, setFilteredPlates] = useState(null);

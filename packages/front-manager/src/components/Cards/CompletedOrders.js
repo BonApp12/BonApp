@@ -9,6 +9,7 @@ import OrderStatusEnum from "../Enum/OrderStatusEnum";
 import resetUserConnected from "../../helpers/resetUserConnected";
 import Modal from "../Modal/Modal";
 import {useHistory} from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 
 
@@ -18,10 +19,21 @@ export default function CompletedOrders(){
     const [modalInfo, setModalInfo] = useState(null);
     const [orderReceived, setOrderReceived] = useState(false);
 
+    // Pagination
+    const [currentItems, setCurrentItems] = useState(null);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
+    const itemsPerPage = 10;
+
     const [userState, setUserState] = useRecoilState(userAtom);   
     const history = useHistory();
 
     let checkStatus, formattedDate;
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % orders.length;
+        setItemOffset(newOffset);
+    }
 
     checkStatus = (status) => {
         return status === OrderStatusEnum.COMPLETED;
@@ -47,6 +59,12 @@ export default function CompletedOrders(){
             setOrders([]);
         }
     }, [orderReceived]);
+
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(orders.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(orders.length / itemsPerPage));
+    }, [orders, itemOffset, itemsPerPage]);
 
     function computeTotal(orderPlates) {
         let total = 0;
@@ -130,7 +148,7 @@ export default function CompletedOrders(){
                         </tr>
                         </thead>
                         <tbody>
-                        {orders.map((order) => (
+                        {currentItems?.map((order) => (
                             <tr key={order.id} className="text-center">
                                 <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4
                 text-left flex items-center">
@@ -185,6 +203,20 @@ export default function CompletedOrders(){
                     </table>
                 </div>
             </div>
+            <ReactPaginate
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        pageCount={pageCount}
+                        className={'btn-group'}
+                        previousLabel="<"
+                        breakClassName={'btn rounded-none'}
+                        pageLinkClassName={"btn rounded-none"}
+                        nextLinkClassName={"btn rounded-none"}
+                        previousLinkClassName={"btn rounded-none"}
+                        activeLinkClassName={"btn-primary"}
+                    />
             <Modal buttonClass={"btn-primary"}>
                 <div className="modal-header">
                     <h1 className="text-xl font-bold">Détails de la commande</h1>
