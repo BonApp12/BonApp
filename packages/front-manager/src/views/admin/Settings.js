@@ -1,7 +1,7 @@
 import React from "react";
 
 // Components
-import CardSettings from "components/Cards/CardSettings.js";
+import CardSettings from "../../components/Cards/CardSettings";
 
 export default function Settings() {
   return (

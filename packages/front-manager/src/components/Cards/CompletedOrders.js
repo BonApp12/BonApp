@@ -52,7 +52,6 @@ export default function CompletedOrders(){
             return res.json();
         }).then(resOrder => {
             setOrders(resOrder);
-            console.log(resOrder);
             setOrderReceived(false);
         });
         return function cleanup() {

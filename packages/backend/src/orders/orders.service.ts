@@ -67,13 +67,16 @@ export class OrdersService {
     }
 
     findByRestaurantByStatus(status: string, id: string) {
-        let notCompleted; 
+        let notCompleted;
         if (status === 'not-completed') notCompleted = Not('completed');
         return this.orderRepository.find({
             relations: ['user', 'orderPlates', 'orderPlates.plate', 'table'],
             where: {
                 'status': notCompleted ?? status,
                 'restaurant': {id}
+            },
+            order: {
+                id: "DESC"
             }
         })
     }
