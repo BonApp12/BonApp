@@ -17,6 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useRecoilValue} from "recoil";
 import {userAtom} from "../states/user";
 import Tables from "../views/admin/Tables";
+import Kitchen from "../views/admin/Kitchen";
 
 // Contexts
 import {socket, SocketContext} from "../contexts/socket";
@@ -45,6 +46,7 @@ export default function Admin() {
                         <Route path="/admin/tables" exact component={Tables}/>
                         <SocketContext.Provider value={socket}>
                             <Route path="/admin/orders" exact component={Orders}/>
+                            <Route path="/admin/kitchen" exact component={Kitchen} />
                         </SocketContext.Provider>
                         {/*<Route path="/admin/logout" exact component={Logout}/>*/}
                     </Switch>
