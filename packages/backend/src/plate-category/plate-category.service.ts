@@ -49,9 +49,16 @@ export class PlateCategoryService {
 
     async findByRestaurant(id: string) {
         return await this.plateCategoryRepository.find({
-            where: { restaurant: {id}},
+            where: {restaurant: {id}},
             relations: ['plates']
         });
 
+    }
+
+    async removePlateFromCategory(id: string, categoryId: string) {
+        //TODO: Tester ça pour voir si ça supprime bien le plat de la catégorie et que la mise à jour de la catégorie fonctionne
+        let category = await this.plateCategoryRepository.findOne({where: {id: categoryId}});
+        category.plates = category.plates.filter(plate => plate.id !== parseInt(id));
+        return await this.plateCategoryRepository.save(category);
     }
 }

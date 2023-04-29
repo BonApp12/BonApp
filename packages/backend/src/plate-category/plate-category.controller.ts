@@ -46,6 +46,11 @@ export class PlateCategoryController {
         return this.plateCategoryService.update(+id, updatePlateCategoryDto);
     }
 
+    @Delete('plate/:id/category/:categoryId')
+    removePlateFromCategory(@Param('id') id: string, @Param('categoryId') categoryId: string) {
+        return this.plateCategoryService.removePlateFromCategory(id, categoryId);
+    }
+
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.plateCategoryService.remove(+id);
