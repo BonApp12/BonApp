@@ -35,11 +35,11 @@ export default function Login() {
                 if (responseLogin.statusCode === 200) {
                     setUserState(responseLogin.user);
                     toast.success("Connexion réussi");
-                    console.log(responseLogin);
                 }
             })
             .catch(err => {
                 setLoading(false);
+                console.log(err);
                 toast.error(err.response.data.message);
             });
     };

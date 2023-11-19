@@ -155,6 +155,5 @@ export class AuthService {
     }
 
     public isUserConnected(user) {
-        console.log(user);
     }
 }

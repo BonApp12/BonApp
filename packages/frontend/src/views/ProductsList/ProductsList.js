@@ -114,7 +114,6 @@ const ProductsList = () => {
 
             socket.on('orderUpdated', (newOrder) => {
                 toast.success('La commande a été mise à jour', {position: "top-right"});
-                console.log('Commande mise à jour');
                 updateOrderSocket(newOrder);
             });
 

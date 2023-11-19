@@ -25,6 +25,7 @@ export const Home = () => {
                 socket.emit('orderCompleted', resOrder.data.raw[0]);
             })
             .catch((err) => {
+                // TODO : Afficher une vraie erreur
                 console.log('Une erreur est survenue');
             });
         setReadyOrders(readyOrders.filter(ord => ord.id !== order.id));
@@ -58,7 +59,6 @@ export const Home = () => {
     useEffect(() => {
         if (orderReceived === true) {
             getReadyOrders(userState.restaurant.id).then((resOrders) => {
-                console.log(resOrders.data);
                 setReadyOrders(resOrders.data);
                 dispatch(addOrder(resOrders.data));
             });

@@ -119,7 +119,6 @@ export class OrdersService {
         createOrder.user = user;
         createOrder.nickname = nickname;
 
-        console.log(createOrder.nickname, nickname);
 
         return await this.orderRepository.save(createOrder)
             .then((result) => {
@@ -136,7 +135,6 @@ export class OrdersService {
                 }
             })
             .catch((error) => {
-                console.log(error);
                 return error;
             });
     }

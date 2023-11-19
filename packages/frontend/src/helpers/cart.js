@@ -11,7 +11,6 @@ export function removeItemFromCart(cart, plateToRemove) {
 }
 
 export function addItemToCart(cart, plateToAdd) {
-    console.log(cart);
     const newCart = cloneDeep(cart);
     const indexOfPlateInCart = newCart.findIndex(plate => plate.id === plateToAdd.id);
     // Si le plat n'existe pas dans le panier on l'ajoute

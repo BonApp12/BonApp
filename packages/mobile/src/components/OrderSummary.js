@@ -4,8 +4,6 @@ import {FlatList, Image, StyleSheet, Text, View} from "react-native";
 export const OrderSummary = (order) => {
     const currentOrder = order.order;
     const Item = (plate) => {
-        console.log(plate);
-        console.log(plate.plate?.plate?.photo);
         return (
             <View style={styles.imageContainer}>
                 <Image

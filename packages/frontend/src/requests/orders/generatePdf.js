@@ -16,6 +16,7 @@ const generatePdf = (orderId) => {
             window.open(url);
         })
         .catch((err) => {
+            // TODO : Remplacer par une vraie erreur
             console.log(err);
         });
 }

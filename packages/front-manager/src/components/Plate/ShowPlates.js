@@ -47,16 +47,16 @@ export default function ShowPlates() {
         };
     }, []);
 
-    function generateHexaColor() {
+    const generateHexaColor = () =>  {
         return Math.floor(Math.random() * 16777215).toString(16);
     }
 
-    function deletePlate(plate) {
+    const deletePlate = (plate) => {
         deletePlateRequest(plate.id).then(async (res) => {
             if (res.status === 401) return resetUserConnected(setUserState, history);
-            if (res.status !== 200) return toast.error('ce plat ne peut pas être supprimé, il est utilisé ailleurs');
+            if (res.status !== 200) return toast.error('Ce plat ne peut pas être supprimé, il est utilisé ailleurs');
             const newPlates = plates.filter(p => p.id !== plate.id);
-            toast.success('le plat a bien été supprimé 🔥');
+            toast.success('Le plat a bien été supprimé 🥖');
             setPlates(newPlates);
         });
     }
@@ -66,7 +66,7 @@ export default function ShowPlates() {
             <div>
                 <table className="table w-full">
                     <thead>
-                    <tr className="text-center">
+                    <tr className="text-center"> 
                         <th>
                         </th>
                         <th>Nom du plat</th>

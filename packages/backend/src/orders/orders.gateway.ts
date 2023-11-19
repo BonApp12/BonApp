@@ -140,7 +140,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     userCartUpdated(client: Socket, args: Record<string, any>) {
         // Getting Room
         const rooms = Array.from(client.rooms);
-        // console.log(rooms);
         if (this.users.get(rooms[1]) !== undefined) {
             // Getting users informations we already have.
             const user = this.users.get(rooms[1]).filter((user) => client.id === user.socket);
@@ -224,7 +223,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             if (clients.length > 1 ) {
                 clients.forEach((client) => {
                     if (client.nickname === newOrder.order.nickname) {
-                        console.log(client.order.id);
                         if (client.order.length > 1) {
                             Object.keys(client?.order).forEach((orderId) => {
                                 let intOrder = parseInt(orderId);
@@ -240,7 +238,6 @@ export class OrdersGateway implements OnGatewayInit, OnGatewayConnection, OnGate
                     }
                 });
             } else if (clients.length === 1) {
-                console.log(clients[0]);
                 if (clients[0].nickname === newOrder.order.nickname) {
                     if (clients[0].order.id === newOrder.order.id) {
                         this.wss.to(clients[0].socket).emit("orderUpdated", newOrder.order);

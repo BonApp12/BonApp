@@ -23,11 +23,9 @@ export default function useFetch(url, options = {
                 }
 
                 const posts = await response.json();
-                console.log(posts);
                 setData(posts);
             } catch (error) {
                 setError(error);
-                console.log(error);
                 setLoading(false);
             }
         }

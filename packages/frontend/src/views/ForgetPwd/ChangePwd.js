@@ -40,6 +40,7 @@ export default function ChangePwd(){
             })
             .catch(err => {
                 setLoading(false);
+                // TODO : Remplacer par une vraie erreur VISIBLE
                 console.log(err);
             });
 

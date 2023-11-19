@@ -9,7 +9,7 @@ Repository de l'application BonApp : Commandez et payez directement depuis votre
 ### Fichiers d'environnement
 
 Pour que l'installation se déroule sans accroc, vous aurez besoin de créer vous-même les fichiers suivants :  
-```packages/backend/.env```:
+`packages/backend/.env`:
 
 ```
 JWT_ACCESS_TOKEN_SECRET=VOTRE_SECRET_JWT
@@ -37,7 +37,7 @@ GOOGLE_REDIRECT_URI=http://localhost:4000/google/redirect
 
 Pour mutualiser les url dans le front:
 
-```packages/frontend/.env```:
+`packages/frontend/.env`:
 
 ```
 REACT_APP_URL_BACKEND=http://localhost:4000
@@ -45,7 +45,7 @@ REACT_APP_SOCKET_BACKEND=ws://localhost:4000
 REACT_APP_GOOGLE_AUTH_CLIENT_ID=VOTRE_CLIENT_ID
 ```
 
-```/.env```:
+`/.env`:
 
 ```
 NODE_ENV=development
@@ -89,12 +89,16 @@ Si vous souhaitez changer les ports ou encore les noms de la base de données, f
 
 ### Base de données
 
-Avant d'exécuter les commandes ci-dessous, rendez-vous dans le fichier ```packages/backend/ormconfig.js```
-et passez la propriété suivante à ```true``` :
+Avant d'exécuter les commandes ci-dessous, rendez-vous dans le fichier `packages/backend/ormconfig.js`
+et passez la propriété suivante à `true` :
 
 ```javascript
-synchronize: false // True
+synchronize: false; // True
 ```
+
+Utilisateur possédant un restaurant : adan.schmitt@gmail.com
+Mot de passe des utilisateurs générés : b0n4pp3SG1&
+Lien local pour restaurant et table : http://localhost:3000/restaurant/6e477441-7c20-45a4-9a1e-9be16f7cf848/b472002f-62d5-46f9-ba5b-f60dac2195f3
 
 Rappel : Une fois que la base de données est initialisée, repasser ce paramètre à false pour éviter qu'elle soit écrasée
 à chaque redémarrage du Docker.
@@ -103,7 +107,7 @@ Rappel : Une fois que la base de données est initialisée, repasser ce paramèt
 
 ```bash
 # Launch local build and up
-$ make local-build 
+$ make local-build
 
 # Launch prod build and up
 $ make prod-build
@@ -113,7 +117,7 @@ $ yarn install
 ```
 
 Concernant l'installation de l'application, la stack étant exclusivement en Javascript, rendez-vous dans les dossiers
-```packages/backend``` ainsi que ```packages/frontend``` pour y exécuter ```yarn install```.
+`packages/backend` ainsi que `packages/frontend` pour y exécuter `yarn install`.
 
 ## Lancer l'application
 
@@ -121,13 +125,13 @@ Concernant l'installation de l'application, la stack étant exclusivement en Jav
 # In local
 $ make local-build # this command build and launch the project
 
-# or to launch the project only 
+# or to launch the project only
 $ make local-up
 
 #In Prod
 $ make prod-build # this command build and launch the project
 
-# or to launch the project only 
+# or to launch the project only
 $ make prod-up
 
 #### YARN ####
@@ -142,7 +146,9 @@ $ yarn run start:prod
 ```
 
 ### Lancer l'application mobile
+
 Après l'installation des packages, vous devez créer un .env avec les informations suivantes :
+
 ```
 #.env
 BACKEND_URL=(url de votre backend)
@@ -152,7 +158,7 @@ BACKEND_URL=(url de votre backend)
 **_NOTE_** :
 
 - Renseigner et remplir les fichiers .env (backend, frontend et racine)
-- Mettre l'option **synchronise** a TRUE dans le fichier ```ormconfig.js``` situé dans le dossier ```packages/backend```
+- Mettre l'option **synchronise** a TRUE dans le fichier `ormconfig.js` situé dans le dossier `packages/backend`
   .
 - Lancer les fixtures qu'on explique juste après.
 
@@ -160,7 +166,7 @@ BACKEND_URL=(url de votre backend)
 
 (Après avoir installé nos packages backend)
 
-``` yarn run seed:run```
+` yarn run seed:run`
 
 Pour drop la base de données:
 
